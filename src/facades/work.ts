@@ -1,6 +1,6 @@
 import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { Languages, StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkDetail, WorkDetailSpec } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
 import { CreateEditionServerPayload } from '../types/edition';
@@ -17,7 +17,7 @@ const include = {
   },
   editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
 };
-const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem | null => {
+const editionsToBook = (book: WorkDetail, language: string): WorkDetail | null => {
   if (book.language == language) {
     return book;
   }
@@ -40,10 +40,10 @@ const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem 
   return book;
 };
 
-export const find = async (id: number, language: string): Promise<WorkMosaicItem | null> => {
+export const find = async (id: number, language: string): Promise<WorkDetail | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
-    include,
+    include:WorkDetailSpec.include,
   });
   if (work) {
     work = editionsToBook(work, language);
@@ -52,7 +52,7 @@ export const find = async (id: number, language: string): Promise<WorkMosaicItem
   return null;
 };
 
-export const findWithoutLangRestrict = async (id: number): Promise<WorkMosaicItem | null> => {
+export const findWithoutLangRestrict = async (id: number): Promise<WorkDetail | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
     include,
@@ -63,7 +63,7 @@ export const findWithoutLangRestrict = async (id: number): Promise<WorkMosaicIte
   return null;
 };
 
-export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkDetail[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
@@ -71,17 +71,7 @@ export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs)
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
-    },
+    include: WorkDetailSpec.include,
     where,
   });
 
@@ -91,7 +81,7 @@ export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs)
   return works;
 };
 
-export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkDetail[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
@@ -99,17 +89,7 @@ export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
-    },
+    include: WorkDetailSpec.include,
     where,
   });
 
@@ -149,17 +129,7 @@ export const search = async (query: { [key: string]: string | string[] | undefin
 
   let works = await prisma.work.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
-    },
+    include: WorkDetailSpec.include,
   });
   if (works) works = works.map((w) => editionsToBook(w, language)!);
   return works;

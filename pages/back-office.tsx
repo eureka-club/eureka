@@ -51,7 +51,7 @@ import PaginationActions from '@/src/components/common/MUITablePaginationActions
 import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
+import { EditWorkClientPayload, WorkDetail } from '@/src/types/work';
 import { EditionMosaicItem } from '@/src/types/edition';
 
 import { FaSave } from 'react-icons/fa';
@@ -107,7 +107,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
-  const [works, setWorks] = useState<WorkMosaicItem[]>();
+  const [works, setWorks] = useState<WorkDetail[]>();
   useEffect(() => {
     if (data?.works) setWorks(data.works);
   }, [data?.works]);
@@ -135,7 +135,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
       }
     }
   }, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled: !!searchWorksFilter });
-  const [allWorks, setAllWorks] = useState<WorkMosaicItem[]>();
+  const [allWorks, setAllWorks] = useState<WorkDetail[]>();
 
   const debounceFn = useCallback(debounce((value: string) => {
     if (value)
@@ -998,7 +998,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                           <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center', marginBottom: 2 }} > {/*style={{ transform: "scale(1)" }}*/}
                             {ed.ToCheck ? <Fab className='ms-1' aria-label="edit" onClick={(e) => {
                               e.preventDefault();
-                              let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
+                              let er = w.editions.splice(idx, 1)[0] as unknown as WorkDetail;
                               setAllWorks(_ => [...allWorks]);
                               works.push(er);
                               setWorks(_ => works);

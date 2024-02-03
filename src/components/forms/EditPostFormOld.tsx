@@ -22,7 +22,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 import { CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -47,7 +47,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
   const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
   const { data: topics } = useTopics();
 
   const [items, setItems] = useState<string[]>([]);
@@ -73,7 +73,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
             items.push(...post.topics.split(','));
       }
     }
-    if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
+    if (post && post.works.length) setSelectedWork(post.works[0] as WorkDetail);
     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
     if(post && post.language) setLanguage(post.language);
   },[post])

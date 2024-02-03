@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { WorkMosaicItem } from './types/work';
+import { WorkDetail } from './types/work';
 import { Prisma } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -7,7 +7,7 @@ export const getWorks = async (
   lang?: string,
   props?: Prisma.WorkFindManyArgs,
   origin = '',
-): Promise<{ works: WorkMosaicItem[], fetched: number, total: number }> => {
+): Promise<{ works: WorkDetail[], fetched: number, total: number }> => {
   let query = props ? `?props=${encodeURIComponent(JSON.stringify(props))}` : ''  //lang=${lang}&
   if (lang)
     query += `&lang=${lang}`;
@@ -33,7 +33,7 @@ const useWorks = (props?: Prisma.WorkFindManyArgs, options?: Options) => {
 
   let ck = (cacheKey || notLangRestrict) ? `${cacheKey}-${JSON.stringify(props)}` : ['WORKS', `${lang}-${JSON.stringify(props)}`];
 
-  return useQuery<{ works: WorkMosaicItem[], fetched: number, total: number }>(ck, () => getWorks(!notLangRestrict ? lang : undefined, props), {
+  return useQuery<{ works: WorkDetail[], fetched: number, total: number }>(ck, () => getWorks(!notLangRestrict ? lang : undefined, props), {
     staleTime,
     enabled
   });

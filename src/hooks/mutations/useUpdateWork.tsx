@@ -1,7 +1,7 @@
 import {} from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
-import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
+import { EditWorkClientPayload, WorkDetail } from '@/src/types/work';
 
 const useUpdateWork = ()=>{
   const queryClient = useQueryClient();
@@ -36,7 +36,7 @@ const useUpdateWork = ()=>{
         if (payload && session) {
           const cacheKey = ['WORK',`${payload.id}`];
           await queryClient.cancelQueries(cacheKey);
-          prevWork = queryClient.getQueryData<WorkMosaicItem>(cacheKey);
+          prevWork = queryClient.getQueryData<WorkDetail>(cacheKey);
           queryClient.setQueryData(cacheKey, { ...prevWork, ...payload });
         }
         return { prevWork };

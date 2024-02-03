@@ -373,7 +373,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const li = slug.split('-').slice(-1);
     id = parseInt(li[0]);
     const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-    user = await getUser(id, origin);
+    user = await getUser(id);
     await qc.prefetchQuery(['USER', id.toString()], () => user);
   }
   return {

@@ -26,6 +26,7 @@ import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
+import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -68,14 +69,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const [idSession,setIdSession] = useState<string>('')
-  const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
-  const [countParticipants,setCountParticipants] = useState<number>()
+  const { data: user } = useUser(session?.user.id!,{ enabled: !!session?.user.id });
   
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const {data} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
-  
   
   const [cycle,setCycle]=useState(cycleItem)
   useEffect(()=>{
@@ -83,40 +81,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   },[data])
 
   const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
-  
   const {show} = useModalContext()
   
-  const whereCycleParticipants = {
-    where:{
-      OR:[
-        {cycles: { some: { id: cycle?.id } }},//creator
-        {joinedCycles: { some: { id: cycle?.id } }},//participants
-      ], 
-    }
-  };
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-    {
-      enabled:!!cycle?.id,
-      from:'cycle/Mosaic'
-    }
-  )
+  const{data:participants}=useCycleParticipants(cycle?.id!);
 
   // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
-  
-  useEffect(() => {
-    const s = session;
-    if (s) {
-      setIdSession(s.user.id.toString());
-    }
-  }, [session]);
-  
-  useEffect(() => {
-    if (cycle && user && participants) {
-      setCountParticipants(participants.length);
-      const idx = participants.findIndex(p=>p.id==user.id);
-    }
-  }, [user, cycle,participants, session]);
-
   
   const { t } = useTranslation('common');
   const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
@@ -244,7 +213,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
       </Button>
 
-      if(cycle.participants.findIndex(p=>p.id==session?.user.id) > -1 )         
+      if(participants && participants.findIndex(p=>p.id==session?.user.id) > -1 )         
           return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
           className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
            <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
@@ -289,12 +258,12 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Badge bg="primary" className={`d-flex flex-row align-items-center  fw-normal fs-6 text-white rounded-pill px-2 ${styles.type}`}>
               {getCycleAccesLbl()}
                {showParticipants && (<div className={`ms-2 d-flex  flex-row`}><MdGroup className='text-white  d-flex align-items-start' style={{fontSize:'1.1em'}}/>
-              <span className='text-white d-flex align-items-center' style={{fontSize:'.9em'}}>{`${cycle._count.participants+1 ||'...'}`}
+              <span className='text-white d-flex align-items-center' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
             </span></div>)
           } 
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
-            {showJoinOrLeaveButton && !(cycle.participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
+            {participants && showJoinOrLeaveButton && !(participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
            </div> 
          </div>
                 

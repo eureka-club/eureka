@@ -5,20 +5,20 @@ import { Col, Spinner, CardGroup } from 'react-bootstrap';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
-import { WorkMosaicItem /* , WorkWithImages */ } from '../../types/work';
+import { WorkDetail /* , WorkWithImages */ } from '../../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
 import { UserMosaicItem } from '../../types/user';
 import Mosaics from './Mosaics';
 
-type Item = CycleMosaicItem | WorkMosaicItem | PostMosaicItem | UserMosaicItem;
+type Item = CycleMosaicItem | WorkDetail | PostMosaicItem | UserMosaicItem;
 type Props = {
   title?: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => void;
   seeAll?: boolean;
-  data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkMosaicItem)[];
+  data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkDetail)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;

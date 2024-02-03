@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { MySocialInfo } from '../../types';
 import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetailHeader.module.css';
 import MosaicItem from './MosaicItem';
@@ -31,7 +31,7 @@ interface Props {
   // cycle: CycleMosaicItem;
   cycleId:number;
   post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  work?: WorkDetail;
   isCurrentUserJoinedToCycle?: boolean;
   participantsCount?: number;
   postsCount?: number;
@@ -255,10 +255,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <CarouselStatic
               cacheKey={['CYCLE', cycle.id.toString()]}
               showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t('Eurekas I created'))}
+              // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
               title={<CycleSummary cycle={cycle} />}
-              data={getWorksSorted() as WorkMosaicItem[]}
+              data={getWorksSorted() as WorkDetail[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
               size="sm"
@@ -281,7 +281,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
                 title={<CycleSummary cycle={cycle} />}
-                data={getWorksSorted() as WorkMosaicItem[]}
+                data={getWorksSorted() as WorkDetail[]}
                 iconBefore={<></>}
                 customMosaicStyle={{ height: '16em' }}
                 size={'sm'}

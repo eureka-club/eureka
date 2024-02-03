@@ -10,7 +10,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
@@ -43,7 +43,7 @@ const languages: Record<string, string> = {
 }
 interface Props {
   cacheKey: string[];
-  workItem: WorkMosaicItem;
+  workItem: WorkDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;

@@ -28,11 +28,11 @@
 // import globalSearchEngineAtom from '../atoms/searchEngine';
 // import styles from './SearchEngine.module.css';
 // import { CycleMosaicItem } from '../types/cycle';
-// // import { WorkMosaicItem } from '../types/work';
-// // import { WorkMosaicItem } from '../types/work';
+// // import { WorkDetail } from '../types/work';
+// // import { WorkDetail } from '../types/work';
 // // import { CycleMosaicItem } from '../types/cycle';
 // import { PostMosaicItem } from '../types/post';
-// import { WorkMosaicItem } from '../types/work';
+// import { WorkDetail } from '../types/work';
 // import useItems from '@/src/useItemsByTopic'
 // import { debounce } from 'lodash';
 
@@ -131,7 +131,7 @@
 //           <CycleTypeaheadSearchItem cycle={item as CycleMosaicItem} />
 //         )) ||
 //           (isWorkMosaicItem(item) && (
-//             <WorkTypeaheadSearchItem work={item as WorkMosaicItem} />
+//             <WorkTypeaheadSearchItem work={item as WorkDetail} />
 //           )) ||
 //           (isPostMosaicItem(item) && (
 //             <PostTypeaheadSearchItem post={item as PostMosaicItem} />

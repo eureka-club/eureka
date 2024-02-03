@@ -2,7 +2,7 @@ import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
-import { WorkMosaicItem, GoogleBooksProps, TMDBVideosProps } from './types/work';
+import { WorkDetail, GoogleBooksProps, TMDBVideosProps } from './types/work';
 import { UserMosaicItem } from '@/src/types/user';
 import { Session as S } from 'next-auth';
 export interface FileUpload {
@@ -45,8 +45,8 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
-export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkMosaicItem | UserMosaicItem;
+export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkDetail | UserMosaicItem;
+export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkDetail | UserMosaicItem;
 export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
@@ -72,10 +72,10 @@ export const isUser = (obj: BasicEntity): obj is User =>
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
   obj && 'type' in obj && obj.type == 'cycle';
 
-export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
+export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkDetail =>
   obj &&
   'type' in obj &&
-  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
+  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkDetail).type);
 
 export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
   obj && 'type' in obj && obj.type == 'post';
@@ -98,7 +98,7 @@ export interface NotifierRequest {
 }
 
 export interface GetAllByResonse {
-  data: (WorkMosaicItem | CycleMosaicItem)[];
+  data: (WorkDetail | CycleMosaicItem)[];
   extraCyclesRequired: number;
   extraWorksRequired: number;
   hasMore: boolean;

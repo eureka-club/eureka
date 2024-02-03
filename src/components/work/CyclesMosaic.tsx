@@ -1,4 +1,4 @@
-import {WorkMosaicItem} from '@/src/types/work'
+import {WorkDetail} from '@/src/types/work'
 import { FunctionComponent } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from 'react-query';
@@ -7,7 +7,7 @@ import { CycleMosaicItem } from '../../types/cycle';
 import Mosaic from '../Mosaic';
 
 interface Props {
-  work: WorkMosaicItem;
+  work: WorkDetail;
 }
 
 const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {

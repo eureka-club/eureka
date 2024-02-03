@@ -6,13 +6,13 @@ import MosaicItemPost from './post/Old_MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import { CycleMosaicItem } from '../types/cycle';
-import { WorkMosaicItem } from '../types/work';
+import { WorkDetail } from '../types/work';
 import { PostMosaicItem } from '../types/post';
 import { CycleContext } from '../useCycleContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
-  parent: CycleMosaicItem | WorkMosaicItem | PostMosaicItem| undefined,
+  parent: CycleMosaicItem | WorkDetail | PostMosaicItem| undefined,
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
@@ -29,7 +29,7 @@ const renderMosaicItem = (
     // let pp = parent;
     // if (!pp) {
     //   const it: PostMosaicItem = item as PostMosaicItem;
-    //   if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+    //   if (it.works && it.works.length > 0) pp = it.works[0] as WorkDetail;
     //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleMosaicItem;
     // }
     // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
@@ -66,7 +66,7 @@ interface Props {
   showComments?: boolean;
   cacheKey: [string,string];
   className?: string;
-  parent?: CycleMosaicItem | WorkMosaicItem;
+  parent?: CycleMosaicItem | WorkDetail;
   enabledPagination?:boolean;
 }
 

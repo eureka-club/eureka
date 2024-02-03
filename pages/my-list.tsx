@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { flatten, zip } from 'lodash';
 
 import { CycleMosaicItem } from '../src/types/cycle';
-import { WorkMosaicItem } from '../src/types/work';
+import { WorkDetail } from '../src/types/work';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { search as searchCycles } from '../src/facades/cycle';
 import { search as searchWork } from '../src/facades/work';
@@ -12,7 +12,7 @@ import Mosaic from '../src/components/Mosaic';
 import {Cycle,Work} from '@prisma/client'
 
 interface Props {
-  myListMosaicData: (CycleMosaicItem | WorkMosaicItem)[];
+  myListMosaicData: (CycleMosaicItem | WorkDetail)[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

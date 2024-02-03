@@ -8,7 +8,7 @@ import { Spinner } from 'react-bootstrap';
 import { QueryClient,dehydrate } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import useCycle,{getCycle} from '@/src/useCycle';
 import usePost,{getPost} from '@/src/usePost';
 import useUsers,{getUsers} from '@/src/useUsers';
@@ -96,7 +96,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
             <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
               <CycleDetailComponent
                 post={post}
-                work={post.works.length ? (post.works[0] as WorkMosaicItem) : undefined}
+                work={post.works.length ? (post.works[0] as WorkDetail) : undefined}
                 session={session}
               />
             </CycleContext.Provider>
@@ -118,7 +118,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
- let post = await getPost(postId,origin);
+ let post = await getPost(postId);
  let cycle = await getCycle(cycleId,origin);
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator.name, storedFile: post?.localImages[0].storedFile}
 

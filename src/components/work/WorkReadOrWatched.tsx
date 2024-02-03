@@ -1,4 +1,4 @@
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
@@ -19,7 +19,7 @@ import { Session } from '@/src/types';
 // import styles from './WorkSummary.module.css';
 
 interface Props {
-  work: WorkMosaicItem; //Work ID
+  work: WorkDetail; //Work ID
   session: Session;
 }
 

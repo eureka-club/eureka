@@ -1,4 +1,6 @@
 import { Prisma,User } from '@prisma/client';
+import { WorkDetailSpec } from './work';
+import { CycleDetailSpec } from './cycle';
 
 export interface EditUserClientPayload {
   name?: string;
@@ -32,16 +34,7 @@ export const UserDetailSpec = {
         workId: true,
         qty: true,
         work: {
-          select: {
-            id: true,
-            author: true,
-            title: true,
-            type: true,
-            countryOfOrigin: true,
-            countryOfOrigin2: true,
-            favs: { select: { id: true } },
-            localImages: { select: { storedFile: true } },
-          },
+          include:WorkDetailSpec.include
         },
       },
     },
@@ -50,43 +43,15 @@ export const UserDetailSpec = {
         workId: true,
         year: true,
         work: {
-          select: {
-            id: true,
-            author: true,
-            title: true,
-            type: true,
-            countryOfOrigin: true,
-            countryOfOrigin2: true,
-            favs: { select: { id: true } },
-            localImages: { select: { storedFile: true } },
-          },
+          include:WorkDetailSpec.include
         },
       },
     },
     favWorks: {
-      select: {
-        id: true,
-        createdAt: true,
-        title: true,
-        type: true,
-        countryOfOrigin: true,
-        countryOfOrigin2: true,
-        favs: { select: { id: true } },
-        localImages: { select: { storedFile: true } },
-      },
+      include:WorkDetailSpec.include
     },
     favCycles: {
-      select: {
-        id: true,
-        createdAt: true,
-        creatorId: true,
-        startDate: true,
-        endDate: true,
-        title: true,
-        favs: { select: { id: true } },
-        usersJoined: { select: { userId: true, pending: true } },
-        participants: { select: { id: true } },
-      },
+      include:CycleDetailSpec.include
     },
     favPosts: {
       select: {
@@ -96,8 +61,12 @@ export const UserDetailSpec = {
         localImages: { select: { storedFile: true } },
       },
     },
-    cycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
-    joinedCycles:{select:{id:true,creatorId:true,startDate:true,endDate:true,title:true}},
+    cycles:{
+      include:CycleDetailSpec.include
+    },
+    joinedCycles:{
+      include:CycleDetailSpec.include
+    },
     ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
     reactions:{select:{postId:true,unified:true,emoji:true}},

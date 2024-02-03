@@ -1,12 +1,13 @@
 import { useQuery } from 'react-query';
 import { UserMosaicItem } from '@/types/user';
 import { useRouter } from 'next/router';
+import { WEBAPP_URL } from './constants';
 
-export const getUser = async (id: number,origin='',language?:string): Promise<UserMosaicItem|null> => {
+export const getUser = async (id: number,language?:string): Promise<UserMosaicItem|null> => {
   if (!id) return null;
   else{
     const langQ = language ? `language=${language}` : '';
-    const url = `${origin||''}/api/user/${id}?${langQ}`;
+    const url = `${WEBAPP_URL}/api/user/${id}?${langQ}`;
     const res = await fetch(url);
     if (!res.ok) return null;
     const result = await res.json();
@@ -26,7 +27,7 @@ const useUser = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getUser(id,''), {
+  return useQuery<UserMosaicItem|null>(['USER', `${id}`], () => getUser(id), {
     staleTime,
     enabled,
   });

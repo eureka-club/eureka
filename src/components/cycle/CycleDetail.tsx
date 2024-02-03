@@ -24,7 +24,7 @@ import { useQueryClient } from 'react-query';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 
 import PostDetailComponent from '../post/PostDetail';
 import HyvorComments from '@/src/components/common/HyvorComments';
@@ -51,7 +51,7 @@ const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion'))
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
 interface Props {
   post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  work?: WorkDetail;
   session:Session
 }
 
@@ -216,7 +216,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           onCarouselSeeAllAction={onCarouselSeeAllAction}
         />
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+      const allowed = participants && participants.findIndex(p=>p.id==session?.user.id)>-1
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;  
       else if([1,2,4].includes(cycle.access))return res;
@@ -322,7 +322,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
         
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+      const allowed = participants && participants.findIndex(p=>p.id==session?.user.id)>-1
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;
 
@@ -358,12 +358,12 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({cycle._count.participants+1})</span>
+              <span className="mb-3">{t('Participants')} ({participants?.length})</span>
             </NavLink>
           </NavItem>
         </>
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+      const allowed = participants && participants.findIndex(p=>p.id==session?.user.id)>-1
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;
       if (cycle.access === 3) return <></>;

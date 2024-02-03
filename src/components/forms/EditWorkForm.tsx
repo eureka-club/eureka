@@ -22,7 +22,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
-import { EditWorkClientPayload, WorkMosaicItem } from '../../types/work';
+import { EditWorkClientPayload, WorkDetail } from '../../types/work';
 import { Country } from '@/src/types';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -236,7 +236,7 @@ const EditWorkForm: FunctionComponent = () => {
       if (work) {
         const ck_ = ck || ['WORK', `${work.id}`];
         await queryClient.cancelQueries(ck_)
-        const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck_)
+        const snapshot = queryClient.getQueryData<WorkDetail>(ck_)
         const { title, contentText } = variables;
         if (snapshot) {
           queryClient.setQueryData(ck_, { ...snapshot, title, contentText });

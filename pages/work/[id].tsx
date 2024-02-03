@@ -119,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
   let lang = ctx.locale ?? "es";
-  let work = await getWork(id,lang,origin);
+  let work = await getWork(id,lang);
   let metaTags:Record<string,any>={};
   if(work){
     metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };

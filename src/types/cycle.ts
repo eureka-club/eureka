@@ -14,26 +14,24 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
     }};
   };
 }>;
-
-export type CycleMosaicItem = Prisma.CycleGetPayload<{
+export const CycleDetailSpec = {
   include: {
     creator: {
-      select: { id: true; name: true; email: true; countryOfOrigin: true };
-    };
+      select: { id: true, name: true, email: true, countryOfOrigin: true },
+    },
     localImages: {
       select: {
-        storedFile: true;
-      };
-    };
+        storedFile: true,
+      },
+    },
     guidelines: {
       select: {
-        title: true;
-        contentText: true;
-      };
-    };
-    usersJoined: { select: { userId: true; pending: true } };
-    participants: { select: { id: true } };
-    ratings: { select: { userId: true; qty: true } };
+        title: true,
+        contentText: true,
+      },
+    },
+    usersJoined: { select: { userId: true, pending: true } },
+    ratings: { select: { userId: true, qty: true } },
     works: {
       include: {
         _count: { select: { ratings: true } },
@@ -46,14 +44,14 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
         },
         editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
       },
-    };
-    favs: { select: { id: true } };
+    },
+    favs: { select: { id: true } },
     cycleWorksDates: {
       select: {
-        id: true;
-        startDate: true;
-        endDate: true;
-        workId: true;
+        id: true,
+        startDate: true,
+        endDate: true,
+        workId: true,
         work: {
           include: {
             _count: { select: { ratings: true } },
@@ -66,18 +64,19 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<{
             },
             editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
           },
-        };
-      };
-    };
+        },
+      },
+    },
     _count: {
       select: {
-        participants: true;
-        ratings: true;
-      };
-    };
-    complementaryMaterials: true;
-  };
-}> & {
+        // participants: true,
+        ratings: true,
+      },
+    },
+    complementaryMaterials: true,
+  }
+}
+export type CycleMosaicItem = Prisma.CycleGetPayload<typeof CycleDetailSpec> & {
   type?: 'cycle';
   currentUserIsCreator?: boolean;
   currentUserIsParticipant?: boolean;

@@ -9,10 +9,10 @@ import Mosaic from '../Mosaic';
 import { MosaicItem } from '../../types';
 import { CycleMosaicItem } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 
 interface Props {
-  work: WorkMosaicItem;
+  work: WorkDetail;
 }
 
 const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {

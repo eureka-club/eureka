@@ -31,7 +31,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 import { CycleMosaicItem } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 //import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -78,7 +78,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
   const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
   const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -135,7 +135,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   // }, [router, router.query.id]);
 
   useEffect(() => {
-    if (work) setSelectedWork(work as WorkMosaicItem);
+    if (work) setSelectedWork(work as WorkDetail);
   }, [work]);
 
   const { t } = useTranslation('createPostForm');

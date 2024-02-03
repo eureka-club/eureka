@@ -89,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // const id = session.user.id;  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   let groupedByTopics:Record<string,GetAllByResonse>={};
-  const user = await  getUser(session?.user.id!,origin);
+  const user = await  getUser(session?.user.id!);
   const bo =  await getbackOfficeData(ctx.locale!)
   let postsId:number[] = [];
   if(bo && bo.PostExplorePage)

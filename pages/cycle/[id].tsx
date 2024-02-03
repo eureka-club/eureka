@@ -110,7 +110,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     if (
       session?.user &&
       join &&
-      cycle?.participants.findIndex(i => i.id == session.user.id) == -1
+      participants && participants.findIndex(i => i.id == session.user.id) == -1
     ) {
       execJoinCycle();
     }

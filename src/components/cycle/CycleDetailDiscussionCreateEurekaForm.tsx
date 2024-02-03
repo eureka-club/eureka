@@ -43,7 +43,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';

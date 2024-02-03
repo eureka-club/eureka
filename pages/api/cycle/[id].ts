@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 
 import { Cycle } from '@prisma/client';
 import getApiHandler from '@/src/lib/getApiHandler';
-import { find, remove } from '@/src/facades/cycle';
+import { find, participants as getparticipants, remove } from '@/src/facades/cycle';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUpload} from '@/src/facades/fileUpload'
 import { Form } from 'multiparty';
@@ -66,7 +66,7 @@ export default getApiHandler()
         if (cycle) {
           let ratingCount = cycle.ratings.length;
           const ratingAVG = cycle.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
-
+          const participants = await getparticipants(cycle.id);
           let currentUserIsParticipant = false;
           let currentUserIsCreator = false;
           let currentUserIsPending = false;
@@ -75,7 +75,7 @@ export default getApiHandler()
             currentUserIsCreator = cycle.creatorId == session.user.id
             const c = await find(id)
             if(c){
-              currentUserIsParticipant =  currentUserIsCreator || c.participants.findIndex(p=>p.id==session.user.id) > -1;
+              currentUserIsParticipant =  currentUserIsCreator || participants.findIndex(p=>p.id==session.user.id) > -1;
               currentUserIsPending = c.usersJoined.findIndex(p=>p.userId==session.user.id && p.pending) > -1;
               let r  = c.ratings.find(r=>r.userId==session.user.id)
               if(r)currentUserRating = r.qty;

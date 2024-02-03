@@ -13,7 +13,7 @@ import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
 // import { Session } from '../../types';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 import { CycleMosaicItem } from '../../types/cycle';
 import useWorks from '@/src/useWorks';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -32,11 +32,11 @@ interface Props {
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle }) => {
   const queryClient = useQueryClient();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const typeaheadRef = useRef<AsyncTypeahead<WorkMosaicItem>>(null);
+  const typeaheadRef = useRef<AsyncTypeahead<WorkDetail>>(null);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
-  // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkDetail[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkDetail | null>(null);
+  // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkDetail[]>([]);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
@@ -140,7 +140,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     results,
   }: {
     activeIndex: number;
-    results: WorkMosaicItem[];
+    results: WorkDetail[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -148,7 +148,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkMosaicItem[]): void => {
+  const handleSearchWorkSelect = (selected: WorkDetail[]): void => {
     if (selected[0] != null) {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setIncludedWorksIds(() => [(selected[0] as Work).id]);

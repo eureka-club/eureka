@@ -2,12 +2,12 @@ import { FunctionComponent } from 'react';
 import LocalImageComponent from '../../LocalImage';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 
 interface Props {
   workId: number;
   workTitle: string;
-  work:WorkMosaicItem;
+  work:WorkDetail;
 }
 
 const WorkPostImages: FunctionComponent<Props> = ({ work, workId, workTitle }) => {

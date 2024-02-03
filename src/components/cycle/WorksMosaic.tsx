@@ -5,7 +5,7 @@ import { FunctionComponent, useEffect, useState } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 // import { useQuery } from 'react-query';
 
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 import Mosaic from '../Mosaic';
 import { CycleMosaicItem } from '../../types/cycle';
 import { Work } from '.prisma/client';
@@ -26,7 +26,7 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
     if(dataWorks)setWorks(dataWorks.works)
   },[dataWorks])
 
-  // const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
+  // const { isLoading, isSuccess, data } = useQuery<WorkDetail[]>(
   //   ['works.mosaic.cycle', cycle.id],
   //   async ({ queryKey: [, cycleId] }) => {
   //     const whereQP = encodeURIComponent(JSON.stringify({ cycles: { some: { id: cycleId } } }));
@@ -75,7 +75,7 @@ const WorksMosaic: FunctionComponent<Props> = ({ cycle, className }) => {
       )} */}
       {
         /* isSuccess && */ works != null && (
-          <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} className={className} showButtonLabels={false} stack={getWorksSorted() as WorkMosaicItem[]} />
+          <Mosaic cacheKey={['CYCLE',cycle.id.toString()]} className={className} showButtonLabels={false} stack={getWorksSorted() as WorkDetail[]} />
         )
       }
     </>

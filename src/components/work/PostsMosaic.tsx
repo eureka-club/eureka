@@ -1,14 +1,14 @@
 import { FunctionComponent,useState,useEffect } from 'react';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import Mosaic from '../Mosaic';
 import usePosts from '@/src/usePosts'
 
 interface Props {
-  work: WorkMosaicItem;
+  work: WorkDetail;
 }
 
 const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
-  // const { isLoading, isSuccess, data } = useQuery<WorkMosaicItem[]>(
+  // const { isLoading, isSuccess, data } = useQuery<WorkDetail[]>(
   //   ['posts.mosaic.work', work.id],
   //   async ({ queryKey: [, workId] }) => {
   //     const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));

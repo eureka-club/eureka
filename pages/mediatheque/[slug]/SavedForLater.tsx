@@ -2,7 +2,7 @@ import CarouselStatic from '@/src/components/CarouselStatic';
 import { CycleMosaicItem } from "@/src/types/cycle";
 import { PostMosaicItem } from "@/src/types/post";
 import { UserMosaicItem } from '@/src/types/user';
-import { WorkMosaicItem } from "@/src/types/work";
+import { WorkDetail } from "@/src/types/work";
 import { BsBookmark } from 'react-icons/bs';
 import useMySaved from '@/src/useMySaved';
 
@@ -23,7 +23,7 @@ const SavedForLater:FC<Props> = ({user,id,goTo,t}) => {
   const {data:session} = useSession();
 
     if (SFL){
-      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkMosaicItem[];
+      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkDetail[];
       items.sort((f, s) => {
         const fCD = dayjs(f.createdAt);
         const sCD = dayjs(s.createdAt);

@@ -11,7 +11,7 @@ import styles from './MosaicItem.module.css';
 import {  Session } from '../../types';
 import Avatar from '../common/UserAvatar';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
@@ -61,7 +61,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkMosaicItem>();
+  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkDetail>();
   const {data:session} = useSession()
 
   const {data:post} = usePost(+postId,{
@@ -78,7 +78,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   useEffect(()=>{
     if(post){
-      if(post.works.length)setPostParent(post.works[0] as WorkMosaicItem)
+      if(post.works.length)setPostParent(post.works[0] as WorkDetail)
       if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
     }
   },[post])

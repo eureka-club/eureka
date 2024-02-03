@@ -60,19 +60,24 @@ export type WorkWithImages = Prisma.WorkGetPayload<{
   };
 }>;
 
-export type WorkMosaicItem = Prisma.WorkGetPayload<{
+export const WorkDetailSpec = {
   include: {
-    _count: { select: { ratings: true } };
-    localImages: { select: { id:true, storedFile: true } };
-    favs: { select: { id: true } };
-    ratings: { select: { userId: true; qty: true } };
-    readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
+    localImages: { select: { id:true, storedFile: true } },
+    favs: { select: { id: true } },
+    ratings: { select: { userId: true, qty: true } },
+    readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
     posts: {
       select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
     },
-    editions:{include:{localImages: { select: { id:true, storedFile: true } }}};
-  };
-}> & {
+    editions:{include:{localImages: { select: { id:true, storedFile: true } }}},
+    _count: {
+      select: {
+        ratings: true,
+      },
+    },
+  }
+}
+export type WorkDetail = Prisma.WorkGetPayload<typeof WorkDetailSpec> & {
   currentUserRating?: number;
   ratingCount?: number;
   ratingAVG?: number;

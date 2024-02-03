@@ -4,7 +4,7 @@ import { Autocomplete, CircularProgress, AutocompleteChangeDetails, Autocomplete
 import { TextField } from '@mui/material';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '@/src/types';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import CycleTypeaheadSearchItem from '@/src/components/cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '@/src/components/work/TypeaheadSearchItem';
 
@@ -108,7 +108,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
             return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleMosaicItem} /></li>
           }
           if (isWorkMosaicItem(option)) {
-            return <li {...props}><WorkTypeaheadSearchItem key={`work-${option.id}`} work={option as WorkMosaicItem} /></li>
+            return <li {...props}><WorkTypeaheadSearchItem key={`work-${option.id}`} work={option as WorkDetail} /></li>
           }
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}

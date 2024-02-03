@@ -421,7 +421,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
     });
 
-    const user = await getUser(id, origin);
+    const user = await getUser(id);
     await queryClient.prefetchQuery(['USER', id.toString()], () => user);
 
     return {

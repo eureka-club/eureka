@@ -12,7 +12,7 @@ import { storeUpload } from '@/src/facades/fileUpload';
 import { cors, middleware } from '@/src/lib/cors';
 import { Edition, Prisma, Work } from '@prisma/client';
 import { CreateEditionPayload, CreateEditionServerPayload } from '@/src/types/edition';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import { MISSING_FIELD, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
 // import redis from '../../../src/lib/redis';
 export const config = {
@@ -92,7 +92,7 @@ export default getApiHandler()
       // let currentUserRating = 0;
       // let ratingAVG = 0;
 
-      let ratingCount = work._count.ratings;
+      let ratingCount = work.ratings.length;
       const ratingAVG = work.ratings.reduce((p, c) => c.qty + p, 0) / ratingCount;
       // if(session){
       //     let r  = work.ratings.find(r=>r.userId==session.user.id)
@@ -132,7 +132,7 @@ export default getApiHandler()
       }
       let editionsIds: { id: number }[] = [];
 
-      const worksToSaveAsEdition: WorkMosaicItem[] = fields.editions?.length
+      const worksToSaveAsEdition: WorkDetail[] = fields.editions?.length
         ? JSON.parse(fields.editions[0])
         : undefined;
 

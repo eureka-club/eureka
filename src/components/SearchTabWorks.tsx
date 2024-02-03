@@ -10,7 +10,7 @@ import useWorks,{getWorks} from '@/src/useWorks'
 import useFilterEngineWorks from './useFilterEngineWorks';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { WorkMosaicItem } from '../types/work';
+import { WorkDetail } from '../types/work';
 import { getWorksProps } from '../types/work';
 
 const take = 8;
@@ -54,7 +54,7 @@ const SearchTabworks:FunctionComponent = () => {
   const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
 
   const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q});
-  const [works,setWorks] = useState<WorkMosaicItem[]>([])
+  const [works,setWorks] = useState<WorkDetail[]>([])
   
   useEffect(()=>{
 

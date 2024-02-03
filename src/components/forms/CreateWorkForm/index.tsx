@@ -22,7 +22,7 @@ import toast from 'react-hot-toast'
 import useTopics from 'src/useTopics';
 import useCountries from 'src/useCountries';
 import { ImCancelCircle } from 'react-icons/im';
-import { CreateWorkClientPayload, GoogleBooksProps, TMDBVideosProps, WorkMosaicItem } from '@/types/work';
+import { CreateWorkClientPayload, GoogleBooksProps, TMDBVideosProps, WorkDetail } from '@/types/work';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import globalModalsAtom from 'src/atoms/globalModals';
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';

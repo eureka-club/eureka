@@ -4,7 +4,7 @@ import SignInForm from '@/src/components/forms/SignInForm';
 
 import { useMutation, useQueryClient } from 'react-query';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import { useSession } from 'next-auth/react';
 import { isCycle, isWork } from '@/src/types';
 import { UserMosaicItem } from '@/src/types/user';

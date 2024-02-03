@@ -3,7 +3,7 @@ import WorkMosaic from '@/src/components/work/MosaicItem'
 import dayjs from 'dayjs';
 import { useQueryClient } from 'react-query';
 import useTranslation from 'next-translate/useTranslation'
-import { WorkMosaicItem } from '@/src/types/work'
+import { WorkDetail } from '@/src/types/work'
 import { Work } from '@prisma/client'
 
 interface Props{
@@ -15,7 +15,7 @@ interface Props{
     startDate: Date | null;
     endDate: Date | null;
     workId: number | null;
-    work:WorkMosaicItem | null;
+    work:WorkDetail | null;
   }[];
 }
 
@@ -69,7 +69,7 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showH
             if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
-              <WorkMosaic work={w as WorkMosaicItem} workId={w.id} size={size} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
+              <WorkMosaic work={w as WorkDetail} workId={w.id} size={size} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
                       </div>
           })}
         </div>

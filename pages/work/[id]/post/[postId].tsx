@@ -81,8 +81,8 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   const locale = ctx.locale??"es";
 
- let post = await getPost(postId,origin);
- let work = await getWork(workId,locale,origin);
+ let post = await getPost(postId);
+ let work = await getWork(workId,locale);
  let metaTags = {
    id: post?.id,
    workId: work?.id,

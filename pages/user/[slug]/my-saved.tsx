@@ -26,7 +26,7 @@ const MySaved: NextPage<Props> = ({id}) => {
   if(!isLoadingSession && !session)router?.push('/')
   const sfl = useMySaved(id)
 
-  // const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkMosaicItem)=>{
+  // const renderSFL = (i:CycleMosaicItem|PostMosaicItem|WorkDetail)=>{
   //   if(isCycleMosaicItem(i))return <CMI cycleId={i.id}/>
   //   if(isPostMosaicItem(i))return <PMI postId={i.id}/>
   //   if(isWorkMosaicItem(i))return <WMI workId={i.id}/>
@@ -154,7 +154,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   if(!session)return res;
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id, origin));
+  await qc.fetchQuery(['USER',id.toString()],()=>getUser(id));
   
   res = {
     props:{

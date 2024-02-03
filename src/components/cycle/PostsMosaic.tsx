@@ -4,9 +4,9 @@ import dayjs from 'dayjs'
 import { CycleMosaicItem } from '@/types/cycle';
 import { PostMosaicItem } from '@/types/post';
 import Mosaic from '../Mosaic';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 interface Props {
-  parent?: CycleMosaicItem | WorkMosaicItem;
+  parent?: CycleMosaicItem | WorkDetail;
   posts: PostMosaicItem[];
   display?: 'h' | 'v';
   showComments?: boolean;

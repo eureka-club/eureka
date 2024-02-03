@@ -1,13 +1,13 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Badge, Container,Row,Col } from 'react-bootstrap'
-import { WorkMosaicItem } from '@/types/work';
+import { WorkDetail } from '@/types/work';
 import LocalImageComponent from '@/src/components/LocalImage';
 import WorkSummary from './WorkSummary';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {
-  work: WorkMosaicItem;
+  work: WorkDetail;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
