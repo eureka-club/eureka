@@ -44,6 +44,7 @@ import { CycleMosaicItem } from '@/src/types/cycle';
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '../ButtonsTopActions';
 import { Button as MaterialButton } from '@mui/material';
+import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
@@ -84,23 +85,13 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const {data:cycle,isLoading} = useCycle(+cycleId,{
     enabled:!!cycleId
   });
+  console.log("cycle ", cycle)
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
 
-  const whereCycleParticipants = {
-    where:{OR:[
-      {cycles: { some: { id: cycle?.id } }},//creator
-      {joinedCycles: { some: { id: cycle?.id } }},//participants
-    ]} 
-  };
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-    {
-      enabled:!!cycle?.id,
-      from:'CycleDetail'
-    }
-  )
+  const{data:participants}=useCycleParticipants(cycle?.id!,{enabled:!!cycle?.id!});
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
   const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
@@ -367,7 +358,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
           <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
             <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({cycle.participants.length})</span>
+              <span className="mb-3">{t('Participants')} ({cycle._count.participants+1})</span>
             </NavLink>
           </NavItem>
         </>

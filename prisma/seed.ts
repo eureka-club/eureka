@@ -628,7 +628,7 @@ backOfficeSettings.forEach((c) => {
   
   transactions.push(
     prismaLocal.$queryRaw(Prisma.sql`
-    INSERT INTO dbo.backOfficeSettings(id,CyclesExplorePage,PostExplorePage,FeaturedUsers) 
+    INSERT INTO dbo.backOfficeSettings(id,CyclesExplorePage,PostExplorePage,FeaturedUsers,FeaturedWorks) 
     VALUES(${c.id}
       ,${c.CyclesExplorePage}
       ,${c.PostExplorePage}
@@ -642,11 +642,18 @@ backOfficeSettings.forEach((c) => {
     transactions.push(
       prismaLocal.$queryRaw(Prisma.sql`
     SET IDENTITY_INSERT dbo.backOfficeSettingsSliders ON;
-      INSERT INTO dbo.backOfficeSettingsSliders(id,title,text,language,publishedFrom,publishedTo,backOfficeSettingId,created_at,updated_at) 
-      VALUES(${s.id},${s.title},${s.text},${s.language},${s.publishedFrom},${s.publishedTo},${s.backOfficeSettingId},${s.createdAt},${s.updatedAt});
+      INSERT INTO dbo.backOfficeSettingsSliders(id,title,text,language,backOfficeSettingId,publishedFrom,publishedTo,created_at,updated_at) 
+      VALUES(${s.id},${s.title},${s.text},${s.language},${s.backOfficeSettingId},${s.publishedFrom},${s.publishedTo??(new Date()).toISOString()},${s.createdAt},${s.updatedAt});
     SET IDENTITY_INSERT dbo.backOfficeSettingsSliders OFF;
       `)
-    )
+    );
+    // _BackOfficeSettingsSlidersToLocalImage
+    transactions.push(
+      prismaLocal.$queryRaw(Prisma.sql`
+      INSERT INTO dbo._BackOfficeSettingsSlidersToLocalImage(A,B) 
+      VALUES(${s.id},${s.images[0].id});
+      `)
+    );
   });
   
 });

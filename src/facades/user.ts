@@ -1,5 +1,5 @@
 import { Prisma, User } from '@prisma/client';
-import { UserMosaicItem } from '@/types/user';
+import { UserDetailSpec, UserMosaicItem } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 
@@ -7,111 +7,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): P
   const { select = undefined, include = true,where } = props;
   const user: any = await prisma.user.findFirst({
     where,
-    include: {
-      followedBy: { select: { id: true } },
-      following: { select: { id: true, name: true, image: true, photos: { select: { storedFile: true } } } },
-      ratingWorks: {
-        ...language && {where:{
-          work:{language}
-        }},
-        select: {
-          workId: true,
-          qty: true,
-          work: {
-            select: {
-              id: true,
-              author: true,
-              title: true,
-              type: true,
-              countryOfOrigin: true,
-              countryOfOrigin2: true,
-              favs: { select: { id: true } },
-              localImages: { select: { storedFile: true } },
-            },
-          },
-        },
-      },
-      readOrWatchedWorks: {
-        ...language && {where:{
-          work:{language}
-        }},
-        select: {
-          workId: true,
-          year: true,
-          work: {
-            select: {
-              id: true,
-              author: true,
-              title: true,
-              type: true,
-              countryOfOrigin: true,
-              countryOfOrigin2: true,
-              favs: { select: { id: true } },
-              localImages: { select: { storedFile: true } },
-            },
-          },
-        },
-      },
-      favWorks: {
-        ...language && {where:{language}},
-        select: {
-          id: true,
-          author: true,
-          createdAt: true,
-          title: true,
-          type: true,
-          countryOfOrigin: true,
-          countryOfOrigin2: true,
-          favs: { select: { id: true } },
-          localImages: { select: { storedFile: true } },
-          language:true
-        },
-      },
-      favPosts: {
-        ...language && {where:{language}},
-        select: {
-          id: true,
-          title: true,
-          createdAt: true,
-          favs: { select: { id: true } },
-          localImages: { select: { storedFile: true } },
-          works: { select: { id: true, title: true } },
-          cycles: { select: { id: true, title: true } },
-          creatorId: true,
-        },
-      },
-      favCycles: {
-        ...language && {where:{languages:{contains:language}}},
-        select: {
-          id: true,
-          createdAt: true,
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-          favs: { select: { id: true } },
-          participants: { select: { id: true } },
-          usersJoined: { select: { userId: true, pending: true } },
-          localImages: { select: { storedFile: true } },
-        },
-      },
-      cycles: { 
-        select: { id: true, creatorId: true, startDate: true, endDate: true, title: true, },
-        ...language && {where:{languages:{contains:language}}},
-      },
-      joinedCycles: { 
-        select: { id: true, creatorId: true, startDate: true, endDate: true, title: true },
-        ...language && {where:{languages:{contains:language}}},
-       },
-      ratingCycles: { 
-        select: { cycleId: true, qty: true },
-        ...language && {where:{
-          cycle:{languages:{contains:language}}
-        }}
-      },
-      photos: { select: { storedFile: true } },
-    },
-    
+    select:UserDetailSpec.select
   });
   user.favWorks.forEach((w:any)=>{
     w.currentUserIsFav = true

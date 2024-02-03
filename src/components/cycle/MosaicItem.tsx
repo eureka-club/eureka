@@ -289,7 +289,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <Badge bg="primary" className={`d-flex flex-row align-items-center  fw-normal fs-6 text-white rounded-pill px-2 ${styles.type}`}>
               {getCycleAccesLbl()}
                {showParticipants && (<div className={`ms-2 d-flex  flex-row`}><MdGroup className='text-white  d-flex align-items-start' style={{fontSize:'1.1em'}}/>
-              <span className='text-white d-flex align-items-center' style={{fontSize:'.9em'}}>{`${participants?.length ||'...'}`}
+              <span className='text-white d-flex align-items-center' style={{fontSize:'.9em'}}>{`${cycle._count.participants+1 ||'...'}`}
             </span></div>)
           } 
             </Badge>
