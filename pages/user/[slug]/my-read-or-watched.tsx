@@ -27,6 +27,7 @@ import useMyReadOrWatched from '@/src/useMyReadOrWatched'
 import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -188,11 +189,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       </Head>
       <SimpleLayout>
         <article className="mt-4">
-          <ButtonGroup className="mt-1 mt-md-3 mb-1">
-            <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-              <BiArrowBack />
-            </Button>
-          </ButtonGroup>
+          <ButtonsTopActions/>
+
           {/*isLoadingSession ? (
             <Spinner animation="grow" />
           ) : */}

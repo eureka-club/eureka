@@ -17,8 +17,8 @@ const materialTheme = createTheme({
   palette: {
     warning: {
       light: 'blue',
-      main: '#ffafaf',
-      dark: '#e3506d',
+      main: '#e3506d',
+      dark: '#e07186',
       contrastText: '#fff',
     },
     primary: {
@@ -31,6 +31,12 @@ const materialTheme = createTheme({
       light: 'blue',
       main: 'rgb(61, 41, 132)',
       dark: 'rgb(42, 26, 107)',
+      contrastText: '#fff',
+    },
+    info: {
+      light: 'blue',
+      main: '#0288d1',
+      dark: '#3596ca',
       contrastText: '#fff',
     },
   },

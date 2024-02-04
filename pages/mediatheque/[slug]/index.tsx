@@ -32,6 +32,7 @@ import { isAccessAllowed } from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
 import dayjs from 'dayjs';
 import { PostMosaicItem } from '@/src/types/post';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   id: number;
@@ -271,12 +272,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   return (
     <SimpleLayout title={t('Mediatheque')}>
       <article data-cy="mediatheque">
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
-
+        <ButtonsTopActions/>
         {!isLoadingUser && user && (
           <section>
             <Card className="userHeader">
