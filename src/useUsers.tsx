@@ -26,7 +26,7 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise
     }
   });
 
-  const res = await fetch(url);
+  const res = await fetch(url!);
   if(!res.ok)return [];
   const {data} = await res.json();
   return data;

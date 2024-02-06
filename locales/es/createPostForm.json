@@ -32,7 +32,7 @@
   "showOthersFields":"Quiero agregar mi Momento Eureka a un ciclo y/o agregar tags.",
   "NoPromptText":"Tienes que escribir una descripción detallada para generar posibles imágenes.",
   "CreateEureka": "¡Crea un Momento Eureka para resumir una obra que te impactó utilizando una imagen!",
-  "SelectImage":"Selecciona la imagen que más te gusta o haz clic en 'Crear imagen' nuevamente para obtener opciones adicionales. Si no te convence ninguna opción, ajusta tu 'prompt' para generar nuevas imágenes.",
+  "SelectImage":"Selecciona la imagen o haz clic en 'Crear imagen' nuevamente para ver opciones adicionales. Si no te gusta ninguna imagen, ajusta tu mensaje para crear nuevas imágenes!",
   "descriptionLabel": "Describe la imagen que quieres generar con el máximo de detalles posible",
   "descriptionHelperText": "ej: mujeres ahogándose en toneladas de datos e información, arte digital",
   "Style": "Estilo",

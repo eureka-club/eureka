@@ -1,21 +1,25 @@
 import { Prisma } from '@prisma/client';
 
 export interface EditReactionClientPayload {
-  postId: number; 
-  userId: number;
+  postId: number, 
+  userId: number,
   data:{
-    emoji?:string;
-    doCreate?:string;
-  }
+    emoji:string,
+    doCreate:string,
+  },
+  createdAt?:Date,
+  updatedAt?:Date,
 }
 
-type ReactionIncludes = {
+export const ReactionDetailSpec = {
   include: {
-    post?:{select:{id:true}};
-    user?:{select:{id:true}};
-  };
+    post:{select:{id:true}},
+    user:{select:{id:true}},
+    emoji:true,
+    unified:true,
+  }
 };
 
-export type ReactionMosaicItem = Prisma.PostReactionGetPayload<ReactionIncludes> & {
+export type ReactionMosaicItem = Prisma.PostReactionGetPayload<typeof ReactionDetailSpec> & {
   type?: 'reaction';
 };

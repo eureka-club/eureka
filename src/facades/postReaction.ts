@@ -2,15 +2,12 @@ import { PostReaction } from '@prisma/client';
 import {prisma} from '@/src/lib/prisma';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { ReactionMosaicItem } from '@/src/types/reaction';
+import { ReactionDetailSpec, ReactionMosaicItem } from '@/src/types/reaction';
 dayjs.extend(utc);
 
 export const find = async (userId: number,postId:number): Promise<ReactionMosaicItem | null> => {
   return prisma.postReaction.findFirst({
-    include:{
-      user:{select:{id:true}},
-      post:{select:{id:true}},
-    },
+    include:ReactionDetailSpec.include,
     where:{
       userId,
       postId
@@ -18,12 +15,10 @@ export const find = async (userId: number,postId:number): Promise<ReactionMosaic
   });
 };
 
-export const findAllByUser = async (userId: number): Promise<ReactionMosaicItem[] | null> => {
+export const findAllByUser = async (userId: number): Promise<ReactionMosaicItem[]> => {
   return prisma.postReaction.findMany({
     orderBy: { updatedAt: 'desc' }, 
-    include:{
-      post:{select:{id:true}},
-    },
+    include:ReactionDetailSpec.include,
     where:{
       userId,
     }
@@ -33,9 +28,7 @@ export const findAllByUser = async (userId: number): Promise<ReactionMosaicItem[
 export const findAllByPost = async (postId: number): Promise<ReactionMosaicItem[] | null> => {
   return prisma.postReaction.findMany({
     orderBy: { updatedAt: 'desc' }, 
-    include:{
-      user:{select:{id:true}},
-    },
+    include:ReactionDetailSpec.include,
     where:{
       postId,
     }
@@ -120,15 +113,18 @@ interface CreateProps{
 }
 export const create = async (props:CreateProps): Promise<ReactionMosaicItem> => {
   const {postId,userId,unified,emoji} = props;
-  const r = await prisma.postReaction.create({data:{
-    emoji,
-    unified,
-    user:{connect:{id:userId}},
-    post:{connect:{id:postId}},
-   
-    createdAt: dayjs.utc().format(),
-    updatedAt: dayjs.utc().format()
-  }});
+  const r = await prisma.postReaction.create({
+    data:{
+      emoji,
+      unified,
+      user:{connect:{id:userId}},
+      post:{connect:{id:postId}},
+    
+      createdAt: dayjs.utc().format(),
+      updatedAt: dayjs.utc().format()
+    },
+    include:ReactionDetailSpec.include
+  });
   return r;
 };
 

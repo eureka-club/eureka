@@ -32,7 +32,7 @@
   "showOthersFields":"I want to add my Eureka Moment to a Cycle and/or add tags.",
   "NoPromptText":"Please write a detailed description to generate possible images.",
   "CreateEureka": "Create an Eureka Moment to summarize a book or movie that impacted you using an image!",
-  "SelectImage":"Select the image you like the most or click 'Create image' again to get additional options. If you still don't like any, adjust your prompt to generate new images!",                        
+  "SelectImage":"Select the image or click 'Create Image' again for additional options. If you don't like any, adjust your prompt to create new images!",                        
   "descriptionLabel": "Describe the image you want to generate with as much detail as possible",
   "descriptionHelperText": "ex: women drowning in tons of data and information, digital art",
   "Style": "Style",
