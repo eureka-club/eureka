@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';;
-import { EditionMosaicItem } from '@/types/edition';
+import { EditionDetail } from '@/types/edition';
 import { Prisma } from '@prisma/client';
 import { useParams } from 'next/navigation';
 import { WEBAPP_URL } from '../constants';
@@ -7,7 +7,7 @@ import { WEBAPP_URL } from '../constants';
 export const getEditions= async (
   lang:string,
   props?:Prisma.WorkFindManyArgs,
-): Promise<{ editions: EditionMosaicItem[],fetched:number,total:number}> => {
+): Promise<{ editions: EditionDetail[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}`:''
   const url = `${WEBAPP_URL}/${lang}/api/edition${query}`
   const res = await fetch(url);
@@ -29,7 +29,7 @@ const useEditions = (props?:Prisma.WorkFindManyArgs,options?: Options) => {
   };
   let ck = cacheKey ? [`${cacheKey}-${JSON.stringify(props)}`] : ['EDITIONS', `${lang}-${JSON.stringify(props)}`];
 
-  return useQuery<{ editions: EditionMosaicItem[], fetched: number, total: number }>(
+  return useQuery<{ editions: EditionDetail[], fetched: number, total: number }>(
     {
       queryKey:ck, 
       queryFn:() => getEditions(lang,props),

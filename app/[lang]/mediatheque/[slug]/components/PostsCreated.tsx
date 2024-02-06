@@ -1,7 +1,7 @@
 "use client"
 import { FC } from "react";
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { PostMosaicItem } from "@/src/types/post";
+import { PostDetail } from "@/src/types/post";
 import { UserDetail } from "@/src/types/user";
 import { useDictContext } from '@/src/hooks/useDictContext';
 

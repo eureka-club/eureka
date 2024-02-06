@@ -1,4 +1,4 @@
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { Button } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { FunctionComponent, MouseEvent, SyntheticEvent } from 'react';
@@ -14,7 +14,7 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 
 
 interface Props {
-  post: PostMosaicItem;
+  post: PostDetail;
   cacheKey: string[] | [string, string];
 }
 const MAX_REACTIONS = 2;
@@ -62,7 +62,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
       return (
         <div>
           {/* <div style={{ position: 'relative' }}> */}
-          <EmojiPicker cacheKey={cacheKey} post={post as PostMosaicItem} onSaved={console.log} />
+          <EmojiPicker cacheKey={cacheKey} post={post as PostDetail} onSaved={console.log} />
           {/* </div> */}
           <Button
             variant='link'

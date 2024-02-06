@@ -20,7 +20,7 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 // import { useSession } from 'next-auth/react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
@@ -52,7 +52,7 @@ const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
 interface Props {
   workId: number;
-  post?: PostMosaicItem;
+  post?: PostDetail;
   session: Session;
 }
 
@@ -74,7 +74,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     enabled: !!workId,
   });
 
-  const [qty, setQty] = useState(work?.ratingAVG || 0);
+  const [qty, setQty] = useState(0);
   const [qtyByUser, setqtyByUser] = useState(0);
 
   useEffect(() => {
@@ -278,12 +278,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     return 0;
   };
 
-  const getRatingAvg = () => {
-    if (work) {
-      return work.ratingAVG || 0;
-    }
-    return 0;
-  };
+  // const getRatingAvg = () => {
+  //   if (work) {
+  //     return work.ratingAVG || 0;
+  //   }
+  //   return 0;
+  // };
 
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -356,7 +356,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         <Box sx={{ display: 'flex' }}>
                           <Rating qty={qty} onChange={handlerChangeRating} size="medium" readonly />
                           <div className="d-flex flex-nowrap ms-2">
-                            {getRatingAvg().toFixed(1)}
+                            {qty.toFixed(1)}
                             {' - '}
                             {getRatingQty()}
                           </div>

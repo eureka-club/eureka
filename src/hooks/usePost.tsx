@@ -1,7 +1,7 @@
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const getPost = async (id: number,origin=''): Promise<PostMosaicItem | undefined> => {
+export const getPost = async (id: number,origin=''): Promise<PostDetail | undefined> => {
   if (!id) return undefined;
   const url = `${origin||''}/api/post/${id}`;
 
@@ -22,13 +22,13 @@ const usePost = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true, 
   };
-  return useQuery<PostMosaicItem | undefined>({
+  return useQuery<PostDetail | undefined>({
     queryKey:['POST', `${id}`],
     queryFn: () => getPost(id), 
     staleTime,
     enabled,
     initialData:()=>{
-      return qc.getQueryData<{posts:PostMosaicItem[]}>(['POSTS','eurekas-of-interest'])?.posts.find(p=>p.id==id)
+      return qc.getQueryData<{posts:PostDetail[]}>(['POSTS','eurekas-of-interest'])?.posts.find(p=>p.id==id)
     }
   });
 };

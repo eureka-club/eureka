@@ -28,8 +28,8 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
 import { CycleDetail } from '@/src/types/cycle';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
+import { PostDetail } from '@/src/types/post';
+import { WorkDetail } from '@/src/types/work';
 import {
   MySocialInfo,
   isCycle,
@@ -52,7 +52,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  entity:CycleDetail | PostMosaicItem | WorkMosaicItem /* | UserDetail */;
+  entity:CycleDetail | PostDetail | WorkDetail /* | UserDetail */;
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
@@ -123,9 +123,11 @@ const SocialInteraction: FunctionComponent<Props> = ({
       setcurrentUserIsFav(() => favoritedByMe);
 
       if (isWork(entity)) {
+        let ratingCount = entity.ratings.length;
+        const ratingAVG = entity.ratings.reduce((p, c) => c.qty + p, 0) / ratingCount;
         ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
-        setQty(entity.ratingAVG || 0);
+        setQty(ratingAVG);
       } else if (isCycle(entity)) {
         ratingByMe = !!entity.currentUserRating;
         setMySocialInfo({ favoritedByMe, ratingByMe });
@@ -143,7 +145,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
 
   const shareUrl = (() => {
     if (isPost(entity)) {
-      const post = entity as PostMosaicItem;
+      const post = entity as PostDetail;
       const parentIsWork = post.works ? post.works.length > 0 : false;
       const parentIsCycle = !parentIsWork && post.cycles && post.cycles.length;
       if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
@@ -165,7 +167,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       return `${t(dict,'workShare')} ${'title' in entity ? `"${entity.title}"` : ''}`;
     }
     if (isPostMosaicItem(entity)) {
-      const post = entity as PostMosaicItem;
+      const post = entity as PostDetail;
       const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
       const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
       return `${t(dict,about)} "${p ? p.title : ''}"`;
@@ -407,13 +409,13 @@ const SocialInteraction: FunctionComponent<Props> = ({
       );
   };
 
-  const getInitialRating = () => {
-    if (entity) {
-      if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)) {
-        return entity.ratingAVG;
-      }
-    }
-  };
+  // const getInitialRating = () => {
+  //   if (entity) {
+  //     if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity)) {
+  //       return entity.ratingAVG;
+  //     }
+  //   }
+  // };
   const getRatingLabelInfo = () => {
     if (entity) {
      if(isCycleMosaicItem(entity) || isWorkMosaicItem(entity))

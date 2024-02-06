@@ -11,7 +11,7 @@ const getCountries = async (q?: string[]):Promise<Country[]> => {
     }
   });
   
-  const res = await fetch(url);
+  const res = await fetch(url!);
   const { result = [] } = await res.json();
   return result
   // const codes = result.map((i: { code: string }) => i.code);

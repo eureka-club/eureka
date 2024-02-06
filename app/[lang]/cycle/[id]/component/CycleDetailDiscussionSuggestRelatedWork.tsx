@@ -7,7 +7,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import { CycleDetail } from '@/src/types/cycle';
 import useWorks from '@/src/hooks/useWorks';
 import globalModalsAtom from '@/src/atoms/globalModals';
@@ -28,8 +28,8 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   const typeaheadRef = createRef<AsyncTypeaheadType>();
 
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkDetail[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkDetail | null>(null);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
   const {data:session} = useSession();
   const{t,dict}=useDictContext();
@@ -107,7 +107,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     results,
   }: {
     activeIndex: number;
-    results: WorkMosaicItem[];
+    results: WorkDetail[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -166,7 +166,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
               onSearch={handleSearchWork}
               options={data?.works||[]}
               onChange={handleSearchWorkSelect}
-              renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work as WorkMosaicItem} />}
+              renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work as WorkDetail} />}
             >
               {/* @ts-ignore*/}
               {handleSearchWorkHighlightChange}

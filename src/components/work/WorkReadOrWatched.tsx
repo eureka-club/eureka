@@ -1,5 +1,4 @@
-import { WorkMosaicItem } from '@/src/types/work';
-
+import { WorkDetail } from '@/src/types/work';
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
@@ -20,7 +19,7 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 // import styles from './WorkSummary.module.css';
 
 interface Props {
-  work: WorkMosaicItem; //Work ID
+  work: WorkDetail; //Work ID
   session: Session;
 }
 

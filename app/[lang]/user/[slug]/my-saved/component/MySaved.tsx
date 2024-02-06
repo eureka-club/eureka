@@ -8,9 +8,9 @@ import { useParams, useRouter } from 'next/navigation'
 import { BiArrowBack } from 'react-icons/bi';
 import { useDictContext } from "@/src/hooks/useDictContext";
 import getUserIdFromSlug from '@/src/getUserIdFromSlug';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import { CycleDetail } from '@/src/types/cycle';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import useFavCycles from '@/src/hooks/useFavCycles';
 import useFavPosts from '@/src/hooks/useFavPosts';
 import useFavWorks from '@/src/hooks/useFavWorks';
@@ -35,7 +35,7 @@ const MySaved: FC<Props> = () => {
 
     const renderPosts = () => {
         return <Row className='mt-5'>
-            {sfl.favPosts.map((i:PostMosaicItem) =>
+            {sfl.favPosts.map((i:PostDetail) =>
                 <Col key={i.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
                     <PMI postId={i.id} size='md' />
                 </Col>
@@ -53,7 +53,7 @@ const MySaved: FC<Props> = () => {
     }
     const renderWorks = () => {
         return <Row className='mt-5'>
-            {sfl.favWorks.map((c:WorkMosaicItem) =>
+            {sfl.favWorks.map((c:WorkDetail) =>
                 <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
                     <WMI notLangRestrict workId={c.id} size='md' />
                 </Col>

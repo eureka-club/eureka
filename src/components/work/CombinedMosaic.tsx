@@ -8,11 +8,11 @@
 // import Mosaic from '../Mosaic';
 // import { MosaicItem } from '../../types';
 // import { CycleDetail } from '../../types/cycle';
-// import { PostMosaicItem } from '../../types/post';
-// import { WorkMosaicItem } from '../../types/work';
+// import { PostDetail } from '../../types/post';
+// import { WorkDetail } from '../../types/work';
 
 // interface Props {
-//   work: WorkMosaicItem;
+//   work: WorkDetail;
 // }
 
 // const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
@@ -32,7 +32,7 @@
 //   //   isLoading: isPostsLoading,
 //   //   isSuccess: isPostsSuccess,
 //   //   data: postsData,
-//   // } = useQuery<PostMosaicItem[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
+//   // } = useQuery<PostDetail[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
 //   //   const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
 //   //   const includeQP = encodeURIComponent(JSON.stringify({ creator: {photos:true}, localImages: true, works: true }));
 //   //   const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);

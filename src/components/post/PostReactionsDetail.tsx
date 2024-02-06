@@ -1,14 +1,14 @@
 import { FunctionComponent, MouseEvent, SyntheticEvent, useMemo } from 'react';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { Button } from 'react-bootstrap';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useModalContext } from '@/src/useModal';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
-  post:PostMosaicItem;
+  post:PostDetail;
   cacheKey:string[];
 }
 const MAX_REACTIONS = 2;

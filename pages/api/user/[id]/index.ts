@@ -9,9 +9,8 @@ import { create } from '@/src/facades/notification';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
-import { UserDetail } from '@/src/types/user';
+import { UserDetail, UserSumary } from '@/src/types/user';
 import { Notification } from '@prisma/client';
-import { LANGUAGES } from '@/src/constants';
 
 export const config = {
   api: {
@@ -134,22 +133,4 @@ export default getApiHandler()
 
 
   })
-  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    try {
-      const { id:id_, select: s, include: i ,language:l} = req.query;
-    
-      const id = parseInt(id_ as string, 10)
-      let language = l?.toString();
-      const user = await find({where:{ id }},language!);
-
-      if(user)
-        (user as unknown as UserDetail).type = "user";
-
-      res.status(200).json({ user });
-    } catch (exc) {
-      console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ error: 'server error' });
-    } finally {
-      //prisma.$disconnect();
-    }
-  });
+ 

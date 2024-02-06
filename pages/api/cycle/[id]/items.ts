@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import {findAll as findAllPosts} from '@/src/facades/post'
 import getApiHandler from '@/src/lib/getApiHandler';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 
 export const config = {
   api: {
@@ -61,7 +61,7 @@ export default getApiHandler()
       }
 
       const it = [        
-        ...posts.map(p=>{(p as PostMosaicItem).type='post';return p;})
+        ...posts.map(p=>{(p as PostDetail).type='post';return p;})
       ]
 
       let items = page>-1 

@@ -86,7 +86,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false }) =>
 
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId!??0, { enabled: !!cycleId })
-  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
+  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle?.product_id!);
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates

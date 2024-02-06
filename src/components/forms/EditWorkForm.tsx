@@ -22,7 +22,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';;
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import TagsInput from './controls/TagsInput';
-import { EditWorkClientPayload, WorkMosaicItem } from '../../types/work';
+import { EditWorkClientPayload, WorkDetail } from '../../types/work';
 import { Country } from '@/src/types';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
@@ -37,7 +37,7 @@ import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTyp
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import LocalImageComponent from '../LocalImage';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { useSession } from 'next-auth/react';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
@@ -234,7 +234,7 @@ const EditWorkForm: FunctionComponent = () => {
       if (work) {
         const ck_ = ck || ['WORK', `${work.id}`];
         await queryClient.cancelQueries({queryKey:ck_})
-        const snapshot = queryClient.getQueryData<WorkMosaicItem>(ck_)
+        const snapshot = queryClient.getQueryData<WorkDetail>(ck_)
         const { title, contentText } = variables;
         if (snapshot) {
           queryClient.setQueryData(ck_, { ...snapshot, title, contentText });

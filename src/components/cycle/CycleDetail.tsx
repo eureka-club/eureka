@@ -18,8 +18,8 @@ import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '@/src/useMosaicContext';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
+import { PostDetail } from '@/src/types/post';
+import { WorkDetail } from '@/src/types/work';
 
 import PostDetailComponent from '../post/PostDetail';
 import HyvorComments from '@/src/components/common/HyvorComments';
@@ -41,12 +41,14 @@ import { ButtonsTopActions } from '../ButtonsTopActions';
 import { Button as MaterialButton } from '@mui/material';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import {useCycleParticipants} from '@/src/hooks/useCycleParticipants';
+import { Session } from '@/src/types';
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
 interface Props {
-  post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  post?: PostDetail;
+  work?: WorkDetail;
+  session:Session
 }
 
 const CycleDetailComponent: FunctionComponent<Props> = ({
@@ -304,7 +306,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
         
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+      const allowed = participants && participants.findIndex(p=>p.id==session?.user.id)>-1
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;
 
@@ -345,7 +347,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           </NavItem>
         </>
       );
-      const allowed = cycle.participants.findIndex(p=>p.id==session?.user.id)>-1
+      const allowed = participants && participants.findIndex(p=>p.id==session?.user.id)>-1
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;
       if (cycle.access === 3) return <></>;

@@ -5,18 +5,19 @@ import SignInForm from '@/src/components/forms/SignInForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UserDetail } from '@/src/types/user';
-import useUser from '@/src/hooks/useUser';
-import { WorkMosaicItem } from '@/src/types/work';
-import { useDictContext } from '../useDictContext';
+import useUser from '@/src/useUser';
+import { WorkDetail } from '@/src/types/work';
+import useTranslation from 'next-translate/useTranslation';
 import { useParams } from 'next/navigation';
-import useReadOrWatchedWorks from '@/src/hooks/useReadOrWatchedWorks';
+import useReadOrWatchedWorks from '../useReadOrWatchedWorks';
+import { useDictContext } from '../useDictContext';
 
 export interface ExecReadOrWatchedWorkPayload {
   doCreate: boolean;
   year: number;
 }
 interface Props{
-  work:WorkMosaicItem;
+  work:WorkDetail;
   notLangRestrict?:boolean
 }
 
@@ -29,7 +30,7 @@ const useExecReadOrWatchedWork = (props: Props) => {
     enabled: !!session?.user?.id,
   });
   const {data:roww}=useReadOrWatchedWorks(user?.id!);
-  const readOrWatchedWorks = roww as {work:WorkMosaicItem,year:any}[];
+  const readOrWatchedWorks = roww as {work:WorkDetail,year:any}[];
   const {dict} = useDictContext();
   const { show } = useModalContext();
 
@@ -64,7 +65,7 @@ const useExecReadOrWatchedWork = (props: Props) => {
           await queryClient.cancelQueries({queryKey:cacheKey});
 
           prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
-          prevWork = queryClient.getQueryData<WorkMosaicItem>(cacheKey);
+          prevWork = queryClient.getQueryData<WorkDetail>(cacheKey);
 
           let readOrWatchedUser = readOrWatchedWorks;
           let readOrWatchedWork = work.readOrWatchedWorks;

@@ -1,8 +1,8 @@
 import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
-import { CycleDetail } from './types/cycle';
-import { PostMosaicItem } from './types/post';
-import { WorkMosaicItem, GoogleBooksProps, TMDBVideosProps } from './types/work';
+import { CycleDetail, CycleSumary } from './types/cycle';
+import { PostDetail } from './types/post';
+import { WorkDetail, GoogleBooksProps, TMDBVideosProps, WorkSumary } from './types/work';
 import { UserDetail } from '@/src/types/user';
 import { Session as S } from 'next-auth';
 export interface FileUpload {
@@ -45,8 +45,8 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleDetail | PostMosaicItem | WorkMosaicItem | UserDetail;
-export type SearchResult = CycleDetail | PostMosaicItem | WorkMosaicItem | UserDetail;
+export type MosaicItem = CycleSumary | WorkSumary | PostDetail | UserDetail;
+export type SearchResult = CycleDetail | PostDetail | WorkDetail | UserDetail;
 export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
@@ -72,12 +72,12 @@ export const isUser = (obj: BasicEntity): obj is User =>
 export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleDetail =>
   obj && 'type' in obj && obj.type == 'cycle';
 
-export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkMosaicItem =>
+export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkDetail =>
   obj &&
   'type' in obj &&
-  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkMosaicItem).type);
+  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkDetail).type);
 
-export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostDetail =>
   obj && 'type' in obj && obj.type == 'post';
 
 export const isBookGoogleBookApi = (obj: GoogleBooksProps | APIMediaSearchResult): obj is GoogleBooksProps =>
@@ -98,7 +98,7 @@ export interface NotifierRequest {
 }
 
 export interface GetAllByResonse {
-  data: (WorkMosaicItem | CycleDetail)[];
+  data: (WorkDetail | CycleDetail)[];
   extraCyclesRequired: number;
   extraWorksRequired: number;
   hasMore: boolean;

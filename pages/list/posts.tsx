@@ -8,7 +8,7 @@ import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
 import { QueryClient, dehydrate, useMutation } from '@tanstack/react-query';;
 
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { Session } from '@/src/types';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
@@ -24,7 +24,7 @@ const ListPostsPage: NextPage<Props> = ({ session }) => {
   const asPath = usePathname()!;
   const { mutate: execDeletePost, isSuccess: isDeletePostSuccess } = useMutation(
     {
-      mutationFn:async (post: PostMosaicItem) => {
+      mutationFn:async (post: PostDetail) => {
         const res = await fetch(`/api/post/${post.id}`, {
           method: 'delete',
         });
@@ -37,7 +37,7 @@ const ListPostsPage: NextPage<Props> = ({ session }) => {
   const {data} = usePosts();
   const posts = data?.posts;
 
-  const handleDeleteClick = (post: PostMosaicItem) => {
+  const handleDeleteClick = (post: PostDetail) => {
     execDeletePost(post);
   };
 

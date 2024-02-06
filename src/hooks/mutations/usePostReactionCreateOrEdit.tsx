@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 
 export interface ExecReactionPayload {
   doCreate:boolean;
@@ -17,10 +17,10 @@ export interface ExecReactionPayload {
 }
 interface MutateReturn{
   prevUser:UserDetail|undefined;
-  prevPost:PostMosaicItem|undefined;
+  prevPost:PostDetail|undefined;
 }
 interface Props{
-  post:PostMosaicItem;
+  post:PostDetail;
   cacheKey:string[]|[string,string];
 }
 
@@ -68,7 +68,7 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           await queryClient.cancelQueries({queryKey:ck});
           
           prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
-          prevPost = queryClient.getQueryData<PostMosaicItem>(ck);
+          prevPost = queryClient.getQueryData<PostDetail>(ck);
       
           let reactionsPost = user.reactions;
           let reactions = post.reactions;

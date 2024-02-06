@@ -5,21 +5,21 @@ import { Col, Spinner, CardGroup } from 'react-bootstrap';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
-import { WorkMosaicItem /* , WorkWithImages */ } from '../../types/work';
-import { CycleDetail /* , CycleWithImages */ } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
+import { WorkSumary } from '../../types/work';
+import { CycleSumary } from '../../types/cycle';
+import { PostDetail } from '../../types/post';
 import { UserDetail } from '../../types/user';
 import Mosaics from './Mosaics';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
-type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserDetail;
+type Item = CycleSumary | WorkSumary | PostDetail | UserDetail;
 type Props = {
   title?: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => void;
   seeAll?: boolean;
-  data: Item[]; // ((CycleDetail & { type: string }) | WorkMosaicItem)[];
+  data: Item[]; // ((CycleDetail & { type: string }) | WorkDetail)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;

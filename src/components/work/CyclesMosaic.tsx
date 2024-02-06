@@ -1,13 +1,13 @@
-import {WorkMosaicItem} from '@/src/types/work'
+import {WorkDetail} from '@/src/types/work'
 import { FunctionComponent } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useQuery } from '@tanstack/react-query';;
 import useCycles from '@/src/useCycles';
-import { CycleDetail } from '../../types/cycle';
+import { CycleDetail, CycleSumary } from '../../types/cycle';
 import Mosaic from '../Mosaic';
 
 interface Props {
-  work: WorkMosaicItem;
+  work: WorkDetail;
 }
 
 const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
@@ -35,7 +35,7 @@ const CyclesMosaic: FunctionComponent<Props> = ({ work }) => {
       {/* {isLoading && (
         <Spinner animation="grow" role="status"/>        
       )} */}
-      {work && cycles && <Mosaic cacheKey={['WORK',work.id.toString()]} className='d-flex justify-content-center justify-content-md-start' stack={cycles as CycleDetail[]} />}
+      {work && cycles && <Mosaic cacheKey={['WORK',work.id.toString()]} className='d-flex justify-content-center justify-content-md-start' stack={cycles as CycleSumary[]} />}
     </>
   );
 };

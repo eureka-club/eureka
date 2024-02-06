@@ -1,7 +1,7 @@
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { CycleDetail } from "@/src/types/cycle";
-import { PostMosaicItem } from "@/src/types/post";
-import { WorkMosaicItem } from "@/src/types/work";
+import { PostDetail } from "@/src/types/post";
+import { WorkDetail } from "@/src/types/work";
 import { BsBookmark } from 'react-icons/bs';
 import { useDictContext } from '@/src/hooks/useDictContext';
 import dayjs from 'dayjs';
@@ -25,7 +25,7 @@ const SavedForLater:FC<Props> = ({goTo}) => {
 
   const { t, dict } = useDictContext();
 
-  const items = [...favPosts??[],...favCycles??[],...favWorks??[]] as PostMosaicItem[]|CycleDetail[]|WorkMosaicItem[];
+  const items = [...favPosts??[],...favCycles??[],...favWorks??[]] as PostDetail[]|CycleDetail[]|WorkDetail[];
   items.sort((f, s) => {
     const fCD = dayjs(f.createdAt);
     const sCD = dayjs(s.createdAt);

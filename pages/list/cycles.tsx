@@ -19,6 +19,7 @@ import { advancedDayjs } from '@/src/lib/utils';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import useCycles, { getCycles } from '@/src/useCycles';
+import { CycleSumary } from '@/src/types/cycle';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -32,7 +33,7 @@ const ListCyclesPage: NextPage<Props> = ({ session }) => {
   const asPath = usePathname()!;
   const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(
     {
-      mutationFn:async (cycle: Cycle) => {
+      mutationFn:async (cycle: CycleSumary) => {
         const res = await fetch(`/api/cycle/${cycle.id}`, {
           method: 'delete',
         });
@@ -46,7 +47,7 @@ const ListCyclesPage: NextPage<Props> = ({ session }) => {
   const {data} = useCycles();
   const cycles = data?.cycles;
 
-  const handleDeleteClick = (cycle: Cycle) => {
+  const handleDeleteClick = (cycle: CycleSumary) => {
     execDeleteCycle(cycle);
   };
 

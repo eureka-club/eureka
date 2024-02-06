@@ -27,9 +27,10 @@ import SignInForm from '../forms/SignInForm';
 import { CycleSumary } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import {useCycleParticipants} from '@/src/hooks/useCycleParticipants';
 import SocialInteraction from './SocialInteraction';
 import Link from 'next/link';
+import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
+import useCycleSumary from '@/src/useCycleSumary';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -72,13 +73,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const [idSession,setIdSession] = useState<string>('')
-  const { data: user } = useUser(+idSession,{ enabled: !!+idSession });
-  const [countParticipants,setCountParticipants] = useState<number>()
+  const { data: user } = useUser(session?.user.id!,{ enabled: !!session?.user.id });
   
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const {data} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
+  const {data} = useCycleSumary(cycleId,{enabled:!!cycleId && !cycleItem})
   
   const searchParams=useSearchParams()!;
   const join=searchParams.get('join');
@@ -87,42 +86,11 @@ const MosaicItem: FunctionComponent<Props> = ({
     if(!cycleItem && data)setCycle(data)
   },[data])
 
-  const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
+  const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle?.product_id!);
   const {data:participants}=useCycleParticipants(cycleId)
   
   const {show} = useModalContext()
-  
-  const whereCycleParticipants = {
-    where:{
-      OR:[
-        {cycles: { some: { id: cycle?.id } }},//creator
-        {joinedCycles: { some: { id: cycle?.id } }},//participants
-      ], 
-    }
-  };
-  // const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants,
-  //   {
-  //     enabled:!!cycle?.id,
-  //     from:'cycle/Mosaic'
-  //   }
-  // )
-
   // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
-  
-  useEffect(() => {
-    const s = session;
-    if (s) {
-      setIdSession(s.user.id.toString());
-    }
-  }, [session]);
-  
-  useEffect(() => {
-    if (cycle && user && participants) {
-      setCountParticipants(participants.length);
-      const idx = participants.findIndex(p=>p.id==user.id);
-    }
-  }, [user, cycle,participants, session]);
-
   
   const { t, dict } = useDictContext();
   const isFetchingCycle = useIsFetching({queryKey:['CYCLE',`${cycle?.id}`]})

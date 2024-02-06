@@ -10,8 +10,8 @@ import {BsChevronUp, BsX} from 'react-icons/bs';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { MySocialInfo } from '../../types';
-import { PostMosaicItem } from '../../types/post';
-import { WorkMosaicItem } from '../../types/work';
+import { PostDetail } from '../../types/post';
+import { WorkDetail } from '../../types/work';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetailHeader.module.css';
 import MosaicItem from './MosaicItem';
@@ -31,8 +31,8 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   // cycle: CycleDetail;
   cycleId:number;
-  post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  post?: PostDetail;
+  work?: WorkDetail;
   isCurrentUserJoinedToCycle?: boolean;
   participantsCount?: number;
   postsCount?: number;
@@ -256,10 +256,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <CarouselStatic
               cacheKey={['CYCLE', cycle.id.toString()]}
               showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t(dict,' I created'))}
+              // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
               title={<CycleSummary cycle={cycle} />}
-              data={getWorksSorted() as WorkMosaicItem[]}
+              data={getWorksSorted() as WorkDetail[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
               size="sm"
@@ -282,7 +282,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
                 title={<CycleSummary cycle={cycle} />}
-                data={getWorksSorted() as WorkMosaicItem[]}
+                data={getWorksSorted() as WorkDetail[]}
                 iconBefore={<></>}
                 customMosaicStyle={{ height: '16em' }}
                 size={'sm'}

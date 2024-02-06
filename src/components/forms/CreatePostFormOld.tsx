@@ -28,7 +28,7 @@
 // import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 // import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 // import { CycleDetail } from '../../types/cycle';
-// import { WorkMosaicItem } from '../../types/work';
+// import { WorkDetail } from '../../types/work';
 // //import ImageFileSelect from './controls/ImageFileSelect';
 // import LanguageSelect from './controls/LanguageSelect';
 // import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -65,7 +65,7 @@
 //   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
 //   const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
 //   const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
-//   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
+//   const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
 //   const [imageFile, setImageFile] = useState<File | null>(null);
 //   const [items, setItems] = useState<string[]>([]);
 //   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -118,7 +118,7 @@
 //   // }, [router, router.query.id]);
 
 //   useEffect(() => {
-//     if (work) setSelectedWork(work as WorkMosaicItem);
+//     if (work) setSelectedWork(work as WorkDetail);
 //   }, [work]);
 
 //   const { t } = useTranslation('createPostForm');

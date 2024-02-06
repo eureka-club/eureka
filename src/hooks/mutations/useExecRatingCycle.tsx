@@ -4,6 +4,7 @@ import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CycleDetail } from '@/src/types/cycle';
+import { WorkDetail } from '@/src/types/work';
 import { useSession } from 'next-auth/react';
 import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';

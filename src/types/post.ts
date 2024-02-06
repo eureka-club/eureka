@@ -5,16 +5,16 @@ import { Session } from '../types';
 //   localImages: LocalImage[];
 //   // type: string;
 // }
-
-export type PostMosaicItem = Prisma.PostGetPayload<{
-  include:{
-    works:{select:{id:true,author:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
-    cycles:{select:{id:true,access:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
-    favs:{select:{id:true,}},
-    creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
-    localImages: {select:{storedFile:true}},
-    reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}},
-  }
+export const PostDetailSpec = {
+  works:{select:{id:true,author:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
+  cycles:{select:{id:true,access:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
+  favs:{select:{id:true,}},
+  creator: {select:{id:true,name:true,photos:true,countryOfOrigin:true}},
+  localImages: {select:{storedFile:true}},
+  reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}},
+} satisfies Prisma.PostInclude
+export type PostDetail = Prisma.PostGetPayload<{
+  include:typeof PostDetailSpec
 }> & { 
   type?: 'post';
   currentUserIsFav?:boolean;

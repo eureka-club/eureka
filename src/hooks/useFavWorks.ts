@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query"
-import { WorkMosaicItem } from "../types/work"
+import { WorkDetail } from "../types/work"
 import { WEBAPP_URL } from "../constants"
 
-export const getFavWorks = async (id:number):Promise<WorkMosaicItem[]>=>{
+export const getFavWorks = async (id:number):Promise<WorkDetail[]>=>{
     const url=`${WEBAPP_URL}/api/user/${id}/favWorks`;
     const fr=await fetch(url);
     if(fr.ok){
         const {favWorks}=await fr.json();
-        return (favWorks as WorkMosaicItem[]).map(c=>({...c,type:'post'}))
+        return (favWorks as WorkDetail[]).map(c=>({...c,type:'post'}))
     }
     return [];
 }

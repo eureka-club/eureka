@@ -4,23 +4,23 @@ import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetail, CycleDe
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
-import { PostMosaicItem } from '../types/post';
+import { PostDetail } from '../types/post';
 import { UserDetailSpec, UserDetail } from '../types/user';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
-
-export const findSumary = async (id: number): Promise<CycleSumary | null> => {
+export const findSumary = async (id: number) => {
   const cycle = await prisma.cycle.findUnique({
     where: { id },
-    select:CycleSumarySpec.select
+    select:CycleSumarySpec
   });
-  return cycle;
+  return cycle ? {...cycle,type:'cycle'} : null;
 };
+
 export const find = async (id: number): Promise<CycleDetail | null> => {
   return prisma.cycle.findUnique({
     where: { id },
-    include: CycleDetailSpec.include
+    include: CycleDetailSpec
   });
 };
 
@@ -32,8 +32,21 @@ export const findAll = async (props?: Prisma.CycleFindManyArgs): Promise<CycleDe
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    include: CycleDetailSpec.include
+    include: CycleDetailSpec
   });
+};
+
+export const findAllSumary = async (props?: Prisma.CycleFindManyArgs) => {
+  const { where, take, skip, cursor } = props || {};
+  let cs = await prisma.cycle.findMany({
+    take,
+    skip,
+    cursor,
+    ...(where && { where }),
+    orderBy: { createdAt: 'desc' },
+    select: CycleSumarySpec
+  });
+  return cs.map(c=>({...c,type:'cycle'}));
 };
 
 export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
@@ -469,7 +482,7 @@ export const remove = async (cycle: Cycle): Promise<Cycle> => {
   });
 };
 
-export const posts = async (id: number): Promise<PostMosaicItem[]> => {
+export const posts = async (id: number): Promise<PostDetail[]> => {
   const cycle = await prisma.cycle.findUnique({
     where: { id },
     select:{
@@ -505,10 +518,10 @@ export const participants = async (id: number): Promise<UserDetail[]> => {
     where: { id },
     select:{
       participants:{
-        select: UserDetailSpec.select
+        select: UserDetailSpec
       },
       creator:{
-        select: UserDetailSpec.select
+        select: UserDetailSpec
       }
     },
   });

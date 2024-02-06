@@ -1,6 +1,7 @@
 import useReadOrWatchedWorks from '@/src/hooks/useReadOrWatchedWorks';
 import { UserDetail } from './types/user';
 import useUser from './useUser';
+import { WorkSumary } from './types/work';
 
 type Item = UserDetail
 

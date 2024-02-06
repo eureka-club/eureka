@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react';
 import { CycleDetail } from './types/cycle';
-import toast from 'react-hot-toast';
 import { UserDetail } from './types/user';
 
 export type ContextType = {

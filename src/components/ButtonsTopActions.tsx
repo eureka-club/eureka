@@ -1,7 +1,7 @@
-import { Button, ButtonGroup } from "@mui/material"
+import { Button, ButtonGroup, IconButton } from "@mui/material"
 import { useRouter } from "next/router";
 import { ReactElement } from "react"
-import { BiArrowBack } from "react-icons/bi"
+import { BiArrowBack } from "react-icons/bi";
 
 interface Props{
   children?: ReactElement | ReactElement[];
@@ -11,13 +11,13 @@ export const ButtonsTopActions = (props:Props)=>{
     return <ButtonGroup
         disableElevation
         variant="contained"
+        size="small"
         >
             <Button 
-            size='small' 
             color="primary"
             onClick={() => router.back()}
             >
-                <BiArrowBack />
+                <span style={{width:'0px'}}>&nbsp;</span><BiArrowBack />
             </Button>
             {props.children}
     </ButtonGroup>

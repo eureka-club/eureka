@@ -3,7 +3,7 @@ import { CycleDetail } from './types/cycle';
 
 export const getCycle = async (id: number,origin=''): Promise<CycleDetail | undefined> => {
   if (!id) throw new Error('idRequired');
-  const url = `${origin||''}/api/cycle/${id}`;
+  const url = `${origin||''}/api/cycle/${id}/detail`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;

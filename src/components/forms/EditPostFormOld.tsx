@@ -20,9 +20,9 @@
 // import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 // import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
-// import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+// import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostDetail } from '../../types/post';
 // import { CycleDetail } from '../../types/cycle';
-// import { WorkMosaicItem } from '../../types/work';
+// import { WorkDetail } from '../../types/work';
 // // import ImageFileSelect from './controls/ImageFileSelect';
 // import LanguageSelect from './controls/LanguageSelect';
 // import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -47,7 +47,7 @@
 //   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
 //   const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
 //   const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
-//   const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
+//   const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
 //   const { data: topics } = useTopics();
 
 //   const [items, setItems] = useState<string[]>([]);
@@ -73,7 +73,7 @@
 //             items.push(...post.topics.split(','));
 //       }
 //     }
-//     if (post && post.works.length) setSelectedWork(post.works[0] as WorkMosaicItem);
+//     if (post && post.works.length) setSelectedWork(post.works[0] as WorkDetail);
 //     if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleDetail);
 //     if(post && post.language) setLanguage(post.language);
 //   },[post])
@@ -104,12 +104,12 @@
 //          if (post) {
 //             const ck_ = ck||['POST',`${post.id}`];
 //             await queryClient.cancelQueries(ck_)
-//             const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+//             const snapshot = queryClient.getQueryData<PostDetail[]|PostDetail>(ck_)
 //             const {title,contentText} = variables;
 //             if(snapshot){
 //               let posts = [];
 //               if(('length' in snapshot)){
-//                 posts = [...snapshot] as PostMosaicItem[];                  
+//                 posts = [...snapshot] as PostDetail[];                  
 //                 const idx = posts.findIndex(p=>p.id == +postId)
 //                 if(idx >- 1){
 //                   const oldPost = posts[idx];
@@ -171,12 +171,12 @@
 //          if (post) {
 //             const ck_ = ck||['POST',`${post.id}`];
 //             await queryClient.cancelQueries(ck_)
-//             const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+//             const snapshot = queryClient.getQueryData<PostDetail[]|PostDetail>(ck_)
 //             const {title,contentText} = variables;
 //             if(snapshot){
 //               let posts = [];
 //               if(('length' in snapshot)){
-//                 posts = [...snapshot] as PostMosaicItem[];                  
+//                 posts = [...snapshot] as PostDetail[];                  
 //                 const idx = posts.findIndex(p=>p.id == +postId)
 //                 if(idx >- 1){
 //                   const oldPost = posts[idx];
@@ -368,7 +368,7 @@
 
 //   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
 //     if (post && ev.currentTarget.id in post) {
-//       const p: PostMosaicItem & { [key: string]: unknown } = post;
+//       const p: PostDetail & { [key: string]: unknown } = post;
 //       p[ev.currentTarget.id] = ev.currentTarget.value;
 //       // setPost(p);
 //     }

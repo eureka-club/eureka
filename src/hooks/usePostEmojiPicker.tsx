@@ -1,6 +1,6 @@
 import { Modal } from 'react-bootstrap';
 import React, { useState } from 'react'
-import { PostMosaicItem } from '@/src/types/post'
+import { PostDetail } from '@/src/types/post'
 // import {default as EP, EmojiClickData} from 'emoji-picker-react'
 import dynamic from 'next/dynamic';
 import { EmojiClickData } from 'emoji-picker-react';
@@ -14,7 +14,7 @@ const EP = dynamic(
     { ssr: false }
 );
 interface Props {
-    post: PostMosaicItem;
+    post: PostDetail;
     cacheKey: string[] | [string, string];
     onSaved?: (emoji: EmojiClickData) => void
 }

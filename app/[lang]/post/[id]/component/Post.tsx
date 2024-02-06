@@ -12,7 +12,7 @@ import styles from './Post.module.css';
 import Avatar from '@/src/components/common/UserAvatar';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { Alert } from '@mui/material';
-import { PostMosaicItem } from "@/src/types/post";
+import { PostDetail } from "@/src/types/post";
 import { FC, MouseEvent } from "react";
 import MosaicItem from "@/src/components/post/MosaicItemDetail";
 import { BiArrowBack } from 'react-icons/bi';
@@ -28,7 +28,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 interface Props {
-  post: PostMosaicItem;
+  post: PostDetail;
 }
 const Post: FC<Props> = ({ post }:Props) => {
   const { t, dict } = useDictContext();

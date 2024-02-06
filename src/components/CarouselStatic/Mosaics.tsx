@@ -1,11 +1,11 @@
 import { FC } from "react";
 import GenericMosaicItem from "./GenericMosaicItem";
-import { CycleDetail } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
-import { PostMosaicItem } from '../../types/post';
+import { CycleSumary } from '../../types/cycle';
+import { WorkSumary } from '../../types/work';
+import { PostDetail } from '../../types/post';
 import { UserDetail } from '../../types/user';
 
-type Item = CycleDetail | WorkMosaicItem | PostMosaicItem | UserDetail;
+type Item = CycleSumary | WorkSumary | PostDetail | UserDetail;
 type MosaicProps = {
     data: Item[];
     showSocialInteraction?: boolean;

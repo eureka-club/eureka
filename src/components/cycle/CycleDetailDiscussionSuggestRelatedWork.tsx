@@ -13,8 +13,8 @@ import { useAtom } from 'jotai';
 import { Cycle, Work } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
 // import { Session } from '../../types';
-import { WorkMosaicItem } from '../../types/work';
 import { CycleDetail } from '../../types/cycle';
+import { WorkDetail } from '../../types/work';
 import useWorks from '@/src/useWorks';
 import globalModalsAtom from '../../atoms/globalModals';
 // import ImageFileSelect from '../forms/controls/ImageFileSelect';
@@ -36,9 +36,9 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const typeaheadRef = useRef(null);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
-  // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkDetail[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkDetail | null>(null);
+  // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkDetail[]>([]);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
   const {data:session} = useSession();
   const { t, dict } = useDictContext();
@@ -142,7 +142,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     results,
   }: {
     activeIndex: number;
-    results: WorkMosaicItem[];
+    results: WorkDetail[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -151,7 +151,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
   };
 
   const handleSearchWorkSelect = (selected: Option[]): void => {
-    const s = (selected as WorkMosaicItem[]);
+    const s = (selected as WorkDetail[]);
     if (s[0] != null) {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       setIncludedWorksIds(() => [s[0].id]);
@@ -197,12 +197,12 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
               placeholder={t(dict,'Select work')}
               ref={typeaheadRef}
               isLoading={isWorkSearchLoading}
-              labelKey={(res) => `${(res as WorkMosaicItem).title}`}
+              labelKey={(res) => `${(res as WorkDetail).title}`}
               minLength={2}
               onSearch={handleSearchWork}
               options={data?.works||[]}
               onChange={handleSearchWorkSelect}
-              renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work as WorkMosaicItem} />}
+              renderMenuItemChildren={(work) => <WorkTypeaheadSearchItem work={work as WorkDetail} />}
             >
               {/* @ts-ignore*/}
               {handleSearchWorkHighlightChange}

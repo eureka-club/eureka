@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { FunctionComponent } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
 import UnclampText from '../UnclampText';
@@ -28,7 +28,7 @@ import useCyclesCreated from 'app/[lang]/mediatheque/[slug]/hooks/useCyclesCreat
 interface Props {
   postId: number;
   cycleId?:number;
-  work?: WorkMosaicItem;
+  work?: WorkDetail;
   cacheKey: [string, string];
   showSaveForLater?: boolean;
 }

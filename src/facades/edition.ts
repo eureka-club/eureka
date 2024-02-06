@@ -1,39 +1,31 @@
-import { Prisma, Edition, LocalImage } from '@prisma/client';
+import { Prisma, Edition } from '@prisma/client';
 import { StoredFileUpload } from '../types';
-import { CreateEditionPayload, CreateEditionServerPayload, EditEditionPayload, EditionMosaicItem } from '../types/edition';
+import { CreateEditionServerPayload, EditEditionPayload, EditionDetail, EditionDetailSpec } from '../types/edition';
 import { prisma } from '@/src/lib/prisma';
-import { connect } from 'http2';
 
-export const find = async (id: number): Promise<EditionMosaicItem | null> => {
+export const find = async (id: number): Promise<EditionDetail | null> => {
   return prisma.edition.findUnique({
     where: { id },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-    },
-    
+    include: EditionDetailSpec
   });
 };
 
-export const findAll = async (props?: Prisma.EditionFindManyArgs): Promise<EditionMosaicItem[]> => {
+export const findAll = async (props?: Prisma.EditionFindManyArgs): Promise<EditionDetail[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
   return prisma.edition.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-    },
+    include: EditionDetailSpec,
     where,
   });
 };
 
-export const findAllByWork = async (workId:number): Promise<EditionMosaicItem[]> => {
+export const findAllByWork = async (workId:number): Promise<EditionDetail[]> => {
   return prisma.edition.findMany({
     orderBy: { createdAt: 'desc' },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-    },
+    include: EditionDetailSpec,
     where:{workId},
   });
 };

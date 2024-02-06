@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';;
-import { WorkMosaicItem } from './types/work';
+import { useQuery } from 'react-query';
+import { WorkDetail } from './types/work';
 import { Prisma } from '@prisma/client';
 import { useParams } from 'next/navigation';
 
@@ -8,7 +8,7 @@ export const getWorks = async (
   lang?: string,
   props?: Prisma.WorkFindManyArgs,
   origin = '',
-): Promise<{ works: WorkMosaicItem[], fetched: number, total: number }> => {
+): Promise<{ works: WorkDetail[], fetched: number, total: number }> => {
   let query = props ? `?props=${encodeURIComponent(JSON.stringify(props))}` : ''  //lang=${lang}&
   if (lang)
     query += `&lang=${lang}`;
@@ -34,7 +34,7 @@ const useWorks = (props?: Prisma.WorkFindManyArgs, options?: Options) => {
 
   let ck = (cacheKey || notLangRestrict) ? [`${cacheKey}-${JSON.stringify(props)}`] : ['WORKS', `${lang}-${JSON.stringify(props)}`];
 
-  return useQuery<{ works: WorkMosaicItem[], fetched: number, total: number }>(
+  return useQuery<{ works: WorkDetail[], fetched: number, total: number }>(
     {
         queryKey:ck,
          queryFn:() => getWorks(!notLangRestrict ? lang : undefined, props),

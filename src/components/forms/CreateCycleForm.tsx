@@ -21,7 +21,7 @@ import globalModals from '../../atoms/globalModals';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
 import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -49,9 +49,9 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkMosaicItem[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkMosaicItem | null>(null);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkMosaicItem[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkDetail[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkDetail | null>(null);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkDetail[]>([]);
   const [enableWorksDisscussionsDates, setEnableWorksDisscussionsDates] = useState<boolean>(true);
   const [selectedWorksForCycleDates, setSelectedWorksForCycleDates] = useState<{
     [key: number]: { startDate?: string; endDate?: string; isInvalidStartDate?: boolean; isInvalidEndDate?: boolean };
@@ -252,7 +252,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
     const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
     const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
-    const itemsSW: WorkMosaicItem[] = await response.json();
+    const itemsSW: WorkDetail[] = await response.json();
 
     setWorkSearchResults(itemsSW);
     setIsWorkSearchLoading(false);
@@ -263,7 +263,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     results,
   }: {
     activeIndex: number;
-    results: WorkMosaicItem[];
+    results: WorkDetail[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -271,7 +271,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
-  const handleSearchWorkSelect = (selected: Option[]): void => {
+  const handleSearchWorkSelect = (selected: WorkDetail[]): void => {
     if (selected[0] != null) {
       //TODO tsc error
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
@@ -936,7 +936,8 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
                   minLength={2}
                   onSearch={handleSearchWork}
                   options={workSearchResults}
-                  onChange={handleSearchWorkSelect}
+                  // TODO
+                  // onChange={handleSearchWorkSelect}
                   renderMenuItemChildren={(work) => {
                     //TODO tsc error
                     // <WorkTypeaheadSearchItem work={work} />

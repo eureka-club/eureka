@@ -6,13 +6,14 @@ import MosaicItemPost from './post/Old_MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import { CycleDetail } from '../types/cycle';
-import { WorkMosaicItem } from '../types/work';
-import { PostMosaicItem } from '../types/post';
+import { WorkDetail } from '../types/work';
+import { PostDetail } from '../types/post';
 import { CycleContext } from '../useCycleContext';
+import { UserSumary } from '../types/user';
 
 const renderMosaicItem = (
   item: MosaicItem,
-  parent: CycleDetail | WorkMosaicItem | PostMosaicItem| undefined,
+  parent: CycleDetail | WorkDetail | PostDetail| undefined,
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
@@ -28,12 +29,12 @@ const renderMosaicItem = (
   else if (isPostMosaicItem(item)) {
     // let pp = parent;
     // if (!pp) {
-    //   const it: PostMosaicItem = item as PostMosaicItem;
-    //   if (it.works && it.works.length > 0) pp = it.works[0] as WorkMosaicItem;
+    //   const it: PostDetail = item as PostDetail;
+    //   if (it.works && it.works.length > 0) pp = it.works[0] as WorkDetail;
     //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleDetail;
     // }
     // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
-    // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
+    // const workId = isWorkDetail(pp!) ? pp.id : undefined;
 
     return (
       <MosaicItemPost
@@ -54,7 +55,7 @@ const renderMosaicItem = (
     );
   }
   else if (isUserMosaicItem(item)) {
-    return <MosaicItemUser  user={item} className="mb-2" />;
+    return <MosaicItemUser  user={item as unknown as UserSumary} className="mb-2" />;
   }
 
   return <></>;
@@ -66,7 +67,7 @@ interface Props {
   showComments?: boolean;
   cacheKey: [string,string];
   className?: string;
-  parent?: CycleDetail | WorkMosaicItem;
+  parent?: CycleDetail | WorkDetail;
   enabledPagination?:boolean;
 }
 

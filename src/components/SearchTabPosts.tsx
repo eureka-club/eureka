@@ -9,7 +9,7 @@ import usePosts,{getPosts} from '@/src/usePosts'
 import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { PostMosaicItem } from '../types/post';
+import { PostDetail } from '../types/post';
 import { useDictContext } from '../hooks/useDictContext';
 
 const take = 8;
@@ -75,7 +75,7 @@ const SearchTabCycles:FunctionComponent = () => {
   const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...getProps()}})
 
   const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePosts(props,{cacheKey,enabled:!!q});
-  const [posts,setPosts] = useState<PostMosaicItem[]>([])
+  const [posts,setPosts] = useState<PostDetail[]>([])
   
   useEffect(()=>{
 

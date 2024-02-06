@@ -13,12 +13,13 @@ import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/Old_MosaicItem';
 import MosaicItemWork from './work/MosaicItem';
 import styles from './Carousel.module.css';
-import { WorkMosaicItem /* , WorkWithImages */ } from '../types/work';
-import { CycleDetail /* , CycleWithImages */ } from '../types/cycle';
+import { WorkDetail /* , WorkWithImages */ } from '../types/work';
 import { CycleContext } from '../useCycleContext';
 import { GetAllByResonse } from '@/src/types';
-import { PostMosaicItem } from '../types/post';
+import { PostDetail } from '../types/post';
 import { useDictContext } from '../hooks/useDictContext';
+import { CycleDetail } from '../types/cycle';
+import { UserDetail } from '../types/user';
 
 
 type Props = {
@@ -55,7 +56,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
 
   const renderMosaicItem = (
     item: MosaicItem,
-    postsParent?: CycleDetail | WorkMosaicItem,
+    postsParent?: CycleDetail | WorkDetail,
     topic = '',
     page = '',
     showSocialInteraction = true,
@@ -75,8 +76,8 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
         </CycleContext.Provider>
       );
     }
-    if (isPostMosaicItem(item) || item.type === 'post') {
-      return <MosaicItemPost post={item as PostMosaicItem} cacheKey={['POST', `${item.id}`]} key={`post-${item.id}`} postId={item.id} />;
+    if (isPostMosaicItem(item)) {
+      return <MosaicItemPost post={item as PostDetail} cacheKey={['POST', `${item.id}`]} key={`post-${item.id}`} postId={item.id} />;
     }
     if (isWorkMosaicItem(item)) {
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -99,7 +100,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
   const buildMosaics = () => {
     let result: JSX.Element = <></>;
     if (apiResponse && apiResponse.data) {
-      const mosaics = apiResponse.data.map((i: CycleDetail | WorkMosaicItem, idx:number) => {
+      const mosaics = apiResponse.data.map((i: CycleDetail | WorkDetail, idx:number) => {
         return <div key={`${i.type}-${i.id}`} className="mx-2">
             {renderMosaicItem(i,undefined, topic, page.toString())}
           </div>

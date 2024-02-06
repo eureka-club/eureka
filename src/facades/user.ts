@@ -1,35 +1,28 @@
 import { Prisma, User } from '@prisma/client';
-import { UserDetailSpec, UserDetail } from '@/types/user';
+import { UserDetailSpec, UserDetail, UserSumary, UserSumarySpec } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 import { CycleDetail, CycleDetailSpec } from '../types/cycle';
-import { WorkMosaicItem } from '../types/work';
-import { PostMosaicItem } from '../types/post';
-
-const workInclude = {
-  include: {
-    _count: { select: { ratings: true } },
-    localImages: { select: { id:true, storedFile: true } },
-    favs: { select: { id: true } },
-    ratings: { select: { userId: true, qty: true } },
-    readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-    posts: {
-      select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-    },
-    editions:{include:{localImages: { select: { id:true, storedFile: true } }}},
-  }
-}
-
+import { WorkDetail, WorkSumary, WorkSumarySpec } from '../types/work';
+import { PostDetail } from '../types/post';
 
 export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserDetail | null> => {
   const { select = undefined, include = true,where } = props;
   const user = await prisma.user.findFirst({
     where,
-    select: UserDetailSpec.select,
+    include: UserDetailSpec,
   });
   // user.favWorks.forEach((w:any)=>{
   //   w.currentUserIsFav = true
   // })
+  return user;
+};
+
+export const findSumary = async (id:number,language?:string): Promise<UserSumary | null> => {
+  const user = await prisma.user.findFirst({
+    where:{id},
+    select: UserSumarySpec,
+  });
   return user;
 };
 
@@ -41,7 +34,20 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserDetai
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    select: UserDetailSpec.select,
+    include: UserDetailSpec
+  });
+  return users;
+};
+
+export const findAllSumary = async (props?:Prisma.UserFindManyArgs): Promise<UserSumary[]> => {
+  const {where,take,skip,cursor} = props||{};
+  const users =await prisma.user.findMany({
+    take,
+    skip,
+    cursor,
+    ...(where && { where }),
+    orderBy: { createdAt: 'desc' },
+    select: UserSumarySpec
   });
   return users;
 };
@@ -63,7 +69,7 @@ export const joinedCycles = async (id:number,lang?:string): Promise<CycleDetail[
   const res = await prisma.user.findFirst({
     where:{id},
     select: {
-      joinedCycles:{include:CycleDetailSpec.include}
+      joinedCycles:{select:CycleDetailSpec}
     }
   });
   
@@ -77,7 +83,7 @@ export const cyclesCreated = async (id:number,lang?:string): Promise<CycleDetail
   const res = await prisma.user.findFirst({
     where:{id},
     select: {
-      cycles:{include:CycleDetailSpec.include}
+      cycles:{select:CycleDetailSpec}
     }
   });
   
@@ -87,7 +93,7 @@ export const cyclesCreated = async (id:number,lang?:string): Promise<CycleDetail
   })
   ??[];
 };
-export const postsCreated = async (id:number,lang?:string): Promise<PostMosaicItem[]> => {
+export const postsCreated = async (id:number,lang?:string): Promise<PostDetail[]> => {
   let res = await prisma.user.findFirst({
     where:{id},
     select: {
@@ -104,13 +110,13 @@ export const postsCreated = async (id:number,lang?:string): Promise<PostMosaicIt
     }
   });
   
-  return res?.posts.map((p:Partial<PostMosaicItem>)=>{
+  return res?.posts.map((p:Partial<PostDetail>)=>{
     p.type='post';
-    return p as PostMosaicItem;
+    return p as PostDetail;
   })
   ??[];
 };
-export const favPosts = async (id:number,lang?:string): Promise<PostMosaicItem[]> => {
+export const favPosts = async (id:number,lang?:string): Promise<PostDetail[]> => {
   let res = await prisma.user.findFirst({
     where:{id},
     select: {
@@ -127,9 +133,9 @@ export const favPosts = async (id:number,lang?:string): Promise<PostMosaicItem[]
     }
   });
   
-  return res?.favPosts.map((p:Partial<PostMosaicItem>)=>{
+  return res?.favPosts.map((p:Partial<PostDetail>)=>{
     p.type='post';
-    return p as PostMosaicItem;
+    return p as PostDetail;
   })
   ??[];
 };
@@ -138,7 +144,7 @@ export const favCycles = async (id:number,lang?:string): Promise<CycleDetail[]> 
     where:{id},
     select: {
       favCycles:{
-        include:CycleDetailSpec.include
+        select:CycleDetailSpec
       }
     }
   });
@@ -149,24 +155,24 @@ export const favCycles = async (id:number,lang?:string): Promise<CycleDetail[]> 
   })
   ??[];
 };
-export const favWorks = async (id:number,lang?:string): Promise<WorkMosaicItem[]> => {
+export const favWorks = async (id:number,lang?:string): Promise<WorkSumary[]> => {
   let res = await prisma.user.findFirst({
     where:{id},
     select: {
-      favWorks:workInclude
+      favWorks:{select:WorkSumarySpec}
     }
   });
   
   return res?.favWorks??[];
 };
 
-export const readOrWatchedWorks = async (id:number):Promise<{work:WorkMosaicItem|null,year:any}[]> => {
+export const readOrWatchedWorks = async (id:number):Promise<{work:WorkSumary|null,year:any}[]> => {
   let res = await prisma.user.findFirst({
     where:{id},
     select:{
       readOrWatchedWorks:{
         select:{
-          work:workInclude,
+          work:{select:WorkSumarySpec},
           year:true
         }
       }

@@ -32,7 +32,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
 import { CycleDetail } from '../../types/cycle';
-import { WorkMosaicItem } from '../../types/work';
+import { WorkDetail } from '../../types/work';
 //import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
@@ -53,7 +53,7 @@ import Prompt from '@/src/components/post/PostPrompt';
 import { set } from 'lodash';
 import usePost from '../../usePost';
 import LocalImageComponent from '../LocalImage';
-import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostDetail } from '../../types/post';
 import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
   noModal?: boolean;
@@ -94,7 +94,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
   const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
   const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkMosaicItem | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   //const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -137,7 +137,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
         currentImage: `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post.localImages[0].storedFile}`,
         contentText: post.contentText,
         selectedCycle: post.cycles[0] as CycleDetail | null,
-        selectedWork: post.works[0] as WorkMosaicItem | null,
+        selectedWork: post.works[0] as WorkDetail | null,
         isPublic: post.isPublic,
         topics: [] as string[],
         tags: post.tags as string
@@ -191,7 +191,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
   // }, [router, router.query.id]);
 
   useEffect(() => {
-    if (work) setSelectedWork(work as WorkMosaicItem);
+    if (work) setSelectedWork(work as WorkDetail);
   }, [work]);
 
   // const { t } = useTranslation('createPostForm');
@@ -297,12 +297,12 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
           await queryClient.cancelQueries({queryKey:ck_})
-          const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
+          const snapshot = queryClient.getQueryData<PostDetail[] | PostDetail>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
             let posts = [];
             if (('length' in snapshot)) {
-              posts = [...snapshot] as PostMosaicItem[];
+              posts = [...snapshot] as PostDetail[];
               const idx = posts.findIndex(p => p.id == +post.id)
               if (idx > - 1) {
                 const oldPost = posts[idx];
@@ -360,12 +360,12 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false }) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
           await queryClient.cancelQueries({queryKey:ck_})
-          const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
+          const snapshot = queryClient.getQueryData<PostDetail[] | PostDetail>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
             let posts = [];
             if (('length' in snapshot)) {
-              posts = [...snapshot] as PostMosaicItem[];
+              posts = [...snapshot] as PostDetail[];
               const idx = posts.findIndex(p => p.id == +post.id)
               if (idx > - 1) {
                 const oldPost = posts[idx];

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { WEBAPP_URL } from '../constants';
-import { PostMosaicItem } from '../types/post';
+import { PostDetail } from '../types/post';
 
 export const myPostsProps = (id: number)=> ({
   include:{works:true},
@@ -10,12 +10,12 @@ export const myPostsProps = (id: number)=> ({
   }
 });
 
-export const getMyPosts = async (id:number):Promise<PostMosaicItem[]>=>{
+export const getMyPosts = async (id:number):Promise<PostDetail[]>=>{
   const url=`${WEBAPP_URL}/api/user/${id}/postsCreated`;
   const fr=await fetch(url)
   if(fr.ok){
     const{postsCreated}=await fr.json()
-    return postsCreated.map((p:PostMosaicItem)=>({...p,type:'post'}));
+    return postsCreated.map((p:PostDetail)=>({...p,type:'post'}));
   }
   return [];
 }

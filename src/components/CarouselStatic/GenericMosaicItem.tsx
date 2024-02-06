@@ -4,7 +4,7 @@ import MosaicItemPost from '../post/MosaicItem';
 import MosaicItemWork from '../work/MosaicItem';
 import MosaicUserItem from '../user/MosaicItem';
 
-import { PostMosaicItem } from '../../types/post';
+import { PostDetail } from '../../types/post';
 import { isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../../types';
 import { GenericMosaicItemProps } from "./types";
 
@@ -25,7 +25,7 @@ import { GenericMosaicItemProps } from "./types";
       );
     }
     if (isPostMosaicItem(item) || (item && item.type === 'post')) {
-      const it: PostMosaicItem = item as PostMosaicItem;
+      const it: PostDetail = item as PostDetail;
       return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} post={it} postId={it.id} size={size} />;
     }
     if (isWorkMosaicItem(item)) {

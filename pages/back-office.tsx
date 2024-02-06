@@ -23,10 +23,8 @@ import {
   TabPane,
   TabContent,
   TabContainer,
-  Row,
   Col,
   Spinner,
-  Button,
   Nav,
   NavItem,
   NavLink,
@@ -44,21 +42,21 @@ import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
 import {
-  Box, Fab, Paper, TextField, Typography, Button as MaButton, ButtonGroup, CircularProgress, Table, TableBody,
-  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider, Modal, Dialog, DialogContent
+  Box, Fab, Paper, TextField, Typography, Button, ButtonGroup, CircularProgress, Table, TableBody,
+  TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider, Modal, Dialog, DialogContent, Stack, Icon
 } from '@mui/material';
 import PaginationActions from '@/src/components/common/MUITablePaginationActions';
 import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { EditWorkClientPayload, WorkMosaicItem } from '@/src/types/work';
-import { EditionMosaicItem } from '@/src/types/edition';
+import { EditWorkClientPayload, WorkDetail } from '@/src/types/work';
+import { EditionDetail } from '@/src/types/edition';
 
 import { FaSave } from 'react-icons/fa';
 import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 import { error } from 'node:console';
 import { usePathname } from 'next/dist/client/components/navigation';
-import { IoAddCircle, IoTrash } from 'react-icons/io5';
+import { IoAddCircle, IoClose, IoPencil, IoSave, IoTrash } from 'react-icons/io5';
 import { AddBackOfficesSlidersForm } from '@/src/components/AddBackOfficesSlidersForm';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -107,7 +105,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const queryClient = useQueryClient();
   const { data: bo } = useBackOffice();
   const { data } = useWorks(WorkToCheckWhere(), { cacheKey: 'WORKS', notLangRestrict: true });
-  const [works, setWorks] = useState<WorkMosaicItem[]>();
+  const [works, setWorks] = useState<WorkDetail[]>();
   useEffect(() => {
     if (data?.works) setWorks(data.works);
   }, [data?.works]);
@@ -135,7 +133,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
       }
     }
   }, { cacheKey: 'WORKS-ALL', notLangRestrict: true, enabled: !!searchWorksFilter });
-  const [allWorks, setAllWorks] = useState<WorkMosaicItem[]>();
+  const [allWorks, setAllWorks] = useState<WorkDetail[]>();
 
   const debounceFn = useCallback(debounce((value: string) => {
     if (value)
@@ -481,17 +479,20 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   }
 
   const OnRemoveSlide = async (id:number)=>{
-    const url = `${WEBAPP_URL}/api/backoffice/slide/${id}/remove`;
-    const fr = await fetch(url,{
-      method:'DELETE',
-    });
-    if(fr.ok){
-      const res = await fr.json()
-      if(res.slide){
-        toast.success('done!');
-        queryClient.invalidateQueries({queryKey:["BACKOFFICE","1"]});
+    const res = await confirm("Are you sure you wanna remove the selected slide?");
+    if(res){
+      const url = `${WEBAPP_URL}/api/backoffice/slide/${id}/remove`;
+      const fr = await fetch(url,{
+        method:'DELETE',
+      });
+      if(fr.ok){
+        const res = await fr.json()
+        if(res.slide){
+          toast.success('done!');
+          queryClient.invalidateQueries({queryKey:["BACKOFFICE","1"]});
+        }
+        else toast.error('error');
       }
-      else toast.error('error');
     }
   }
 
@@ -543,7 +544,9 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
             <h2 className="text-secondary mt-3 mb-3">
               <b>{t('Banner Settings')}</b>
             </h2>
-              <Button className='text-white mb-3' onClick={OnAddSlide}><IoAddCircle/></Button>
+              <Button  size='large' onClick={OnAddSlide}  variant='contained' startIcon={<IoAddCircle/>}>
+                Add
+              </Button>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableBody>
@@ -558,7 +561,10 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                       </TableCell>
                       <TableCell>
-                        <Button className='text-white' variant='danger' onClick={(e)=>OnRemoveSlide(s.id)}><IoTrash/></Button>
+                        <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                          <Button size='small' color='info' variant='contained' onClick={(e)=>{alert("Todo")}} startIcon={<IoPencil/>}>Edit</Button>
+                          <Button size='small' color='warning' variant='contained' onClick={(e)=>OnRemoveSlide(s.id)} startIcon={<IoTrash/>}>Remove</Button>
+                        </ButtonGroup>
                       </TableCell>
                     </TableRow>;
                     })
@@ -768,12 +774,15 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   </Form.Group>
                 </Col>
               </div>
-              <div className="d-flex justify-content-center justify-content-lg-end">
-                <Button variant="primary" type="submit" className="text-white mb-5" style={{ width: '12em' }}>
-                  {t('Save')}
-                  {isLoadingBackOffice && <Spinner animation="grow" variant="info" size="sm" className="ms-1" />}
-                </Button>
-              </div>
+              <Stack direction={'row'} justifyContent={'right'} gap={3}>
+                  <Button variant="outlined" onClick={()=>router.push('/')} size='large' startIcon={<IoClose/>}>
+                    {t('Cancel')}
+                  </Button>
+                  <Button variant="contained" type="submit" size='large' startIcon={<IoSave/>}>
+                    {t('Save')}
+                    {isLoadingBackOffice && <Spinner animation="grow" variant="info" size="sm" className="ms-1" />}
+                  </Button>
+              </Stack>
             </Form>
 
           </TabPane>
@@ -784,19 +793,12 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           <TabPane eventKey="work-administration">
             <Box className='mt-4 d-flex flex-row justify-content-start'>
               {/*<h1 className=''>Works for Revision</h1>*/}
-              <MaButton
-                style={{
-                  width: '200px',
-                  background: 'var(--eureka-green)',
-                  fontFamily: 'Open Sans, sans-serif',
-                  textTransform: 'none',
-                }}
+              <Button
                 variant="contained"
-                size="small"
                 onClick={handleDrawerOpen}
               >
                 Search ours works
-              </MaButton>
+              </Button>
             </Box>
             {works ? <div className="row">
               <TableContainer>
@@ -836,7 +838,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         <TableCell align="left">{work.author}</TableCell>
                         <TableCell align="left">{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</TableCell>
                         <TableCell align="center"><div className='d-flex flex-row justify-content-center'>
-                          <Button variant="link" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
+                          <Button variant="text" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
                             <FindInPageOutlinedIcon />
                           </Button>
 
@@ -848,7 +850,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             overlay={
                               <Popover id="confirmRevision">
                                 <Popover.Body>
-                                  <Button variant="primary text-white" onClick={() => handleRevisionClick(work)} >
+                                  <Button variant="outlined" onClick={() => handleRevisionClick(work)} >
                                     confirm Revision!!!
                                   </Button>
                                 </Popover.Body>
@@ -856,7 +858,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             }
                           >
 
-                            <Button variant="link" className="ms-2">
+                            <Button variant="text" className="ms-2">
                               <CheckCircleOutlineIcon className='text-primary' />
                             </Button>
                           </OverlayTrigger>
@@ -869,14 +871,14 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                             overlay={
                               <Popover id="confirmDelete">
                                 <Popover.Body>
-                                  <Button variant="danger text-white" onClick={() => handleDeleteClick(work)}>
+                                  <Button variant="outlined" color='warning' onClick={() => handleDeleteClick(work)}>
                                     confirm delete!!!
                                   </Button>
                                 </Popover.Body>
                               </Popover>
                             }
                           >
-                            <Button variant="link" className="ms-2">
+                            <Button variant="text" className="ms-2">
                               <DeleteIcon className='text-primary' />
                             </Button>
                           </OverlayTrigger>
@@ -963,7 +965,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         {
                           w.editions.length
                             ? <>{!isUpdateWorkLoading && <ButtonGroup sx={{ marginRight: '.5rem' }}>
-                              <MaButton
+                              <Button
                                 style={{
                                   height: '2rem',
                                   background: 'var(--eureka-green)',
@@ -974,7 +976,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                                 disabled={isUpdateWorkLoading}
                               >
                                 <FaSave />
-                              </MaButton>
+                              </Button>
                             </ButtonGroup>}
                               {isUpdateWorkLoading && (
                                 <CircularProgress
@@ -992,7 +994,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         }
                       </Box>
                       <Box sx={{ display: "flex", flexWrap: 'wrap', flexDirection: 'column' }} >
-                        {w.editions.map((ed: EditionMosaicItem, idx) => <Box key={`edition-${ed.id}`}
+                        {w.editions.map((ed: EditionDetail, idx) => <Box key={`edition-${ed.id}`}
                           onDragStart={(e) => {
                             e.preventDefault();
                           }}
@@ -1000,7 +1002,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                           <Box sx={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'center', marginBottom: 2 }} > {/*style={{ transform: "scale(1)" }}*/}
                             {ed.ToCheck ? <Fab className='ms-1' aria-label="edit" onClick={(e) => {
                               e.preventDefault();
-                              let er = w.editions.splice(idx, 1)[0] as unknown as WorkMosaicItem;
+                              let er = w.editions.splice(idx, 1)[0] as unknown as WorkDetail;
                               setAllWorks(_ => [...allWorks]);
                               works.push(er);
                               setWorks(_ => works);
@@ -1034,7 +1036,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
                             <TabContent>
                               <TabPane eventKey='notifications'>
-                                <Button variant='danger' className='text-white my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
+                                <Button color='warning' variant='contained' className=' my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
                               </TabPane>
                             </TabContent>
 
@@ -1051,7 +1053,6 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
           <AddBackOfficesSlidersForm/>
         </DialogContent>
       </Dialog>
-
 
     </SimpleLayout>
   );

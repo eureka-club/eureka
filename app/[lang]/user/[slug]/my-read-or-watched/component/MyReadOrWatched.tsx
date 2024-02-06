@@ -30,7 +30,7 @@ import LocalImageComponent from '@/src/components/LocalImage';
 import useReadOrWatchedWorks from '../../../../../../src/hooks/useReadOrWatchedWorks';
 import user from 'pages/api/user';
 import getUserIdFromSlug from '@/src/getUserIdFromSlug';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 
 interface Props {
     // session: Session | null;

@@ -27,9 +27,7 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 
 import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
-import { CycleDetail, CycleSumary } from '@/src/types/cycle';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
+import { CycleSumary } from '@/src/types/cycle';
 import {
   MySocialInfo,
   isCycle,
@@ -106,7 +104,6 @@ const SocialInteraction: FunctionComponent<Props> = ({
     /* error, */ data: user,
   } = useUser(idSession!, { enabled: !!idSession! });
   //const { notifier } = useNotificationContext();
-
   useEffect(() => {
     if (isSuccessUser && idSession && !user) {
       queryClient.invalidateQueries({queryKey:['USER', `${idSession}`]});

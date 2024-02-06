@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';;
-import { PostMosaicItem } from './types/post';
+import { PostDetail } from './types/post';
 import { Prisma } from '@prisma/client';
 
-export type CycleItem = PostMosaicItem;
+export type CycleItem = PostDetail;
 export type WhereT = {filtersWork:number[]}
 
 export const getRecords = async (cycleId:number,page: number,where?:WhereT): Promise<{items:CycleItem[],total:number}|undefined> => {

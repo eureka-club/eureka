@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';;
-import { PostMosaicItem } from './types/post';
+import { PostDetail } from './types/post';
 import { Prisma } from '@prisma/client';
 import { useParams } from 'next/navigation';
 
@@ -9,7 +9,7 @@ export const getPosts = async (
   lang?:string,
   props?:Prisma.PostFindManyArgs,
   origin=''
-): Promise<{posts:PostMosaicItem[],fetched:number,total:number}> => {
+): Promise<{posts:PostDetail[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}&lang=${lang}`:''
   const url = `${origin||''}/api/post${query}`
   const res = await fetch(url);
@@ -33,7 +33,7 @@ const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options) => {
   };
   let ck = cacheKey ? [cacheKey] : ['POSTS', `${JSON.stringify(props)}`];
 
-  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(
+  return useQuery<{posts:PostDetail[],fetched:number,total:number}>(
     {
         queryKey:ck,
          queryFn:() => getPosts(lang,props),

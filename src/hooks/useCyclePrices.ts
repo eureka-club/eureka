@@ -25,14 +25,14 @@ export const getPrices = async (product_id:string):Promise<Type> => {
     enabled?: boolean;
   }
 
-  export const useCyclePrice = (cycle?:CycleSumary,options?: Options)=>{
+  export const useCyclePrice = (product_id:string,options?: Options)=>{
     const { staleTime, enabled } = options || {
       staleTime: 1000 * 60 * 60,
       enabled: true,
     };
     return useQuery<Type>({
-      queryKey:['CYCLE-PRICE', cycle?.product_id],
-      queryFn: () => getPrices(cycle?.product_id!),
+      queryKey:['CYCLE-PRICE', product_id],
+      queryFn: () => getPrices(product_id!),
       staleTime,
       enabled,
       retry:3

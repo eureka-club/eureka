@@ -9,17 +9,17 @@ import { FaRegComments, FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import SocialInteraction from '../common/SocialInteraction';
-import { PostMosaicItem } from '../../types/post';
+import { PostDetail } from '../../types/post';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { isCycle, isWork, Session } from '../../types';
-// import { CycleDetail } from '../../types/cycle';
-// import { WorkMosaicItem } from '../../types/work';
+// import { CycleMosaicItem } from '../../types/cycle';
+// import { WorkDetail } from '../../types/work';
 // import CommentsList from '../common/CommentsList';
 import Avatar from '../common/UserAvatar';
 import UnclampText from '../UnclampText';
 import { CycleDetail } from '@/src/types/cycle';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 // import ActionsBar from '@/src/components/common/ActionsBar'
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
@@ -32,7 +32,7 @@ import { useSession} from 'next-auth/react';
 import { BiEdit} from 'react-icons/bi';
 import { useDictContext } from '@/src/hooks/useDictContext';
 interface Props {
-  post?:PostMosaicItem;
+  post?:PostDetail;
   postId: number|string;
   display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -66,11 +66,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  // const [post,setPost] = useState<PostMosaicItem>();
-  const [postParent,setPostParent] = useState<CycleDetail|WorkMosaicItem>();
+  // const [post,setPost] = useState<PostDetail>();
+  const [postParent,setPostParent] = useState<CycleDetail|WorkDetail>();
   const {data:session} = useSession()
-  //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
-  // const pp = queryClient.getQueryData<CycleDetail|WorkMosaicItem>(cacheKey);
+  //const postFromCache = queryClient.getQueryData<PostDetail>(['POST',postId.toString()]);
+  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkDetail>(cacheKey);
   const [post,setPost]=useState(postItem)
   const {data} = usePost(+postId,{
     enabled:!!postId && !postItem
@@ -81,7 +81,7 @@ const MosaicItem: FunctionComponent<Props> = ({
 
   useEffect(()=>{
     if(post){
-      if(post.works.length)setPostParent(post.works[0] as WorkMosaicItem)
+      if(post.works.length)setPostParent(post.works[0] as WorkDetail)
       if(post.cycles.length)setPostParent(post.cycles[0] as CycleDetail)
     }
   },[post])

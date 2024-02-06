@@ -11,7 +11,7 @@
 // import { cors, middleware } from '@/src/lib/cors';
 // import { Edition, Prisma, Work } from '@prisma/client';
 // import { CreateEditionPayload, CreateEditionServerPayload } from '@/src/types/edition';
-// import { WorkMosaicItem } from '@/src/types/work';
+// import { WorkDetail } from '@/src/types/work';
 // import { BAD_REQUEST, MISSING_FIELD, NOT_FOUND, SERVER_ERROR, UNAUTHORIZED } from '@/src/response_codes';
 // import { getSession } from 'next-auth/react';
 // import { getServerSession } from "next-auth/next"
@@ -208,7 +208,7 @@
 //       }
 //       let editionsIds: { id: number }[] = [];
 
-//       const worksToSaveAsEdition: WorkMosaicItem[] = fields.editions?.length
+//       const worksToSaveAsEdition: WorkDetail[] = fields.editions?.length
 //         ? JSON.parse(fields.editions[0])
 //         : undefined;
 

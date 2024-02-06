@@ -15,7 +15,7 @@ import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
 // import { Session } from '../../types';
 import { CycleDetail } from '../../types/cycle';
-import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostDetail } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
@@ -43,10 +43,10 @@ import {
   MenuItem,
 } from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
-import { WorkMosaicItem } from '@/src/types/work';
 import { Locale } from 'i18n-config';
 import { usePathname } from 'next/dist/client/components/navigation';
 import { useDictContext } from '@/src/hooks/useDictContext';
+import { WorkDetail } from '@/src/types/work';
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
@@ -271,7 +271,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       },
       onMutate: async () => {
         // await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<PostDetail[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {

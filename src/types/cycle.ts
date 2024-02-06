@@ -15,38 +15,10 @@ export type CycleWithImages = Prisma.CycleGetPayload<{
     }};
   };
 }>;
-
-export const CycleSumarySpec = {
-  select:{
-    id:true,
-    title:true,
-    startDate:true,
-    endDate:true,
-    access:true,
-    creatorId:true,
-    product_id:true,
-    languages:true,
-    localImages:{select:{storedFile:true}},
-    usersJoined:{select:{userId:true,pending:true}},
-    favs:{select:{id:true}},
-    ratings:{select:{userId:true,qty:true}},
-    _count: { select: { ratings: true } },
-  }
-}
-export type CycleSumary = Prisma.CycleGetPayload<typeof CycleSumarySpec> & {
-  type?: 'cycle';
-};
-
-export const CycleDetailSpec={
-  include: {
-    participants:UserDetailSpec,
+export const CycleDetailSpec = {
+    participants:{select:UserDetailSpec},
     creator: {
-      select: { 
-        // id: true, 
-        name: true, 
-        email: true, 
-        // countryOfOrigin: true 
-      },
+      select: { id: true, name: true, email: true, countryOfOrigin: true },
     },
     localImages: {
       select: {
@@ -98,14 +70,14 @@ export const CycleDetailSpec={
     },
     _count: {
       select: {
-        participants: true,
+        // participants: true,
         ratings: true,
       },
     },
     complementaryMaterials: true,
-  },
-};
-export type CycleDetail = Prisma.CycleGetPayload<typeof CycleDetailSpec> & {
+} satisfies Prisma.CycleInclude;
+
+export type CycleDetail = Prisma.CycleGetPayload<{include: typeof CycleDetailSpec}> & {
   type?: 'cycle';
   currentUserIsCreator?: boolean;
   currentUserIsParticipant?: boolean;
@@ -115,6 +87,27 @@ export type CycleDetail = Prisma.CycleGetPayload<typeof CycleDetailSpec> & {
   ratingCount?: number;
   ratingAVG?: number;
 };
+
+export const CycleSumarySpec = {
+  id:true,
+  title:true,
+  creatorId:true,
+  creator:{select:{name:true}},
+  product_id:true,
+  access:true,
+  languages:true,
+  startDate:true,
+  endDate:true,
+  localImages:{select:{storedFile:true}},
+  usersJoined:{select:{userId:true,pending:true}},
+  ratings:{select:{userId:true,qty:true}},
+  favs:{select:{id:true}},
+  _count:{select:{ratings:true}}
+} satisfies Prisma.CycleSelect;
+
+export type CycleSumary = Prisma.CycleGetPayload<{select: typeof CycleSumarySpec}> & {
+  type?:"cycle"
+}
 
 // export type CycleDetail = Prisma.CycleGetPayload<{
 //   include: {

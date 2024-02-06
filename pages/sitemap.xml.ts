@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import {findAll as findAllCycles} from '@/src/facades/cycle'
 import {findAll as findAllWoks} from '@/src/facades/work'
 import {findAll as findAllPosts} from '@/src/facades/post'
-import { PostMosaicItem } from "@/src/types/post";
+import { PostDetail } from "@/src/types/post";
 
 const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
 const languages = [
@@ -47,7 +47,7 @@ const generatePostsMap = async ()=>{
   const posts = await findAllPosts({
     select:{id:true,title:true,contentText:true,cycles:{select:{id:true}},works:{select:{id:true}}}
   })
-  const getParentData  = (p:PostMosaicItem)=>{
+  const getParentData  = (p:PostDetail)=>{
     if(p.cycles.length){
       return ['cycle',p.cycles[0].id] 
     } 

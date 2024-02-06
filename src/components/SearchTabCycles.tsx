@@ -10,7 +10,7 @@ import useCycles,{getCycles} from '@/src/useCycles'
 import useFilterEngineCycles from './useFilterEngineCycles';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { CycleDetail } from '../types/cycle';
+import { CycleSumary } from '../types/cycle';
 import cycle from 'pages/api/cycle';
 import { useDictContext } from '../hooks/useDictContext';
 
@@ -93,7 +93,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
 
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(props,{cacheKey,enabled:!!q});
-  const [cycles,setCycles] = useState<CycleDetail[]>([])
+  const [cycles,setCycles] = useState<CycleSumary[]>([])
 
   useEffect(()=>{
     let props: Prisma.CycleWhereInput|undefined = undefined;

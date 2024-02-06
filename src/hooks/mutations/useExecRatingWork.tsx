@@ -6,14 +6,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/hooks/useUser';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
+import useTranslation from 'next-translate/useTranslation';
 
 export interface ExecRatingPayload {
   doCreate:boolean;
   ratingQty:number;
 }
 interface Props{
-  work:WorkMosaicItem;
+  work:WorkDetail;
 }
 
 const useExecRating = (props:Props)=>{
@@ -56,7 +57,7 @@ const useExecRating = (props:Props)=>{
           await queryClient.cancelQueries({queryKey:cacheKey});
           
           prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
-          prevWork = queryClient.getQueryData<WorkMosaicItem>(cacheKey);
+          prevWork = queryClient.getQueryData<WorkDetail>(cacheKey);
       
           let ratingWorks = user.ratingWorks
           let ratings = work.ratings;

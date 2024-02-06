@@ -1,4 +1,5 @@
 import { Edition, Prisma } from '@prisma/client';
+import { EditionDetailSpec } from './edition';
 
 // export type WorkDetail = Prisma.WorkGetPayload<{
 //   include: {
@@ -60,22 +61,47 @@ export type WorkWithImages = Prisma.WorkGetPayload<{
   };
 }>;
 
-export type WorkMosaicItem = Prisma.WorkGetPayload<{
-  include: {
-    _count: { select: { ratings: true } };
-    localImages: { select: { id:true, storedFile: true } };
-    favs: { select: { id: true } };
-    ratings: { select: { userId: true; qty: true } };
-    readOrWatchedWorks: { select: { userId: true; workId: true; year: true } };
-    posts: {
-      select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+export const WorkDetailSpec = {
+  localImages: { select: { id:true, storedFile: true } },
+  favs: { select: { id: true } },
+  ratings: { select: { userId: true, qty: true } },
+  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+  posts: {
+    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
+  },
+  editions:{include:{localImages: { select: { id:true, storedFile: true } }}},
+  _count: {
+    select: {
+      ratings: true,
     },
-    editions:{include:{localImages: { select: { id:true, storedFile: true } }}};
-  };
-}> & {
+  },
+  type:true
+} satisfies Prisma.WorkSelect
+
+export type WorkDetail = Prisma.WorkGetPayload<{include: typeof WorkDetailSpec}> & {
   currentUserRating?: number;
   ratingCount?: number;
-  ratingAVG?: number;
+  // ratingAVG?: number;
+};
+
+export const WorkSumarySpec = {
+  id:true,
+  language:true,
+  title:true,
+  publicationYear:true,
+  countryOfOrigin:true,
+  length:true,
+  ToCheck:true,
+  contentText:true,
+  type:true,
+  editions:{include:EditionDetailSpec},
+  localImages: { select: { id:true, storedFile: true } },
+  ratings:{select:{userId:true,qty:true}},
+  updatedAt:true,
+} satisfies Prisma.WorkSelect
+
+export type WorkSumary = Prisma.WorkGetPayload<{select: typeof WorkSumarySpec}> & {
+  // ratingAVG:number
 };
 
 export interface CreateWorkClientPayload {

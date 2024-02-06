@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '../../src/lib/getApiHandler';
 import {Languages, SearchResult} from '@/src/types'
 import { CycleDetail } from '@/src/types/cycle';
-import { WorkMosaicItem } from '@/src/types/work';
-import { PostMosaicItem } from '@/src/types/post';
+import { WorkDetail } from '@/src/types/work';
+import { PostDetail } from '@/src/types/post';
 import dayjs from 'dayjs';
 import {prisma} from '@/src/lib/prisma';
 import { findAll as fap } from '@/src/facades/post';
@@ -47,7 +47,7 @@ export default getApiHandler()
           ]
     };
 
-    const responseWork =  await faw(language,{where: worksWhere}) as WorkMosaicItem[];
+    const responseWork =  await faw(language,{where: worksWhere}) as WorkDetail[];
 
     const cyclesWhere={
       AND:[{ access:{not:3}}],
@@ -124,7 +124,7 @@ export default getApiHandler()
       ]
     }
 
-    const responsePost = await fap({where:postsWhere}) as PostMosaicItem[];
+    const responsePost = await fap({where:postsWhere}) as PostDetail[];
     responseCycle.forEach(c=>{c.type="cycle"})
     responsePost.forEach(p=>{p.type="post"})
     const data: SearchResult[] = [

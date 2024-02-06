@@ -9,8 +9,8 @@ import {BsChevronUp, BsX} from 'react-icons/bs';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { MySocialInfo } from '@/src/types';
-import { PostMosaicItem } from '@/src/types/post';
-import { WorkMosaicItem } from '@/src/types/work';
+import { PostDetail } from '@/src/types/post';
+import { WorkDetail } from '@/src/types/work';
 import CycleSummary from '@/src/components/cycle/CycleSummary';
 import styles from './CycleDetailHeader.module.css';
 import MosaicItem from '@/src/components/cycle/MosaicItem';
@@ -29,8 +29,8 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 interface Props {
-  post?: PostMosaicItem;
-  work?: WorkMosaicItem;
+  post?: PostDetail;
+  work?: WorkDetail;
   isCurrentUserJoinedToCycle?: boolean;
   participantsCount?: number;
   postsCount?: number;
@@ -254,10 +254,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <CarouselStatic
               cacheKey={['CYCLE', cycle.id.toString()]}
               showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkMosaicItem[], t(dict,'Eurekas I created'))}
+              // onSeeAll={async () => seeAll(works as WorkDetail[], t(dict,'Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
               title={<CycleSummary cycle={cycle} />}
-              data={getWorksSorted() as WorkMosaicItem[]}
+              data={getWorksSorted() as WorkDetail[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
               size="sm"
@@ -280,7 +280,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
                 title={<CycleSummary cycle={cycle} />}
-                data={getWorksSorted() as WorkMosaicItem[]}
+                data={getWorksSorted() as WorkDetail[]}
                 iconBefore={<></>}
                 customMosaicStyle={{ height: '16em' }}
                 size={'sm'}

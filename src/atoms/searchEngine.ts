@@ -1,15 +1,10 @@
 import { atom } from 'jotai';
-// import { SearchResult } from '../types';
-import { CycleDetail } from '../types/cycle';
-import { PostMosaicItem } from '../types/post';
-import { WorkMosaicItem } from '../types/work';
-import { UserDetail } from '../types/user';
 import {SearchResult} from "@/src/types"
 /* 
 type Item =
   | (CycleDetail & { type: string })
-  | WorkMosaicItem
-  | (PostMosaicItem & { type: string })
+  | WorkDetail
+  | (PostDetail & { type: string })
   | UserDetail; */
 type Filter = {
   only: string[];
@@ -20,7 +15,7 @@ type Filter = {
   where?: string;
   show?: boolean;
   cacheKey?: string[];
-  // searchMosaicData?: ((CycleDetail & { type: string }) | WorkMosaicItem)[];
+  // searchMosaicData?: ((CycleDetail & { type: string }) | WorkDetail)[];
 };
 const o: Filter = {
   only: [],

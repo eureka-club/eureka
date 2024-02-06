@@ -1,4 +1,4 @@
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -11,7 +11,7 @@ import { useDictContext } from '@/src/hooks/useDictContext';
 
 dayjs.extend(utc);
 interface Props {
-  work: WorkMosaicItem
+  work: WorkDetail
 }
 
 const WorkSummary: FunctionComponent<Props> = ({ work }) => {

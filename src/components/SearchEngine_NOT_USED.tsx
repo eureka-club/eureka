@@ -20,7 +20,7 @@
 // import {
 //   // Session,
 //   SearchResult,
-//   isCycleMosaicItem,
+//   isCycleDetail,
 //   isWorkMosaicItem,
 //   isPostMosaicItem
 // } from '../types';
@@ -28,11 +28,11 @@
 // import globalSearchEngineAtom from '../atoms/searchEngine';
 // import styles from './SearchEngine.module.css';
 // import { CycleDetail } from '../types/cycle';
-// // import { WorkMosaicItem } from '../types/work';
-// // import { WorkMosaicItem } from '../types/work';
+// // import { WorkDetail } from '../types/work';
+// // import { WorkDetail } from '../types/work';
 // // import { CycleDetail } from '../types/cycle';
-// import { PostMosaicItem } from '../types/post';
-// import { WorkMosaicItem } from '../types/work';
+// import { PostDetail } from '../types/post';
+// import { WorkDetail } from '../types/work';
 // import useItems from '@/src/useItemsByTopic'
 // import { debounce } from 'lodash';
 
@@ -127,14 +127,14 @@
 //     return resultsWithOutPosts.slice(0,3).map((item, index) => (
 //       <MenuItem key={`${item.id}`} option={item} position={index}>
 //         {/* <Highlighter search={props.text}>{item}</Highlighter> */}
-//         {(isCycleMosaicItem(item) && (
+//         {(isCycleDetail(item) && (
 //           <CycleTypeaheadSearchItem cycle={item as CycleDetail} />
 //         )) ||
 //           (isWorkMosaicItem(item) && (
-//             <WorkTypeaheadSearchItem work={item as WorkMosaicItem} />
+//             <WorkTypeaheadSearchItem work={item as WorkDetail} />
 //           )) ||
 //           (isPostMosaicItem(item) && (
-//             <PostTypeaheadSearchItem post={item as PostMosaicItem} />
+//             <PostTypeaheadSearchItem post={item as PostDetail} />
 //           ))
 //         }
 //       </MenuItem>
@@ -170,7 +170,7 @@
 //             onChange={handleSelectItem}
 //             ignoreDiacritics
 //             // renderMenuItemChildren={(searchResult) => {
-//             //   if (isCycleMosaicItem(searchResult)) {
+//             //   if (isCycleDetail(searchResult)) {
 //             //     return <CycleTypeaheadSearchItem cycle={searchResult} />;
 //             //   }
 //             //   if (isWorkMosaicItem(searchResult)) {

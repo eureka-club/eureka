@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 
 export type ContextType = {
-  work: WorkMosaicItem | null;
+  work: WorkDetail | null;
   showShare?: boolean;
   linkToWork?: boolean;
 };

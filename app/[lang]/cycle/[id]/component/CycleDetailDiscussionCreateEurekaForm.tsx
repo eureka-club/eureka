@@ -7,7 +7,7 @@ import { Post } from '@prisma/client';
 import { ImCancelCircle } from 'react-icons/im';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { CycleDetail } from '../../../../../src/types/cycle';
-import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../../../../src/types/post';
+import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostDetail } from '../../../../../src/types/post';
 import TagsInputTypeAheadMaterial from '../../../../../src/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '../../../../../src/components/forms/controls/TagsInputMaterial';
 import { useNotificationContext } from '@/src/hooks/useNotificationProvider';
@@ -248,7 +248,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
       onMutate: async () => {
         await queryClient.cancelQueries({queryKey:['CYCLE',cycle.id.toString(),'POSTS']});
         await queryClient.cancelQueries({queryKey:cacheKey});
-        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<PostDetail[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {

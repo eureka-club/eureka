@@ -10,8 +10,8 @@ import { ImCancelCircle } from 'react-icons/im';
 import { useMutation, useQueryClient } from '@tanstack/react-query';;
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import { WorkMosaicItem } from '../../types/work';
-import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { WorkDetail } from '../../types/work';
+import { CreatePostAboutWorkClientPayload, PostDetail } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
@@ -44,7 +44,7 @@ const languages: Record<string, string> = {
 }
 interface Props {
   cacheKey: string[];
-  workItem: WorkMosaicItem;
+  workItem: WorkDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;
@@ -225,7 +225,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         return null;
       },
       onMutate: async () => {
-        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<PostDetail[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {

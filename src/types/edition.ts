@@ -1,9 +1,11 @@
 import { Prisma } from '@prisma/client';
 
-export type EditionMosaicItem = Prisma.EditionGetPayload<{
-  include: {
-    localImages: { select: { id:true, storedFile: true } };
-  };
+export const EditionDetailSpec = {
+  localImages: { select: { id:true, storedFile: true } }
+} satisfies Prisma.EditionInclude;
+
+export type EditionDetail = Prisma.EditionGetPayload<{
+  include: typeof EditionDetailSpec
 }>;
 
 export interface CreateEditionPayload {

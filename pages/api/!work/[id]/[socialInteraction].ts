@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 
 import { Languages, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
-import { find, saveSocialInteraction } from '@/src/facades/work';
+import { findDetail, saveSocialInteraction } from '@/src/facades/work';
 // import redis from '@/src/lib/redis';
 import {create} from '@/src/facades/notification'
 
@@ -47,7 +47,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),language);
+      const work = await findDetail(Number(id),language);
       if (work == null) {
         res.status(404).end();
         return;
@@ -83,7 +83,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),language);
+      const work = await findDetail(Number(id),language);
       if (work == null) {
         res.status(404).end();
         return;

@@ -18,7 +18,7 @@ import {
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkReadOrWatched from '@/src/components/work/WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
@@ -35,7 +35,7 @@ import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import { Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import { useDictContext } from '@/src/hooks/useDictContext';
-import { WorkMosaicItem } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import { CycleDetail } from '@/src/types/cycle';
 
 import { WorkContext } from '@/src/hooks/useWorkContext';
@@ -47,10 +47,10 @@ import MosaicItem from '@/src/components/work/MosaicItem';
 // const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
 interface Props {
-  work: WorkMosaicItem;
+  work: WorkDetail;
   workCycles: CycleDetail[];
-  workPosts:PostMosaicItem[];
-//post?: PostMosaicItem;
+  workPosts:PostDetail[];
+//post?: PostDetail;
   session: Session;
 }
 
@@ -58,7 +58,7 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
   const router = useRouter();
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const {t,dict}=useDictContext();
-  const [qty, setQty] = useState(work?.ratingAVG || 0);
+  const [qty, setQty] = useState(0);
   const [qtyByUser, setqtyByUser] = useState(0);
 
   useEffect(() => {
@@ -123,12 +123,12 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
     return 0;
   };
 
-  const getRatingAvg = () => {
-    if (work) {
-      return work.ratingAVG || 0;
-    }
-    return 0;
-  };
+  // const getRatingAvg = () => {
+  //   if (work) {
+  //     return work.ratingAVG || 0;
+  //   }
+  //   return 0;
+  // };
 
   return (
     <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -185,7 +185,7 @@ const Work: FunctionComponent<Props> = ({ work,workCycles,workPosts, session }) 
                     <Box sx={{ display: 'flex' }}>
                         <Rating qty={qty} onChange={handlerChangeRating} size="medium" readonly />
                         <div className="d-flex flex-nowrap ms-2">
-                        {getRatingAvg().toFixed(1)}
+                        {qty.toFixed(1)}
                         {' - '}
                         {getRatingQty()}
                         </div>

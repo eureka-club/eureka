@@ -12,14 +12,14 @@ import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import useWork from '@/src/useWork';
-import { WorkMosaicItem } from '@/src/types/work';
-import { getLocale_In_NextPages } from '@/src/lib/utils';
+import { WorkDetail } from '@/src/types/work';
 import { useDictContext } from '@/src/hooks/useDictContext';
+import { getLocale_In_NextPages } from '@/src/lib/utils';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
-  work?: WorkMosaicItem;
+  work?: WorkDetail;
   workId: number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -58,7 +58,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const asPath=usePathname()!;
   const locale=getLocale_In_NextPages(asPath);
   const [work, setWork] = useState(workItem);
-
+debugger;
   const { data } = useWork(workId,{
     enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
   });
@@ -176,7 +176,7 @@ const MosaicItem: FunctionComponent<Props> = ({
             <span>
               {type ? t(dict,type) : '...'}
               <em>
-                {` (${LOCALES[work.language].toUpperCase()})`}
+                {` (${work.language?LOCALES[work.language].toUpperCase():''})`}
               </em>
             </span>
           </Badge>

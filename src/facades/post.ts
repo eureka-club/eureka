@@ -1,10 +1,10 @@
 import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload, PostMosaicItem } from '../types/post';
+import { CreatePostServerFields, CreatePostServerPayload, PostDetail } from '../types/post';
 import { prisma } from '@/src/lib/prisma';
 
-export const find = async (id: number): Promise<PostMosaicItem | null> => {
+export const find = async (id: number): Promise<PostDetail | null> => {
   return prisma.post.findUnique({
     where: { id },
     include:{
@@ -18,7 +18,7 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
   });
 };
 
-export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): Promise<PostMosaicItem[]> => {
+export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): Promise<PostDetail[]> => {
   const { include, where, take, skip, cursor } = props || {};
   return prisma.post.findMany({
     take,
@@ -172,7 +172,7 @@ export const saveSocialInteraction = async (
   });
 };
 
-export const remove = async (post: PostMosaicItem): Promise<Post> => {
+export const remove = async (post: PostDetail): Promise<Post> => {
   if (post.cycles.length) {
     await prisma.post.update({
       where: { id: post.id },

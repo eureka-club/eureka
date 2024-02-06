@@ -31,11 +31,11 @@
 // import { isAccessAllowed } from '@/src/lib/utils';
 // import RenderAccessInfo from './RenderAccessInfo';
 // import dayjs from 'dayjs';
-// import { PostMosaicItem } from '@/src/types/post';
+// import { PostDetail } from '@/src/types/post';
 
 // interface Props {
 //   id: number;
-//   session: Session;posts:PostMosaicItem[]
+//   session: Session;posts:PostDetail[]
 // }
 // const Mediatheque: NextPage<Props> = ({ id, session }) => {
 //   const router = useRouter();

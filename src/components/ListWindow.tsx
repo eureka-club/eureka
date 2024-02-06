@@ -1,5 +1,5 @@
 // import React,{useEffect,useMemo,useRef,useState} from 'react'
-// import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isPost } from '@/src/types';
+// import { MosaicItem, isCycleDetail, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem, isPost } from '@/src/types';
 // import { FixedSizeList } from 'react-window';
 // import MosaicItemCycle from './cycle/MosaicItem';
 // import MosaicItemPost from './post/MosaicItem';
@@ -8,14 +8,14 @@
 
 // import { v4 } from 'uuid';
 // import { CycleDetail } from '../types/cycle';
-// import { WorkMosaicItem } from '../types/work';
-// import { PostMosaicItem } from '../types/post';
+// import { WorkDetail } from '../types/work';
+// import { PostDetail } from '../types/post';
 // import { CycleContext } from '../useCycleContext';
 
 // interface Props{
 //     items:MosaicItem[];
 //     cacheKey: string[];
-//     parent?: CycleDetail | WorkMosaicItem;
+//     parent?: CycleDetail | WorkDetail;
 //     itemSize?:number
 //     width?:string,
 //     itemsByRow:number
@@ -38,7 +38,7 @@
 //           const a = items.splice(0,itemsByRow)
 //           const rows = []
 //           for(let item of a){
-//               if (isCycleMosaicItem(item)) {
+//               if (isCycleDetail(item)) {
 //                 rows.push(<CycleContext.Provider value={{ cycle: item as CycleDetail }}>
 //                     <MosaicItemCycle key={`${v4()}`} cycleId={item.id} detailed className="me-3 my-6"/>
 //                   </CycleContext.Provider>)
@@ -46,11 +46,11 @@
 //               else if (isPostMosaicItem(item)) {
 //                 // let pp = parent;
 //                 // if (!pp) {
-//                 //   const it: PostMosaicItem = item as PostMosaicItem;
-//                 //   if (it.works && it.works.length) pp = it.works[0] as WorkMosaicItem;
+//                 //   const it: PostDetail = item as PostDetail;
+//                 //   if (it.works && it.works.length) pp = it.works[0] as WorkDetail;
 //                 //   else if (it.cycles && it.cycles.length > 0) pp = it.cycles[0] as CycleDetail;
 //                 // }
-//                 // const cycleId = isCycleMosaicItem(pp!) ? pp.id : undefined;
+//                 // const cycleId = isCycleDetail(pp!) ? pp.id : undefined;
 //                 // const workId = isWorkMosaicItem(pp!) ? pp.id : undefined;
             
 //                 rows.push(<MosaicItemPost

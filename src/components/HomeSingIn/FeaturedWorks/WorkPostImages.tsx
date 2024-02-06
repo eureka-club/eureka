@@ -1,14 +1,13 @@
 import { FunctionComponent } from 'react';
 import LocalImageComponent from '../../LocalImage';
-import { useRouter } from 'next/navigation';
-
-import { WorkMosaicItem } from '@/src/types/work';
+import { useRouter } from 'next/router';
+import { WorkDetail } from '@/src/types/work';
 import { useDictContext } from '@/src/hooks/useDictContext';
 
 interface Props {
   workId: number;
   workTitle: string;
-  work:WorkMosaicItem;
+  work:WorkDetail;
 }
 
 const WorkPostImages: FunctionComponent<Props> = ({ work, workId, workTitle }) => {

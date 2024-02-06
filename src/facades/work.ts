@@ -1,23 +1,34 @@
 import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
 import { Languages, StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkMosaicItem } from '../types/work';
+import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkDetail, WorkDetailSpec, WorkSumary, WorkSumarySpec } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/response_codes';
-import { CreateEditionServerPayload } from '../types/edition';
 import { defaultLocale } from 'i18n';
+import { EditionDetail, EditionDetailSpec } from '../types/edition';
 
-const include = {
-  localImages: { select: { id:true, storedFile: true } },
-  _count: { select: { ratings: true } },
-  favs: { select: { id: true } },
-  ratings: { select: { userId: true, qty: true } },
-  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-  posts: {
-    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-  },
-  editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
+const editionsToBookDetail = (book: WorkDetail, language: string): WorkDetail | null => {
+  if (book.language == language) {
+    return book;
+  }
+  let i = 0,
+    count = book.editions?.length;
+  for (; i < count; i++) {
+    const e = book?.editions[i];
+    if (e.language == language) {
+      book.title = e.title;
+      book.contentText = e.contentText;
+      book.publicationYear = e.publicationYear;
+      book.language = e.language;
+      book.countryOfOrigin = e.countryOfOrigin;
+      book.length = e.length;
+      book.ToCheck = e.ToCheck;
+      book.localImages = e.localImages;
+      return book;
+    }
+  }
+  return book;
 };
-const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem | null => {
+const editionsToBookSumary = (book: WorkSumary, language: string): WorkSumary | null => {
   if (book.language == language) {
     return book;
   }
@@ -40,24 +51,38 @@ const editionsToBook = (book: WorkMosaicItem, language: string): WorkMosaicItem 
   return book;
 };
 
-export const find = async (id: number, language?: string): Promise<WorkMosaicItem | null> => {
+export const findDetail = async (id: number, language: string): Promise<WorkDetail | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
-    include,
+    include:WorkDetailSpec,
   });
   if (work) {
     if(language)
-      work = editionsToBook(work, language);
+      work = editionsToBookDetail(work, language);
     return work;
   }
   
   return null;
 };
 
-export const findWithoutLangRestrict = async (id: number): Promise<WorkMosaicItem | null> => {
+export const findSumary = async (id: number, language: string): Promise<WorkSumary | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
-    include,
+    select:WorkSumarySpec,
+  });
+  if (work) {
+    if(language)
+      work = editionsToBookSumary(work, language);
+    return work;
+  }
+  
+  return null;
+};
+
+export const findWithoutLangRestrict = async (id: number): Promise<WorkDetail | null> => {
+  let work = await prisma.work.findUnique({
+    where: { id },
+    include:WorkDetailSpec,
   });
   if (work) {
     return work;
@@ -65,7 +90,7 @@ export const findWithoutLangRestrict = async (id: number): Promise<WorkMosaicIte
   return null;
 };
 
-export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkSumary[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
@@ -73,27 +98,17 @@ export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs)
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
-    },
+    select: WorkSumarySpec,
     where,
   });
 
   if (works) {
-    works = works.map((w) => editionsToBook(w, language)!);
+    works = works.map((w) => editionsToBookSumary(w, language)!);
   }
   return works;
 };
 
-export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkMosaicItem[]> => {
+export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkSumary[]> => {
   const { where, include = null, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
@@ -101,27 +116,17 @@ export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
-    },
+    select: WorkSumarySpec,
     where,
   });
 
   if (works) {
-    works = works.map((w) => editionsToBook(w, w.language)!);
+    works = works.map((w) => editionsToBookSumary(w, w.language)!);
   }
   return works;
 };
 
-export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
+export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<WorkSumary[]> => {
   const { q, where, include, lang: l } = query;
   const language = Languages[l?.toString() ?? defaultLocale];
 
@@ -131,39 +136,19 @@ export const search = async (query: { [key: string]: string | string[] | undefin
 
   if (typeof q === 'string') {
     return prisma.work.findMany({
-      include: {
-        localImages: { select: { storedFile: true } },
-        _count: { select: { ratings: true } },
-        favs: { select: { id: true } },
-        ratings: { select: { userId: true, qty: true } },
-        readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-        posts: {
-          select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-        },
-        editions: { include: { localImages: { select: { storedFile: true } } } },
-      },
+      select:WorkSumarySpec,
       where: {
         OR: [{ title: { contains: q } }, { author: { contains: q } }],
       },
-      ...(typeof include === 'string' && { include: JSON.parse(include) }),
+      // ...(typeof include === 'string' && { include: JSON.parse(include) }),
     });
   }
 
   let works = await prisma.work.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    include: {
-      localImages: { select: { id:true,storedFile: true } },
-      _count: { select: { ratings: true } },
-      favs: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-      posts: {
-        select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-      },
-      editions: { include: { localImages: { select: { id:true,storedFile: true } } } },
-    },
+    select: WorkSumarySpec,
   });
-  if (works) works = works.map((w) => editionsToBook(w, language)!);
+  if (works) works = works.map((w) => editionsToBookSumary(w, language)!);
   return works;
 };
 
@@ -213,7 +198,7 @@ export const isReadOrWatchedByUser = async (work: Work, user: User): Promise<num
 export const createFromServerFields = async (
   fields: CreateWorkServerFields,
   coverImageUpload: StoredFileUpload,
-): Promise<{ error?: string; work?: Work | Edition | null }> => {
+): Promise<{ error?: string; work?: WorkDetail | EditionDetail | null }> => {
   const payload = Object.entries(fields).reduce((memo, field) => {
     const [fieldName, fieldValues] = field;
 
@@ -231,12 +216,14 @@ export const createFromServerFields = async (
     if ('isbn' in payload) {
       if (!payload.isbn) return { error: MISSING_FIELD('isbn') };
       const w = await prisma.work.findFirst({
+        include:WorkDetailSpec,
         where: {
           isbn: payload.isbn,
         },
       });
       if (w) return { work: w, error: WORK_ALREADY_EXIST };
       const e = await prisma.edition.findFirst({
+        include:EditionDetailSpec,
         where: {
           isbn: payload.isbn,
         },
@@ -246,7 +233,7 @@ export const createFromServerFields = async (
   }
 
   const w = await prisma.work.create({
-    include,
+    include:WorkDetailSpec,
     data: {
       ...payload,
       ToCheck: true,
