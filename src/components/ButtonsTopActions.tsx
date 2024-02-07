@@ -4,7 +4,7 @@ import { ReactElement } from "react"
 import { BiArrowBack } from "react-icons/bi";
 
 interface Props{
-  children?: ReactElement | ReactElement[];
+  children?: any;
 }
 export const ButtonsTopActions = (props:Props)=>{
     const router = useRouter();
@@ -17,7 +17,8 @@ export const ButtonsTopActions = (props:Props)=>{
             color="primary"
             onClick={() => router.back()}
             >
-                <span style={{width:'0px'}}>&nbsp;</span><BiArrowBack />
+                <span style={{width:'0px'}}>&nbsp;</span>
+                <BiArrowBack />
             </Button>
             {props.children}
     </ButtonGroup>

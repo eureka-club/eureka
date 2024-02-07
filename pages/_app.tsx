@@ -17,8 +17,8 @@ const materialTheme = createTheme({
   palette: {
     warning: {
       light: 'blue',
-      main: '#e3506d',
-      dark: '#e07186',
+      main: '#ffafaf',
+      dark: '#e3506d',
       contrastText: '#fff',
     },
     primary: {

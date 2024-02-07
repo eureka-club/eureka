@@ -426,14 +426,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
         ? <MaterialButton color="warning" onClick={handleEditClick} size="small">
               {t('Edit')}
             </MaterialButton>
-        : <></> 
+        : '' 
       }
       {
         post && cycle && canEditPost() 
           ? <MaterialButton color="warning" onClick={handleEditPostClick} size="small">
             {t('Edit')}
           </MaterialButton>
-          : <></>
+          : ''
       }
     </ButtonsTopActions>
 
