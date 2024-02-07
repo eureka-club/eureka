@@ -54,7 +54,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [work, setWork] = useState(workItem);
-debugger;
   const { data } = useWork(workId,{
     enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
   });

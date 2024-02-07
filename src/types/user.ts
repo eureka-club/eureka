@@ -15,7 +15,6 @@ export interface EditUserClientPayload {
 }
 
 export const UserDetailSpec = {
-  select: {
     id: true,
     name: true,
     email: true,
@@ -70,12 +69,21 @@ export const UserDetailSpec = {
     ratingCycles:{select:{cycleId:true,qty:true}},
     photos:{select:{storedFile:true}},
     reactions:{select:{postId:true,unified:true,emoji:true}},
-  }
+} 
+
+export type UserMosaicItem = Prisma.UserGetPayload<{select:typeof UserDetailSpec}> & {
+  type?: 'user',
 };
 
-export type UserMosaicItem = Prisma.UserGetPayload<typeof UserDetailSpec> & {
-  type?: 'user';
-};
+export const UserSumarySpec = {
+  id:true,
+  name:true,
+  image:true,
+} 
+
+export type UserSumary = Prisma.UserGetPayload<{select: typeof UserSumarySpec}> & {
+  type?:'user',
+}
 
 export type UserWhitPhoto = Prisma.UserGetPayload<{
   include:{photos:true}

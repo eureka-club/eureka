@@ -9,7 +9,7 @@ type Options={
 export const useCycleParticipants = (id:number,opt?:Options)=>{
     const options = {
         staleTime: opt?.staleTime??1000 * 60 * 60,
-        enabled:opt?.enabled??true,
+        enabled:opt?.enabled??!isNaN(id),
     };
     return useQuery<UserMosaicItem[]>(["CYCLE",id?.toString(),"PARTICIPANTS"], () => getCycleParticipants(id), options);
   }

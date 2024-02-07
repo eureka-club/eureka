@@ -5,7 +5,7 @@ import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } fr
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
-import { UserDetailSpec, UserMosaicItem } from '../types/user';
+import { UserDetailSpec, UserMosaicItem, UserSumary, UserSumarySpec } from '../types/user';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
@@ -632,15 +632,15 @@ export const remove = async (cycle: Cycle): Promise<Cycle> => {
   });
 };
 
-export const participants = async (id:number):Promise<UserMosaicItem[]>=>{
+export const participants = async (id:number):Promise<UserSumary[]>=>{
   const cycle = await prisma.cycle.findFirst({
     where:{id},
     select:{
-      creator:{select:UserDetailSpec.select},
-      participants:{select:UserDetailSpec.select},
-      _count:{
-        select:{participants:true}
-      }
+      creator:{select:UserSumarySpec},
+      participants:{select:UserSumarySpec},
+      // _count:{
+      //   select:{participants:true}
+      // }
     }
   })
   const res =[...cycle?.participants??[],cycle?.creator!];

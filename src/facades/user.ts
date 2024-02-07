@@ -7,7 +7,7 @@ export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): P
   const { select = undefined, include = true,where } = props;
   const user: any = await prisma.user.findFirst({
     where,
-    select:UserDetailSpec.select
+    select:UserDetailSpec
   });
   user.favWorks.forEach((w:any)=>{
     w.currentUserIsFav = true
@@ -23,7 +23,7 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    select: UserDetailSpec.select
+    select: UserDetailSpec
   });
 };
 

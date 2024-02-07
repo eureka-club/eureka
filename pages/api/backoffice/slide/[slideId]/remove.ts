@@ -21,7 +21,7 @@ export default getApiHandler()
   await middleware(req,res,cors)
 
     try {
-      if(session){debugger;
+      if(session){
         const {slideId:id_} = req.query
         const id = +id_!;
         const slide = await removeSlide(id);
