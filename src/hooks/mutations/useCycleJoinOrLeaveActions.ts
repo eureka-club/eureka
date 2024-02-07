@@ -13,7 +13,7 @@ type ctx = {
     ck: string[];
 } | undefined;
 
-const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -110,7 +110,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:UserMosaicItem[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();

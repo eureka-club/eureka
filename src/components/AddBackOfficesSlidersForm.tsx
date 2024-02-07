@@ -139,7 +139,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
   //     const promises = (data as { b64_json: string }[]).map((d) => {
   //       return new Promise((resolve, reject) => {
   //         const img = new Image();
-  //         img.onload = function () {debugger;
+  //         img.onload = function () {
   //           setImages((res) => [...res, img]);
   //           resolve(true);
   //         };

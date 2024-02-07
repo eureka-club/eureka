@@ -1,7 +1,7 @@
 import { Cycle, CycleComplementaryMaterial, LocalImage, Prisma, User, RatingOnCycle } from '@prisma/client';
 
 import { StoredFileUpload } from '../types';
-import { CreateCycleServerFields, CreateCycleServerPayload, CycleMosaicItem } from '../types/cycle';
+import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetailSpec, CycleMosaicItem } from '../types/cycle';
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
@@ -13,92 +13,7 @@ export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUB
 export const find = async (id: number): Promise<CycleMosaicItem | null> => {
   return prisma.cycle.findUnique({
     where: { id },
-    include: {
-      creator: {
-        select: { id: true, name: true, email: true, countryOfOrigin: true },
-      },
-      localImages: {
-        select: {
-          storedFile: true,
-        },
-      },
-      //complementaryMaterials: true,
-      guidelines: {
-        select: {
-          title: true,
-          contentText: true,
-        },
-      },
-      usersJoined: { select: { userId: true, pending: true } },
-      ratings: { select: { userId: true, qty: true } },
-      participants: { select: { id: true } },
-      works: {
-        include: {
-          _count: { select: { ratings: true } },
-          localImages: { select: { id:true,storedFile: true } },
-          favs: { select: { id: true } },
-          ratings: { select: { userId: true, qty: true } },
-          readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-          posts: {
-            select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-          },
-          editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
-        },
-      },
-      // participants:{
-      //   select:{
-      //     id:true,
-      //     name:true,
-      //     countryOfOrigin:true,
-      //     favWorks:{select:{id:true}},
-      //     ratingWorks:{select:{workId:true}},
-      //     photos:{select:{storedFile:true}},
-      //     notifications:{
-      //       select:{
-      //         viewed:true,
-      //         notification:{select:{message:true,createdAt:true}}}
-      //       }
-      //   }
-      // },
-      // ratings: {
-      //   select: {
-      //     qty:true,
-      //     userId:true,
-      //   }
-      // },
-      favs: {
-        select: { id: true },
-      },
-      cycleWorksDates: {
-        select: {
-          id: true,
-          startDate: true,
-          endDate: true,
-          workId: true,
-          work: {
-            include: {
-              _count: { select: { ratings: true } },
-              localImages: { select: { id:true,storedFile: true } },
-              favs: { select: { id: true } },
-              ratings: { select: { userId: true, qty: true } },
-              readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-              posts: {
-                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-              },
-              editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
-            },
-          },
-        },
-      },
-      // comments:true,
-      complementaryMaterials: true,
-      _count: {
-        select: {
-          participants: true,
-          ratings: true,
-        },
-      },
-    },
+    include: CycleDetailSpec.include
   });
 };
 
@@ -110,93 +25,8 @@ export const findAll = async (props?: Prisma.CycleFindManyArgs): Promise<CycleMo
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    include: {
-      creator: {
-        select: { id: true, name: true, email: true, countryOfOrigin: true },
-      },
-      localImages: {
-        select: {
-          storedFile: true,
-        },
-      },
-      //complementaryMaterials: true,
-      guidelines: {
-        select: {
-          title: true,
-          contentText: true,
-        },
-      },
-      usersJoined: { select: { userId: true, pending: true } },
-      participants: { select: { id: true } },
-      ratings: { select: { userId: true, qty: true } },
-      works: {
-        include: {
-          _count: { select: { ratings: true } },
-          localImages: { select: { id:true,storedFile: true } },
-          favs: { select: { id: true } },
-          ratings: { select: { userId: true, qty: true } },
-          readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-          posts: {
-            select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-          },
-          editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
-        },
-      },
-      // participants:{
-      //   select:{
-      //     id:true,
-      //     name:true,
-      //     countryOfOrigin:true,
-      //     favWorks:{select:{id:true}},
-      //     ratingWorks:{select:{workId:true}},
-      //     photos:{select:{storedFile:true}},
-      //     notifications:{
-      //       select:{
-      //         viewed:true,
-      //         notification:{select:{message:true,createdAt:true}}}
-      //       }
-      //   }
-      // },
-      // ratings: {
-      //   select: {
-      //     qty:true,
-      //     userId:true,
-      //   }
-      // },
-      favs: {
-        select: { id: true },
-      },
-      cycleWorksDates: {
-        select: {
-          id: true,
-          startDate: true,
-          endDate: true,
-          workId: true,
-          work: {
-            include: {
-              _count: { select: { ratings: true } },
-              localImages: { select: { id:true,storedFile: true } },
-              favs: { select: { id: true } },
-              ratings: { select: { userId: true, qty: true } },
-              readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-              posts: {
-                select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-              },
-              editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
-            },
-          },
-        },
-      },
-      // comments:true,
-      complementaryMaterials: true,
-      _count: {
-        select: {
-          participants: true,
-          ratings: true,
-        },
-      },
-    },
-  });
+    include: CycleDetailSpec.include
+    });
 };
 
 export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {

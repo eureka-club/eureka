@@ -3,6 +3,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { Languages } from '@/src/types';
 import { findAll } from '@/src/facades/work';
+import { CycleDetailSpec } from '@/src/types/cycle';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -63,11 +64,7 @@ export default getApiHandler()
       return {
         skip: c * countItemsPerPage + skipPlus,
         take: takePlus || countItemsPerPage,
-        include:{
-          localImages: {select:{storedFile:true}},
-          usersJoined:{select:{userId:true,pending:true}},
-          participants:{select:{id:true}},
-        },
+        include:CycleDetailSpec.include,
         where:w
       }
     };

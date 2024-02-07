@@ -1034,7 +1034,9 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
 
                             <TabContent>
                               <TabPane eventKey='notifications'>
-                                <Button color='warning' variant='contained' className=' my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
+                                <Box className='mt-4 d-flex flex-row justify-content-start'>
+                                  <Button color='warning' variant='contained' className=' my-1' onClick={removeNotificationsSinceLastMonth}>{t('RemoveOldNotifications')}</Button>
+                                </Box>
                               </TabPane>
                             </TabContent>
 

@@ -26,7 +26,7 @@ import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 import { CycleMosaicItem } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
-import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
+// import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -73,18 +73,13 @@ const MosaicItem: FunctionComponent<Props> = ({
   
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const {data} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
-  
-  const [cycle,setCycle]=useState(cycleItem)
-  useEffect(()=>{
-    if(!cycleItem && data)setCycle(data)
-  },[data])
-
-  const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
+  const {data:c} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
+  const cycle = cycleItem??c;
   const {show} = useModalContext()
+  const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
+  const participants = cycle ? [...cycle?.participants!??[],cycle?.creator!] : [];
   
-  const{data:participants}=useCycleParticipants(cycle?.id!);
-
+  // const{data:participants}=useCycleParticipants(cycle?.id!);
   // const isFetchingParticipants = useIsFetching(['USERS',JSON.stringify(whereCycleParticipants)])
   
   const { t } = useTranslation('common');
@@ -213,7 +208,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
       </Button>
 
-      if(participants && participants.findIndex(p=>p.id==session?.user.id) > -1 )         
+      if(participants && participants?.findIndex(p=>p.id==session?.user.id) > -1 )         
           return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
           className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
            <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
@@ -263,7 +258,8 @@ const MosaicItem: FunctionComponent<Props> = ({
           } 
             </Badge>
            <div className={`h-100 d-flex justify-content-center align-items-end`}>
-            {participants && showJoinOrLeaveButton && !(participants.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
+            {
+            participants?.length && showJoinOrLeaveButton && !(participants?.findIndex(p => p.id == session?.user.id) > -1 && cycle.access == 4) && renderJoinLeaveCycleBtn()}
            </div> 
          </div>
                 

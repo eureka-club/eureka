@@ -67,6 +67,7 @@ export const CycleDetailSpec = {
         },
       },
     },
+    participants:{select:{id: true, name: true, email: true, countryOfOrigin: true}},
     _count: {
       select: {
         // participants: true,

@@ -13,7 +13,6 @@ const bcrypt = require('bcryptjs');
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     // const session = await getSession({ req });
-    debugger;
     const session = await getSession({req});
     const {userId:ui}=req.body;
     if (session == null && !ui) {
@@ -147,7 +146,6 @@ export default getApiHandler()
     }
   })
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    debugger;
     const session = await getSession({req});
     if (session == null) {
       res.statusMessage = 'unauthorized';
