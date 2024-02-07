@@ -11,11 +11,7 @@ import {prisma} from '@/src/lib/prisma';
 import { sendMail, sendMailSingIn } from '@/src/facades/mail';
 const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
-import { addParticipant, find } from '@/src/facades/cycle';
-import axios from 'axios';
-import cycle from '../cycle';
 import { Cycle } from '@prisma/client';
-import { CycleMosaicItem } from '@/src/types/cycle';
 import { defaultLocale } from 'i18n';
 
 /* const getOptions = (req: NextApiRequest) => {
@@ -119,7 +115,7 @@ const joinToCycleHandler = async (req: NextApiRequest,cycle:Cycle & {
         userId:user.id,
         notificationMessage,
         notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-        notificationToUsers:cycle.participants.map(i=>i.id),
+        notificationToUsers:cycle.participants.map((i:{id:number})=>i.id),
       }),
     });
   }
