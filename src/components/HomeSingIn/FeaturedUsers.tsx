@@ -46,11 +46,11 @@ const FeaturedUsers = () => {
           </div>
         )}
         <div className='d-none d-lg-flex flex-column'>
-          {users.map((user) => (
-            <div key={user.id} className="d-flex justify-content-center justify-content-lg-start">
-              <MosaicItemUser user={user} />
-            </div>
-          ))}
+          {users.map((user) => {
+            return <div key={user?.id} className="d-flex justify-content-center justify-content-lg-start">
+            <MosaicItemUser user={user} />
+          </div>
+          })}
         </div>
 
 

@@ -467,10 +467,7 @@ export const participants = async (id:number):Promise<UserSumary[]>=>{
     where:{id},
     select:{
       creator:{select:UserSumarySpec},
-      participants:{select:UserSumarySpec},
-      // _count:{
-      //   select:{participants:true}
-      // }
+      participants:{select:UserSumarySpec}
     }
   })
   const res =[...cycle?.participants??[],cycle?.creator!];

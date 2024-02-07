@@ -1,6 +1,6 @@
 import { getCycleParticipants } from "@/src/actions/getCycleParticipants";
 import { useQuery } from "react-query";
-import { UserMosaicItem } from "@/src/types/user";
+import { UserSumary } from "@/src/types/user";
 
 type Options={
     enabled?:boolean,
@@ -11,5 +11,5 @@ export const useCycleParticipants = (id:number,opt?:Options)=>{
         staleTime: opt?.staleTime??1000 * 60 * 60,
         enabled:opt?.enabled??!isNaN(id),
     };
-    return useQuery<UserMosaicItem[]>(["CYCLE",id?.toString(),"PARTICIPANTS"], () => getCycleParticipants(id), options);
+    return useQuery<UserSumary[]>(["CYCLE",id?.toString(),"PARTICIPANTS"], () => getCycleParticipants(id), options);
   }

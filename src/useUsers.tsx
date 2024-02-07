@@ -1,7 +1,8 @@
 import { Prisma } from '@prisma/client';
 import { useQuery, useQueryClient } from 'react-query';
-import { UserMosaicItem } from './types/user';
+import { UserMosaicItem, UserSumary } from './types/user';
 import { buildUrl } from 'build-url-ts';
+import { WEBAPP_URL } from './constants';
 
 // import { useAtom } from 'jotai';
 // import globalSearchEngineAtom from './atoms/searchEngine';
@@ -11,12 +12,12 @@ interface Options {
   enabled?: boolean;
   from?:string
 }
-export const getUsers = async (props?:Prisma.UserFindManyArgs,origin=''):Promise<UserMosaicItem[]> => {
+export const getUsers = async (props?:Prisma.UserFindManyArgs):Promise<UserSumary[]> => {
   const {where:w,take,skip,cursor:c} = props || {};
   const where = w ? encodeURIComponent(JSON.stringify(w)) : '';
   const cursor = c ? encodeURIComponent(JSON.stringify(c)) : '';
 
-  const url = buildUrl(`${origin||''}/api`, {
+  const url = buildUrl(`${WEBAPP_URL}/api`, {
     path: 'user',
     queryParams: {
       where,
@@ -39,7 +40,7 @@ const useUsers = (where:Prisma.UserFindManyArgs,options?: Options) => {
     enabled: true,
   };
   
-  return useQuery<UserMosaicItem[]>(['USERS', JSON.stringify(where)], () => getUsers(where), {
+  return useQuery<UserSumary[]>(['USERS', JSON.stringify(where)], () => getUsers(where), {
     staleTime,
     enabled
   });

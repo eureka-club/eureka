@@ -11,7 +11,6 @@ import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { UserMosaicItem } from '@/src/types/user';
 import { Notification } from '@prisma/client';
-import { LANGUAGES } from '@/src/constants';
 
 export const config = {
   api: {

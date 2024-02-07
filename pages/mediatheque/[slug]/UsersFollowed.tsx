@@ -1,6 +1,6 @@
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { HiOutlineUserGroup } from 'react-icons/hi';
-import { UserMosaicItem } from "@/src/types/user";
+import { UserMosaicItem, UserSumary } from "@/src/types/user";
 import { FC } from 'react';
 
 interface Props{
@@ -16,7 +16,7 @@ const UsersFollowed:FC<Props> = ({user,goTo,t}) => {
             cacheKey={['MEDIATHEQUE-FOLLOWING',`USER-${user.id}`]}
             onSeeAll={()=>goTo('my-users-followed')}
             title={`${t('common:myUsersFollowed')}  `}
-            data={user!.following as UserMosaicItem[]}
+            data={user!.following as UserSumary[]}
             iconBefore={<HiOutlineUserGroup />}
           />
 

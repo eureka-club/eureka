@@ -10,6 +10,7 @@ import {useRouter} from 'next/router'
 import useUser,{getUser} from '@/src/useUser';
 import { UserMosaicItem } from '@/src/types/user';
 import { BiArrowBack } from 'react-icons/bi';
+import useUserSumary from '@/src/useUserSumary';
 
 interface Props{
   id:number
@@ -21,7 +22,7 @@ const MyUsersFollowed: NextPage<Props> = ({id}) => {
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:user} = useUser(id)
+  const {data:user} = useUserSumary(id)
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -51,9 +52,9 @@ const MyUsersFollowed: NextPage<Props> = ({id}) => {
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myUsersFollowed')}</h1>
             <Row>
-              {(user?.following as UserMosaicItem[]).map(c=>
+              {(user?.following).map(c=>
                 <Col key={c.id} xs={12} sm={6} lg={3} className='mb-4 d-flex justify-content-center  align-items-center'>
-                  <UMI user={c} />
+                  <UMI userId={c.id} />
                 </Col>
               )}
             </Row>

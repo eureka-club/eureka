@@ -3,11 +3,12 @@ import useUser from '@/src/useUser'
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'
-import { UserMosaicItem } from '@/src/types/user';
+import { UserSumary } from '@/src/types/user';
 import slugify from 'slugify'
+import useUserSumary from '@/src/useUserSumary';
 interface Props {
-  user?:UserMosaicItem;
-  userId: number;
+  user?:UserSumary;
+  userId?: number;
   showName?: boolean;
   showFullName?: boolean;
   size?: 'md' | 'sm' | 'xs' | 'xl';
@@ -16,7 +17,7 @@ interface Props {
   height:number;
 }
 
-const getMediathequeSlug = (user:UserMosaicItem)=>{
+const getMediathequeSlug = (user:UserSumary)=>{
   if(user){
     const s =`${user.name}`
     const slug = `${slugify(s,{lower:true})}-${user.id}` 
@@ -39,14 +40,11 @@ const UserAvatar: FunctionComponent<Props> = ({
   const onLoadImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
-  const [user,setUser] = useState(userItem)
-  const {data} = useUser(userId,{
+  const {data} = useUserSumary(userId!,{
     enabled:!!userId && !userItem
-  })
-  useEffect(()=>{
-    if(data && !userItem)setUser(data)
-  },[data])
-
+  });
+  const user = userItem??data;
+debugger;
   const renderUserName = () => {
     let res = '';
     if (showName) {
@@ -63,7 +61,7 @@ const UserAvatar: FunctionComponent<Props> = ({
     }
     return <span className='ms-2'>{res}</span>
   };
-  const onClick = (e:MouseEvent<HTMLAnchorElement>,user:UserMosaicItem)=>{
+  const onClick = (e:MouseEvent<HTMLAnchorElement>,user:UserSumary)=>{
     e.stopPropagation()
     router.push(`/mediatheque/${getMediathequeSlug(user)}`)
   }

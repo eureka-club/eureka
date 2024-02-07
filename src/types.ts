@@ -3,7 +3,7 @@ import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 import { CycleMosaicItem } from './types/cycle';
 import { PostMosaicItem } from './types/post';
 import { WorkDetail, GoogleBooksProps, TMDBVideosProps } from './types/work';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserMosaicItem, UserSumary } from '@/src/types/user';
 import { Session as S } from 'next-auth';
 export interface FileUpload {
   fieldName: string;
@@ -45,7 +45,7 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkDetail | UserMosaicItem;
+export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkDetail | UserSumary;
 export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkDetail | UserMosaicItem;
 export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 

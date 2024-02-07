@@ -1,5 +1,5 @@
 import { Prisma, User } from '@prisma/client';
-import { UserDetailSpec, UserMosaicItem } from '@/types/user';
+import { UserDetailSpec, UserMosaicItem, UserSumary, UserSumarySpec } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 
@@ -15,6 +15,14 @@ export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): P
   return user;
 };
 
+export const findSumary = async (id:number,language?:string): Promise<UserMosaicItem | null> => {
+  const user: any = await prisma.user.findFirst({
+    where:{id},
+    select:UserSumarySpec
+  });
+  return user;
+};
+
 export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosaicItem[]> => {
   const {where,take,skip,cursor} = props||{};
   return prisma.user.findMany({
@@ -24,6 +32,18 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
     select: UserDetailSpec
+  });
+};
+
+export const findAllSumary = async (props?:Prisma.UserFindManyArgs): Promise<UserSumary[]> => {
+  const {where,take,skip,cursor} = props||{};
+  return prisma.user.findMany({
+    take,
+    skip,
+    cursor,
+    ...(where && { where }),
+    orderBy: { createdAt: 'desc' },
+    select: UserSumarySpec
   });
 };
 

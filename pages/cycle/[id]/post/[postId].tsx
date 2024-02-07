@@ -123,7 +123,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator.name, storedFile: post?.localImages[0].storedFile}
 
   const queryClient = new QueryClient() 
-   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu,origin))
+   await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))
    await queryClient.prefetchQuery(['CYCLE',`${cycleId}`],()=>cycle)
    await queryClient.prefetchQuery(['POST',`${postId}`],()=>post)
 

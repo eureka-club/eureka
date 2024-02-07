@@ -18,7 +18,7 @@ import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePost'
 import { useSession} from 'next-auth/react';
 import { PostMosaicItem } from '@/src/types/post';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserMosaicItem, UserSumary } from '@/src/types/user';
 interface Props {
   post?:PostMosaicItem;
   postId: number|string;
@@ -190,7 +190,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {post && showdetail && (
           <div className={`${styles.postDetail}`}>
                <div  className={`d-flex flex-row fs-6 `}>
-                <Avatar width={27} height={27} user={post.creator as unknown as UserMosaicItem} userId={post.creatorId} showFullName={false} size= {(!size) ? "xs" :"sm" } />
+                <Avatar width={27} height={27} user={post.creator as unknown as UserSumary} userId={post.creatorId} showFullName={false} size= {(!size) ? "xs" :"sm" } />
                 <span className={` ms-1 me-1 d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>-</span>
                 <span className={`d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>

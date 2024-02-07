@@ -79,6 +79,11 @@ export const UserSumarySpec = {
   id:true,
   name:true,
   image:true,
+  countryOfOrigin:true,
+  tags:true,
+  photos:true,
+  followedBy:{select:{id:true}},
+  following:{select:{id:true}},
 } 
 
 export type UserSumary = Prisma.UserGetPayload<{select: typeof UserSumarySpec}> & {
