@@ -44,7 +44,6 @@ const UserAvatar: FunctionComponent<Props> = ({
     enabled:!!userId && !userItem
   });
   const user = userItem??data;
-debugger;
   const renderUserName = () => {
     let res = '';
     if (showName) {

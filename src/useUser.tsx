@@ -7,7 +7,7 @@ export const getUser = async (id: number,language?:string): Promise<UserMosaicIt
   if (!id) return null;
   else{
     const langQ = language ? `language=${language}` : '';
-    const url = `${WEBAPP_URL}/api/user/${id}?${langQ}`;
+    const url = `${WEBAPP_URL}/api/user/${id}/sumary/?${langQ}`;
     const res = await fetch(url);
     if (!res.ok) return null;
     const result = await res.json();
