@@ -1,18 +1,18 @@
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { UserMosaicItem } from "@/src/types/user";
-import { WorkDetail } from "@/src/types/work";
+import { UserDetail } from "@/src/types/user";
+import { WorkSumary } from "@/src/types/work";
 import { BsEye } from 'react-icons/bs';
 import { FC } from "react";
 
 interface Props{
-    user:UserMosaicItem;
+    user:UserDetail;
     id:string;
     goTo:(path:string)=>void;
     t:(val:string)=>string;
 }
 const ReadOrWatched:FC<Props> = ({user,id,goTo,t}) => {
     if (user && user.ratingWorks && user.ratingWorks.length) {
-      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as WorkDetail).reverse().slice(0,6);
+      const RW = user.ratingWorks.filter(rw=>rw.work).map((w) => w.work as unknown as WorkSumary).reverse().slice(0,6);
       /*RW.sort((f, s) => {
           const fCD = dayjs(f.createdAt);
           const sCD = dayjs(s.createdAt);

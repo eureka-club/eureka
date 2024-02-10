@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { QueryClient, dehydrate } from 'react-query';
 import { ButtonGroup, Button, Alert } from 'react-bootstrap';
 import { getPosts } from '@/src/usePosts';
-import { getWorks } from '@/src/useWorks';
 import { getCycles } from '@/src/useCycles';
 
 import { Session } from '@/src/types';
@@ -15,6 +14,7 @@ import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { getWorksProps } from '@/src/types/work';
+import { getWorksSumary } from '@/src/useWorksSumary';
 
 const topics = [
   'gender-feminisms',
@@ -169,7 +169,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
   const hasPosts = postsData.total > 0;
   
-  const worksData = await getWorks(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
+  const worksData = await getWorksSumary(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
 
   qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
   const hasWorks = worksData.total > 0;

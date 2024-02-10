@@ -13,7 +13,6 @@ import Banner from '@/src/components/Banner';
 import useCycle, { getCycle } from '@/src/useCycle';
 import useUsers, { getUsers } from '@/src/useUsers';
 import { getPosts } from '@/src/usePosts';
-import { getWorks } from '@/src/useWorks';
 import { CycleContext } from '@/src/useCycleContext';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import { WEBAPP_URL } from '@/src/constants';
@@ -25,6 +24,7 @@ import { useEffect } from 'react';
 import { Session } from '@/src/types';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
+import { getWorksSumary } from '@/src/useWorksSumary';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -255,7 +255,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
   const participants = await getCycleParticipants(cycle?.id!);
-  const { works } = await getWorks(ctx.locale!, wcw, origin);
+  const { works } = await getWorksSumary(ctx.locale!, wcw, origin);
 
   await queryClient.prefetchQuery(['CYCLE', `${id}`, 'PARTICIPANTS'], () => participants);
   await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp, origin));
@@ -296,7 +296,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/cycle`)
   const {data:cycles} = await res.json();
 
-  const paths = cycles.map((cycle:CycleMosaicItem) => ({
+  const paths = cycles.map((cycle:CycleDetail) => ({
     params: { id: cycle.id.toString() },
   }))
 

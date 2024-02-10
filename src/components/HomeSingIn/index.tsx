@@ -6,8 +6,8 @@ import { Spinner, Col } from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { CycleDetail } from '@/src/types/cycle';
+import { UserDetail } from '@/src/types/user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
@@ -38,7 +38,7 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 
 interface Props {
   language:string;
-  // myCycles?:CycleMosaicItem[]
+  // myCycles?:CycleDetail[]
 }
 
 const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
@@ -50,9 +50,9 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
-  const [users, setUsers] = useState<UserMosaicItem[]>()
+  const [users, setUsers] = useState<UserDetail[]>()
   const { data: dataCycles } = useMyCycles(session?.user.id!)
-  const [cycles, setCycles] = useState<CycleMosaicItem[]>()
+  const [cycles, setCycles] = useState<CycleDetail[]>()
 
   useEffect(() => {
     if (dataCycles) setCycles(dataCycles.cycles)
@@ -105,7 +105,7 @@ const [gbt, setGBT] = useState<any[]>([]);
     return slug
   }
 
-  const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
+  const seeAll = async (data: CycleDetail[], q: string, showFilterEngine = true): Promise<void> => {
     if (session) {
       const u = session.user
       router.push(`/user/${getMediathequeSlug(u.id, u.name || u.id.toString())}/my-cycles`);

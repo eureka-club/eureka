@@ -10,8 +10,8 @@ import {BsChevronUp, BsX} from 'react-icons/bs';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { MySocialInfo } from '../../types';
-import { PostMosaicItem } from '../../types/post';
-import { WorkDetail } from '../../types/work';
+import { PostDetail } from '../../types/post';
+import { WorkDetail, WorkSumary } from '../../types/work';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetailHeader.module.css';
 import MosaicItem from './MosaicItem';
@@ -23,14 +23,15 @@ import useCycle from '@/src/useCycle'
 import CarouselStatic from '../CarouselStatic';
 import { Box } from '@mui/material';
 import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { useQueryClient } from 'react-query';
 import useUser from '@/src/useUser';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
+import { CycleWork } from '@/src/types/cycleWork';
 interface Props {
-  // cycle: CycleMosaicItem;
+  // cycle: CycleDetail;
   cycleId:number;
-  post?: PostMosaicItem;
+  post?: PostDetail;
   work?: WorkDetail;
   isCurrentUserJoinedToCycle?: boolean;
   participantsCount?: number;
@@ -128,11 +129,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   const getWorksSorted = () => {
-    const res: Work[] = [];
+    const res: CycleWork[] = [];
     if(!cycle)return []
     if(!cycle.cycleWorksDates)return works||[];
     //console.log(cycle.cycleWorksDates,'cycle.cycleWorksDates')
-    cycle.cycleWorksDates
+    (cycle.cycleWorksDates as CycleWork[])
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
@@ -159,7 +160,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       .forEach((cw) => {
         if (works) {
           const idx = works?.findIndex((w) => w!.id === cw.workId);
-          res.push(works[idx]!);          
+          res.push(works[idx]! as unknown as CycleWork);          
         }
       });
     if (cycle.cycleWorksDates.length) return res;
@@ -258,7 +259,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
               title={<CycleSummary cycle={cycle} />}
-              data={getWorksSorted() as WorkDetail[]}
+              data={getWorksSorted() as WorkSumary[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
               size="sm"
@@ -281,7 +282,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
                 title={<CycleSummary cycle={cycle} />}
-                data={getWorksSorted() as WorkDetail[]}
+                data={getWorksSorted() as WorkSumary[]}
                 iconBefore={<></>}
                 customMosaicStyle={{ height: '16em' }}
                 size={'sm'}

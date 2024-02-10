@@ -135,11 +135,8 @@ export default getApiHandler()
       
       let cr = await prisma?.cycle.aggregate({where,_count:true})
       const total = cr?._count;
-      data = await findAll({take,where,skip,cursor});
+      data = await findAll(session,{take,where,skip,cursor});
 
-      data.forEach((c) => {
-          c.type ='cycle';
-      }); 
       res.status(200).json({
         data,
         fetched:data.length,

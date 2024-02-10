@@ -5,13 +5,12 @@ import { Spinner,Row, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/work/MosaicItem'
 
-import useWorks,{getWorks} from '@/src/useWorks'
-
 import useFilterEngineWorks from './useFilterEngineWorks';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { WorkDetail } from '../types/work';
+import { WorkDetail, WorkSumary } from '../types/work';
 import { getWorksProps } from '../types/work';
+import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
@@ -53,8 +52,8 @@ const SearchTabworks:FunctionComponent = () => {
 
   const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorks(props,{cacheKey,enabled:!!router.query?.q});
-  const [works,setWorks] = useState<WorkDetail[]>([])
+  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorksSumary(props,{cacheKey,enabled:!!router.query?.q});
+  const [works,setWorks] = useState<WorkSumary[]>([])
   
   useEffect(()=>{
 
@@ -79,7 +78,7 @@ const SearchTabworks:FunctionComponent = () => {
     if(inView && works.length < total){
       const fi = async ()=>{
         const {id} = works.slice(-1)[0]
-        const r = await getWorks(lang,{...props,skip:1,cursor:{id}});
+        const r = await getWorksSumary(lang,{...props,skip:1,cursor:{id}});
         setWorks((c: any)=>[...c,...r.works])
       }
       fi()

@@ -3,14 +3,14 @@ import Head from "next/head";
 import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
-import useWork,{getWork} from '@/src/useWork';
-import usePost,{getPost} from '@/src/usePost';
+import useWork,{getWork} from '@/src/useWorkDetail';
 import { QueryClient,dehydrate } from 'react-query';
 import { WEBAPP_URL } from '@/src/constants';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
+import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
 interface Props {
   postId:number;
   workId:number;
@@ -24,7 +24,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
   const { t } = useTranslation('meta');
 
   const { data: work, isLoading: loadingWork } = useWork(+workId, { enabled: !!workId });
-  const { data: post, isLoading: loadingPost } = usePost(+postId, { enabled: !!postId });
+  const { data: post, isLoading: loadingPost } = usePostDetail(+postId, { enabled: !!postId });
   const isLoadingData = () => {
     if (loadingWork) return true;
     if (loadingPost) return true;
@@ -81,7 +81,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   const locale = ctx.locale??"es";
 
- let post = await getPost(postId);
+ let post = await getPostDetail(postId);
  let work = await getWork(workId,locale);
  let metaTags = {
    id: post?.id,

@@ -1,13 +1,13 @@
 import { Prisma, User } from '@prisma/client';
-import { UserDetailSpec, UserMosaicItem, UserSumary, UserSumarySpec } from '@/types/user';
+import { UserDetailSpec, UserDetail, UserSumary, UserSumarySpec } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
 
-export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserMosaicItem | null> => {
+export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserDetail | null> => {
   const { select = undefined, include = true,where } = props;
   const user: any = await prisma.user.findFirst({
     where,
-    select:UserDetailSpec
+    include:UserDetailSpec.include
   });
   user.favWorks.forEach((w:any)=>{
     w.currentUserIsFav = true
@@ -15,15 +15,15 @@ export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): P
   return user;
 };
 
-export const findSumary = async (id:number,language?:string): Promise<UserMosaicItem | null> => {
+export const findSumary = async (id:number,language?:string): Promise<UserDetail | null> => {
   const user: any = await prisma.user.findFirst({
     where:{id},
-    select:UserSumarySpec
+    select:UserSumarySpec.select
   });
   return user;
 };
 
-export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosaicItem[]> => {
+export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserDetail[]> => {
   const {where,take,skip,cursor} = props||{};
   return prisma.user.findMany({
     take,
@@ -31,7 +31,7 @@ export const findAll = async (props?:Prisma.UserFindManyArgs): Promise<UserMosai
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    select: UserDetailSpec
+    include: UserDetailSpec.include
   });
 };
 
@@ -43,7 +43,7 @@ export const findAllSumary = async (props?:Prisma.UserFindManyArgs): Promise<Use
     cursor,
     ...(where && { where }),
     orderBy: { createdAt: 'desc' },
-    select: UserSumarySpec
+    select: UserSumarySpec.select
   });
 };
 

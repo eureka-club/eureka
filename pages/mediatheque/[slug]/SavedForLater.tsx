@@ -1,7 +1,7 @@
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { CycleMosaicItem } from "@/src/types/cycle";
-import { PostMosaicItem } from "@/src/types/post";
-import { UserMosaicItem } from '@/src/types/user';
+import { CycleDetail } from "@/src/types/cycle";
+import { PostDetail } from "@/src/types/post";
+import { UserDetail } from '@/src/types/user';
 import { WorkDetail } from "@/src/types/work";
 import { BsBookmark } from 'react-icons/bs';
 import useMySaved from '@/src/useMySaved';
@@ -9,10 +9,11 @@ import useMySaved from '@/src/useMySaved';
 import dayjs from 'dayjs';
 import { FC } from 'react';
 import { useSession } from 'next-auth/react';
+import { MosaicItem } from '@/src/types';
 
 interface Props{
     id:number;
-    user:UserMosaicItem;
+    user:UserDetail;
     goTo:(path:string)=>void;
     t:(val:string)=>string;
     
@@ -23,7 +24,7 @@ const SavedForLater:FC<Props> = ({user,id,goTo,t}) => {
   const {data:session} = useSession();
 
     if (SFL){
-      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as PostMosaicItem[]|CycleMosaicItem[]|WorkDetail[];
+      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as MosaicItem[];
       items.sort((f, s) => {
         const fCD = dayjs(f.createdAt);
         const sCD = dayjs(s.createdAt);

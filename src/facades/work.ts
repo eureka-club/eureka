@@ -1,23 +1,38 @@
 import { Prisma, Work, Edition, User, RatingOnWork, ReadOrWatchedWork } from '@prisma/client';
-import { Languages, StoredFileUpload } from '../types';
-import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkDetail, WorkDetailSpec } from '../types/work';
+import { Languages, Session, StoredFileUpload } from '../types';
+import { CreateWorkServerFields, CreateWorkServerPayload, EditWorkServerFields, WorkDetail, WorkDetailSpec, WorkSumary, WorkSumarySpec } from '../types/work';
 import { prisma } from '@/src/lib/prisma';
 import { MISSING_FIELD, WORK_ALREADY_EXIST } from '@/src/api_code';
-import { CreateEditionServerPayload } from '../types/edition';
 import { defaultLocale } from 'i18n';
 
-const include = {
-  localImages: { select: { id:true, storedFile: true } },
-  _count: { select: { ratings: true } },
-  favs: { select: { id: true } },
-  ratings: { select: { userId: true, qty: true } },
-  readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-  posts: {
-    select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-  },
-  editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
-};
-const editionsToBook = (book: WorkDetail, language: string): WorkDetail | null => {
+
+const WorkSumaryWithExtrasSpec = {
+  select:{
+    ...WorkSumarySpec.select,
+    editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
+    favs: { select: { id: true } },
+    ratings: { select: { userId: true, qty: true } },
+  }
+}
+type WorkSumaryWithExtras = WorkSumary & Prisma.WorkGetPayload<typeof WorkSumaryWithExtrasSpec>;
+
+const WorkDetailWithExtrasSpec = {
+  include: {
+    ...WorkDetailSpec.include,
+    editions: { include: { localImages: { select: { id:true, storedFile: true } } } },
+    favs: { select: { id: true } },
+    ratings: { select: { userId: true, qty: true } },
+  }
+}
+type WorkDetailWithExtras = WorkDetail & Prisma.WorkGetPayload<typeof WorkDetailWithExtrasSpec>;
+
+const PopulateWorkWithExtras =(w:WorkDetailWithExtras|WorkSumaryWithExtras,session:Session|null)=>{
+  w.currentUserIsFav = w.favs.findIndex(f=>f.id==session?.user.id) > -1;
+  w.currentUserRating = w.ratings.find(r=>r.userId==session?.user.id)?.qty??0;
+  w.ratingCount = w.ratings.length;
+  w.ratingAVG = w.ratings.reduce((p, c) => c.qty + p, 0) / w.ratingCount;
+}
+const editionsToBookDetail = (book: WorkDetail, language: string): WorkDetail | null => {
   if (book.language == language) {
     return book;
   }
@@ -39,67 +54,149 @@ const editionsToBook = (book: WorkDetail, language: string): WorkDetail | null =
   }
   return book;
 };
+const editionsToBookSumary = (book: WorkSumaryWithExtras, language: string|null): WorkSumary | null => {
+  if (book.language == language) {
+    return book;
+  }
+  let i = 0,
+    count = book.editions?.length;
+  for (; i < count; i++) {
+    const e = book?.editions[i];
+    if (e.language == language) {
+      book.title = e.title;
+      return book;
+    }
+  }
+  return book;
+};
 
-export const find = async (id: number, language: string): Promise<WorkDetail | null> => {
+export const find = async (id: number, language: string, session:Session|null): Promise<WorkDetail | null> => {
   let work = await prisma.work.findUnique({
     where: { id },
-    include:WorkDetailSpec.include,
+    include:WorkDetailWithExtrasSpec.include,
+  });
+  if(work){
+    let ws = (work as WorkDetailWithExtras);
+    PopulateWorkWithExtras(ws,session);
+    return editionsToBookDetail(ws, language);
+  }
+  return null;
+};
+
+export const findSumary = async (id: number, language: string|null,session:Session|null): Promise<WorkSumary | null> => {
+  let work = await prisma.work.findUnique({
+    where: { 
+      id,
+      ... language && {language}, 
+    },
+    select:WorkSumaryWithExtrasSpec.select,
+  });
+  if(work){
+    let ws = (work as WorkSumaryWithExtras);
+    PopulateWorkWithExtras(ws,session);
+    return editionsToBookSumary(ws, language);
+  }
+  return null
+};
+
+export const findWithoutLangRestrict = async (id: number,session:Session|null): Promise<WorkDetail | null> => {
+  let work = await prisma.work.findUnique({
+    where: { id },
+    include:WorkDetailWithExtrasSpec.include,
   });
   if (work) {
-    work = editionsToBook(work, language);
+    PopulateWorkWithExtras(work as WorkDetailWithExtras,session);
     return work;
   }
   return null;
 };
 
-export const findWithoutLangRestrict = async (id: number): Promise<WorkDetail | null> => {
-  let work = await prisma.work.findUnique({
-    where: { id },
-    include,
-  });
-  if (work) {
-    return work;
-  }
-  return null;
-};
-
-export const findAll = async (language: string, props?: Prisma.WorkFindManyArgs): Promise<WorkDetail[]> => {
-  const { where, include = null, take, skip, cursor } = props || {};
+export const findAll = async (language: string,session:Session|null, props?: Prisma.WorkFindManyArgs): Promise<WorkDetail[]> => {
+  const { where, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: WorkDetailSpec.include,
+    include:WorkDetailWithExtrasSpec.include,
     where,
   });
 
-  if (works) {
-    works = works.map((w) => editionsToBook(w, language)!);
-  }
-  return works;
+  return works 
+    ? works.map((w) => {
+      if(w){
+        let ws = (w as WorkDetailWithExtras);
+        PopulateWorkWithExtras(ws,session);
+      }
+      return editionsToBookDetail(w as WorkDetailWithExtras, language)!
+    })
+    : [];
 };
-
-export const findAllWithoutLangRestrict = async (props?: Prisma.WorkFindManyArgs): Promise<WorkDetail[]> => {
-  const { where, include = null, take, skip, cursor } = props || {};
+export const findAllSumary = async (language: string,session:Session|null, props?: Prisma.WorkFindManyArgs): Promise<WorkSumary[]> => {
+  const { where, take, skip, cursor } = props || {};
 
   let works = await prisma.work.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: WorkDetailSpec.include,
+    select: WorkSumaryWithExtrasSpec.select,
     where,
   });
 
-  if (works) {
-    works = works.map((w) => editionsToBook(w, w.language)!);
-  }
-  return works;
+  return works 
+    ? works.map((w) => {
+      if(w){
+        let ws = (w as WorkSumaryWithExtras);
+        PopulateWorkWithExtras(ws,session);
+      }
+      return editionsToBookSumary(w as WorkSumaryWithExtras, language)!
+    })
+    : [];
 };
 
-export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Work[]> => {
+export const findAllWithoutLangRestrict = async (session:Session|null,props?: Prisma.WorkFindManyArgs): Promise<WorkDetail[]> => {
+  const { where, take, skip, cursor } = props || {};
+
+  let works = await prisma.work.findMany({
+    take,
+    skip,
+    cursor,
+    orderBy: { createdAt: 'desc' },
+    include: WorkDetailWithExtrasSpec.include,
+    where,
+  });
+
+  return works 
+    ? works.map((w) => {
+      PopulateWorkWithExtras(w as WorkDetailWithExtras,session);
+      return editionsToBookDetail(w as WorkDetailWithExtras, w.language)!
+    })
+    : [];
+};
+
+export const findAllWithoutLangRestrictSumary = async (session:Session|null,props?: Prisma.WorkFindManyArgs): Promise<WorkSumary[]> => {
+  const { where, take, skip, cursor } = props || {};
+
+  let works = await prisma.work.findMany({
+    take,
+    skip,
+    cursor,
+    orderBy: { createdAt: 'desc' },
+    select: WorkSumaryWithExtrasSpec.select,
+    where,
+  });
+
+  return works 
+    ? works.map((w) => {
+      PopulateWorkWithExtras(w as WorkSumaryWithExtras,session);
+      return editionsToBookSumary(w as WorkSumaryWithExtras, w.language)!
+    })
+    : [];
+};
+
+export const search = async (session: Session|null, query: { [key: string]: string | string[] | undefined }): Promise<WorkSumary[]> => {
   const { q, where, include, lang: l } = query;
   const language = Languages[l?.toString() ?? defaultLocale];
 
@@ -107,32 +204,22 @@ export const search = async (query: { [key: string]: string | string[] | undefin
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }
 
-  if (typeof q === 'string') {
-    return prisma.work.findMany({
-      include: {
-        localImages: { select: { storedFile: true } },
-        _count: { select: { ratings: true } },
-        favs: { select: { id: true } },
-        ratings: { select: { userId: true, qty: true } },
-        readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-        posts: {
-          select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-        },
-        editions: { include: { localImages: { select: { storedFile: true } } } },
-      },
+  let works = await prisma.work.findMany({
+    ...(typeof q === 'string') && {
       where: {
         OR: [{ title: { contains: q } }, { author: { contains: q } }],
-      },
-      ...(typeof include === 'string' && { include: JSON.parse(include) }),
-    });
-  }
-
-  let works = await prisma.work.findMany({
+      }
+    },
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    include: WorkDetailSpec.include,
+    select: WorkSumaryWithExtrasSpec.select,
   });
-  if (works) works = works.map((w) => editionsToBook(w, language)!);
-  return works;
+  works.forEach(work=>{
+    const ws = (work as WorkSumaryWithExtras)
+    PopulateWorkWithExtras(ws,session)
+  })
+  return works
+  ? works.map((w) => editionsToBookSumary(w as WorkSumaryWithExtras, language)!)
+  :[];
 };
 
 export const countCycles = async (
@@ -214,7 +301,7 @@ export const createFromServerFields = async (
   }
 
   const w = await prisma.work.create({
-    include,
+    include:WorkDetailSpec.include,
     data: {
       ...payload,
       ToCheck: true,

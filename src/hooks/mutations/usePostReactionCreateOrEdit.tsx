@@ -4,9 +4,9 @@ import SignInForm from '@/src/components/forms/SignInForm';
 
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/useUser';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { PostReaction } from '@prisma/client';
 
 export interface ExecReactionPayload {
@@ -15,11 +15,11 @@ export interface ExecReactionPayload {
   unified:string;
 }
 interface MutateReturn{
-  prevUser:UserMosaicItem|undefined;
-  prevPost:PostMosaicItem|undefined;
+  prevUser:UserDetail|undefined;
+  prevPost:PostDetail|undefined;
 }
 interface Props{
-  post:PostMosaicItem;
+  post:PostDetail;
   cacheKey:string[]|[string,string];
 }
 
@@ -66,8 +66,8 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
           await queryClient.cancelQueries(ck);
           
-          prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
-          prevPost = queryClient.getQueryData<PostMosaicItem>(ck);
+          prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
+          prevPost = queryClient.getQueryData<PostDetail>(ck);
       
           let reactionsPost = user.reactions;
           let reactions = post.reactions;

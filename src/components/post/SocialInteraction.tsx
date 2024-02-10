@@ -28,8 +28,8 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 
 import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
-// import { CycleMosaicItem } from '@/src/types/cycle';
-import { PostMosaicItem } from '@/src/types/post';
+// import { CycleDetail } from '@/src/types/cycle';
+import { PostDetail } from '@/src/types/post';
 // import { WorkDetail } from '@/src/types/work';
 import {
   MySocialInfo,
@@ -51,7 +51,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  post: PostMosaicItem;
+  post: PostDetail;
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
@@ -349,10 +349,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         }
         
         <div className='ms-auto'>
-            <PostReactionsDetail cacheKey={cacheKey} post={post as PostMosaicItem}/>
+            <PostReactionsDetail cacheKey={cacheKey} post={post as PostDetail}/>
         </div>
         <div className={`ms-1`}>
-            <PostReactionsActions cacheKey={cacheKey} post={post as PostMosaicItem}/>
+            <PostReactionsActions cacheKey={cacheKey} post={post as PostDetail}/>
         </div>
         {ss && (
           <div className="">

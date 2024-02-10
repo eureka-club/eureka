@@ -1,4 +1,4 @@
-import { WorkDetail } from '@/src/types/work';
+import { WorkDetail, WorkSumary } from '@/src/types/work';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -10,7 +10,7 @@ import styles from './WorkSummary.module.css';
 
 dayjs.extend(utc);
 interface Props {
-  work: WorkDetail
+  work: WorkSumary
 }
 
 const WorkSummary: FunctionComponent<Props> = ({ work }) => {

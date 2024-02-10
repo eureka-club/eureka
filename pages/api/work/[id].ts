@@ -43,8 +43,8 @@ export default getApiHandler()
 
     try {
       let work = null;
-      if (language) work = await find(idNum, language);
-      else work = await findWithoutLangRestrict(idNum);
+      if (language) work = await find(idNum, language, session);
+      else work = await findWithoutLangRestrict(idNum, session);
 
       if (work == null) {
         res.status(404).end();
@@ -83,25 +83,11 @@ export default getApiHandler()
 
     try {
       let work = null; 
-      if (language) work = await find(idNum, language);
-      else work = await findWithoutLangRestrict(idNum);
+      if (language) work = await find(idNum, language, session);
+      else work = await findWithoutLangRestrict(idNum, session);
       if (work == null) {
         return res.status(200).json(null);
       }
-      // let currentUserIsFav = false;
-      // let currentUserRating = 0;
-      // let ratingAVG = 0;
-
-      let ratingCount = work.ratings.length;
-      const ratingAVG = work.ratings.reduce((p, c) => c.qty + p, 0) / ratingCount;
-      // if(session){
-      //     let r  = work.ratings.find(r=>r.userId==session.user.id)
-      //     if(r)currentUserRating = r.qty;
-      //     currentUserIsFav = work.favs.findIndex(f=>f.id==session.user.id) > -1
-      // }
-      // work.currentUserRating = currentUserRating;
-      work.ratingAVG = ratingAVG;
-      // work.currentUserIsFav = currentUserIsFav;
       res.status(200).json(work);
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console

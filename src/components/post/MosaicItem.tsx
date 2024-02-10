@@ -5,22 +5,22 @@ import { useRouter } from 'next/router';
 import { Card, Badge,Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
-import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import {  Session } from '../../types';
 import Avatar from '../common/UserAvatar';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { WorkDetail } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import usePost from '@/src/usePost'
+import usePost from '@/src/usePostDetail'
 import { useSession} from 'next-auth/react';
-import { PostMosaicItem } from '@/src/types/post';
-import { UserMosaicItem, UserSumary } from '@/src/types/user';
+import { PostDetail } from '@/src/types/post';
+import { UserSumary } from '@/src/types/user';
+import PostSocialInteraction from '../common/PostSocialInteraction';
 interface Props {
-  post?:PostMosaicItem;
+  post?:PostDetail;
   postId: number|string;
   //display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -61,7 +61,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkDetail>();
+  const [postParent,setPostParent] = useState<CycleDetail|WorkDetail>();
   const {data:session} = useSession()
 
   const {data:post} = usePost(+postId,{
@@ -79,7 +79,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   useEffect(()=>{
     if(post){
       if(post.works.length)setPostParent(post.works[0] as WorkDetail)
-      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
+      if(post.cycles.length)setPostParent(post.cycles[0] as CycleDetail)
     }
   },[post])
    
@@ -238,12 +238,11 @@ const MosaicItem: FunctionComponent<Props> = ({
             )}
           </h2> */}
         
-            <SocialInteraction
+            <PostSocialInteraction
               cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
               post={post}
-              parent={postParent}
               showTrash={false}
               showSaveForLater={showSaveForLater}
               className="ms-auto"

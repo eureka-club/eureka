@@ -1,11 +1,11 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { WorkDetail } from './types/work';
+import { WorkSumary } from './types/work';
 import useTranslation from 'next-translate/useTranslation';
 import { WEBAPP_URL } from './constants';
 
-export const getWork = async (id: number,language:string | undefined): Promise<WorkDetail> => {
+export const getWorkSumary = async (id: number,language:string | undefined): Promise<WorkSumary> => {
   if (!id) throw new Error('idRequired');
-  let url = `${WEBAPP_URL}/api/work/${id}`; // ?lang=${language}
+  let url = `${WEBAPP_URL}/api/work/${id}/sumary`; // ?lang=${language}
   if(language)
     url += `?lang=${language}`;
 
@@ -22,17 +22,17 @@ interface Options {
   notLangRestrict?:boolean
 }
 
-const useWork = (id: number, options?: Options): UseQueryResult<WorkDetail,Error> => {
+const useWorkSumary = (id: number, options?: Options): UseQueryResult<WorkSumary,Error> => {
   const {lang} = useTranslation();
   const { staleTime, enabled, notLangRestrict } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const ck =  ['WORK', `${id}`];
-  return useQuery<WorkDetail, Error>(ck, () => getWork(id, !notLangRestrict ? lang!:undefined), {
+  const ck =  ['WORK', `${id}`, 'SUMARY'];
+  return useQuery<WorkSumary, Error>(ck, () => getWorkSumary(id, !notLangRestrict ? lang!:undefined), {
     staleTime,
     enabled,
   });
 };
 
-export default useWork;
+export default useWorkSumary;

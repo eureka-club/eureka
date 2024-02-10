@@ -1,9 +1,5 @@
-import { CycleMosaicItem } from './types/cycle';
-import { PostMosaicItem } from './types/post';
-import { WorkDetail } from './types/work';
 import useUser from './useUser';
 
-type Item = CycleMosaicItem | WorkDetail | PostMosaicItem;
 
 const useMySaved = (id:number) => {
   const {data:user} = useUser(id||0,{enabled:!!id});

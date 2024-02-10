@@ -106,7 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let promises:Promise<any>[] = [
     getFeaturedEurekas(ctx.locale!,postsId,undefined,origin),
     getInterestedCycles(ctx.locale!,cyclesIds,undefined,origin),
-    getFeaturedWorks(ctx.locale!,worksIds,8,origin),
+    getFeaturedWorks(ctx.locale!,worksIds,8),
     ...worksIds.map(id=>getHyvorComments(`work-${id}`,origin)),
   ]
   let resolved = await Promise.all(promises);

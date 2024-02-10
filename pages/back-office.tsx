@@ -9,8 +9,8 @@ import useBackOffice from '@/src/useBackOffice';
 // import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
-import { getWorks } from '@/src/useWorks';
-import useWorks from '@/src/useWorks';
+import { getWorksDetail } from '@/src/useWorksDetail';
+import useWorks from '@/src/useWorksDetail';
 import { Edition, Work } from '@prisma/client';
 import { Session } from '@/src/types';
 import dayjs from 'dayjs';
@@ -49,7 +49,7 @@ import PaginationActions from '@/src/components/common/MUITablePaginationActions
 import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { EditWorkClientPayload, WorkDetail } from '@/src/types/work';
+import { EditWorkClientPayload, WorkDetail, WorkSumary } from '@/src/types/work';
 import { EditionMosaicItem } from '@/src/types/edition';
 
 import { FaSave } from 'react-icons/fa';
@@ -410,11 +410,11 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     },
   );
 
-  const handleDeleteClick = (work: Work) => {
+  const handleDeleteClick = (work: WorkDetail) => {
     execDeleteWork(work)
   };
 
-  const handleRevisionClick = (work: Work) => {
+  const handleRevisionClick = (work: WorkDetail) => {
     execRevisionWork(work)
   };
 
@@ -833,8 +833,8 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         <TableCell align="left"><Image width={24} height={24} className="m-0" src={`/img/lang-flags/${UserLanguages[work.language]}.png`} alt="Language flag 'es'" /></TableCell>
                         <TableCell align="left">{work.type}</TableCell>
                         <TableCell align="left">{work.title}</TableCell>
-                        <TableCell align="left">{work.author}</TableCell>
-                        <TableCell align="left">{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</TableCell>
+                        {/* <TableCell align="left">{work.author}</TableCell> */}
+                        {/* <TableCell align="left">{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</TableCell> */}
                         <TableCell align="center"><div className='d-flex flex-row justify-content-center'>
                           <Button variant="text" href={`/work/${work.id}/edit?admin=${true}`} className="ms-2">
                             <FindInPageOutlinedIcon />
@@ -936,7 +936,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
                   {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex" }}>
                     <Box sx={{ width: '40%' }}>
-                      <MosaicItem work={w} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
+                      <MosaicItem work={w as unknown as WorkSumary} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
                     </Box>
                     <Paper
                       sx={{ width: '60%' }}
@@ -1066,7 +1066,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const worksData = await getWorks(undefined, WorkToCheckWhere(), origin);
+  const worksData = await getWorksDetail(undefined, WorkToCheckWhere());
   qc.prefetchQuery('list/works', () => worksData);
 
   return {

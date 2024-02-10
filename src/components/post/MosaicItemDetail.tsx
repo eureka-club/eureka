@@ -10,16 +10,16 @@ import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItemDetail.module.css';
 import { Session } from '../../types';
 import Avatar from '../common/UserAvatar';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { WorkDetail } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import usePost from '@/src/usePost'
+import usePost from '@/src/usePostDetail'
 import { useSession} from 'next-auth/react';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 interface Props {
-  post?:PostMosaicItem;
+  post?:PostDetail;
   postId: number|string;
   //display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -58,7 +58,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
   const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkDetail>();
+  const [postParent,setPostParent] = useState<CycleDetail|WorkDetail>();
   const {data:session} = useSession()
 
   const {data} = usePost(+postId,{
@@ -73,7 +73,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
   useEffect(()=>{
     if(post){
       if(post.works.length)setPostParent(post.works[0] as WorkDetail)
-      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
+      if(post.cycles.length)setPostParent(post.cycles[0] as CycleDetail)
     }
   },[post])
    

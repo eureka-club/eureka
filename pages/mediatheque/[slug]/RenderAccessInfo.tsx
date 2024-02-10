@@ -1,11 +1,11 @@
 import { Session } from "@/src/types";
-import { UserMosaicItem } from "@/src/types/user";
+import { UserDetail } from "@/src/types/user";
 import { Alert } from "@mui/material";
 import { FC } from "react";
 import {isAccessAllowed} from '@/src/lib/utils';
 
 interface Props{
-    user:UserMosaicItem;
+    user:UserDetail;
     t:(val:string)=>string;
     isLoadingUser:boolean;
     isFollowedByMe:boolean;

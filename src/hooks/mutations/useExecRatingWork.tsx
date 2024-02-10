@@ -3,17 +3,18 @@ import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/useUser';
-import { WorkDetail } from '@/src/types/work';
+import { WorkDetail, WorkSumary } from '@/src/types/work';
 import useTranslation from 'next-translate/useTranslation';
+import { Work } from '@prisma/client';
 
 export interface ExecRatingPayload {
   doCreate:boolean;
   ratingQty:number;
 }
 interface Props{
-  work:WorkDetail;
+  work:Work;
 }
 
 const useExecRating = (props:Props)=>{
@@ -55,21 +56,21 @@ const useExecRating = (props:Props)=>{
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
           await queryClient.cancelQueries(cacheKey);
           
-          prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
-          prevWork = queryClient.getQueryData<WorkDetail>(cacheKey);
+          prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
+          prevWork = queryClient.getQueryData<WorkSumary>(cacheKey);
       
           let ratingWorks = user.ratingWorks
-          let ratings = work.ratings;
+          // let ratings = work.ratings;
       
           if (!payload.doCreate) {
             ratingWorks = ratingWorks.filter((i) => i.workId !== work.id);
-            ratings = ratings.filter((i) => i.userId != session.user.id);
+            // ratings = ratings.filter((i) => i.userId != session.user.id);
           } 
           else {
-            ratingWorks?.push({workId:work.id,work,qty:payload.ratingQty});
-            ratings.push({ userId: +user.id, qty:payload.ratingQty });
+            // ratingWorks?.push({workId:work.id,work,qty:payload.ratingQty});
+            // ratings.push({ userId: +user.id, qty:payload.ratingQty });
           }
-          queryClient.setQueryData(cacheKey, { ...work, ratings });
+          queryClient.setQueryData(cacheKey, { ...work });
           queryClient.setQueryData(['USER', `${user.id}`], { ...user, ratingWorks });
         }
         return { prevUser, prevWork };

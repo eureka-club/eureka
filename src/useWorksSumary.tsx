@@ -1,13 +1,13 @@
 import { useQuery } from 'react-query';
-import { WorkDetail } from './types/work';
+import { WorkSumary } from './types/work';
 import { Prisma } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 
-export const getWorks = async (
+export const getWorksSumary = async (
   lang?: string,
   props?: Prisma.WorkFindManyArgs,
   origin = '',
-): Promise<{ works: WorkDetail[], fetched: number, total: number }> => {
+): Promise<{ works: WorkSumary[], fetched: number, total: number }> => {
   let query = props ? `?props=${encodeURIComponent(JSON.stringify(props))}` : ''  //lang=${lang}&
   if (lang)
     query += `&lang=${lang}`;
@@ -24,7 +24,7 @@ interface Options {
   notLangRestrict?: boolean | undefined;
   cacheKey?: string | string[];
 }
-const useWorks = (props?: Prisma.WorkFindManyArgs, options?: Options) => {
+const useWorksSumary = (props?: Prisma.WorkFindManyArgs, options?: Options) => {
   const { lang } = useTranslation();
   const { staleTime, enabled, cacheKey, notLangRestrict } = options || {
     staleTime: 1000 * 60 * 60,
@@ -33,10 +33,10 @@ const useWorks = (props?: Prisma.WorkFindManyArgs, options?: Options) => {
 
   let ck = (cacheKey || notLangRestrict) ? `${cacheKey}-${JSON.stringify(props)}` : ['WORKS', `${lang}-${JSON.stringify(props)}`];
 
-  return useQuery<{ works: WorkDetail[], fetched: number, total: number }>(ck, () => getWorks(!notLangRestrict ? lang : undefined, props), {
+  return useQuery<{ works: WorkSumary[], fetched: number, total: number }>(ck, () => getWorksSumary(!notLangRestrict ? lang : undefined, props), {
     staleTime,
     enabled
   });
 };
 
-export default useWorks;
+export default useWorksSumary;

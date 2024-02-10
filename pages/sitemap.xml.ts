@@ -2,7 +2,9 @@ import { GetServerSideProps } from "next";
 import {findAll as findAllCycles} from '@/src/facades/cycle'
 import {findAll as findAllWoks} from '@/src/facades/work'
 import {findAll as findAllPosts} from '@/src/facades/post'
-import { PostMosaicItem } from "@/src/types/post";
+import { PostDetail } from "@/src/types/post";
+import { Session } from "@/src/types";
+import { getSession } from "next-auth/react";
 
 const {NEXT_PUBLIC_WEBAPP_URL:origin}=process.env;
 const languages = [
@@ -14,9 +16,7 @@ const languages = [
 const dateFormat = (date:Date,locale:string) => new Intl.DateTimeFormat(locale, { dateStyle: 'full', timeStyle: 'long'}).format(date)
 
 const generateCyclesMap = async ()=>{
-  const cycles = await findAllCycles({
-    select:{id:true,title:true,contentText:true}
-  })
+  const cycles = await findAllCycles(null,{})
   return cycles.map(c=>{
     return languages.map(l=>{
       return `<url>
@@ -28,10 +28,8 @@ const generateCyclesMap = async ()=>{
   }).join('')
 }
 
-const generateWorksMap = async (locale:string)=>{
-  const works = await findAllWoks(locale,{
-    select:{id:true,title:true,contentText:true}
-  })
+const generateWorksMap = async (locale:string, session:Session|null)=>{
+  const works = await findAllWoks(locale,session)
   return works.map(w=>{
     return languages.map(l=>{
       return `<url>
@@ -44,10 +42,8 @@ const generateWorksMap = async (locale:string)=>{
 }
 
 const generatePostsMap = async ()=>{
-  const posts = await findAllPosts({
-    select:{id:true,title:true,contentText:true,cycles:{select:{id:true}},works:{select:{id:true}}}
-  })
-  const getParentData  = (p:PostMosaicItem)=>{
+  const posts = await findAllPosts(null,{})
+  const getParentData  = (p:PostDetail)=>{
     if(p.cycles.length){
       return ['cycle',p.cycles[0].id] 
     } 
@@ -95,13 +91,13 @@ const generatePostsMap = async ()=>{
     }).join('')
   }
 
-const generateSiteMap = async (locale:string) => {
+const generateSiteMap = async (locale:string,session:Session|null) => {
   return `<?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${generateHomePage()}
   ${generateStaticPages()}
   ${await generateCyclesMap()}
-  ${await generateWorksMap(locale)}
+  ${await generateWorksMap(locale,session)}
   ${await generatePostsMap()}
   </urlset>
   `;
@@ -112,8 +108,9 @@ function SiteMap() {
 }
 
 export const  getServerSideProps:GetServerSideProps = async (ctx)=> {
-  const {res} = ctx;
-  const sitemap = await generateSiteMap(ctx?.locale??"es");
+  const {req,res} = ctx;
+  const session=await getSession({req});
+  const sitemap = await generateSiteMap(ctx?.locale??"es",session);
 
   res.setHeader('Content-Type', 'text/xml');
   res.write(sitemap);

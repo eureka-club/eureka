@@ -1,18 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '../../src/lib/getApiHandler';
 import {Languages, SearchResult} from '@/src/types'
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { WorkDetail } from '@/src/types/work';
-import { PostMosaicItem } from '@/src/types/post';
+import { CycleDetail } from '@/src/types/cycle';
+import { PostDetail } from '@/src/types/post';
 import dayjs from 'dayjs';
-import {prisma} from '@/src/lib/prisma';
-import { findAll as fap } from '@/src/facades/post';
+import { findAllSumary as fap } from '@/src/facades/post';
 import { findAll as fac } from '@/src/facades/cycle';
-import { findAll as faw } from '@/src/facades/work';
+import { findAllSumary as faw } from '@/src/facades/work';
+import { getSession } from 'next-auth/react';
 
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
   try {
+    const session=await getSession({req});
     const {q:q_,lang:l} = req.query;
     const language = Languages[l?.toString()??"es"];
 
@@ -47,7 +47,7 @@ export default getApiHandler()
           ]
     };
 
-    const responseWork =  await faw(language,{where: worksWhere}) as WorkDetail[];
+    const responseWork =  await faw(language,session,{where: worksWhere});
 
     const cyclesWhere={
       AND:[{ access:{not:3}}],
@@ -86,7 +86,7 @@ export default getApiHandler()
       ]
     };
 
-    const responseCycle = await fac({where: cyclesWhere}) as CycleMosaicItem[];
+    const responseCycle = await fac(null,{where: cyclesWhere}) as CycleDetail[];
 
     const postsWhere = {
         AND:[{
@@ -124,7 +124,7 @@ export default getApiHandler()
       ]
     }
 
-    const responsePost = await fap({where:postsWhere}) as PostMosaicItem[];
+    const responsePost = await fap(session,{where:postsWhere}) as PostDetail[];
     responseCycle.forEach(c=>{c.type="cycle"})
     responsePost.forEach(p=>{p.type="post"})
     const data: SearchResult[] = [

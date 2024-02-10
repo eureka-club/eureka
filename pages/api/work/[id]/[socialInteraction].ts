@@ -47,7 +47,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),language);
+      const work = await find(Number(id),language,session);
       if (work == null) {
         res.status(404).end();
         return;
@@ -83,7 +83,7 @@ export default getApiHandler()
     }
 
     try {
-      const work = await find(Number(id),language);
+      const work = await find(Number(id),language,session);
       if (work == null) {
         res.status(404).end();
         return;

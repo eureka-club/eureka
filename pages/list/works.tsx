@@ -17,8 +17,8 @@ import { Session } from '@/src/types';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { findAll } from '@/src/facades/work';
-import { getWorks } from '@/src/useWorks';
-import useWorks from '@/src/useWorks';
+import useWorks, { getWorksDetail } from '@/src/useWorksDetail';
+import { WorkDetail, WorkSumary } from '@/src/types/work';
 
 interface Props {
   // works: (Work & {
@@ -32,7 +32,7 @@ const ListWorksPage: NextPage<Props> = ({ session }) => {
   const {data} = useWorks();
   const works = data?.works.filter(x => x.ToCheck)
 
-  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: Work) => {
+  const { mutate: execDeleteWork, isSuccess: isDeleteWorkSucces } = useMutation(async (work: WorkDetail) => {
     const res = await fetch(`/api/work/${work.id}`, {
       method: 'delete',
     });
@@ -41,7 +41,7 @@ const ListWorksPage: NextPage<Props> = ({ session }) => {
     return data;
   });
 
-  const handleDeleteClick = (work: Work) => {
+  const handleDeleteClick = (work: WorkDetail) => {
     execDeleteWork(work);
   };
 
@@ -80,8 +80,8 @@ const ListWorksPage: NextPage<Props> = ({ session }) => {
               </td>
               <td>{work.type}</td>
               <td>{work.title}</td>
-              <td>{work.author}</td>
-              <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td>
+              {/* <td>{work.author}</td>
+              <td>{work.publicationYear && dayjs(work.publicationYear).format(DATE_FORMAT_ONLY_YEAR)}</td> */}
               <td>
                 <Link href={`/work/${work.id}`}>
                   <a>detail</a>
@@ -122,7 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const worksData = await getWorks(ctx.locale!,undefined, origin);
+  const worksData = await getWorksDetail(ctx.locale!,undefined);
   qc.prefetchQuery('list/works', () => worksData);
 
   return {

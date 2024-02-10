@@ -1,9 +1,9 @@
 import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
-import { CycleMosaicItem } from './types/cycle';
-import { PostMosaicItem } from './types/post';
-import { WorkDetail, GoogleBooksProps, TMDBVideosProps } from './types/work';
-import { UserMosaicItem, UserSumary } from '@/src/types/user';
+import { CycleDetail, CycleSumary } from './types/cycle';
+import { PostDetail, PostSumary } from './types/post';
+import { WorkDetail, GoogleBooksProps, TMDBVideosProps, WorkSumary } from './types/work';
+import { UserDetail, UserSumary } from '@/src/types/user';
 import { Session as S } from 'next-auth';
 export interface FileUpload {
   fieldName: string;
@@ -45,15 +45,15 @@ export interface MySocialInfo {
  */
 
 export type BasicEntity = Cycle | Post | Work | User | Comment;
-export type MosaicItem = CycleMosaicItem | PostMosaicItem | WorkDetail | UserSumary;
-export type SearchResult = CycleMosaicItem | PostMosaicItem | WorkDetail | UserMosaicItem;
+export type MosaicItem = CycleSumary | PostSumary | WorkSumary //| UserSumary;
+export type SearchResult = CycleSumary | PostSumary | WorkSumary | UserSumary;
 export type APIMediaSearchResult = GoogleBooksProps | TMDBVideosProps;
 
 export const isCycle = (obj: BasicEntity): obj is Cycle =>
   obj &&
   typeof (obj as Cycle).title === 'string' &&
-  (obj as CycleMosaicItem).startDate !== undefined &&
-  (obj as CycleMosaicItem).endDate !== undefined;
+  (obj as CycleDetail).startDate !== undefined &&
+  (obj as CycleDetail).endDate !== undefined;
 export const isPost = (obj: BasicEntity): obj is Post =>
   obj &&
   typeof (obj as Post).title === 'string' &&
@@ -69,15 +69,15 @@ export const isUser = (obj: BasicEntity): obj is User =>
   typeof (obj as User).roles === 'string' && typeof (obj as User).email === 'string';
 
 // TODO separate type-guards for MosaicItem and SearchResult
-export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleMosaicItem =>
+export const isCycleMosaicItem = (obj: MosaicItem | SearchResult): obj is CycleSumary =>
   obj && 'type' in obj && obj.type == 'cycle';
 
-export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkDetail =>
+export const isWorkMosaicItem = (obj: MosaicItem | SearchResult): obj is WorkSumary =>
   obj &&
   'type' in obj &&
-  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkDetail).type);
+  ['work', 'book', 'fiction-book', 'movie', 'documentary'].includes((obj as WorkSumary).type);
 
-export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostMosaicItem =>
+export const isPostMosaicItem = (obj: MosaicItem | SearchResult): obj is PostSumary =>
   obj && 'type' in obj && obj.type == 'post';
 
 export const isBookGoogleBookApi = (obj: GoogleBooksProps | APIMediaSearchResult): obj is GoogleBooksProps =>
@@ -86,7 +86,7 @@ export const isBookGoogleBookApi = (obj: GoogleBooksProps | APIMediaSearchResult
 export const isVideoTMDB = (obj: TMDBVideosProps | APIMediaSearchResult): obj is TMDBVideosProps =>
   obj && 'release_date' in obj;
 
-export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserMosaicItem =>
+export const isUserMosaicItem = (obj: MosaicItem | SearchResult): obj is UserSumary =>
   obj && 'name' in obj && ('image' in obj || 'photos' in obj);
 
 export interface NotifierResponse {
@@ -98,7 +98,7 @@ export interface NotifierRequest {
 }
 
 export interface GetAllByResonse {
-  data: (WorkDetail | CycleMosaicItem)[];
+  data: MosaicItem[];
   extraCyclesRequired: number;
   extraWorksRequired: number;
   hasMore: boolean;

@@ -8,9 +8,9 @@ import { SelectChangeEvent,TextField,FormControl,InputLabel, Select, MenuItem} f
 
 import { GiBrain } from 'react-icons/gi';
 import { BiBookHeart } from 'react-icons/bi';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import UserAvatar from '../common/UserAvatar';
-import useWorks from '@/src/useWorks';
+import useWorks from '@/src/useWorksDetail';
 import useUsers from '@/src/useUsers'
 import {useModalContext} from '@/src/useModal'
 import styles from './CycleDetailDiscussion.module.css';
@@ -19,7 +19,7 @@ import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreate
 import CycleDetailDiscussionSuggestRelatedWork from './CycleDetailDiscussionSuggestRelatedWork';
 import SignInForm from '../forms/SignInForm';
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   className?: string;
   cacheKey:string[];
 }

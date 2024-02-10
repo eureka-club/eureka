@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import router from 'next/router';
 import styles from './MosaicItem.module.css';
 import UserAvatar from '../common/UserAvatar';
-import { UserMosaicItem, UserSumary } from '../../types/user';
+import { UserDetail, UserSumary } from '../../types/user';
 import TagsInput from '../forms/controls/TagsInput';
 import LocalImageComponent from '@/src/components/LocalImage';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';

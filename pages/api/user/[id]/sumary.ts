@@ -9,7 +9,7 @@ import { create } from '@/src/facades/notification';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
-import { UserMosaicItem, UserSumary } from '@/src/types/user';
+import { UserDetail, UserSumary } from '@/src/types/user';
 import { Notification } from '@prisma/client';
 
 dayjs.extend(utc);

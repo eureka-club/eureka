@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { WorkDetail } from '../../types/work';
-import { CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { CreatePostAboutWorkClientPayload, PostDetail } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
@@ -23,7 +23,7 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import useWork from '@/src/useWork'
+import useWork from '@/src/useWorkDetail'
 import useUsers from '@/src/useUsers'
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 import styles from './WorkDetailCreateEurekaForm.module.css';
@@ -224,7 +224,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
     },
     {
       onMutate: async () => {
-        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<PostDetail[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {

@@ -30,14 +30,14 @@ import styles from './EditWorkForm.module.css';
 import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
 import useCountries from 'src/useCountries';
-import useWork from '@/src/useWork'
+import useWork from '@/src/useWorkDetail'
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
 import Textarea from '@mui/joy/Textarea';
 import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import LocalImageComponent from '../LocalImage';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 
 dayjs.extend(utc);
 

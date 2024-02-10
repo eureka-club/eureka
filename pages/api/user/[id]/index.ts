@@ -9,7 +9,7 @@ import { create } from '@/src/facades/notification';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { Notification } from '@prisma/client';
 
 export const config = {
@@ -74,13 +74,13 @@ export default getApiHandler()
       },{});
       
       if(files.photo && files.photo[0]){
-        const user = await find({where:{id:idNum}}) as UserMosaicItem;
+        const user = await find({where:{id:idNum}}) as UserDetail;
         if(!user){
           res.statusMessage = 'User not found';
           return res.status(405).end();
         }
         if(user.photos && user.photos.length){
-          const storedFile = (user as UserMosaicItem).photos[0].storedFile;
+          const storedFile = (user as UserDetail).photos[0].storedFile;
           const resImageRemoving = await storeDeleteFile(storedFile,'users-photos');
           if(!resImageRemoving){
             console.error('Removing image has failed')
@@ -142,7 +142,7 @@ export default getApiHandler()
       const user = await find({where:{ id }},language!);
 
       if(user)
-        (user as unknown as UserMosaicItem).type = "user";
+        (user as unknown as UserDetail).type = "user";
 
       res.status(200).json({ user });
     } catch (exc) {

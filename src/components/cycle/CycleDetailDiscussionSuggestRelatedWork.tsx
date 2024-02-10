@@ -1,42 +1,30 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { MouseEvent, FunctionComponent, useState, useRef } from 'react';
-
 import { Button, Col, Row, Form } from 'react-bootstrap';
-import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
-
-// import { BsCheck } from 'react-icons/bs';
-// import { ImCancelCircle } from 'react-icons/im';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useAtom } from 'jotai';
-import { Cycle, Work } from '@prisma/client';
+import { Cycle } from '@prisma/client';
 import styles from './CycleDetailDiscussionSuggestRelatedWork.module.css';
-// import { Session } from '../../types';
-import { WorkDetail } from '../../types/work';
-import { CycleMosaicItem } from '../../types/cycle';
-import useWorks from '@/src/useWorks';
-import globalModalsAtom from '../../atoms/globalModals';
-// import ImageFileSelect from '../forms/controls/ImageFileSelect';
-// import TagsInputTypeAhead from '../forms/controls/TagsInputTypeAhead';
-// import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
-
+import useWorks from '@/src/useWorksDetail';
+import globalModalsAtom from '@/src/atoms/globalModals';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
-
-// import styles from './CycleDetailDiscussionCreateEurekaForm.module.css';
-
+import { WorkSumary } from '@/src/types/work';
+import { CycleDetail } from '@/src/types/cycle';
+import useWorksSumary from '@/src/useWorksSumary';
 interface Props {
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
 }
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle }) => {
   const queryClient = useQueryClient();
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  const typeaheadRef = useRef<AsyncTypeahead<WorkDetail>>(null);
+  const typeaheadRef = useRef<AsyncTypeahead<WorkSumary>>(null);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkDetail[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkDetail | null>(null);
-  // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkDetail[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkSumary[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkSumary | null>(null);
+  // const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSumary[]>([]);
   const [includedWorksIds, setIncludedWorksIds] = useState<number[]>();
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
@@ -86,7 +74,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
       onMutate: async () => {
         const cacheKey = ['CYCLE', `${cycle.id}`];
         // await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<CycleMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<CycleDetail[]>(cacheKey);
         // const eureka: Pick<Post, 'title' | 'language' | 'contentText' | 'isPublic'> = newEureka;
 
         // queryClient.setQueryData<Item[]>(cacheKey, (prev) => prev!.concat(eureka));
@@ -107,7 +95,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
  
   const [worksFilteredQuery,setWorksFilteredQuery] = useState('')
   
-  const {data} = useWorks({
+  const {data} = useWorksSumary({
     where:{
       AND:[
         {
@@ -140,7 +128,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     results,
   }: {
     activeIndex: number;
-    results: WorkDetail[];
+    results: WorkSumary[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -148,10 +136,10 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({ cycle
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkDetail[]): void => {
+  const handleSearchWorkSelect = (selected: WorkSumary[]): void => {
     if (selected[0] != null) {
       // setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
-      setIncludedWorksIds(() => [(selected[0] as Work).id]);
+      setIncludedWorksIds(() => [(selected[0] as WorkSumary).id]);
       // setAddWorkModalOpened(false);
     }
   };

@@ -1,7 +1,7 @@
 import { FunctionComponent, MouseEvent, SyntheticEvent, useMemo } from 'react';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { Button } from 'react-bootstrap';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { useSession } from 'next-auth/react';
 
 import { Toast as T } from 'react-bootstrap';
@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 import { useModalContext } from '@/src/useModal';
 interface Props {
-  post:PostMosaicItem;
+  post:PostDetail;
   cacheKey:string[];
 }
 const MAX_REACTIONS = 2;

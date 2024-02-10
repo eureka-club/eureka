@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
-import { WorkDetail } from './types/work';
+import { WorkSumary } from './types/work';
 
 export type ContextType = {
-  work: WorkDetail | null;
+  work: WorkSumary | null;
   showShare?: boolean;
   linkToWork?: boolean;
 };

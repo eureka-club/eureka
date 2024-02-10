@@ -18,7 +18,7 @@ import WMI from '@/src/components/work/MosaicItem';
 import { useRouter } from 'next/router';
 import { getUser } from '@/src/useUser';
 import { BiArrowBack } from 'react-icons/bi';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { QueryClient, dehydrate } from 'react-query';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
@@ -363,7 +363,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx)
-  let user: UserMosaicItem | null = null;
+  let user: UserDetail | null = null;
   const qc = new QueryClient();
   let id = 0;
   if (ctx.query && ctx.query.slug) {

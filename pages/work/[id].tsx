@@ -9,7 +9,7 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { WEBAPP_URL } from '@/src/constants';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
 import { dehydrate, QueryClient } from 'react-query';
-import useWork,{getWork} from '@/src/useWork';
+import useWork,{getWork} from '@/src/useWorkDetail';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
 import { Session } from '@/src/types';

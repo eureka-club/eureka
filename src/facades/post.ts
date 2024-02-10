@@ -1,11 +1,50 @@
 import { Cycle, Post, Prisma, User, Work } from '@prisma/client';
 
-import { StoredFileUpload } from '../types';
-import { CreatePostServerFields, CreatePostServerPayload, PostMosaicItem } from '../types/post';
+import { Session, StoredFileUpload } from '../types';
+import { CreatePostServerFields, CreatePostServerPayload, PostDetail, PostDetailSpec, PostSumary, PostSumarySpec } from '../types/post';
 import { prisma } from '@/src/lib/prisma';
 
-export const find = async (id: number): Promise<PostMosaicItem | null> => {
-  return prisma.post.findUnique({
+const PostSumarySpecWithExtrasSpec = {
+  select:{
+    ...PostSumarySpec.select,
+    favs: { select: { id: true } }
+  }
+}
+type PostSumaryWithExtras = Prisma.PostGetPayload<typeof PostSumarySpecWithExtrasSpec>;
+const PostDetailSpecWithExtrasSpec = {
+  include:{
+    ...PostDetailSpec.include,
+    favs: { select: { id: true } }
+  }
+}
+type PostDetailWithExtras = Prisma.PostGetPayload<typeof PostDetailSpecWithExtrasSpec>;
+
+const PopulatePostSumaryWithExtras = (post:PostSumaryWithExtras,session:Session|null)=>{
+  const currentUserIsFav = post?.favs?.findIndex(p=>p.id==session?.user.id)>-1;
+  const p:Record<string,any> ={
+    currentUserIsFav:currentUserIsFav,
+    type:'post',
+  };
+  Object.keys(PostSumarySpec.select).forEach(([k,])=>{
+    p[`${k}`] = Object.getOwnPropertyDescriptor(post,k)?.value!;
+  });
+  return p as PostSumary;
+}
+const PopulatePostDetailWithExtras = (post:PostDetailWithExtras,session:Session|null)=>{
+  const currentUserIsFav = post?.favs?.findIndex(p=>p.id==session?.user.id)>-1;
+  const p:Record<string,any> ={
+    currentUserIsFav:currentUserIsFav,
+    type:'post',
+  };
+  Object.keys(PostDetailSpec.include).forEach(([k,])=>{
+    p[`${k}`] = Object.getOwnPropertyDescriptor(post,k)?.value!;
+  });
+  return p as PostDetail;
+}
+
+
+export const find = async (id: number,session:Session|null): Promise<PostDetail | null> => {
+  const ps = await prisma.post.findUnique({
     where: { id },
     include: {
       works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
@@ -26,39 +65,58 @@ export const find = async (id: number): Promise<PostMosaicItem | null> => {
       reactions: true,
     },
   });
+  return PopulatePostDetailWithExtras(ps as PostDetailWithExtras,session);
 };
 
-export const findAll = async (props?: Prisma.PostFindManyArgs, page?: number): Promise<PostMosaicItem[]> => {
-  const { include, where, take, skip, cursor } = props || {};
-  return prisma.post.findMany({
+export const findSumary = async (id: number,session:Session|null): Promise<PostSumary | null> => {
+  const pf = await prisma.post.findUnique({
+    where: { id },
+    select:{
+      ...PostSumarySpec.select,
+      favs: { select: { id: true } },
+    }
+  });
+  if(pf){
+    return PopulatePostSumaryWithExtras(pf as PostSumaryWithExtras,session);
+  }
+  return null;
+};
+
+export const findAll = async (session:Session|null, props?: Prisma.PostFindManyArgs, page?: number): Promise<PostDetail[]> => {
+  const { where, take, skip, cursor } = props || {};
+  const psf = await prisma.post.findMany({
     take,
     skip,
     cursor,
     orderBy: { createdAt: 'desc' },
-    include: {
-      works: { select: { id: true, title: true, type: true, localImages: { select: { storedFile: true } } } },
-      cycles: {
-        select: {
-          id: true,
-          creator: { select: { name: true } },
-          localImages: { select: { storedFile: true } },
-          creatorId: true,
-          startDate: true,
-          endDate: true,
-          title: true,
-        },
-      },
-      favs: { select: { id: true } },
-      creator: { select: { id: true, name: true, photos: true, countryOfOrigin: true } },
-      localImages: { select: { storedFile: true } },
-      reactions: true,
+    include:{
+      ...PostDetailSpecWithExtrasSpec.include
     },
     where,
   });
+  return psf?.map(p=>{
+    return PopulatePostDetailWithExtras(p as PostDetailWithExtras,session)
+  })
+};
+export const findAllSumary = async (session:Session|null, props?: Prisma.PostFindManyArgs, page?: number): Promise<PostSumary[]> => {
+  const { where, take, skip, cursor } = props || {};
+  const psf = await prisma.post.findMany({
+    take,
+    skip,
+    cursor,
+    orderBy: { createdAt: 'desc' },
+    select:{
+      ...PostSumarySpecWithExtrasSpec.select,
+    },
+    where,
+  });
+  return psf?.map(p=>{
+    return PopulatePostSumaryWithExtras(p as PostSumaryWithExtras,session)
+  })
 };
 
 export const search = async (query: { [key: string]: string | string[] | undefined }): Promise<Post[]> => {
-  const { q, where /* , include */ } = query;
+  const { q, where } = query;
   if (where == null && q == null) {
     throw new Error("[412] Invalid invocation! Either 'q' or 'where' query parameter must be provided");
   }
@@ -66,7 +124,6 @@ export const search = async (query: { [key: string]: string | string[] | undefin
   if (q && typeof q === 'string') {
     return prisma.post.findMany({
       where: { title: { contains: q } },
-      // ...(typeof include === 'string' && { include: JSON.parse(include) }),
       include: {
         creator: true,
         localImages: true,
@@ -86,7 +143,6 @@ export const search = async (query: { [key: string]: string | string[] | undefin
 
   return prisma.post.findMany({
     ...(typeof where === 'string' && { where: JSON.parse(where) }),
-    // ...(typeof include === 'string' && { include: JSON.parse(include) }),
     include: {
       creator: true,
       localImages: true,
@@ -192,7 +248,7 @@ export const saveSocialInteraction = async (
   });
 };
 
-export const remove = async (post: PostMosaicItem): Promise<Post> => {
+export const remove = async (post: PostDetail): Promise<Post> => {
   if (post.cycles.length) {
     await prisma.post.update({
       where: { id: post.id },

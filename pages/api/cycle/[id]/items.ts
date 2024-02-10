@@ -3,7 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import {findAll as findAllPosts} from '@/src/facades/post'
 import getApiHandler from '@/src/lib/getApiHandler';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
+import { getSession } from 'next-auth/react';
 
 export const config = {
   api: {
@@ -14,6 +15,7 @@ export const config = {
 export default getApiHandler()  
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
+      const session = await getSession({req});
       const { q = null, where:w = null,take:t,page:p=1,id:id_} = req.query;
       if(!p)
         res.status(400).end()
@@ -34,11 +36,11 @@ export default getApiHandler()
             { title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }
           ],          
         };
-        posts = await findAllPosts({where});
+        posts = await findAllPosts(session, {where});
       } else if (where) {
-        posts = await findAllPosts({where});
+        posts = await findAllPosts(session, {where});
       } else {
-        posts = await findAllPosts({where});
+        posts = await findAllPosts(session, {where});
       }
 
       let comments = null;
@@ -61,7 +63,7 @@ export default getApiHandler()
       }
 
       const it = [        
-        ...posts.map(p=>{(p as PostMosaicItem).type='post';return p;})
+        ...posts.map(p=>{(p as PostDetail).type='post';return p;})
       ]
 
       let items = page>-1 

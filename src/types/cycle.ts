@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { CycleWorkSpec } from './cycleWork';
 export interface ComplementaryMaterial {
   author: string;
   title: string;
@@ -47,25 +48,7 @@ export const CycleDetailSpec = {
     },
     favs: { select: { id: true } },
     cycleWorksDates: {
-      select: {
-        id: true,
-        startDate: true,
-        endDate: true,
-        workId: true,
-        work: {
-          include: {
-            _count: { select: { ratings: true } },
-            localImages: { select: { id:true,storedFile: true } },
-            favs: { select: { id: true } },
-            ratings: { select: { userId: true, qty: true } },
-            readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
-            posts: {
-              select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
-            },
-            editions:{include:{localImages: { select: { id:true,storedFile: true } }}},
-          },
-        },
-      },
+      select:CycleWorkSpec.select
     },
     participants:{select:{id: true, name: true, email: true, countryOfOrigin: true}},
     _count: {
@@ -77,7 +60,7 @@ export const CycleDetailSpec = {
     complementaryMaterials: true,
   }
 }
-export type CycleMosaicItem = Prisma.CycleGetPayload<typeof CycleDetailSpec> & {
+export type CycleDetail = Prisma.CycleGetPayload<typeof CycleDetailSpec> & {
   type?: 'cycle';
   currentUserIsCreator?: boolean;
   currentUserIsParticipant?: boolean;
@@ -88,6 +71,44 @@ export type CycleMosaicItem = Prisma.CycleGetPayload<typeof CycleDetailSpec> & {
   ratingAVG?: number;
 };
 
+export const CycleSumarySpec = {
+  select: {
+    id:true,
+    title:true,
+    languages:true,
+    access:true,
+    tags:true,
+    product_id:true,
+    price:true,
+    topics:true,
+    countryOfOrigin:true,
+    startDate:true,
+    endDate:true,
+    createdAt:true,
+    updatedAt:true,
+    creator: {
+      select: { id: true, name: true, email: true, countryOfOrigin: true },
+    },
+    localImages: {
+      select: {
+        storedFile: true,
+      },
+    },
+    // usersJoined: { select: { userId: true, pending: true } },
+    ratings: { select: { userId: true, qty: true } },
+    favs: { select: { id: true } },
+    participants:{select:{id: true
+      // , name: true, email: true, countryOfOrigin: true
+    }},
+  }
+}
+export type CycleSumary = Prisma.CycleGetPayload<typeof CycleSumarySpec> & {
+  type?: 'cycle';
+  currentUserRating?: number;
+  ratingCount?: number;
+  ratingAVG?: number;
+  currentUserJoinPending?:boolean;
+}
 // export type CycleDetail = Prisma.CycleGetPayload<{
 //   include: {
 //     creator: true;

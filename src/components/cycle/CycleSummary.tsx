@@ -9,10 +9,11 @@ import useTranslation from 'next-translate/useTranslation';
 import { DATE_FORMAT_SHORT } from '../../constants';
 import { advancedDayjs } from '../../lib/utils';
 import styles from './CycleSummary.module.css';
+import { CycleSumary } from '@/src/types/cycle';
 // import TagsInput from '../forms/controls/TagsInput';
 
 interface Props {
-  cycle: Cycle;
+  cycle: CycleSumary;
 } 
 
 dayjs.extend(utc);

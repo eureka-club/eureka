@@ -20,7 +20,7 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { BiArrowBack } from 'react-icons/bi';
 // import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
@@ -32,7 +32,6 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
 import { WorkContext } from '@/src/useWorkContext';
-import useWork from '@/src/useWork';
 import useCycles from '@/src/useCycles';
 import usePosts, { getPosts } from '@/src/usePosts';
 import WorkDetailPost from './WorkDetailPost';
@@ -45,13 +44,17 @@ import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
 import { Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
+import useWorkSumary from '@/src/useWorkSumary';
+import useWork from '@/src/useWorkDetail';
+import useWorkDetail from '@/src/useWorkDetail';
+import { WorkSumary } from '@/src/types/work';
 
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
 interface Props {
   workId: number;
-  post?: PostMosaicItem;
+  post?: PostDetail;
   session: Session;
 }
 
@@ -67,23 +70,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     // skip: supportsLazyLoading !== false,
   });
 
-  const { data: work } = useWork(workId, {
+  const { data: work } = useWorkDetail(workId, {
     enabled: !!workId,
   });
-
-  const [qty, setQty] = useState(work?.ratingAVG || 0);
-  const [qtyByUser, setqtyByUser] = useState(0);
-
-  useEffect(() => {
-    if (work && session) {
-      let ratingCount = work.ratings.length;
-      const ratingAVG = work.ratings.reduce((p, c) => c.qty + p, 0) / ratingCount;
-      setQty(ratingAVG);
-
-      const currentRating = work?.ratings.filter((w) => w.userId == session?.user.id);
-      setqtyByUser(currentRating?.length ? currentRating[0].qty : 0);
-    }
-  }, [work, session]);
 
   const workCyclessWhere = {
     where: {
@@ -249,8 +238,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   const handlerChangeRating = (value: number) => {
-    setQty(value);
-    setqtyByUser(value);
     execRating({
       ratingQty: value,
       doCreate: value ? true : false,
@@ -258,8 +245,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   const clearRating = () => {
-    setQty(0);
-    setqtyByUser(0);
     execRating({
       ratingQty: 0,
       doCreate: false,
@@ -267,10 +252,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   const getRatingQty = () => {
-    if (work) {
-      return work.ratings.length || 0;
-    }
-    return 0;
+    return work?.ratingCount??0;
   };
 
   const getRatingAvg = () => {
@@ -281,7 +263,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   return (
-    <WorkContext.Provider value={{ work, linkToWork: false }}>
+    // <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
         <ButtonGroup className="mt-1 mt-md-3 mb-1">
           <Button variant="primary text-white" onClick={() => router.back()} size="sm">
@@ -319,11 +301,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     />
                     <Box className="d-flex flex-row align-items-baseline" mt={1}>
                       <Rating
-                        qty={qtyByUser}
+                        qty={work?.currentUserRating??0}
                         onChange={handlerChangeRating}
                         size="medium"
                         iconColor="var(--bs-danger)"
-                      /> { qtyByUser > 0 && <Button
+                      /> { (work?.currentUserRating??0) > 0 && <Button
                         type="button"
                         title={t('common:clearRating')}
                         className="text-warning p-0 ms-2"
@@ -346,10 +328,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     <section className="mx-md-4">
                       <h1 className="fw-bold text-secondary">{work.title}</h1>
                       <h2 className={`${styles.author}`}>{work.author}</h2>
-                      <WorkSummary work={work} />
+                      <WorkSummary work={work as unknown as WorkSumary} />
                       <div className="d-flex flex-wrap flex-row mt-2 mb-2">
                         <Box sx={{ display: 'flex' }}>
-                          <Rating qty={qty} onChange={handlerChangeRating} size="medium" readonly />
+                          <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
                           <div className="d-flex flex-nowrap ms-2">
                             {getRatingAvg().toFixed(1)}
                             {' - '}
@@ -380,7 +362,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
                         <MosaicItem
                           className="postition-absolute start-50 translate-middle-x"
-                          work={work}
+                          work={work as unknown as WorkSumary}
                           workId={work.id}
                           showTrash
                           linkToWork={false}
@@ -390,11 +372,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         />
                         <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
                           <Rating
-                            qty={qtyByUser}
+                            qty={work.currentUserRating??0}
                             onChange={handlerChangeRating}
                             size="medium"
                             iconColor="var(--bs-danger)"
-                          /> {qtyByUser > 0 && <Button
+                          /> {(work.currentUserRating??0) > 0 && <Button
                             type="button"
                             title={t('common:clearRating')}
                             className="text-warning p-0 ms-2"
@@ -569,7 +551,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
           // : <EditPostForm noModal cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
         }
     </MosaicContext.Provider>
-    </WorkContext.Provider >
+    // </WorkContext.Provider >
   );
 };
 

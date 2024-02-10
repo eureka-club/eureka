@@ -1,13 +1,13 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Badge, Container,Row,Col } from 'react-bootstrap'
-import { WorkDetail } from '@/types/work';
+import { WorkSumary } from '@/types/work';
 import LocalImageComponent from '@/src/components/LocalImage';
 import WorkSummary from './WorkSummary';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {
-  work: WorkDetail;
+  work: WorkSumary;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {

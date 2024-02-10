@@ -20,18 +20,18 @@ import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
-import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkDetail } from '../../types/work';
+import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostDetail } from '../../types/post';
+import { CycleSumary } from '@/src/types/cycle';
+import { WorkSumary } from '@/src/types/work';
 // import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
-import globalModalsAtom from '../../atoms/globalModals';
+import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './CreatePostForm.module.css';
-import useTopics from '../../useTopics';
-import usePost from '../../usePost';
-import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
+import useTopics from '@/src/useTopics';
+import usePost from '@/src/usePostDetail';
+import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens';
 import toast from 'react-hot-toast'
 import { Alert } from 'react-bootstrap';
 interface Props {
@@ -45,9 +45,9 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleSumary[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleSumary | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkSumary | null>(null);
   const { data: topics } = useTopics();
 
   const [items, setItems] = useState<string[]>([]);
@@ -73,8 +73,8 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
             items.push(...post.topics.split(','));
       }
     }
-    if (post && post.works.length) setSelectedWork(post.works[0] as WorkDetail);
-    if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as CycleMosaicItem);
+    if (post && post.works.length) setSelectedWork(post.works[0] as WorkSumary);
+    if (post && post.cycles.length) setSelectedCycle(post.cycles[0] as unknown as CycleSumary);
     if(post && post.language) setLanguage(post.language);
   },[post])
     
@@ -104,12 +104,12 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
          if (post) {
             const ck_ = ck||['POST',`${post.id}`];
             await queryClient.cancelQueries(ck_)
-            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+            const snapshot = queryClient.getQueryData<PostDetail[]|PostDetail>(ck_)
             const {title,contentText} = variables;
             if(snapshot){
               let posts = [];
               if(('length' in snapshot)){
-                posts = [...snapshot] as PostMosaicItem[];                  
+                posts = [...snapshot] as PostDetail[];                  
                 const idx = posts.findIndex(p=>p.id == +postId)
                 if(idx >- 1){
                   const oldPost = posts[idx];
@@ -171,12 +171,12 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
          if (post) {
             const ck_ = ck||['POST',`${post.id}`];
             await queryClient.cancelQueries(ck_)
-            const snapshot = queryClient.getQueryData<PostMosaicItem[]|PostMosaicItem>(ck_)
+            const snapshot = queryClient.getQueryData<PostDetail[]|PostDetail>(ck_)
             const {title,contentText} = variables;
             if(snapshot){
               let posts = [];
               if(('length' in snapshot)){
-                posts = [...snapshot] as PostMosaicItem[];                  
+                posts = [...snapshot] as PostDetail[];                  
                 const idx = posts.findIndex(p=>p.id == +postId)
                 if(idx >- 1){
                   const oldPost = posts[idx];
@@ -240,7 +240,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
 
     setIsSearchCycleLoading(true);
     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const itemsSCL: CycleMosaicItem[] = await response.json();
+    const itemsSCL: CycleSumary[] = await response.json();
 
     setSearchCycleResults(itemsSCL);
     setIsSearchCycleLoading(false);
@@ -259,7 +259,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     }
   };
 
-  const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
+  const handleSelectCycle = (selected: CycleSumary[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
       setSelectedCycle(searchResult);
@@ -368,7 +368,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
 
   const handlerchange = (ev: ChangeEvent<HTMLInputElement>) => {
     if (post && ev.currentTarget.id in post) {
-      const p: PostMosaicItem & { [key: string]: unknown } = post;
+      const p: PostDetail & { [key: string]: unknown } = post;
       p[ev.currentTarget.id] = ev.currentTarget.value;
       // setPost(p);
     }

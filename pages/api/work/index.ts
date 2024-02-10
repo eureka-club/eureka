@@ -123,7 +123,7 @@ export default getApiHandler()
 
         let cr = await prisma?.work.aggregate({ where, _count: true });
         const total = cr?._count;
-        data = await findAll(language, { take, where, skip, cursor });
+        data = await findAll(language, session, { take, where, skip, cursor });
 
         res.status(200).json({
           data,
@@ -136,7 +136,7 @@ export default getApiHandler()
         };
         let cr = await prisma?.work.aggregate({ where, _count: true });
         const total = cr?._count;
-        data = await findAllWithoutLangRestrict({ take, where, skip, cursor });
+        data = await findAllWithoutLangRestrict(session,{ take, where, skip, cursor });
 
         res.status(200).json({
           data,

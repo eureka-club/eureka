@@ -3,7 +3,8 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { Languages } from '@/src/types';
 import { findAll } from '@/src/facades/work';
-import { CycleDetailSpec } from '@/src/types/cycle';
+import { CycleSumarySpec } from '@/src/types/cycle';
+import { getSession } from 'next-auth/react';
 // import redis from '../../src/lib/redis';
 
 export const config = {
@@ -18,8 +19,8 @@ export default getApiHandler()
     const lstr = l?.toString();
     const language = Languages[lstr!];
     const data: { id:number;type: string }[] = [];
-    const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-
+    // const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
+    const session = await getSession({req});
     // const result: { [index: string]: (Work | (Cycle & { type: string }))[] } = {};
     const { cursor, topic, extraCyclesRequired = 0, extraWorksRequired = 0 } = req.query;
     const c = parseInt(cursor as string, 10);
@@ -64,7 +65,7 @@ export default getApiHandler()
       return {
         skip: c * countItemsPerPage + skipPlus,
         take: takePlus || countItemsPerPage,
-        include:CycleDetailSpec.include,
+        select:CycleSumarySpec.select,
         where:w
       }
     };
@@ -95,7 +96,7 @@ export default getApiHandler()
     };
 
     const ewr = parseInt(extraWorksRequired as string, 10);
-    let works = await findAll(language,{
+    let works = await findAll(language,session,{
       ...getOptWork(0, ewr),
       orderBy: {
         id: 'desc',
@@ -115,7 +116,7 @@ export default getApiHandler()
     let worksPlus = 0;
     if (cycles.length !== countItemsPerPage && works.length === countItemsPerPage) {
       worksPlus = countItemsPerPage - cycles.length;
-      const extraWorks = await findAll(language,{
+      const extraWorks = await findAll(language,session,{
         ...getOptWork(worksPlus, ewr + countItemsPerPage),
         orderBy: {
           id: 'desc',

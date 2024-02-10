@@ -7,8 +7,8 @@ import useCycles from '@/src/useCycles'
 import usePosts from '@/src/usePosts'
 import Mosaic from '../Mosaic';
 import { MosaicItem } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
+import { CycleDetail } from '../../types/cycle';
+import { PostDetail } from '../../types/post';
 import { WorkDetail } from '../../types/work';
 
 interface Props {
@@ -20,7 +20,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   //   isLoading: isCyclesLoading,
   //   isSuccess: isCyclesSuccess,
   //   data: cyclesData,
-  // } = useQuery<CycleMosaicItem[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
+  // } = useQuery<CycleDetail[]>(['work.mosaic.cycles', work.id], async ({ queryKey: [, workId] }) => {
   //   const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
   //   const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
   //   const res = await fetch(`/api/search/cycles?where=${whereQP}&include=${includeQP}`);
@@ -32,7 +32,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
   //   isLoading: isPostsLoading,
   //   isSuccess: isPostsSuccess,
   //   data: postsData,
-  // } = useQuery<PostMosaicItem[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
+  // } = useQuery<PostDetail[]>(['posts.mosaic.work', work.id], async ({ queryKey: [, workId] }) => {
   //   const whereQP = encodeURIComponent(JSON.stringify({ works: { some: { id: workId } } }));
   //   const includeQP = encodeURIComponent(JSON.stringify({ creator: {photos:true}, localImages: true, works: true }));
   //   const res = await fetch(`/api/search/posts?where=${whereQP}&include=${includeQP}`);

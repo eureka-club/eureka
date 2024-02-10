@@ -3,28 +3,22 @@ import WorkMosaic from '@/src/components/work/MosaicItem'
 import dayjs from 'dayjs';
 import { useQueryClient } from 'react-query';
 import useTranslation from 'next-translate/useTranslation'
-import { WorkDetail } from '@/src/types/work'
-import { Work } from '@prisma/client'
+import { WorkSumary } from '@/src/types/work'
+import { CycleWork } from '@/src/types/cycleWork';
 
 interface Props{
   showSocialInteraction?:boolean,
   showHeader?: boolean,
   size?: string | undefined,
-  cycleWorksDates:{
-    id: number;
-    startDate: Date | null;
-    endDate: Date | null;
-    workId: number | null;
-    work:WorkDetail | null;
-  }[];
+  cycleWorksDates:CycleWork[];
 }
 
 const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showHeader = true,size = 'md',cycleWorksDates}) => {
-  const works = cycleWorksDates.map(c=>c.work!)
+  const works:WorkSumary[] = cycleWorksDates.map(c=>c.work!);
   const {t} = useTranslation('cycleDetail')
   const queryClient = useQueryClient()
   const getWorksSorted = (() => {
-    const res: Work[] = [];
+    const res: WorkSumary[] = [];
     cycleWorksDates
       .sort((f, s) => {
         const fCD = dayjs(f.startDate!);
@@ -69,7 +63,7 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showH
             if(!w)return ''
             queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
-              <WorkMosaic work={w as WorkDetail} workId={w.id} size={size} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
+              <WorkMosaic work={w} workId={w.id} size={size} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
                       </div>
           })}
         </div>

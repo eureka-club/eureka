@@ -21,7 +21,7 @@ import globalModals from '../../atoms/globalModals';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { DATE_FORMAT_PROPS, DATE_FORMAT_SHORT_MONTH_YEAR } from '../../constants';
 import { ComplementaryMaterial, CreateCycleClientPayload } from '../../types/cycle';
-import { WorkDetail } from '../../types/work';
+import { WorkSumary } from '../../types/work';
 import LocalImageComponent from '../LocalImage';
 import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -47,15 +47,15 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
   const [addWorkModalOpened, setAddWorkModalOpened] = useState(false);
   const [isWorkSearchLoading, setIsWorkSearchLoading] = useState(false);
-  const [workSearchResults, setWorkSearchResults] = useState<WorkDetail[]>([]);
-  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkDetail | null>(null);
-  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkDetail[]>([]);
+  const [workSearchResults, setWorkSearchResults] = useState<WorkSumary[]>([]);
+  const [workSearchHighlightedOption, setWorkSearchHighlightedOption] = useState<WorkSumary | null>(null);
+  const [selectedWorksForCycle, setSelectedWorksForCycle] = useState<WorkSumary[]>([]);
   const [enableWorksDisscussionsDates, setEnableWorksDisscussionsDates] = useState<boolean>(true);
   const [selectedWorksForCycleDates, setSelectedWorksForCycleDates] = useState<{
     [key: number]: { startDate?: string; endDate?: string; isInvalidStartDate?: boolean; isInvalidEndDate?: boolean };
   }>({});
 
-  const typeaheadRef = useRef<AsyncTypeahead<WorkDetail>>(null);
+  const typeaheadRef = useRef<AsyncTypeahead<WorkSumary>>(null);
   const typeaheadRefOC = useRef<AsyncTypeahead<{ id: number; code: string; label: string }>>(null);
   const [countryOrigin, setCountryOrigin] = useState<string>();
   const [language, setLanguage] = useState<string>('');
@@ -244,7 +244,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
 
     const includeQP = encodeURIComponent(JSON.stringify({ localImages: true }));
     const response = await fetch(`/api/search/works?q=${query}&include=${includeQP}`);
-    const itemsSW: WorkDetail[] = await response.json();
+    const itemsSW: WorkSumary[] = await response.json();
 
     setWorkSearchResults(itemsSW);
     setIsWorkSearchLoading(false);
@@ -255,7 +255,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     results,
   }: {
     activeIndex: number;
-    results: WorkDetail[];
+    results: WorkSumary[];
   }) => {
     if (activeIndex !== -1) {
       // wait for component rendering with setTimeout(fn, undefinded)
@@ -263,7 +263,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
     }
   };
 
-  const handleSearchWorkSelect = (selected: WorkDetail[]): void => {
+  const handleSearchWorkSelect = (selected: WorkSumary[]): void => {
     if (selected[0] != null) {
       setSelectedWorksForCycle([...selectedWorksForCycle, selected[0]]);
       // setSelectedWorksForCycleDates((res) => ({

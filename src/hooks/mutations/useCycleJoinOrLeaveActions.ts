@@ -1,19 +1,19 @@
 import {} from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { CycleSumary } from '@/src/types/cycle';
+import { UserDetail } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 
 type ctx = {
-    ss: UserMosaicItem[] | undefined;
+    ss: UserDetail[] | undefined;
     ck: string[];
 } | undefined;
 
-const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useJoinUserToCycleAction = (user:UserDetail,cycle:CycleSumary,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
             cycleTitle: cycle?.title,
           })}`;
           const notificationToUsers = (participants || []).map(p=>p.id);
-          if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
+          if(cycle?.creator.id) notificationToUsers.push(cycle?.creator.id);
           if(cycle.access==4){
             const fr = await fetch('/api/stripe/checkout_sessions',{
               method:'POST',
@@ -86,11 +86,11 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
           onMutate: async () => {
             const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
             await queryClient.cancelQueries(ck);
-            const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
+            const ss = queryClient.getQueryData<UserDetail[]>(ck)
             return {ss,ck};    
           },
           onSettled(_data,error,_variable,context) {
-            const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
+            const {ck,ss} = context as {ss:UserDetail[],ck:string[]}
             if(error){
               // setIsCurrentUserJoinedToCycle(false);
               // setCountParticipants(res=>res?res-1:undefined)
@@ -110,7 +110,7 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useLeaveUserFromCycleAction = (user:UserDetail,cycle:CycleSumary,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
@@ -128,7 +128,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           cycleTitle: cycle?.title,
         })}`;
         const notificationToUsers = (participants || []).filter(p=>p.id!==user?.id).map(p=>p.id);
-        if(cycle?.creatorId) notificationToUsers.push(cycle?.creatorId);
+        if(cycle?.creator.id) notificationToUsers.push(cycle?.creator.id);
   
         const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 
           method: 'DELETE',
@@ -136,7 +136,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           body: JSON.stringify({
             notificationMessage,
             notificationContextURL: `/cycle/${cycle!.id}?tabKey=participants`,
-            notificationToUsers:[cycle.creatorId],
+            notificationToUsers:[cycle.creator.id],
           })
         });
         if(!res.ok){
@@ -147,7 +147,7 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
           const json = await res.json();
           if(notifier){
             notifier.notify({
-              toUsers:[cycle.creatorId],
+              toUsers:[cycle.creator.id],
               data:{message:notificationMessage}
             });
           }
@@ -162,12 +162,12 @@ const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,p
         onMutate: async () => {
             const ck = ['USERS',JSON.stringify(whereCycleParticipants)];
             await queryClient.cancelQueries(ck);
-            const ss = queryClient.getQueryData<UserMosaicItem[]>(ck)
+            const ss = queryClient.getQueryData<UserDetail[]>(ck)
             return {ss,ck}
   
         },
         onSettled(_data,error,_variable,context) {
-            const {ck,ss} = context as {ss:UserMosaicItem[],ck:string[]}
+            const {ck,ss} = context as {ss:UserDetail[],ck:string[]}
             if(error){
             queryClient.setQueryData(ck,ss)
             }

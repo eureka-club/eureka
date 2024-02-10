@@ -31,7 +31,7 @@ import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
+import { CycleDetail } from '../../types/cycle';
 import { WorkDetail } from '../../types/work';
 //import ImageFileSelect from './controls/ImageFileSelect';
 import LanguageSelect from './controls/LanguageSelect';
@@ -40,7 +40,7 @@ import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
-import useWork from '../../useWork';
+import useWork from '../../useWorkDetail';
 // import { Session } from '@/src/types';
 import { useSession } from 'next-auth/react';
 import useUser from '@/src/useUser';
@@ -51,9 +51,9 @@ import toast from 'react-hot-toast'
 import { ImCancelCircle } from 'react-icons/im';
 import Prompt from '@/src/components/post/PostPrompt';
 import { set } from 'lodash';
-import usePost from '../../usePost';
+import usePost from '../../usePostDetail';
 import LocalImageComponent from '../LocalImage';
-import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { EditPostAboutCycleClientPayload, EditPostAboutWorkClientPayload, PostDetail } from '../../types/post';
 interface Props {
   noModal?: boolean;
   cacheKey?: string[]
@@ -89,8 +89,8 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleDetail[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleDetail | null>(null);
   const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   //const [items, setItems] = useState<string[]>([]);
@@ -133,7 +133,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         image: null,
         currentImage: `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post.localImages[0].storedFile}`,
         contentText: post.contentText,
-        selectedCycle: post.cycles[0] as CycleMosaicItem | null,
+        selectedCycle: post.cycles[0] as CycleDetail | null,
         selectedWork: post.works[0] as WorkDetail | null,
         isPublic: post.isPublic,
         topics: [] as string[],
@@ -230,7 +230,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
   };
 
   const handleSelectCycle = (selected: SearchResult | null): void => {
-    const searchResult = selected as CycleMosaicItem | null
+    const searchResult = selected as CycleDetail | null
     setFormValues({
       ...formValues,
       ['selectedCycle']: searchResult
@@ -294,12 +294,12 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
           await queryClient.cancelQueries(ck_)
-          const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
+          const snapshot = queryClient.getQueryData<PostDetail[] | PostDetail>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
             let posts = [];
             if (('length' in snapshot)) {
-              posts = [...snapshot] as PostMosaicItem[];
+              posts = [...snapshot] as PostDetail[];
               const idx = posts.findIndex(p => p.id == +post.id)
               if (idx > - 1) {
                 const oldPost = posts[idx];
@@ -357,12 +357,12 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         if (post) {
           const ck_ = ck || ['POST', `${post.id}`];
           await queryClient.cancelQueries(ck_)
-          const snapshot = queryClient.getQueryData<PostMosaicItem[] | PostMosaicItem>(ck_)
+          const snapshot = queryClient.getQueryData<PostDetail[] | PostDetail>(ck_)
           const { title, contentText } = variables;
           if (snapshot) {
             let posts = [];
             if (('length' in snapshot)) {
-              posts = [...snapshot] as PostMosaicItem[];
+              posts = [...snapshot] as PostDetail[];
               const idx = posts.findIndex(p => p.id == +post.id)
               if (idx > - 1) {
                 const oldPost = posts[idx];

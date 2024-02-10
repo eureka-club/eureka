@@ -23,7 +23,7 @@ import { MosaicContext } from '@/src/useMosaicContext';
 import { useQueryClient } from 'react-query';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { WorkDetail } from '@/src/types/work';
 
 import PostDetailComponent from '../post/PostDetail';
@@ -40,17 +40,18 @@ import useUsers from '@/src/useUsers'
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '../ButtonsTopActions';
 import { Button as MaterialButton } from '@mui/material';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
+import { CycleWork } from '@/src/types/cycleWork';
 
 
 const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('./CycleDetailWorks'))
 interface Props {
-  post?: PostMosaicItem;
+  post?: PostDetail;
   work?: WorkDetail;
   session:Session
 }
@@ -333,7 +334,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return '';
   };
 
-  const RenderRestrictTabsHeaders:FC<{cycle:CycleMosaicItem}> = ({cycle}) => {
+  const RenderRestrictTabsHeaders:FC<{cycle:CycleDetail}> = ({cycle}) => {
     if (cycle) {
       const res = (
         <>
@@ -502,7 +503,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                         )}
                         <div ref={cycleWorksRef}>
                           <MosaicContext.Provider value={{ showShare: true }}>                     
-                            {works && <CycleDetailWorks cycleWorksDates={works!} /> || ''}
+                            {works && <CycleDetailWorks cycleWorksDates={works! as unknown as CycleWork[]} /> || ''}
                           </MosaicContext.Provider>
                         </div>
                         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (

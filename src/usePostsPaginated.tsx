@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
-import { PostMosaicItem } from './types/post';
+import { PostDetail } from './types/post';
 
 
 export const POST_COUNT = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
-export const getRecords = async (cycleId:number,page: number): Promise<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined> => {
+export const getRecords = async (cycleId:number,page: number): Promise<{posts:PostDetail[],hasNextPage:boolean}|undefined> => {
   if (!cycleId) return undefined;
   const where = encodeURIComponent(JSON.stringify({
     cycles:{some:{id:cycleId}}
@@ -14,7 +14,7 @@ export const getRecords = async (cycleId:number,page: number): Promise<{posts:Po
   const res = await fetch(url);
   if (!res.ok) return undefined;
   const {data:posts,hasNextPage} = await res.json();
-  posts.forEach((p:PostMosaicItem) => {
+  posts.forEach((p:PostDetail) => {
     p.type = 'post'
   });
   return {posts,hasNextPage};
@@ -32,7 +32,7 @@ const usePostsPaginated = (cycleId:number,page: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<{posts:PostMosaicItem[],hasNextPage:boolean}|undefined>(['POSTS', `CYCLE-${cycleId}-PAGE-${page}`], ()=> getRecords(cycleId,page),{ keepPreviousData : true });
+  return useQuery<{posts:PostDetail[],hasNextPage:boolean}|undefined>(['POSTS', `CYCLE-${cycleId}-PAGE-${page}`], ()=> getRecords(cycleId,page),{ keepPreviousData : true });
 };
 
 export default usePostsPaginated

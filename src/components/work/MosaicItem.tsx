@@ -8,16 +8,17 @@ import utc from 'dayjs/plugin/utc';
 import isBetween from 'dayjs/plugin/isBetween';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import SocialInteraction from '../common/SocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
-import useWork from '@/src/useWork';
-import { WorkDetail } from '@/src/types/work';
+import useWork from '@/src/useWorkDetail';
+import { WorkDetail, WorkSumary } from '@/src/types/work';
+import useWorkSumary from '@/src/useWorkSumary';
+import WorkSocialInteraction from '../common/WorkSocialInteraction';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 interface Props {
-  work?: WorkDetail;
+  work?: WorkSumary;
   workId: number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -54,7 +55,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [work, setWork] = useState(workItem);
-  const { data } = useWork(workId,{
+  const { data } = useWorkSumary(workId,{
     enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
   });
   useEffect(() => {
@@ -180,7 +181,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (
         <Card.Footer className={`${styles.footer}  d-flex justify-content-end `}>
-          <SocialInteraction
+          <WorkSocialInteraction
             cacheKey={cacheKey || ['WORK', work.id.toString()]}
             showButtonLabels={showButtonLabels}
             showRating={false}

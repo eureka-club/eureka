@@ -64,7 +64,7 @@ export const WorkDetailSpec = {
   include: {
     localImages: { select: { id:true, storedFile: true } },
     favs: { select: { id: true } },
-    ratings: { select: { userId: true, qty: true } },
+    // ratings: { select: { userId: true, qty: true } },
     readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
     posts: {
       select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },
@@ -79,10 +79,33 @@ export const WorkDetailSpec = {
 }
 export type WorkDetail = Prisma.WorkGetPayload<typeof WorkDetailSpec> & {
   currentUserRating?: number;
+  currentUserIsFav?:boolean;
   ratingCount?: number;
   ratingAVG?: number;
 };
-
+export const WorkSumarySpec = {
+  select:{
+    id:true,
+    title:true,
+    type:true,
+    language:true,
+    ToCheck:true,
+    author:true,
+    createdAt:true,
+    updatedAt:true,
+    publicationYear:true,
+    countryOfOrigin:true,
+    length:true,
+    localImages: { select: { id:true, storedFile: true } },
+    readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+  }
+}
+export type WorkSumary = Prisma.CycleGetPayload<typeof WorkSumarySpec> & {
+  currentUserRating?: number;
+  currentUserIsFav?:boolean;
+  ratingCount?: number;
+  ratingAVG?: number;
+}
 export interface CreateWorkClientPayload {
   cover: File;
   type: string;

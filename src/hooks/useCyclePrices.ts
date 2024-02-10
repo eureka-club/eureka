@@ -1,4 +1,4 @@
-import { CycleMosaicItem } from "../types/cycle";
+import { CycleSumary } from "../types/cycle";
 import { useQuery } from "react-query";
 
 interface Type{
@@ -20,7 +20,7 @@ export const getPrices = async (product_id:string):Promise<Type> => {
     return {price,currency};
   }
 
-  export const useCyclePrice = (cycle?:CycleMosaicItem)=>{
+  export const useCyclePrice = (cycle?:CycleSumary)=>{
     return useQuery<Type>(['CYCLE-PRICE', cycle?.product_id], () => getPrices(cycle?.product_id!), {
         staleTime: 1000 * 60 * 60,
       });

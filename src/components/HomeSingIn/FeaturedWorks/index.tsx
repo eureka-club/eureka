@@ -5,6 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import MosaicItem from '@/components/work/MosaicItem';
 import WorkPostImages from './WorkPostImages';
 import WorkComments from './WorkComments';
+import { WorkSumary } from '@/src/types/work';
 //import HyvorComments from '@/src/components/common/HyvorComments';
 
 const FeaturedWorks = () => {
@@ -31,7 +32,7 @@ const FeaturedWorks = () => {
                 <Row className="d-flex flex-row w-100  bg-gray-very-light rounded-3 py-4 m-0  pe-0 pe-lg-3">
                   <Col xs={12}  xl={4} className="d-flex justify-content-center">
                     <MosaicItem
-                      work={work}
+                      work={work as unknown as WorkSumary}
                       workId={work.id}
                       showCreateEureka={true}
                       showSocialInteraction={true}

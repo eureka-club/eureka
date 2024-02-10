@@ -5,20 +5,16 @@ import { Col, Spinner, CardGroup } from 'react-bootstrap';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
-import { WorkDetail /* , WorkWithImages */ } from '../../types/work';
-import { CycleMosaicItem /* , CycleWithImages */ } from '../../types/cycle';
-import { PostMosaicItem } from '../../types/post';
-import { UserMosaicItem, UserSumary } from '../../types/user';
 import Mosaics from './Mosaics';
+import { MosaicItem } from '@/src/types';
 
-type Item = CycleMosaicItem | WorkDetail | PostMosaicItem | UserSumary;
 type Props = {
   title?: string | JSX.Element;
   iconBefore?: JSX.Element;
   iconAfter?: JSX.Element;
   onSeeAll?: () => void;
   seeAll?: boolean;
-  data: Item[]; // ((CycleMosaicItem & { type: string }) | WorkDetail)[];
+  data: MosaicItem[]; // ((CycleDetail & { type: string }) | WorkDetail)[];
   showSocialInteraction?: boolean;
   customMosaicStyle?: { [key: string]: string };
   className?: string;
@@ -43,7 +39,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
   userMosaicDetailed = false,
 }) => {
   const { t } = useTranslation('topics');
-  const [dataFiltered, setDataFiltered] = useState<Item[]>([]);
+  const [dataFiltered, setDataFiltered] = useState<MosaicItem[]>([]);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const [globalSEState] = useAtom(globalSearchEngineAtom);

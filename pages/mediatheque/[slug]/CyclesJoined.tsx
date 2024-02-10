@@ -1,10 +1,10 @@
-import { CycleMosaicItem } from "@/src/types/cycle";
+import { CycleDetail } from "@/src/types/cycle";
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { FC } from "react";
 import { useSession } from "next-auth/react";
 
 interface Props{
-    cycles:CycleMosaicItem[];
+    cycles:CycleDetail[];
     goTo:(path:string)=>void;
     t:(val:string)=>string;
     id:string;

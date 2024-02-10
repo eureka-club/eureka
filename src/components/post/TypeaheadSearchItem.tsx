@@ -1,12 +1,12 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Badge } from 'react-bootstrap'
-import { PostMosaicItem } from '@/types/post';
+import { PostDetail } from '@/types/post';
 import LocalImageComponent from '@/src/components/LocalImage';
 import styles from './TypeaheadSearchItem.module.css';
 
 interface Props {
-  post: PostMosaicItem;
+  post: PostDetail;
 }
 
 const TypeaheadSearchItem: FunctionComponent<Props> = ({ post }) => {

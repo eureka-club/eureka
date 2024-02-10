@@ -1,37 +1,25 @@
-import { Cycle, Work } from '@prisma/client';
-// import classNames from 'classnames';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
-import { FaRegComments, FaRegCompass } from 'react-icons/fa';
+import { FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import SocialInteraction from '../common/SocialInteraction';
-import { PostMosaicItem } from '../../types/post';
+import SocialInteraction from '../common/PostSocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import { isCycle, isWork, Session } from '../../types';
-// import { CycleMosaicItem } from '../../types/cycle';
-// import { WorkDetail } from '../../types/work';
-// import CommentsList from '../common/CommentsList';
+import { Session } from '../../types';
 import Avatar from '../common/UserAvatar';
-import UnclampText from '../UnclampText';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { WorkDetail } from '@/src/types/work';
-// import ActionsBar from '@/src/components/common/ActionsBar'
+import { CycleSumary } from '@/src/types/cycle';
+import { WorkSumary } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import usePost from '@/src/usePost'
-import {useQueryClient} from 'react-query'
-import useCycle from '@/src/useCycle';
-import useWork from '@/src/useWork'
 import { useSession} from 'next-auth/react';
 import { BiEdit} from 'react-icons/bi';
+import usePostSumary from '@/src/usePostSumary';
 interface Props {
-  post?:PostMosaicItem;
   postId: number|string;
   display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -43,12 +31,10 @@ interface Props {
   showTrash?: boolean;
   showComments?: boolean;
   linkToPost?: boolean;
-
   className?: string;
 }
 
 const MosaicItem: FunctionComponent<Props> = ({
-  post:postItem,
   postId,
   display = 'v',
   showSocialInteraction = true,
@@ -59,36 +45,15 @@ const MosaicItem: FunctionComponent<Props> = ({
   className,
 }) => {
   const cacheKey = ck || ['POST',`${postId}`]
-  const [gmAtom,setGmAtom] = useAtom(globalModals);
   const { t } = useTranslation('common');
-  const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
-  const [k,setK] = useState<[string,string]>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  // const [post,setPost] = useState<PostMosaicItem>();
-  const [postParent,setPostParent] = useState<CycleMosaicItem|WorkDetail>();
   const {data:session} = useSession()
-  //const postFromCache = queryClient.getQueryData<PostMosaicItem>(['POST',postId.toString()]);
-  // const pp = queryClient.getQueryData<CycleMosaicItem|WorkDetail>(cacheKey);
-  const [post,setPost]=useState(postItem)
-  const {data} = usePost(+postId,{
-    enabled:!!postId && !postItem
+  const {data:post} = usePostSumary(+postId,{
+    enabled:!!postId
   })
-  useEffect(()=>{
-    if(data && !postItem)setPost(data)
-  },[data])
 
-  useEffect(()=>{
-    if(post){
-      if(post.works.length)setPostParent(post.works[0] as WorkDetail)
-      if(post.cycles.length)setPostParent(post.cycles[0] as CycleMosaicItem)
-    }
-  },[post])
-  //  const {data:workParent} = useWork(workId,{enabled:!!workId})
-  //  const {data:cycleParent} = useCycle(cycleId,{enabled:!!cycleId})
-  
-   
-   if(!post)return <></>
+  if(!post)return <></>
 
   const parentLinkHref = ((): string | null => {
     if (post.works.length) {
@@ -109,15 +74,8 @@ const MosaicItem: FunctionComponent<Props> = ({
     return `/post/${post.id}`;
   })();
 
-  // const [creator] = useState(post.creator as User);
   const { /* title, localImages, id, */ type } = post;
-  // const [newCommentInput, setNewCommentInput] = useState<string>();
-  
-
-  // const getDirectParent = () => {
-  //   if (post.works && post.works.length) return post.works[0];
-  //   return parent;
-  // };
+ 
   const canEditPost = ()=>{
     if(session)
       return post.creatorId == (session as unknown as Session).user.id
@@ -126,12 +84,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
     router.push(`/post/${post.id}/edit`)
   }
-
-   const onEditSmallScreen = async (e:React.MouseEvent<HTMLButtonElement>) => {
-        setGmAtom(res=>({...res, editPostId:post.id}))
-        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: true } });
-  }
-
 
   const renderVerticalMosaic = (props: { showDetailedInfo: boolean,specifyDataCy?:boolean,commentSection?:boolean }) => {
     const { showDetailedInfo, specifyDataCy=true,commentSection=false } = props;
@@ -208,7 +160,7 @@ const MosaicItem: FunctionComponent<Props> = ({
          
           {post && showdetail && (
           <div className={`w-100 d-flex flex-row align-items-center ${styles.postDetail}`}>
-                <Avatar width={28} height={28} userId={post.creator.id} size="xs" />
+                <Avatar width={28} height={28} userId={post.creatorId} size="xs" />
                 <span className='ms-1 me-1'>-</span>
                 <span className="fs-6">{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>
@@ -243,8 +195,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
-              entity={post}
-              parent={postParent}
+              post={post}
               showRating={false}
               showTrash={false}
               className="ms-auto"

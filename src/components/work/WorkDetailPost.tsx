@@ -7,7 +7,7 @@ import { GiBrain } from 'react-icons/gi';
 import { BiBookHeart } from 'react-icons/bi';
 import { Session } from '../../types';
 import UserAvatar from '../common/UserAvatar';
-import useWork from '@/src/useWork';
+import useWork from '@/src/useWorkDetail';
 import styles from './WorkDetailPost.module.css';
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';

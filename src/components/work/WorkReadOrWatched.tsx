@@ -1,4 +1,4 @@
-import { WorkDetail } from '@/src/types/work';
+import { WorkDetail, WorkSumary } from '@/src/types/work';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
@@ -37,7 +37,7 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work,session }) => {
   const [value, setValue] = useState('');
 
     const { mutate: execReadOrWatchedWork } = useExecReadOrWatchedWork({
-      work: work!,
+      workId: work.id!,
     });
 
 

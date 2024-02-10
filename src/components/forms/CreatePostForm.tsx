@@ -2,14 +2,12 @@ import { Post } from '@prisma/client';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import FormCheck from 'react-bootstrap/FormCheck';
-import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -18,29 +16,20 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
-import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { BsFillXCircleFill } from 'react-icons/bs';
+import { Switch, TextField, FormControlLabel } from '@mui/material';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { useMutation, useQueryClient } from 'react-query';
-import TagsInput from './controls/TagsInput';
 import TagsInputMaterial from './controls/TagsInputMaterial';
 import TagsInputTypeAheadMaterial from './controls/TagsInputTypeAheadMaterial';
 import AsyncTypeaheadMaterial from './controls/AsyncTypeaheadMaterial';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkDetail } from '../../types/work';
-//import ImageFileSelect from './controls/ImageFileSelect';
-import LanguageSelect from './controls/LanguageSelect';
-import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
-import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
+import { CycleSumary } from '../../types/cycle';
+import { WorkSumary } from '../../types/work';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
-import useWork from '../../useWork';
-// import { Session } from '@/src/types';
 import { useSession } from 'next-auth/react';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
@@ -49,8 +38,7 @@ import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect
 import toast from 'react-hot-toast'
 import { ImCancelCircle } from 'react-icons/im';
 import Prompt from '@/src/components/post/PostPrompt';
-import { set } from 'lodash';
-
+import useWorkSumary from '@/src/useWorkSumary';
 interface Props {
   noModal?: boolean;
   params?: any;
@@ -76,9 +64,9 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleSumary[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleSumary | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkSumary | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -102,7 +90,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
       setWorkId(router.query.id.toString());
     }
   }, [router])
-  const { data: work } = useWork(+workId, {
+  const { data: work } = useWorkSumary(+workId, {
     enabled: !!workId
   });
 
@@ -135,7 +123,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   // }, [router, router.query.id]);
 
   useEffect(() => {
-    if (work) setSelectedWork(work as WorkDetail);
+    if (work) setSelectedWork(work);
   }, [work]);
 
   const { t } = useTranslation('createPostForm');
@@ -174,8 +162,8 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
               cycleTitle: selectedCycle.title
             })}`;
             notificationToUsers = (participants || []).filter(p => p.id !== user.id).map(p => p.id);
-            if (user.id !== selectedCycle.creatorId)
-              notificationToUsers.push(selectedCycle.creatorId)
+            if (user.id !== selectedCycle.creator.id)
+              notificationToUsers.push(selectedCycle.creator.id)
           }
           else {
             message = `eurekaCreatedAboutWork!|!${JSON.stringify({
@@ -191,8 +179,8 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
             cycleTitle: selectedCycle.title
           })}`;
           notificationToUsers = (participants || []).filter(p => p.id !== user.id).map(p => p.id);
-          if (user.id !== selectedCycle.creatorId)
-            notificationToUsers.push(selectedCycle.creatorId)
+          if (user.id !== selectedCycle.creator.id)
+            notificationToUsers.push(selectedCycle.creator.id)
         }
 
         formData.append('notificationMessage', message);
@@ -264,7 +252,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
 
     setIsSearchCycleLoading(true);
     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const itemsCL: CycleMosaicItem[] = await response.json();
+    const itemsCL: CycleSumary[] = await response.json();
 
     setSearchCycleResults(itemsCL);
     setIsSearchCycleLoading(false);
@@ -278,8 +266,8 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
       if (isCycleMosaicItem(searchResult)) {
         setSelectedCycle(searchResult);
       }
-      if (isWorkMosaicItem(searchResult)) {
-        setSelectedWork(searchResult);
+      else if (!['post','user'].includes(searchResult.type!)) {
+        setSelectedWork(searchResult as WorkSumary);
         setSelectedCycle(null);
       }
     }
@@ -293,7 +281,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
   };
 
   const handleSelectCycle = (selected: SearchResult | null): void => {
-    const searchResult = selected as CycleMosaicItem | null
+    const searchResult = selected as CycleSumary | null
     if (searchResult != null) {
       setSelectedCycle(searchResult);
       if (searchResult.access === 2)

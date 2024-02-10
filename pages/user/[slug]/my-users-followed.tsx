@@ -8,7 +8,7 @@ import { dehydrate,QueryClient } from 'react-query';
 import UMI from '@/src/components/user/MosaicItem';
 import {useRouter} from 'next/router'
 import useUser,{getUser} from '@/src/useUser';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import { BiArrowBack } from 'react-icons/bi';
 import useUserSumary from '@/src/useUserSumary';
 

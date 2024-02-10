@@ -190,15 +190,7 @@ export default getApiHandler()
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;
-      let data = await findAll({select,take,where,skip,cursor});
-
-      data.forEach(p=>{
-        p.type='post';
-        let currentUserIsFav = false;
-        if(session)
-          currentUserIsFav = p.favs.findIndex(f=>f.id==session.user.id) > -1
-        p.currentUserIsFav = currentUserIsFav;
-      })
+      let data = await findAll(session,{select,take,where,skip,cursor});
 
       res.status(200).json({ 
         data, 

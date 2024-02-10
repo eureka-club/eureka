@@ -3,11 +3,11 @@ import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 
 import { useMutation, useQueryClient } from 'react-query';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleDetail } from '@/src/types/cycle';
 import { WorkDetail } from '@/src/types/work';
 import { useSession } from 'next-auth/react';
 import { isCycle, isWork } from '@/src/types';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/useUser';
 
 export interface ExecRatingPayload {
@@ -15,11 +15,11 @@ export interface ExecRatingPayload {
   ratingQty:number;
 }
 interface MutateReturn{
-  prevUser:UserMosaicItem|undefined;
-  prevcycle:CycleMosaicItem|undefined;
+  prevUser:UserDetail|undefined;
+  prevcycle:CycleDetail|undefined;
 }
 interface Props{
-  cycle:CycleMosaicItem;
+  cycle:CycleDetail;
 }
 
 const useExecRating = (props:Props)=>{
@@ -61,8 +61,8 @@ const useExecRating = (props:Props)=>{
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
           await queryClient.cancelQueries(cacheKey);
           
-          prevUser = queryClient.getQueryData<UserMosaicItem>(['USER', `${session.user.id}`]);
-          prevCycle = queryClient.getQueryData<CycleMosaicItem>(cacheKey);
+          prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
+          prevCycle = queryClient.getQueryData<CycleDetail>(cacheKey);
       
           let ratingCycles = user.ratingCycles
           let ratings = cycle.ratings;

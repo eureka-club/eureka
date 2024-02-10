@@ -31,12 +31,12 @@ import SavedForLater from './SavedForLater';
 import { isAccessAllowed } from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
 import dayjs from 'dayjs';
-import { PostMosaicItem } from '@/src/types/post';
+import { PostDetail } from '@/src/types/post';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   id: number;
-  session: Session;posts:PostMosaicItem[]
+  session: Session;posts:PostDetail[]
 }
 const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const router = useRouter();
@@ -240,7 +240,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   };
 
  const getReadOrWatchedTotal = () => {
-    if (user) return user.readOrWatchedWorks.length;
+    return user?.readOrWatchedWorks.length;
   };
 
   const getReadCurrentYear = () => {

@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { useQuery, useQueryClient } from 'react-query';
-import { UserMosaicItem, UserSumary } from './types/user';
+import { UserDetail, UserSumary } from './types/user';
 import { buildUrl } from 'build-url-ts';
 import { WEBAPP_URL } from './constants';
 

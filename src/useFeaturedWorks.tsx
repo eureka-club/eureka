@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation';
-import useWorks, { getWorks } from './useWorks';
 import useBackOffice from '@/src/useBackOffice';
+import useWorksDetail, { getWorksDetail } from './useWorksDetail';
 
 export const featuredWorksWhere = (ids:number[]) => ({
   where:{
@@ -8,8 +8,8 @@ export const featuredWorksWhere = (ids:number[]) => ({
   }
 }) 
 
-export const getFeaturedWorks = async (lang:string,ids:number[],take:number=8,origin?:string)=>{
-  return getWorks(lang,{ ...featuredWorksWhere(ids), take },origin||'');
+export const getFeaturedWorks = async (lang:string,ids:number[],take:number=8)=>{
+  return getWorksDetail(lang,{ ...featuredWorksWhere(ids), take });
 }
 
 const useFeaturedWorks = () => {
@@ -19,7 +19,7 @@ const useFeaturedWorks = () => {
   if(bo && bo.FeaturedWorks)
     bo.FeaturedWorks.split(',').forEach((x) => worksIds.push(parseInt(x)));
       
-  return useWorks(featuredWorksWhere(worksIds), { enabled: !!worksIds });
+  return useWorksDetail(featuredWorksWhere(worksIds), { enabled: !!worksIds });
 
   
 };

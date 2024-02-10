@@ -5,8 +5,7 @@ import { Session } from '../types';
 //   localImages: LocalImage[];
 //   // type: string;
 // }
-
-export type PostMosaicItem = Prisma.PostGetPayload<{
+export const PostDetailSpec = {
   include:{
     works:{select:{id:true,title:true,type:true,localImages:{select:{storedFile:true}}}},
     cycles:{select:{id:true,localImages:{select:{storedFile:true}},creatorId:true,startDate:true,endDate:true,title:true}},
@@ -15,10 +14,29 @@ export type PostMosaicItem = Prisma.PostGetPayload<{
     localImages: {select:{storedFile:true}},
     reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}},
   }
-}> & { 
+}
+export type PostDetail = Prisma.PostGetPayload<typeof PostDetailSpec> & { 
   type?: 'post';
   currentUserIsFav?:boolean;
  };
+
+ export const PostSumarySpec = {
+  select:{
+    id:true,
+    title:true,
+    contentText:true,
+    createdAt:true,
+    creatorId:true,
+    localImages: {select:{storedFile:true}},
+    favs:{select:{id:true,}},
+    works:{select:{id:true,title:true}},
+    cycles:{select:{id:true,title:true}},
+  }
+ }
+ export type PostSumary = Prisma.PostGetPayload<typeof PostSumarySpec>&{
+  type?: 'post';
+  currentUserIsFav?:boolean;
+ }
 
 // export type PostDetail = Prisma.PostGetPayload<{
 //   include: {

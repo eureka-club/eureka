@@ -1,7 +1,7 @@
-import { UserMosaicItem } from './types/user';
+import { UserDetail } from './types/user';
 import useUser from './useUser';
 
-type Item = UserMosaicItem
+type Item = UserDetail
 
 const useMyReadOrWatched = (id: number) => {
   const { data: user } = useUser(id || 0, { enabled: !!id });

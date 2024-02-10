@@ -15,7 +15,7 @@ import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
 import Avatar from '../common/UserAvatar';
 // import { useCycleContext } from '../../useCycleContext';
-import usePost from '@/src/usePost'
+import usePost from '@/src/usePostDetail'
 import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import { useSession } from 'next-auth/react';

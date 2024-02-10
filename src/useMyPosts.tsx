@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import usePosts,{getPosts} from './usePosts';
 import useTranslation from 'next-translate/useTranslation';
 import { useQuery } from 'react-query';
-import { GetPostBySessionFilter, PostMosaicItem } from './types/post';
+import { GetPostBySessionFilter, PostDetail } from './types/post';
 import { Session } from '@/src/types';
 import { useSession } from 'next-auth/react';
 
@@ -37,7 +37,7 @@ const useMyPosts = (id:number,take=8,options?:Options) => {
     enabled: true,
   };
   let ck = ['MY-POSTS', id.toString()]
-  return useQuery<{posts:PostMosaicItem[],fetched:number,total:number}>(ck, async () => await getMyPosts(id,session,take), {
+  return useQuery<{posts:PostDetail[],fetched:number,total:number}>(ck, async () => await getMyPosts(id,session,take), {
     staleTime,
     enabled,
     retry:3

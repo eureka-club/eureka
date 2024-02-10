@@ -25,7 +25,7 @@ import {
   DATE_FORMAT_PROPS,
 } from '../../constants';
 import {
-  CycleMosaicItem,
+  CycleDetail,
   // ComplementaryMaterial,
   EditCycleClientPayload,
 } from '../../types/cycle';
@@ -129,12 +129,12 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
     onMutate(vars){
       const ck = ['CYCLE',`${router.query.id}`];
       queryClient.cancelQueries(ck)
-      const ss = queryClient.getQueryData<CycleMosaicItem>(ck)
+      const ss = queryClient.getQueryData<CycleDetail>(ck)
       queryClient.setQueryData(ck,{...ss,...vars})
       return {ss,ck}
     },
     onSettled(data,error,vars,context){
-      type ctx = {ck:string[],ss:CycleMosaicItem}
+      type ctx = {ck:string[],ss:CycleDetail}
       const {ss,ck} = context as ctx;
       if(error){
         queryClient.setQueryData(ck,ss)

@@ -1,12 +1,12 @@
 import { FC } from "react";
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { PostMosaicItem } from "@/src/types/post";
-import { UserMosaicItem } from "@/src/types/user";
+import { PostDetail } from "@/src/types/post";
+import { UserDetail } from "@/src/types/user";
 import { useSession } from "next-auth/react";
 
 interface Props{
-  posts:PostMosaicItem[];
-  user:UserMosaicItem;
+  posts:PostDetail[];
+  user:UserDetail;
   id:string;
   goTo:(path:string)=>void;
   t:(val:string)=>string;

@@ -10,11 +10,11 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import { WorkDetail } from '@/src/types/work';
 import useCycle,{getCycle} from '@/src/useCycle';
-import usePost,{getPost} from '@/src/usePost';
 import useUsers,{getUsers} from '@/src/useUsers';
 import { CycleContext } from '@/src/useCycleContext';
 import { WEBAPP_URL } from '@/src/constants';
 import { Session } from '@/src/types';
+import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
 interface Props {
   session:Session;
   postId:number;
@@ -34,11 +34,11 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
   const router = useRouter();
   const { t } = useTranslation('meta');
 
-  // const [post, setPost] = useState<PostMosaicItem>();
+  // const [post, setPost] = useState<PostDetail>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
   
   const { data:cycle, isLoading: isLoadingCycle } = useCycle(cycleId);
-  const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePost(postId);
+  const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePostDetail(postId);
   
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
@@ -118,7 +118,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
- let post = await getPost(postId);
+ let post = await getPostDetail(postId);
  let cycle = await getCycle(cycleId,origin);
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator.name, storedFile: post?.localImages[0].storedFile}
 

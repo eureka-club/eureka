@@ -32,7 +32,7 @@ export default getApiHandler()
     }
 
     try {
-      const post = await find(idNum);
+      const post = await find(idNum,session);
       if (post == null) {
         res.status(404).end();
         return;
@@ -75,7 +75,7 @@ export default getApiHandler()
     }
 
     try {
-      const post = await find(idNum);
+      const post = await find(idNum,session);
       if (post == null) {
         // res.status(404).end();
         res.status(200).json({ status: 'OK', post: null });
@@ -119,7 +119,7 @@ export default getApiHandler()
       const coverImage: FileUpload = files?.image != null ? files.image[0] : null;
       try {
         
-        const post = await find(idNum);
+        const post = await find(idNum,session);
         if (!post) res.status(412).json({ status: 'notFound' });
         if (post?.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
 

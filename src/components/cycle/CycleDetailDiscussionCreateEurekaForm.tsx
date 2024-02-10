@@ -14,8 +14,8 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import globalModalsAtom from '../../atoms/globalModals';
 // import { Session } from '../../types';
-import { CycleMosaicItem } from '../../types/cycle';
-import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostMosaicItem } from '../../types/post';
+import { CycleDetail } from '../../types/cycle';
+import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostDetail } from '../../types/post';
 
 import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
@@ -28,7 +28,7 @@ import { useNotificationContext } from '@/src/useNotificationProvider';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
-import useWorks from '@/src/useWorks';
+import useWorks from '@/src/useWorksDetail';
 import useUsers from '@/src/useUsers';
 // import {useGlobalEventsContext} from '@/src/useGlobalEventsContext'
 import styles from './CycleDetailDiscussionCreateEureka.module.css';
@@ -50,7 +50,7 @@ import { WorkDetail } from '@/src/types/work';
 
 interface Props {
   cacheKey: string[];
-  cycle: CycleMosaicItem;
+  cycle: CycleDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
   close: () => void;
@@ -265,7 +265,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     {
       onMutate: async () => {
         // await queryClient.cancelQueries(cacheKey);
-        const previewsItems = queryClient.getQueryData<PostMosaicItem[]>(cacheKey);
+        const previewsItems = queryClient.getQueryData<PostDetail[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
       onSettled: (_eureka, error, _variables, context) => {

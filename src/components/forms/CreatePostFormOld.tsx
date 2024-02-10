@@ -27,17 +27,14 @@ import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '../../types';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload } from '../../types/post';
-import { CycleMosaicItem } from '../../types/cycle';
-import { WorkDetail } from '../../types/work';
-//import ImageFileSelect from './controls/ImageFileSelect';
-import LanguageSelect from './controls/LanguageSelect';
+import { CycleSumary } from '../../types/cycle';
+import { WorkSumary } from '../../types/work';
 import CycleTypeaheadSearchItem from '../cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '../work/TypeaheadSearchItem';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './CreatePostForm.module.css';
 import useTopics from '../../useTopics';
-import useWork from '../../useWork';
-// import { Session } from '@/src/types';
+import useWork from '../../useWorkDetail';
 import { useSession } from 'next-auth/react';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
@@ -63,9 +60,9 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   const [isSearchWorkOrCycleLoading, setIsSearchWorkOrCycleLoading] = useState(false);
   const [isSearchCycleLoading, setIsSearchCycleLoading] = useState(false);
   const [searchWorkOrCycleResults, setSearchWorkOrCycleResults] = useState<SearchResult[]>([]);
-  const [searchCycleResults, setSearchCycleResults] = useState<CycleMosaicItem[]>([]);
-  const [selectedCycle, setSelectedCycle] = useState<CycleMosaicItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkDetail | null>(null);
+  const [searchCycleResults, setSearchCycleResults] = useState<CycleSumary[]>([]);
+  const [selectedCycle, setSelectedCycle] = useState<CycleSumary | null>(null);
+  const [selectedWork, setSelectedWork] = useState<WorkSumary | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [items, setItems] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>() as RefObject<HTMLFormElement>;
@@ -118,7 +115,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
   // }, [router, router.query.id]);
 
   useEffect(() => {
-    if (work) setSelectedWork(work as WorkDetail);
+    if (work) setSelectedWork(work as unknown as WorkSumary);
   }, [work]);
 
   const { t } = useTranslation('createPostForm');
@@ -157,8 +154,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
               cycleTitle:selectedCycle.title
             })}`;
             notificationToUsers = (participants||[]).filter(p=>p.id!==user.id).map(p=>p.id);
-            if(user.id !== selectedCycle.creatorId)
-              notificationToUsers.push(selectedCycle.creatorId)
+            if(user.id !== selectedCycle.creator.id)
+              notificationToUsers.push(selectedCycle.creator.id)
           }
           else{
             message = `eurekaCreatedAboutWork!|!${JSON.stringify({
@@ -174,8 +171,8 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
             cycleTitle:selectedCycle.title
           })}`;
           notificationToUsers = (participants||[]).filter(p=>p.id!==user.id).map(p=>p.id);
-          if(user.id !== selectedCycle.creatorId)
-            notificationToUsers.push(selectedCycle.creatorId)
+          if(user.id !== selectedCycle.creator.id)
+            notificationToUsers.push(selectedCycle.creator.id)
         }
   
         formData.append('notificationMessage', message);
@@ -247,7 +244,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
 
     setIsSearchCycleLoading(true);
     const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-    const itemsCL: CycleMosaicItem[] = await response.json();
+    const itemsCL: CycleSumary[] = await response.json();
 
     setSearchCycleResults(itemsCL);
     setIsSearchCycleLoading(false);
@@ -265,7 +262,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
     }
   };
 
-  const handleSelectCycle = (selected: CycleMosaicItem[]): void => {
+  const handleSelectCycle = (selected: CycleSumary[]): void => {
     const searchResult = selected[0];
     if (searchResult != null) {
       setSelectedCycle(searchResult);

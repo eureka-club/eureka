@@ -4,7 +4,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { v4 } from 'uuid';
 import { Area } from 'react-easy-crop/types';
 import { Session } from '../types';
-import { UserMosaicItem } from '../types/user';
+import { UserDetail } from '../types/user';
 import fs from 'fs'
 
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
@@ -295,7 +295,7 @@ export const getImageFile = async (
 
 export const isAccessAllowed = (
   session: Session,
-  user: UserMosaicItem,
+  user: UserDetail,
   isLoadingUser: boolean,
   isFollowedByMe: boolean,
 ) => {

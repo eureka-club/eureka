@@ -5,7 +5,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import { ButtonGroup, Button, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 // import { Session } from '../../../src/types';
-import { CycleMosaicItem } from '../../../src/types/cycle';
+import { CycleDetail } from '../../../src/types/cycle';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
 import useCycle,{getCycle} from '@/src/useCycle';

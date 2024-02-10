@@ -15,24 +15,25 @@ import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
-import SocialInteraction from '../common/SocialInteraction';
+import SocialInteraction from '../common/PostSocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import toast from 'react-hot-toast';
-import useCycle from '@/src/useCycle'
+import useCycleSumary from '@/src/useCycleSumary'
 import Avatar from '../common/UserAvatar';
 // import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
 import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
-import { CycleMosaicItem } from '@/src/types/cycle';
+import { CycleSumary } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
+import CycleSocialInteraction from '../common/CycleSocialInteraction';
 // import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(isBetween);
 interface Props {
-  cycle?:CycleMosaicItem;
+  cycle?:CycleSumary;
   cycleId:number;
   showButtonLabels?: boolean;
   showShare?: boolean;
@@ -73,7 +74,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const {data:c} = useCycle(cycleId,{enabled:!!cycleId && !cycleItem})
+  const {data:c} = useCycleSumary(cycleId,{enabled:!!cycleId && !cycleItem})
   const cycle = cycleItem??c;
   const {show} = useModalContext()
   const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
@@ -122,7 +123,7 @@ const MosaicItem: FunctionComponent<Props> = ({
     if (isLoading) return false;
     if (user) {
       if (isJoinCycleLoading) return false;
-      if (user.id === cycle!.creatorId) return false;
+      if (user.id === cycle!.creator.id) return false;
     }
     return true;
   };
@@ -169,9 +170,9 @@ const MosaicItem: FunctionComponent<Props> = ({
     const img = cycle?.localImages 
       ? <div className='img h-100 cursor-pointer'> 
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
-      {detailed && (cycle && cycle.creatorId && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
+      {detailed && (cycle && cycle.creator.id && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
                         <div  className={` d-flex flex-row aling-items-center fs-6`}>
-                         <Avatar className='' width={26} height={26} userId={cycle.creatorId} showName={false} size="xs" />
+                         <Avatar className='' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
                          <div className='d-flex align-items-center'>
                             {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           <span className='' style={{marginLeft:'1.5px',marginRight:'1.5px'}}>-</span>
@@ -202,7 +203,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const renderJoinLeaveCycleBtn = ()=>{
     if (cycle && !isLoadingSession ){
 
-      if(cycle.creatorId == session?.user.id)
+      if(cycle.creator.id == session?.user.id)
         return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
          className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm'>
           <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
@@ -214,7 +215,7 @@ const MosaicItem: FunctionComponent<Props> = ({
            <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
             </Button>
 
-      if(cycle.usersJoined.findIndex(p=>p.userId==session?.user.id && p.pending) > -1)
+      if(cycle.currentUserJoinPending)
          return  <Button 
             disabled={true}
             className={`rounded rounded-2 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
@@ -266,7 +267,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       </Card.Body>    
          {showSocialInteraction && cycle && (
         <Card.Footer className={`${styles.footer}  d-flex justifify-content-between`}>
-            <SocialInteraction
+            <CycleSocialInteraction
               cacheKey={cacheKey||['CYCLE',cycle.id.toString()]}
               showButtonLabels={showButtonLabels}
               showRating={false}

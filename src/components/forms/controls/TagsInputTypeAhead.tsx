@@ -105,7 +105,7 @@ const TagsInputTypeAhead: FunctionComponent<TagsInputProp> = (props: TagsInputPr
 
   //   const items: SearchResult[] = [
   //     ...((responseWork && responseWork.data) || []),
-  //     ...((responseCycle && responseCycle.data) || []).map((i: CycleMosaicItem & { type: string }) => ({
+  //     ...((responseCycle && responseCycle.data) || []).map((i: CycleDetail & { type: string }) => ({
   //       ...i,
   //       type: 'cycle',
   //     })),

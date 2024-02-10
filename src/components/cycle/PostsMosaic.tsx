@@ -1,20 +1,20 @@
 import { FunctionComponent } from 'react';
 // import Spinner from 'react-bootstrap/Spinner';
 import dayjs from 'dayjs'
-import { CycleMosaicItem } from '@/types/cycle';
-import { PostMosaicItem } from '@/types/post';
+import { CycleDetail } from '@/types/cycle';
+import { PostDetail } from '@/types/post';
 import Mosaic from '../Mosaic';
 import { WorkDetail } from '@/src/types/work';
 interface Props {
-  parent?: CycleMosaicItem | WorkDetail;
-  posts: PostMosaicItem[];
+  parent?: CycleDetail | WorkDetail;
+  posts: PostDetail[];
   display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey: [string, string];
 }
 
 const PostsMosaic: FunctionComponent<Props> = ({ posts,parent, display, showComments, cacheKey }) => {
-  // const { isLoading, isSuccess, data } = useQuery<PostMosaicItem[]>(
+  // const { isLoading, isSuccess, data } = useQuery<PostDetail[]>(
   //   ['posts.mosaic.cycle', cycle.id],
   //   async ({ queryKey: [, cycleId] }) => {
   //     const whereQP = encodeURIComponent(JSON.stringify({ cycles: { some: { id: cycleId } } }));
@@ -47,14 +47,14 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts,parent, display, showComm
       <>
         <Mosaic
           display={display}
-          stack={orderedPosts as PostMosaicItem[]}
+          stack={orderedPosts as PostDetail[]}
           showComments={showComments}
           cacheKey={cacheKey}
           parent={parent}
         />
         {/* <Mosaic
           display={display}
-          stack={worksPost.sort((p, c) => (p.id > c.id && -1) || 1) as PostMosaicItem[]}
+          stack={worksPost.sort((p, c) => (p.id > c.id && -1) || 1) as PostDetail[]}
           // postsLinksTo={cycle}
           showComments={showComments}
           cacheKey={cacheKey}

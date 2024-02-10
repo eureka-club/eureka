@@ -1,16 +1,16 @@
 import { atom } from 'jotai';
 // import { SearchResult } from '../types';
-import { CycleMosaicItem } from '../types/cycle';
-import { PostMosaicItem } from '../types/post';
+import { CycleDetail } from '../types/cycle';
+import { PostDetail } from '../types/post';
 import { WorkDetail } from '../types/work';
-import { UserMosaicItem } from '../types/user';
+import { UserDetail } from '../types/user';
 import {SearchResult} from "@/src/types"
 /* 
 type Item =
-  | (CycleMosaicItem & { type: string })
+  | (CycleDetail & { type: string })
   | WorkDetail
-  | (PostMosaicItem & { type: string })
-  | UserMosaicItem; */
+  | (PostDetail & { type: string })
+  | UserDetail; */
 type Filter = {
   only: string[];
   countryQuery?: string[];
@@ -20,7 +20,7 @@ type Filter = {
   where?: string;
   show?: boolean;
   cacheKey?: string[];
-  // searchMosaicData?: ((CycleMosaicItem & { type: string }) | WorkDetail)[];
+  // searchMosaicData?: ((CycleDetail & { type: string }) | WorkDetail)[];
 };
 const o: Filter = {
   only: [],
