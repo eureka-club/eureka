@@ -16,7 +16,7 @@ import { featuredWorksWhere, getFeaturedWorks } from '@/src/useFeaturedWorks';
 import { getHyvorComments } from '@/src/useHyvorComments';
 // import { backOfficeData } from '@/src/types/backoffice';
 import {getItemsByTopic} from '@/src/useItemsByTopic';
-import { getUser } from '@/src/useUser';
+import { getUserSumary } from '@/src/useUserSumary';
 
 //const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
 const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
@@ -89,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // const id = session.user.id;  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   let groupedByTopics:Record<string,GetAllByResonse>={};
-  const user = await  getUser(session?.user.id!);
+  const user = await  getUserSumary(session?.user.id!);
   const bo =  await getbackOfficeData(ctx.locale!)
   let postsId:number[] = [];
   if(bo && bo.PostExplorePage)
