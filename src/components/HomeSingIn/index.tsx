@@ -41,40 +41,40 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
   const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
-  const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
+  // const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
   const [gbt, setGBT] = useState<any[]>([]);
-  useEffect(()=>{
-    let isCanceled = false;
-    if(!isCanceled){
-      if(itemsByTopic){
-        const exist = topicsFetched.has(topics[topicIdx]);
-        if(!exist){
-           setGBT((prev)=>[...prev,[topics[topicIdx],itemsByTopic]])
-            topicsFetched.add(topics[topicIdx]);
-            setTopicsFetched(topicsFetched);
-        }
-      }
-    }
-    return () => {
-      isCanceled = true
-    }
-  },[itemsByTopic])
+  // useEffect(()=>{
+  //   let isCanceled = false;
+  //   if(!isCanceled){
+  //     if(itemsByTopic){
+  //       const exist = topicsFetched.has(topics[topicIdx]);
+  //       if(!exist){
+  //          setGBT((prev)=>[...prev,[topics[topicIdx],itemsByTopic]])
+  //           topicsFetched.add(topics[topicIdx]);
+  //           setTopicsFetched(topicsFetched);
+  //       }
+  //     }
+  //   }
+  //   return () => {
+  //     isCanceled = true
+  //   }
+  // },[itemsByTopic])
 
-  useEffect(() => {
-    const idx = topicIdx + 1;
-    if (inView && idx < topics.length) {
-      setTopicIdx(()=>idx);
-    }
-  }, [inView]);
+  // useEffect(() => {
+  //   const idx = topicIdx + 1;
+  //   if (inView && idx < topics.length) {
+  //     setTopicIdx(()=>idx);
+  //   }
+  // }, [inView]);
 
   const getTopicsBadgedLinks = () => {
     return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
 
-  const renderSpinnerForLoadNextCarousel = () => {
-    if (itemsByTopic?.data.length && topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
-    return '';
-  }
+  // const renderSpinnerForLoadNextCarousel = () => {
+  //   if (itemsByTopic?.data.length && topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
+  //   return '';
+  // }
 
   // const getMediathequeSlug = (id: number, name: string) => {
   //   const s = `${name}`
@@ -191,12 +191,12 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
-            <>
+            {/* <>
               <div className="mt-5">
                 <CarouselsByTopics groupedByTopics={gbt} />
               </div>
               <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
-            </>
+            </> */}
           </section>
         </Col>
       </section>

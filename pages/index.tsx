@@ -115,8 +115,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     getInterestedCycles(ctx.locale!,cyclesIds,undefined,origin),
     getFeaturedWorks(ctx.locale!,worksIds,8,origin),
     getFeaturedUsers(usersIds,8),
-    getItemsByTopic(0,topics[0],ctx.locale!),
-    getItemsByTopic(0,topics[1],ctx.locale!),
+    // getItemsByTopic(0,topics[0],ctx.locale!),
+    // getItemsByTopic(0,topics[1],ctx.locale!),
     ...worksIds.map(id=>getHyvorComments(`work-${id}`,origin)),
   ];
   let resolved = await Promise.all(promises);
@@ -124,25 +124,25 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const interestedCycles = resolved[1];
   const featuredWorks = resolved[2];
   const featuredUsers:UserSumary[] = resolved[3];
-  const itemsByTopic = [resolved[4],resolved[5]];
+  // const itemsByTopic = [resolved[4],resolved[5]];
   const hyvorComments = resolved.slice(6);
-  promises = [
-    getItemsByTopic(0,topics[0],ctx.locale!),
-    getItemsByTopic(0,topics[1],ctx.locale!)
-  ]
-  resolved = await Promise.all(promises);
+  // promises = [
+  //   getItemsByTopic(0,topics[0],ctx.locale!),
+  //   getItemsByTopic(0,topics[1],ctx.locale!)
+  // ]
+  // resolved = await Promise.all(promises);
   // groupedByTopics[topics[0]] = resolved[0];
   // groupedByTopics[topics[1]] = resolved[1];
   const qc = new QueryClient();
 
-  await qc.prefetchQuery({
-    queryKey:['ITEMS-BY-TOPIC',`${topics[0]}-${0}`],
-    queryFn:()=>itemsByTopic[0]
-  })
-  await qc.prefetchQuery({
-    queryKey:['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],
-    queryFn:()=>itemsByTopic[1]
-  })
+  // await qc.prefetchQuery({
+  //   queryKey:['ITEMS-BY-TOPIC',`${topics[0]}-${0}`],
+  //   queryFn:()=>itemsByTopic[0]
+  // })
+  // await qc.prefetchQuery({
+  //   queryKey:['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],
+  //   queryFn:()=>itemsByTopic[1]
+  // })
 
   await qc.prefetchQuery({
     queryKey:['BACKOFFICE', `1`],
