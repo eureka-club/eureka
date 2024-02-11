@@ -125,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const featuredWorks = resolved[2];
   const featuredUsers:UserSumary[] = resolved[3];
   // const itemsByTopic = [resolved[4],resolved[5]];
-  const hyvorComments = resolved.slice(6);
+  const hyvorComments = resolved.slice(4);
   // promises = [
   //   getItemsByTopic(0,topics[0],ctx.locale!),
   //   getItemsByTopic(0,topics[1],ctx.locale!)
