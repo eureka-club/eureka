@@ -5,7 +5,7 @@ import searchEngine from '@/src/atoms/searchEngine';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, MouseEventHandler, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
@@ -20,9 +20,9 @@ import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './Navbar.module.css';
-import useUser from '@/src/useUser';
 import slugify from 'slugify';
 import { useQueryClient } from 'react-query';
+import useUserSumary from '@/src/useUserSumary';
 
 const topics = [
   'gender-feminisms',
@@ -55,7 +55,7 @@ const NavBar: FunctionComponent = () => {
     if (session) setUserId(session.user.id);
   }, [session]);
 
-  const { data: user } = useUser(userId, {
+  const { data: user } = useUserSumary(userId, {
     enabled: userId != -1,
     staleTime: 1,
   });

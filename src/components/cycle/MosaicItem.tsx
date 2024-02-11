@@ -13,7 +13,6 @@ import { MdGroup } from 'react-icons/md';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import SocialInteraction from '../common/PostSocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
@@ -27,6 +26,7 @@ import SignInForm from '../forms/SignInForm';
 import { CycleSumary } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import CycleSocialInteraction from '../common/CycleSocialInteraction';
+import useUserSumary from '@/src/useUserSumary';
 // import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
@@ -70,7 +70,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const { data: user } = useUser(session?.user.id!,{ enabled: !!session?.user.id });
+  const { data: user } = useUserSumary(session?.user.id!,{ enabled: !!session?.user.id });
   
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();

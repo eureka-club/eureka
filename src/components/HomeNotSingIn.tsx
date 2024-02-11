@@ -23,7 +23,6 @@ const HomeNotSingIn: FunctionComponent = ({  }) => {
                                 <b className='text-secondary'>{t('infoText3')}</b>
                         </h1>
                         <h2 className='text-secondary mt-1 mb-4' style={{fontSize:'1.25rem'}}>{t('infoSubText')}</h2>
-
                  </section>
                 <Row className='d-flex flex-column-reverse flex-lg-row justify-content-center'>
                         <Col className={`col-12 col-lg-4`}>

@@ -18,13 +18,13 @@ import SearchInput from '@/components/SearchInput';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './NavbarMobile.module.css';
-import useUser from '@/src/useUser';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useAtom } from 'jotai';
 import searchEngine from '@/src/atoms/searchEngine';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import slugify from 'slugify';
+import useUserSumary from '@/src/useUserSumary';
 
 const topics = [
   'gender-feminisms',
@@ -54,7 +54,7 @@ const NavBar: FunctionComponent = () => {
     if (session) setUserId(session.user.id);
   }, [session]);
 
-  const { data: user } = useUser(userId, {
+  const { data: user } = useUserSumary(userId, {
     enabled: userId != -1,
     staleTime: 1,
   });

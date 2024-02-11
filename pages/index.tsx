@@ -6,7 +6,7 @@ import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { GetAllByResonse, Session } from '@/src/types';
+import { Session } from '@/src/types';
 // import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import { dehydrate,QueryClient } from 'react-query';
 import {getbackOfficeData} from '@/src/useBackOffice'
@@ -16,10 +16,12 @@ import { featuredWorksWhere, getFeaturedWorks } from '@/src/useFeaturedWorks';
 import { getHyvorComments } from '@/src/useHyvorComments';
 // import { backOfficeData } from '@/src/types/backoffice';
 import {getItemsByTopic} from '@/src/useItemsByTopic';
-import { getUser } from '@/src/useUser';
+import { getFeaturedUsers } from '@/src/useFeaturedUsers';
+import { UserSumary } from '@/src/types/user';
+import HomeSingIn from '@/src/components/HomeSingIn';
 
 //const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
-const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
+// const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
 
 const topics = ['gender-feminisms', 'technology', 'environment',
  'racism-discrimination',
@@ -74,9 +76,9 @@ const IndexPage: NextPage<Props> = ({language,session}) => {
       {/*{session && session.user &&  */}
 
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
-        <Suspense fallback={<Spinner animation="grow" />}>
+        {/* <Suspense fallback={<Spinner animation="grow" />}> */}
           <HomeSingIn language={language}/>
-        </Suspense>
+        {/* </Suspense> */}
       </SimpleLayout>
     </>
   );
@@ -88,8 +90,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // return {props:{groupedByTopics:null}};
   // const id = session.user.id;  
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
-  let groupedByTopics:Record<string,GetAllByResonse>={};
-  const user = await  getUser(session?.user.id!);
+  // let groupedByTopics:Record<string,GetAllByResonse>={};
+  // const user = await  getUserSumary(session?.user.id!);
   const bo =  await getbackOfficeData(ctx.locale!)
   let postsId:number[] = [];
   if(bo && bo.PostExplorePage)
@@ -100,39 +102,79 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   bo.CyclesExplorePage.split(',').forEach((x:string)=> cyclesIds.push(parseInt(x)));
   
   let worksIds:number[] = [];
-  if(bo && bo.FeaturedWorks)
-  bo.FeaturedWorks.split(',').forEach((x) => worksIds.push(parseInt(x)));
+  let usersIds:number[] = [];
+  if(bo){
+    if(bo.FeaturedWorks)
+      bo.FeaturedWorks.split(',').forEach((x) => worksIds.push(+x));
+    if(bo.FeaturedUsers)
+      bo.FeaturedUsers.split(',').forEach((x) => usersIds.push(+x));
+  }
   
   let promises:Promise<any>[] = [
     getFeaturedEurekas(ctx.locale!,postsId,undefined,origin),
     getInterestedCycles(ctx.locale!,cyclesIds,undefined,origin),
     getFeaturedWorks(ctx.locale!,worksIds,8),
+    getFeaturedUsers(usersIds,8),
+    // getItemsByTopic(0,topics[0],ctx.locale!),
+    // getItemsByTopic(0,topics[1],ctx.locale!),
     ...worksIds.map(id=>getHyvorComments(`work-${id}`,origin)),
-  ]
+  ];
   let resolved = await Promise.all(promises);
   const featuredEurekas = resolved[0];
   const interestedCycles = resolved[1];
   const featuredWorks = resolved[2];
-  const hyvorComments = promises.slice(3);
-
-  promises = [
-    getItemsByTopic(0,topics[0],ctx.locale!),
-    getItemsByTopic(0,topics[1],ctx.locale!)
-  ]
-  resolved = await Promise.all(promises);
+  const featuredUsers:UserSumary[] = resolved[3];
+  // const itemsByTopic = [resolved[4],resolved[5]];
+  const hyvorComments = resolved.slice(4);
+  // promises = [
+  //   getItemsByTopic(0,topics[0],ctx.locale!),
+  //   getItemsByTopic(0,topics[1],ctx.locale!)
+  // ]
+  // resolved = await Promise.all(promises);
   // groupedByTopics[topics[0]] = resolved[0];
   // groupedByTopics[topics[1]] = resolved[1];
   const qc = new QueryClient();
 
-  await qc.fetchQuery(['ITEMS-BY-TOPIC',`${topics[0]}-${0}`],()=>resolved[0])
-  await qc.fetchQuery(['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],()=>resolved[1])
+  // await qc.prefetchQuery({
+  //   queryKey:['ITEMS-BY-TOPIC',`${topics[0]}-${0}`],
+  //   queryFn:()=>itemsByTopic[0]
+  // })
+  // await qc.prefetchQuery({
+  //   queryKey:['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],
+  //   queryFn:()=>itemsByTopic[1]
+  // })
 
-  await qc.fetchQuery(['BACKOFFICE', `1`], () => bo)
-  await qc.fetchQuery([`eurekas-of-interest-${ctx.locale}`],()=>featuredEurekas)
-  await qc.fetchQuery([`cycles-of-interest-${ctx.locale}`],()=>interestedCycles)
-  await qc.fetchQuery(['WORKS',`${JSON.stringify(featuredWorksWhere(worksIds))}`],()=>featuredWorks)
-  await worksIds.forEach(async (id,idx)=>{
-    await qc.fetchQuery(['HYVOR-COMMENTS', `work-${id}`],()=>hyvorComments[idx])
+  await qc.prefetchQuery({
+    queryKey:['BACKOFFICE', `1`],
+    queryFn:()=>bo,
+  })
+  await qc.prefetchQuery({
+    queryKey:[`eurekas-of-interest-${ctx.locale}`],
+    queryFn:()=>featuredEurekas
+  })
+  await qc.prefetchQuery({
+    queryKey:[`cycles-of-interest-${ctx.locale}`],
+    queryFn:()=>interestedCycles
+  })
+  await qc.prefetchQuery({
+    queryKey:['featured-users'],
+    queryFn:()=>featuredUsers
+  });
+  featuredUsers.forEach(u=> {
+    qc.prefetchQuery({
+      queryKey:['USER',u.id.toString(),'SUMARY'],
+      queryFn:()=>u
+    })
+  });
+  qc.prefetchQuery({
+    queryKey:['WORKS',`${JSON.stringify(featuredWorksWhere(worksIds))}`],
+    queryFn:()=>featuredWorks
+  })
+  worksIds.forEach((id,idx)=>{
+    qc.prefetchQuery({
+      queryKey:['HYVOR-COMMENTS', `work-${id}`],
+      queryFn:()=>hyvorComments[idx]
+    })
   });
   
   // const k = myCyclesWhere(session.user.id)

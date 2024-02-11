@@ -10,7 +10,8 @@ import { WEBAPP_URL } from './constants';
 interface Options {
   staleTime?: number;
   enabled?: boolean;
-  from?:string
+  from?:string;
+  cacheKey?:string[];
 }
 export const getUsers = async (props?:Prisma.UserFindManyArgs):Promise<UserSumary[]> => {
   const {where:w,take,skip,cursor:c} = props || {};
@@ -34,13 +35,12 @@ export const getUsers = async (props?:Prisma.UserFindManyArgs):Promise<UserSumar
 };
 
 const useUsers = (where:Prisma.UserFindManyArgs,options?: Options) => {
-  const qc = useQueryClient()
-  const { staleTime, enabled,from } = options || {
+  const { staleTime, enabled,from,cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  
-  return useQuery<UserSumary[]>(['USERS', JSON.stringify(where)], () => getUsers(where), {
+  const ck = cacheKey ?? ['USERS', JSON.stringify(where)];
+  return useQuery<UserSumary[]>(ck, () => getUsers(where), {
     staleTime,
     enabled
   });

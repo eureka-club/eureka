@@ -27,7 +27,7 @@ const useUserSumary = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<UserSumary|null>(['USER', `${id}`], () => getUserSumary(id), {
+  return useQuery<UserSumary|null>(['USER', `${id}`, 'SUMARY'], () => getUserSumary(id), {
     staleTime,
     enabled,
   });

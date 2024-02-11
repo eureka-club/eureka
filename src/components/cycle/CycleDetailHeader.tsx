@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { Cycle, Work } from '@prisma/client';
+import { Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Col, Row,Spinner,Button } from 'react-bootstrap';
@@ -18,16 +18,11 @@ import MosaicItem from './MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import { MosaicContext } from '../../useMosaicContext';
-// import useWorks from '@/src/useWorks'
 import useCycle from '@/src/useCycle'
 import CarouselStatic from '../CarouselStatic';
 import { Box } from '@mui/material';
-import useExecRatingCycle, { ExecRatingPayload } from '@/src/hooks/mutations/useExecRatingCycle';
-import { UserDetail } from '@/src/types/user';
-import { useQueryClient } from 'react-query';
-import useUser from '@/src/useUser';
-import { CycleDetail } from '@/src/types/cycle';
 import { CycleWork } from '@/src/types/cycleWork';
+import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
 interface Props {
   // cycle: CycleDetail;
   cycleId:number;
@@ -61,7 +56,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   // const router = useRouter();
   const [show, setShow] = useState<boolean>(s);
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');

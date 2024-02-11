@@ -26,7 +26,6 @@ import {
 import { Cycle, Work } from '@prisma/client';
 import { useMosaicContext } from '@/src/useMosaicContext';
 
-import useUser from '@/src/useUser';
 import { WEBAPP_URL } from '@/src/constants';
 // import { CycleDetail } from '@/src/types/cycle';
 import { PostDetail } from '@/src/types/post';
@@ -44,6 +43,7 @@ import PostReactionsDetail from './PostReactionsDetail';
 import usePostEmojiPicker from './hooks/usePostEmojiPicker';
 import PostReactionsActions from './PostReactionsActions';
 import Link from 'next/link';
+import useUserSumary from '@/src/useUserSumary';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -102,7 +102,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
     isSuccess: isSuccessUser,
     isError,
     /* error, */ data: user,
-  } = useUser(idSession!, { enabled: !!idSession! });
+  } = useUserSumary(idSession!, { enabled: !!idSession! });
   // const { notifier } = useNotificationContext();
 
   useEffect(() => {
