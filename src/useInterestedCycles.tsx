@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation';
-import useCycles,{getCycles} from './useCycles';
 import useBackOffice from '@/src/useBackOffice';
+import useCyclesSumary, { getCyclesSumary } from './useCyclesSumary';
 
 export const interestedCyclesWhere = (ids:number[]) => ({
   where:{
@@ -9,7 +9,7 @@ export const interestedCyclesWhere = (ids:number[]) => ({
 }) 
 
 export const getInterestedCycles = async (lang:string,ids:number[],take:number=8,origin?:string)=>{
-  return getCycles(lang,{...interestedCyclesWhere(ids),take},origin);
+  return getCyclesSumary(lang,{...interestedCyclesWhere(ids),take});
 }
 
 const useInterestedCycles = () => {
@@ -19,8 +19,8 @@ const useInterestedCycles = () => {
   if(bo && bo.CyclesExplorePage)
     bo.CyclesExplorePage.split(',').forEach(x=> cyclesIds.push(parseInt(x)));
       
-  return useCycles(lang,interestedCyclesWhere(cyclesIds),
-    {enabled:!!cyclesIds.length,cacheKey:`cycles-of-interest-${lang}`}
+  return useCyclesSumary(lang,interestedCyclesWhere(cyclesIds),
+    {enabled:!!cyclesIds.length,cacheKey:[`cycles-of-interest-${lang}`]}
   )
 };
 

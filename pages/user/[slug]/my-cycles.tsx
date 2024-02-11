@@ -81,9 +81,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
     }
   }
   if(!session)return res;
-  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-
-  await qc.fetchQuery(['MY-CYCLES',id],()=>getMyCycles(id,8,origin));
+  await qc.fetchQuery(['MY-CYCLES',id.toString()],()=>getMyCycles(id,8));
   
   res = {
     props:{

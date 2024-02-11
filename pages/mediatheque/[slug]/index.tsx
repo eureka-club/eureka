@@ -4,21 +4,15 @@ import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, SyntheticEvent, useCallback, MouseEvent } from 'react';
-
-import { Spinner, Card, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
+import { Spinner, Card, Row, Col, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
-import { BiArrowBack } from 'react-icons/bi';
 import LocalImageComponent from '@/src/components/LocalImage';
-
 import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser, { getUser } from '@/src/useUser';
-
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import FilterEngine from '@/src/components/FilterEngine';
 import TagsInput from '@/src/components/forms/controls/TagsInput';
-
-// import UnclampText from '@/src/components/UnclampText';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import useMyPosts, { getMyPosts } from '@/src/useMyPosts';
 import useMyCycles, { getMyCycles } from '@/src/useMyCycles';
@@ -26,7 +20,6 @@ import slugify from 'slugify';
 import { Session } from '@/src/types';
 import PostsCreated from './PostsCreated';
 import CyclesJoined from './CyclesJoined';
-// import ReadOrWatched from './ReadOrWatched';
 import SavedForLater from './SavedForLater';
 import { isAccessAllowed } from '@/src/lib/utils';
 import RenderAccessInfo from './RenderAccessInfo';
@@ -411,8 +404,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
 
-    const { cycles } = await getMyCycles(id!, 8, origin);
-    await queryClient.prefetchQuery(['MY-CYCLES'], () => cycles);
+    const { cycles } = await getMyCycles(id!, 8);
+    await queryClient.prefetchQuery(['MY-CYCLES',id.toString()], () => cycles);
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
     });
