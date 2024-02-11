@@ -182,7 +182,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
           </div>
 
           <section className="mt-4">
-            {/* <FeaturedUsers /> */}
+            <FeaturedUsers />
           </section>
 
         </Col>
@@ -193,7 +193,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             <FeaturedCycles />
             <>
               <div className="mt-5">
-                {/* <CarouselsByTopics groupedByTopics={gbt} /> */}
+                <CarouselsByTopics groupedByTopics={gbt} />
               </div>
               <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
             </>
