@@ -85,10 +85,7 @@ export const find = async (id: number, language: string, session:Session|null): 
 
 export const findSumary = async (id: number, language: string|null,session:Session|null): Promise<WorkSumary | null> => {
   let work = await prisma.work.findUnique({
-    where: { 
-      id,
-      ... language && {language}, 
-    },
+    where: { id },
     select:WorkSumaryWithExtrasSpec.select,
   });
   if(work){

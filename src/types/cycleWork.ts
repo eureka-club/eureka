@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
 import { WorkSumarySpec } from './work';
-import { CycleSumarySpec } from './cycle';
 
 export const CycleWorkSpec = {
   select:{
     id:true,
-    cycle:{select:CycleSumarySpec.select},
+    // cycle:{select:CycleSumarySpec.select},
+    cycle:{select:{id:true}},
     work:{select:WorkSumarySpec.select},
     cycleId:true,
     workId:true,
