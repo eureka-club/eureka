@@ -1,6 +1,4 @@
 import { signIn } from 'next-auth/react';
-import { getSession } from 'next-auth/react';
-
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -22,17 +20,13 @@ import Footer from '@/components/layouts/Footer';
 import { TextField, Box } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import { Session } from '@/src/types';
 //import { useSession } from 'next-auth/react';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import LinearProgress from '@mui/material/LinearProgress';
-
-
+import useUserSumary from '@/src/useUserSumary';
 
 interface Props {
   noModal?: boolean;
@@ -125,7 +119,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     }
   )
 
-  const { data: user } = useUser(+idSession, { enabled: !!+idSession });
+  const { data: user } = useUserSumary(+idSession, { enabled: !!+idSession });
 
   const handleHaveAccountLink = (ev: MouseEvent<HTMLButtonElement>) => {
     setFormValues({

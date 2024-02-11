@@ -1,5 +1,4 @@
 import { FunctionComponent, SyntheticEvent,MouseEvent, useState, useEffect} from 'react';
-import useUser from '@/src/useUser'
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'

@@ -18,13 +18,10 @@ const FeaturedWorks = () => {
         </h2>
         <div className="d-flex justify-content-center">
           <Carousel
-            //interval={3000}
-            //variant="dark"
             slide={true}
             indicators={true}
             controls={false}
             style={{ width: '100%' }}
-            //fade
           >
             {dataFeaturedWorks.works.map((work) => (
               <Carousel.Item key={work.id} className="">

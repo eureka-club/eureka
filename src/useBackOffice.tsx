@@ -1,7 +1,6 @@
 import { useQuery } from 'react-query';
 import { backOfficeData } from '@/types/backoffice';
 import { WEBAPP_URL } from './constants';
-import useTranslation from 'next-translate/useTranslation';
 
 export const getbackOfficeData = async (lang:string=''): Promise<backOfficeData|null> => {
     const url = `${WEBAPP_URL||''}/api/backoffice?lang=${lang}`;

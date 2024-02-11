@@ -2,7 +2,7 @@ import {} from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import { CycleMosaicItem } from '@/src/types/cycle';
-import { UserMosaicItem } from '@/src/types/user';
+import { UserMosaicItem, UserSumary } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
@@ -13,7 +13,7 @@ type ctx = {
     ck: string[];
 } | undefined;
 
-const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -110,8 +110,8 @@ const useJoinUserToCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,part
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserMosaicItem,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
-    const {t} = useTranslation('common');
+const useLeaveUserFromCycleAction = (user:UserSumary,cycle:CycleMosaicItem,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+    // const {t} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
     const whereCycleParticipants = {

@@ -12,6 +12,7 @@ export interface EditUserClientPayload {
   tags?: string;
   photo?:File;
   language?:string|null;
+  
 }
 
 export const UserDetailSpec = {
@@ -82,8 +83,18 @@ export const UserSumarySpec = {
   countryOfOrigin:true,
   tags:true,
   photos:true,
+  email:true,
   followedBy:{select:{id:true}},
   following:{select:{id:true}},
+  favWorks: {
+    select:{id:true}
+  },
+  favCycles: {
+    select:{id:true}
+  },
+  favPosts: {
+    select:{id:true}
+  },
 } 
 
 export type UserSumary = Prisma.UserGetPayload<{select: typeof UserSumarySpec}> & {

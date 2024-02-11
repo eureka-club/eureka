@@ -1,26 +1,21 @@
 
-import { FunctionComponent, useEffect, useState, lazy, FC, memo } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { Spinner, Col } from 'react-bootstrap';
 import TagsInput from '@/components/forms/controls/TagsInput';
-import { GetAllByResonse } from '@/src/types';
 import { useInView } from 'react-intersection-observer';
-import { CycleMosaicItem } from '@/src/types/cycle';
-import { UserMosaicItem } from '@/src/types/user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify'
-import useMyCycles, { myCyclesWhere } from '@/src/useMyCycles';
 import Prompt from '@/src/components/post/PostPrompt';
 import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import CarouselsByTopics from './CarouselsByTopics';
-import CarouselStatic from '../CarouselStatic';
 import FeaturedUsers from './FeaturedUsers';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-import useItemsByTopic, { getItemsByTopic } from '@/src/useItemsByTopic';
+import useItemsByTopic from '@/src/useItemsByTopic';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -30,43 +25,25 @@ const topics = ['gender-feminisms', 'technology', 'environment',
   'sciences', 'arts-culture', 'history',
 ];
 
-// const fetchItems = async (pageParam: number, topic: string, sessionId: number): Promise<GetAllByResonse> => {
-//   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}&sessionId=${sessionId}`;
-//   const q = await fetch(url);
-//   return q.json();
-// };
-
 interface Props {
   language:string;
-  // myCycles?:CycleMosaicItem[]
 }
 
 const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
   const { t,lang } = useTranslation('common');
   const [ref, inView] = useInView({
     triggerOnce: false,
     // rootMargin: '200px 0px',
     // skip: supportsLazyLoading !== false,
   });
-  const [users, setUsers] = useState<UserMosaicItem[]>()
-  const { data: dataCycles } = useMyCycles(session?.user.id!)
-  const [cycles, setCycles] = useState<CycleMosaicItem[]>()
-
-  useEffect(() => {
-    if (dataCycles) setCycles(dataCycles.cycles)
-
-  }, [dataCycles])
 
   const [topicIdx, setTopicIdx] = useState(0);
   const [topicsFetched, setTopicsFetched] = useState(new Set());
   const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
 
   const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
-const [gbt, setGBT] = useState<any[]>([]);
+  const [gbt, setGBT] = useState<any[]>([]);
   useEffect(()=>{
-    
     let isCanceled = false;
     if(!isCanceled){
       if(itemsByTopic){
@@ -99,40 +76,37 @@ const [gbt, setGBT] = useState<any[]>([]);
     return '';
   }
 
-  const getMediathequeSlug = (id: number, name: string) => {
-    const s = `${name}`
-    const slug = `${slugify(s, { lower: true })}-${id}`
-    return slug
-  }
+  // const getMediathequeSlug = (id: number, name: string) => {
+  //   const s = `${name}`
+  //   const slug = `${slugify(s, { lower: true })}-${id}`
+  //   return slug
+  // }
 
-  const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
-    if (session) {
-      const u = session.user
-      router.push(`/user/${getMediathequeSlug(u.id, u.name || u.id.toString())}/my-cycles`);
-    }
-  };
+  // const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
+  //   if (session) {
+  //     const u = session.user
+  //     router.push(`/user/${getMediathequeSlug(u.id, u.name || u.id.toString())}/my-cycles`);
+  //   }
+  // };
   //       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
 
+  // const cyclesJoined = () => {
+  //   if (!session) return <></>
+  //   const k = JSON.stringify(myCyclesWhere(session?.user.id))
 
-
-  const cyclesJoined = () => {
-    if (!session) return <></>
-    const k = JSON.stringify(myCyclesWhere(session?.user.id))
-
-    return (cycles && cycles.length)
-      ? <div data-cy="myCycles">
-        <CarouselStatic
-          cacheKey={['CYCLES', k]}
-          onSeeAll={async () => seeAll(cycles, t('myCycles'))}
-          title={t('myCycles')}
-          data={cycles}
-          iconBefore={<></>}
-        // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-        />
-      </div>
-      : <></>;
-  };
-
+  //   return (cycles && cycles.length)
+  //     ? <div data-cy="myCycles">
+  //       <CarouselStatic
+  //         cacheKey={['CYCLES', k]}
+  //         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
+  //         title={t('myCycles')}
+  //         data={cycles}
+  //         iconBefore={<></>}
+  //       // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+  //       />
+  //     </div>
+  //     : <></>;
+  // };
 
   return (
     <>
@@ -208,7 +182,7 @@ const [gbt, setGBT] = useState<any[]>([]);
           </div>
 
           <section className="mt-4">
-            <FeaturedUsers />
+            {/* <FeaturedUsers /> */}
           </section>
 
         </Col>
@@ -217,10 +191,9 @@ const [gbt, setGBT] = useState<any[]>([]);
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
-            {/*cyclesJoined()*/}
             <>
               <div className="mt-5">
-                <CarouselsByTopics groupedByTopics={gbt} />
+                {/* <CarouselsByTopics groupedByTopics={gbt} /> */}
               </div>
               <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
             </>

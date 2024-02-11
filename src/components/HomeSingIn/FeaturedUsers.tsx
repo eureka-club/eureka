@@ -1,8 +1,6 @@
 import useFeaturedUsers from '@/src/useFeaturedUsers';
 import { useState } from 'react';
-import { UserMosaicItem } from '../../types/user';
 import MosaicItemUser from '@/components/user/MosaicItem';
-import CarouselStatic from '../CarouselStatic';
 import useTranslation from 'next-translate/useTranslation';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 

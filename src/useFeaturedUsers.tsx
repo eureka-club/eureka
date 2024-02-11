@@ -20,7 +20,7 @@ const useFeaturedUsers = () => {
     bo.FeaturedUsers.split(',').forEach(x=> usersIds.push(parseInt(x)));
       
   return useUsers(featuredUsersWhere(usersIds),
-    {enabled:!!usersIds}
+    {enabled:!!usersIds,cacheKey:['featured-users']}
   )
 };
 

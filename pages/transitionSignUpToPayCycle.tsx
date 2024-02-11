@@ -13,9 +13,9 @@ import { Session } from '@/src/types';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import useCycle from '@/src/useCycle';
-import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers';
 import toast from 'react-hot-toast';
+import useUserSumary from '@/src/useUserSumary';
 
 interface Props {
   session: Session
@@ -62,7 +62,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
     }
   )
 
-  const { data: user } = useUser(+idSession, { enabled: !!+idSession });
+  const { data: user } = useUserSumary(+idSession, { enabled: !!+idSession });
 
 
   //console.log(session, 'SESSION1 SESSION1 SESSION1')

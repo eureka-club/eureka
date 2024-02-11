@@ -8,7 +8,7 @@ import styles from './index.module.css';
 import { WorkDetail /* , WorkWithImages */ } from '../../types/work';
 import { CycleMosaicItem /* , CycleWithImages */ } from '../../types/cycle';
 import { PostMosaicItem } from '../../types/post';
-import { UserMosaicItem, UserSumary } from '../../types/user';
+import { UserSumary } from '../../types/user';
 import Mosaics from './Mosaics';
 
 type Item = CycleMosaicItem | WorkDetail | PostMosaicItem | UserSumary;
