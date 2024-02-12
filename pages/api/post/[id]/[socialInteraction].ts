@@ -46,7 +46,7 @@ export default getApiHandler()
     }
 
     try {
-      const post = await find(Number(id),session);
+      const post = await find(Number(id),session.user.id);
       if (post == null) {
         res.status(404).end();
         return;
@@ -78,7 +78,7 @@ export default getApiHandler()
     }
 
     try {
-      const post = await find(Number(id),session);
+      const post = await find(Number(id),session.user.id);
       if (post == null) {
         res.status(404).end();
         return;

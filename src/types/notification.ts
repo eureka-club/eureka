@@ -11,13 +11,20 @@ export interface EditNotificationClientPayload {
   }
 }
 
-type NotificationIncludes = {
-  include: {
-    notification:true;
-    user?:true;
-  };
+export const NotificationSumarySpec = {
+  select: {
+    notification:{select:{
+      id:true,
+      createdAt:true,
+      message:true,
+      contextURL:true,
+      fromUser:{select:{id:true}},
+    }},
+    user:{select:{id:true}},
+    viewed:true,
+  },
 };
 
-export type NotificationMosaicItem = Prisma.NotificationsOnUsersGetPayload<NotificationIncludes> & {
+export type NotificationSumary = Prisma.NotificationsOnUsersGetPayload<typeof NotificationSumarySpec> & {
   type?: 'notification';
 };

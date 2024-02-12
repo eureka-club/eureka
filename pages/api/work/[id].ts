@@ -7,11 +7,9 @@ import { Session, FileUpload, Languages } from '../../../src/types';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, findWithoutLangRestrict, remove, updateFromServerFields } from '../../../src/facades/work';
 import { createFromServerFields as editionCreateFromServerFields } from '@/src/facades/edition';
-import { prisma } from '@/src/lib/prisma';
 import { storeUpload } from '@/src/facades/fileUpload';
-import { cors, middleware } from '@/src/lib/cors';
-import { Edition, Prisma, Work } from '@prisma/client';
-import { CreateEditionPayload, CreateEditionServerPayload } from '@/src/types/edition';
+import { Edition, Work } from '@prisma/client';
+import { CreateEditionServerPayload } from '@/src/types/edition';
 import { WorkDetail } from '@/src/types/work';
 import { MISSING_FIELD, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
 // import redis from '../../../src/lib/redis';
@@ -69,7 +67,7 @@ export default getApiHandler()
     // }
     const { id, lang: l } = req.query;
     const language = l ? Languages[l.toString()] : null;
-
+debugger;
     if (typeof id !== 'string') {
       res.status(404).end();
       return;

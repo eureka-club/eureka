@@ -190,7 +190,7 @@ export default getApiHandler()
 
       let cr = await prisma?.post.aggregate({where,_count:true})
       const total = cr?._count;
-      let data = await findAll(session,{select,take,where,skip,cursor});
+      let data = await findAll(session?.user.id!,{select,take,where,skip,cursor});
 
       res.status(200).json({ 
         data, 

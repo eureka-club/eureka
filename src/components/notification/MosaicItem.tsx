@@ -1,17 +1,15 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import {BsFillCircleFill} from 'react-icons/bs'
-import router from 'next/router';
-
 import { getNotificationMessage } from '@/src/lib/utils';
-import { NotificationMosaicItem } from '../../types/notification';
+import { NotificationSumary } from '../../types/notification';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
 
 interface Props {
-  notification: NotificationMosaicItem;
+  notification: NotificationSumary;
   className?:string;
 }
 

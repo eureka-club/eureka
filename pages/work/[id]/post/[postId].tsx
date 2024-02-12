@@ -9,7 +9,6 @@ import { WEBAPP_URL } from '@/src/constants';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
 interface Props {
   postId:number;
@@ -81,15 +80,15 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   const locale = ctx.locale??"es";
 
- let post = await getPostDetail(postId);
- let work = await getWork(workId,locale);
+ let post = await getPostDetail(postId,session?.user.id!);
+ let work = await getWork(workId,locale);debugger;
  let metaTags = {
    id: post?.id,
    workId: work?.id,
    title: post?.title,
    workTitle: work?.title,
-   creator: post?.creator.name,
-   storedFile: post?.localImages[0].storedFile,
+   creator: post?.creator?.name,
+   storedFile: post?.localImages?.length ? post?.localImages[0].storedFile:'',
  };
 
   const queryClient = new QueryClient() 

@@ -26,7 +26,7 @@ const Notifications: React.FC = () =>{
         <>
             {isLoadingSession && <Spinner animation="grow" variant="info" />}
             {!isLoadingSession && <ListGroup>
-                {notidications?.map((n)=><ListGroup.Item key={n.notificationId}><MosaicItemNotification notification={n} /></ListGroup.Item>)}
+                {notidications?.map((n)=><ListGroup.Item key={n.notification.id}><MosaicItemNotification notification={n} /></ListGroup.Item>)}
             </ListGroup>}
         </>
     </SimpleLayout>

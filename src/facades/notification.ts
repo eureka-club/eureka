@@ -2,30 +2,26 @@ import { Notification } from '@prisma/client';
 import {prisma} from '@/src/lib/prisma';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import {NotificationMosaicItem} from '@/src/types/notification'
+import {NotificationSumary, NotificationSumarySpec} from '@/src/types/notification'
 dayjs.extend(utc);
 /* export interface findProps {
   id: number;
   select?: Record<string, boolean>;
   include?: boolean;
 } */
-export const find = async (notificationId: number): Promise<NotificationMosaicItem | null> => {
+export const find = async (notificationId: number): Promise<NotificationSumary | null> => {
   return prisma.notificationsOnUsers.findFirst({
-    include:{
-      notification:true
-    },
+    select:NotificationSumarySpec.select,
     where:{
       notificationId
     }
   });
 };
 
-export const findAll = async (userId: number): Promise<NotificationMosaicItem[] | null> => {
+export const findAll = async (userId: number): Promise<NotificationSumary[] | null> => {
   return prisma.notificationsOnUsers.findMany({
     orderBy: { notificationId: 'desc' }, 
-    include:{
-      notification:true
-    },
+    select:NotificationSumarySpec.select,
     where:{
       userId,
       //viewed:false,      

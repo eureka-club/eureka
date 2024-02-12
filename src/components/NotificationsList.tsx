@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import { useMutation, useQueryClient } from 'react-query'
-import { EditNotificationClientPayload, NotificationMosaicItem } from '@/src/types/notification'
+import { EditNotificationClientPayload, NotificationSumary } from '@/src/types/notification'
 import { useAtom } from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import styles from './NotificationsList.module.css';
@@ -38,8 +38,8 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
 
   const { data: notifications, isLoading } = useNotifications(userId, { enabled: !!userId })
 
-  const [notVieweds, setNotVieweds] = useState<NotificationMosaicItem[]>([])
-  const [AllNotifications, setAllNotifications] = useState<NotificationMosaicItem[]>([])
+  const [notVieweds, setNotVieweds] = useState<NotificationSumary[]>([])
+  const [AllNotifications, setAllNotifications] = useState<NotificationSumary[]>([])
 
   useEffect(() => {
     if (notifications && notifications.length) {
@@ -82,7 +82,7 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
           const ck = ['USER', `${userId}`, 'NOTIFICATIONS'];
           queryClient.cancelQueries(ck)
           const ss = queryClient.getQueryData(ck);
-          const idx = notVieweds.findIndex(n => n.notificationId == vars.notificationId)
+          const idx = notVieweds.findIndex(n => n.notification.id == vars.notificationId)
           if (idx >= 0) {
             queryClient.setQueryData(ck, notVieweds.splice(idx, 1))
           }
@@ -179,13 +179,13 @@ const NotificationsList: React.FC<Props> = ({ className }) => {
       if (AllNotifications.length) {
         return <ListGroup className='NotificationsList' as="ul">{AllNotifications.slice(0, 5).map((n, idx) => {
           return <ListGroup.Item
-            key={`notification-${n.notificationId}`}
+            key={`notification-${n.notification.id}`}
             as="li"
             className="d-flex justify-content-between align-items-start cursor-pointer"
-            onClick={(e) => notificationOnClick(e, n.userId, n.notificationId, n.notification.contextURL)}
+            onClick={(e) => notificationOnClick(e, n.user.id, n.notification.id, n.notification.contextURL)}
           >
             <aside>
-              <MosaicItem notification={n as NotificationMosaicItem} />
+              <MosaicItem notification={n as NotificationSumary} />
             </aside>
 
           </ListGroup.Item>;

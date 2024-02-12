@@ -36,11 +36,11 @@ export default getApiHandler()
             { title: { contains: q } }, { contentText: { contains: q } }, { tags: { contains: q } }
           ],          
         };
-        posts = await findAllPosts(session, {where});
+        posts = await findAllPosts(session?.user.id!, {where});
       } else if (where) {
-        posts = await findAllPosts(session, {where});
+        posts = await findAllPosts(session?.user.id!, {where});
       } else {
-        posts = await findAllPosts(session, {where});
+        posts = await findAllPosts(session?.user.id!, {where});
       }
 
       let comments = null;

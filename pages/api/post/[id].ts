@@ -2,11 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { Form } from 'multiparty';
 import { FileUpload } from '../../../src/types';
-import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../../src/lib/getApiHandler';
 import { find, remove, updateFromServerFields } from '../../../src/facades/post';
 import { storeUpload } from '@/src/facades/fileUpload';
-import { prisma } from '../../../src/lib/prisma';
 import { storeDeleteFile } from '@/src/facades/fileUpload';
 
 export const config = {
@@ -32,7 +30,7 @@ export default getApiHandler()
     }
 
     try {
-      const post = await find(idNum,session);
+      const post = await find(idNum,session?.user.id!);
       if (post == null) {
         res.status(404).end();
         return;
@@ -48,44 +46,6 @@ export default getApiHandler()
       await remove(post);
 
       res.status(200).json({ status: 'OK' });
-    } catch (exc) {
-      console.error(exc); // eslint-disable-line no-console
-      res.status(500).json({ status: 'server error' });
-    } finally {
-      //prisma.$disconnect();
-    }
-  })
-  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = await getSession({ req });
-    // if (session == null || !session.user.roles.includes('admin')) {
-    //   res.status(401).json({ status: 'Unauthorized' });
-    //   return;
-    // }
-
-    const { id } = req.query;
-    if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
-    }
-
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
-      res.status(404).end();
-      return;
-    }
-
-    try {
-      const post = await find(idNum,session);
-      if (post == null) {
-        // res.status(404).end();
-        res.status(200).json({ status: 'OK', post: null });
-        return;
-      }
-      let currentUserIsFav = false;
-      if (session) currentUserIsFav = post.favs.findIndex((f) => f.id == session.user.id) > -1;
-      post.currentUserIsFav = currentUserIsFav;
-      post.type = 'post';
-      res.status(200).json({ status: 'OK', post });
     } catch (exc) {
       console.error(exc); // eslint-disable-line no-console
       res.status(500).json({ status: 'server error' });
@@ -119,7 +79,7 @@ export default getApiHandler()
       const coverImage: FileUpload = files?.image != null ? files.image[0] : null;
       try {
         
-        const post = await find(idNum,session);
+        const post = await find(idNum,session.user.id);
         if (!post) res.status(412).json({ status: 'notFound' });
         if (post?.creatorId !== session.user.id) res.status(401).json({ status: 'Unauthorized' });
 

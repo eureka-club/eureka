@@ -184,6 +184,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
 
         </Col>
         <Col xs={12} lg={10} className="mt-5 mt-lg-0">
+          <Link href={`http://localhost:3000/es/work/314/post/411`}>ir al post de prueba</Link>
           <section className="ms-0 ms-lg-5">
             <FeaturedWorks />
             <FeaturedEurekas />
