@@ -13,6 +13,7 @@ import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import { Col } from 'react-bootstrap';
+import { Stack } from '@mui/material';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -116,7 +117,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
         <Col xs={12} lg={2} className="me-2">
           <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
-          <section className="mt-5">
+          {/* <section className="mt-5">
             <h1 className="d-flex flex-row align-items-center text-secondary  fw-bold" style={{ fontSize: '1.25rem' }}>
               <span>{t('About Eureka')}{' '}</span>
               {!showAboutSection && (
@@ -176,7 +177,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
               <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
             </section>
-          </div>
+          </div> */}
 
           <section className="mt-4">
             <FeaturedUsers />
@@ -188,12 +189,20 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
-            {/* <>
-              <div className="mt-5">
-                <CarouselsByTopics groupedByTopics={gbt} />
-              </div>
-              <div className="mb-5">{renderSpinnerForLoadNextCarousel()} </div>
-            </> */}
+            <Stack direction={'row'} justifyItems={'center'} gap={3} className='pt-3'>
+              <section className="p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
+              </section>
+              <section className="p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
+              </section>
+              <section className="p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
+              </section>
+              <section className="p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
+              </section>
+            </Stack>
           </section>
         </Col>
       </section>

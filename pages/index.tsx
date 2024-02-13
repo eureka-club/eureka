@@ -1,4 +1,4 @@
-import { lazy,Suspense } from 'react';
+import { lazy,Suspense, useState } from 'react';
 import { NextPage } from 'next';
 import {GetServerSideProps} from 'next';
 import Head from "next/head";
@@ -19,6 +19,9 @@ import {getItemsByTopic} from '@/src/useItemsByTopic';
 import { getFeaturedUsers } from '@/src/useFeaturedUsers';
 import { UserSumary } from '@/src/types/user';
 import HomeSingIn from '@/src/components/HomeSingIn';
+import Link from 'next/link';
+import { BsChevronDown } from 'react-icons/bs';
+import { Stack } from '@mui/material';
 
 //const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
 // const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
@@ -44,6 +47,8 @@ interface Props{
 
 const IndexPage: NextPage<Props> = ({language,session}) => {
   const { t } = useTranslation('common');
+  const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
+
   // const {data:session,status} = useSession();
   // const isLoadingSession = status === "loading"
   return (
@@ -78,6 +83,7 @@ const IndexPage: NextPage<Props> = ({language,session}) => {
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
         {/* <Suspense fallback={<Spinner animation="grow" />}> */}
           <HomeSingIn language={language}/>
+          
         {/* </Suspense> */}
       </SimpleLayout>
     </>
