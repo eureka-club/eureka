@@ -126,7 +126,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </Badge>
             </Col>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+            {/* <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/jose-manuel-gallardo.webp`}
@@ -153,7 +153,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Badge pill className={`badge-secondary ${styles.interest}`}>
                 {t('Nature')}
               </Badge>
-            </Col>
+            </Col> */}
 
             <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
