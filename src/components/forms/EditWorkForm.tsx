@@ -5,11 +5,10 @@ import utc from 'dayjs/plugin/utc';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, FormEvent, useEffect, useState, FunctionComponent, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
+import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import LanguageSelect from './controls/LanguageSelect';
-//import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -19,15 +18,10 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
-import TagsInput from './controls/TagsInput';
 import { EditWorkClientPayload, WorkDetail } from '../../types/work';
 import { Country } from '@/src/types';
-// import ImageFileSelect from './controls/ImageFileSelect';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditWorkForm.module.css';
-import i18nConfig from '../../../i18n';
 import useTopics from '../../useTopics';
 import useCountries from 'src/useCountries';
 import useWork from '@/src/useWorkDetail'
@@ -37,7 +31,6 @@ import TagsInputTypeAheadMaterial from '@/components/forms/controls/TagsInputTyp
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import ImageFileSelect from '@/components/forms/controls/ImageFileSelectMUI';
 import LocalImageComponent from '../LocalImage';
-import { PostDetail } from '@/src/types/post';
 
 dayjs.extend(utc);
 
@@ -55,6 +48,7 @@ interface FormValues {
 }
 
 const EditWorkForm: FunctionComponent = () => {
+  const editorRef = useRef<any>(null);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -270,7 +264,7 @@ const EditWorkForm: FunctionComponent = () => {
       authorGender: formValues.authorGender ? formValues.authorGender : null,
       authorRace: formValues.authorRace ? formValues.authorRace : null,
       cover: coverFile,
-      contentText: formValues.description ? formValues.description : null,
+      contentText: editorRef.current.getContent() ?? null,
       link: formValues.link ? formValues.link : null,
       countryOfOrigin: countryOrigin.join(',') || null,
       //countryOfOrigin2: countryOrigin2 || null,
@@ -304,7 +298,6 @@ const EditWorkForm: FunctionComponent = () => {
       ['language']: language
     });
   };
-
 
   if (!work) return <></>
   return (
@@ -351,7 +344,8 @@ const EditWorkForm: FunctionComponent = () => {
             </Col>
 
           </Row>
-          <><Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
+          <>
+          <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
             <Col className="d-flex flex-row ">
               <ImageFileSelect aceptedFileTypes="image/*" file={coverFile} setFile={setCoverFile} >
                 {(imagePreview) => (
@@ -379,129 +373,149 @@ const EditWorkForm: FunctionComponent = () => {
               </TextField>
             </Col>
           </Row>
-
-            <span className='text-primary fw-bold'>{t('Authorship')}</span>
-            <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
-              <Col className="">
-                <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
-                  variant="outlined" size="small" name='author'
-                  value={formValues.author}
-                  type="text"
-                  onChange={handleChangeTextField}
-                >
-                </TextField>
-
-
-              </Col>
-              <Col className="mt-4 mt-lg-0">
-                <FormGroup controlId="countryOrigin">
-                  <TagsInputTypeAheadMaterial
-                    data={countrySearchResults}
-                    items={countryOrigin}
-                    setItems={setCountryOrigin}
-                    formatValue={(v: string) => t(`countries:${v}`)}
-                    max={2}
-                    label={`${t('countryFieldLabel')} - 2 max`}
-                  //placeholder={`${t('Type to add tag')}...`}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
-              <Col className="">
-                <FormGroup controlId="authorGender">
-                  <FormControl size="small" fullWidth>
-                    <InputLabel id="authorGender-label">*{t('authorGenderFieldLabel')}</InputLabel>
-                    <Select
-                      labelId="authorGender-label"
-                      id="authorGender"
-                      name='authorGender'
-                      value={formValues.authorGender!}
-                      label={`*${t("authorGenderFieldLabel")}`}
-                      onChange={handleChangeSelectField}
-                    >
-                      <MenuItem value="">{t('authorGenderFieldPlaceholder')}</MenuItem>
-                      <MenuItem value="female">{t('authorGenderFemale')}</MenuItem>
-                      <MenuItem value="male">{t('authorGenderMale')}</MenuItem>
-                      <MenuItem value="non-binary">{t('authorGenderNonbinary')}</MenuItem>
-                      <MenuItem value="trans">{t('authorGenderTrans')}</MenuItem>
-                      <MenuItem value="other">{t('authorGenderOther')}</MenuItem>
-                    </Select>
-                  </FormControl>
-                </FormGroup>
-
-              </Col>
-              <Col className=" mt-4 mt-lg-0">
-                <FormGroup controlId="authorRace">
-                  <FormControl size="small" fullWidth>
-                    <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
-                    <Select
-                      labelId="authorRace-label"
-                      id="authorRace"
-                      name='authorRace'
-                      value={formValues.authorRace!}
-                      label={`*${t("authorEthnicityFieldLabel")}`}
-                      onChange={handleChangeSelectField}
-                    >
-                      <MenuItem value="">{t('authorEthnicityFieldPlaceholder')}</MenuItem>
-                      <MenuItem value="white">{t('authorEthnicityIsWhite')}</MenuItem>
-                      <MenuItem value="non-white">{t('authorEthnicityIsNotWhite')}</MenuItem>
-                    </Select>
-                  </FormControl>
-                </FormGroup>
-              </Col>
-            </Row>
-
-            <span className='text-primary fw-bold'>{t('Content')}</span>
-            <Row className='d-flex flex-column flex-lg-row mt-4'>
-              <Col className="">
-                <FormGroup controlId="topics">
-                  <TagsInputTypeAheadMaterial
-                    data={topics}
-                    items={items}
-                    setItems={setItems}
-                    formatValue={(v: string) => t(`topics:${v}`)}
-                    max={3}
-                    label={t('topicsLabel')}
-                   // placeholder={`${t('Type to add tag')}...`}
-                  />
-                </FormGroup>
-              </Col>
-              <Col className="mt-4 mt-lg-0">
-                <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
-
-              </Col>
-            </Row>
-            <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
-            <Row className='d-flex flex-column flex-lg-row mt-4'>
-              <Col className="">
-                <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
-                  variant="outlined" size="small" name="publicationYear"
-                  value={formValues.publicationYear}
-                  type="number"
-                  onChange={handleChangeTextField}
+           <span className='text-primary fw-bold'>{t('Authorship')}</span>
+          <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
+            <Col className="">
+              <TextField id="author" className="w-100" label={`*${t('authorFieldLabel')}`}
+                variant="outlined" size="small" name='author'
+                value={formValues.author}
+                type="text"
+                onChange={handleChangeTextField}
+              >
+              </TextField>
+            </Col>
+            <Col className="mt-4 mt-lg-0">
+              <FormGroup controlId="countryOrigin">
+                <TagsInputTypeAheadMaterial
+                  data={countrySearchResults}
+                  items={countryOrigin}
+                  setItems={setCountryOrigin}
+                  formatValue={(v: string) => t(`countries:${v}`)}
+                  max={2}
+                  label={`${t('countryFieldLabel')} - 2 max`}
+                //placeholder={`${t('Type to add tag')}...`}
                 />
-              </Col>
-              <Col className="mt-4 mt-lg-0">
-                <TextField id="workLength" className="w-100" label={publicationLengthLabel}
-                  variant="outlined" size="small" name="workLength"
-                  value={formValues.workLength}
-                  type="text"
-                  onChange={handleChangeTextField}
-                />
-              </Col>
-            </Row>
-            <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
-              <Col className="">
-                <FormGroup controlId="description">
-                  <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
-                  <Textarea minRows={5} name="description" value={formValues.description!} onChange={handleChangeTextField} />
-                </FormGroup>
-              </Col>
-            </Row>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row className='d-flex flex-column flex-lg-row mt-4 mb-4'>
+            <Col className="">
+              <FormGroup controlId="authorGender">
+                <FormControl size="small" fullWidth>
+                  <InputLabel id="authorGender-label">*{t('authorGenderFieldLabel')}</InputLabel>
+                  <Select
+                    labelId="authorGender-label"
+                    id="authorGender"
+                    name='authorGender'
+                    value={formValues.authorGender!}
+                    label={`*${t("authorGenderFieldLabel")}`}
+                    onChange={handleChangeSelectField}
+                  >
+                    <MenuItem value="">{t('authorGenderFieldPlaceholder')}</MenuItem>
+                    <MenuItem value="female">{t('authorGenderFemale')}</MenuItem>
+                    <MenuItem value="male">{t('authorGenderMale')}</MenuItem>
+                    <MenuItem value="non-binary">{t('authorGenderNonbinary')}</MenuItem>
+                    <MenuItem value="trans">{t('authorGenderTrans')}</MenuItem>
+                    <MenuItem value="other">{t('authorGenderOther')}</MenuItem>
+                  </Select>
+                </FormControl>
+              </FormGroup>
 
+            </Col>
+            <Col className=" mt-4 mt-lg-0">
+              <FormGroup controlId="authorRace">
+                <FormControl size="small" fullWidth>
+                  <InputLabel id="authorRace-label">*{t('authorEthnicityFieldLabel')}</InputLabel>
+                  <Select
+                    labelId="authorRace-label"
+                    id="authorRace"
+                    name='authorRace'
+                    value={formValues.authorRace!}
+                    label={`*${t("authorEthnicityFieldLabel")}`}
+                    onChange={handleChangeSelectField}
+                  >
+                    <MenuItem value="">{t('authorEthnicityFieldPlaceholder')}</MenuItem>
+                    <MenuItem value="white">{t('authorEthnicityIsWhite')}</MenuItem>
+                    <MenuItem value="non-white">{t('authorEthnicityIsNotWhite')}</MenuItem>
+                  </Select>
+                </FormControl>
+              </FormGroup>
+            </Col>
+          </Row>
+          <span className='text-primary fw-bold'>{t('Content')}</span>
+          <Row className='d-flex flex-column flex-lg-row mt-4'>
+            <Col className="">
+              <FormGroup controlId="topics">
+                <TagsInputTypeAheadMaterial
+                  data={topics}
+                  items={items}
+                  setItems={setItems}
+                  formatValue={(v: string) => t(`topics:${v}`)}
+                  max={3}
+                  label={t('topicsLabel')}
+                  // placeholder={`${t('Type to add tag')}...`}
+                />
+              </FormGroup>
+            </Col>
+            <Col className="mt-4 mt-lg-0">
+              <TagsInputMaterial tags={tags} setTags={setTags} label={t('topicsFieldLabel')} />
+
+            </Col>
+          </Row>
+          <span className='text-primary fw-bold'>{t('AdditionalInformation')}</span>
+          <Row className='d-flex flex-column flex-lg-row mt-4'>
+            <Col className="">
+              <TextField id="publicationYear" className="w-100" label={publicationYearLabel}
+                variant="outlined" size="small" name="publicationYear"
+                value={formValues.publicationYear}
+                type="number"
+                onChange={handleChangeTextField}
+              />
+            </Col>
+            <Col className="mt-4 mt-lg-0">
+              <TextField id="workLength" className="w-100" label={publicationLengthLabel}
+                variant="outlined" size="small" name="workLength"
+                value={formValues.workLength}
+                type="text"
+                onChange={handleChangeTextField}
+              />
+            </Col>
+          </Row>
+          <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
+            <Col className="">
+              <FormGroup controlId="description">
+                <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
+                {/* <textarea name="description" value={formValues.description!} onChange={handleChangeTextField} /> */}
+                <EditorCmp
+                  apiKey="f8fbgw9smy3mn0pzr82mcqb1y7bagq2xutg4hxuagqlprl1l"
+                  onInit={(_: any, editor) => {
+                    editorRef.current = editor;
+                  }}
+                  initialValue={formValues.description!}
+                  init={{
+                    height: 300,
+                    menubar: false,
+                    plugins: [
+                      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'print', 'preview', 'anchor',
+                      'searchreplace', 'visualblocks', 'fullscreen',
+                      'insertdatetime', 'media', 'table', 'paste', 'code', 'help', 'wordcount', 'emoticons'
+                    ],
+                    emoticons_database: 'emojiimages',
+                    relative_urls: false,
+                    forced_root_block : "div",
+                    toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons | code  | help',
+                    // toolbar:
+                    //   'undo redo | formatselect | ' +
+                    //   'bold italic backcolor | alignleft aligncenter ' +
+                    //   'alignright alignjustify | bullist numlist outdent indent | ' +
+                    //   'removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  }}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
           </>
-
         </ModalBody>
         <ModalFooter>
           <Row>
