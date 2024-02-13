@@ -124,7 +124,7 @@ export default getApiHandler()
       ]
     }
 
-    const responsePost = await fap(session,{where:postsWhere}) as PostDetail[];
+    const responsePost = await fap(session?.user.id!,{where:postsWhere}) as PostDetail[];
     responseCycle.forEach(c=>{c.type="cycle"})
     responsePost.forEach(p=>{p.type="post"})
     const data: SearchResult[] = [

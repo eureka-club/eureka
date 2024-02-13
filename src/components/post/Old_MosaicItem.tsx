@@ -6,19 +6,14 @@ import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
 import { FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
-import SocialInteraction from '../common/PostSocialInteraction';
+import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import { Session } from '../../types';
 import Avatar from '../common/UserAvatar';
-import { CycleSumary } from '@/src/types/cycle';
-import { WorkSumary } from '@/src/types/work';
-import {useAtom} from 'jotai'
-import globalModals from '@/src/atoms/globalModals'
-import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import { useSession} from 'next-auth/react';
 import { BiEdit} from 'react-icons/bi';
 import usePostSumary from '@/src/usePostSumary';
+import { useSession } from 'next-auth/react';
 interface Props {
   postId: number|string;
   display?: 'v' | 'h';
@@ -191,7 +186,11 @@ const MosaicItem: FunctionComponent<Props> = ({
                 {post.comments.length} {`${t('Replies')}`}
               </span>
             </div> */}
-            <SocialInteraction
+            <SocialInteraction 
+          post={post}
+          cacheKey={cacheKey}
+          />
+            {/* <SocialInteraction
               cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
@@ -199,7 +198,7 @@ const MosaicItem: FunctionComponent<Props> = ({
               showRating={false}
               showTrash={false}
               className="ms-auto"
-            />
+            /> */}
           </Card.Footer>
         )}
         {canEditPost() && <section className="position-absolute top-0 end-0">

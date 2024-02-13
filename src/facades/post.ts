@@ -19,16 +19,15 @@ const PostDetailSpecWithExtrasSpec = {
 }
 type PostDetailWithExtras = Prisma.PostGetPayload<typeof PostDetailSpecWithExtrasSpec>;
 
-const PopulatePostSumaryWithExtras = (post:PostSumaryWithExtras,session:Session|null)=>{
-  const currentUserIsFav = post?.favs?.findIndex(p=>p.id==session?.user.id)>-1;
+const PopulatePostSumaryWithExtras = (post:PostSumaryWithExtras,sessionId:number|null)=>{
+  const currentUserIsFav = post?.favs?.findIndex(p=>p.id==sessionId)>-1;
   const p:Record<string,any> ={
     currentUserIsFav:currentUserIsFav,
     type:'post',
   };
-  Object.keys(PostSumarySpec.select).forEach(([k,])=>{
-    p[`${k}`] = Object.getOwnPropertyDescriptor(post,k)?.value!;
-  });
-  return p as PostSumary;
+  post = {...post,...p}
+  
+  return post as PostSumary;
 }
 const PopulatePostDetailWithExtras = (post:PostDetailWithExtras,sessionId:number|null)=>{debugger;
   const currentUserIsFav = post?.favs?.findIndex(p=>p.id==sessionId)>-1;
@@ -66,7 +65,7 @@ export const find = async (id: number,sessionId:number|null): Promise<PostDetail
   return PopulatePostDetailWithExtras(ps as PostDetailWithExtras,sessionId);
 };
 
-export const findSumary = async (id: number,session:Session|null): Promise<PostSumary | null> => {
+export const findSumary = async (id: number,sessionId:number|null): Promise<PostSumary | null> => {
   const pf = await prisma.post.findUnique({
     where: { id },
     select:{
@@ -75,7 +74,7 @@ export const findSumary = async (id: number,session:Session|null): Promise<PostS
     }
   });
   if(pf){
-    return PopulatePostSumaryWithExtras(pf as PostSumaryWithExtras,session);
+    return PopulatePostSumaryWithExtras(pf as PostSumaryWithExtras,sessionId);
   }
   return null;
 };
@@ -96,7 +95,7 @@ export const findAll = async (sessionId:number|null, props?: Prisma.PostFindMany
     return PopulatePostDetailWithExtras(p as PostDetailWithExtras,sessionId)
   })
 };
-export const findAllSumary = async (session:Session|null, props?: Prisma.PostFindManyArgs, page?: number): Promise<PostSumary[]> => {
+export const findAllSumary = async (sessionId:number|null, props?: Prisma.PostFindManyArgs, page?: number): Promise<PostSumary[]> => {
   const { where, take, skip, cursor } = props || {};
   const psf = await prisma.post.findMany({
     take,
@@ -109,7 +108,7 @@ export const findAllSumary = async (session:Session|null, props?: Prisma.PostFin
     where,
   });
   return psf?.map(p=>{
-    return PopulatePostSumaryWithExtras(p as PostSumaryWithExtras,session)
+    return PopulatePostSumaryWithExtras(p as PostSumaryWithExtras,sessionId)
   })
 };
 

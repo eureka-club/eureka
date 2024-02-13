@@ -15,8 +15,6 @@ export const ReactionDetailSpec = {
   include: {
     post:{select:{id:true}},
     user:{select:{id:true}},
-    emoji:true,
-    unified:true,
   }
 };
 

@@ -38,6 +38,7 @@ import SignInForm from '../forms/SignInForm';
 import _ from 'lodash';
 import { CycleSumary } from '@/src/types/cycle';
 import { WorkSumary } from '@/src/types/work';
+import usePostSumary from '@/src/usePostSumary';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -45,7 +46,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  post: PostSumary;
+  postId: number;
   showCounts?: boolean;
   showButtonLabels?: boolean;
   cacheKey: string[];
@@ -58,7 +59,7 @@ interface Props {
 }
 
 const PostSocialInteraction: FunctionComponent<Props> = ({
-  post,
+  postId,
   showCounts = false,
   showButtonLabels = true,
   cacheKey = '',
@@ -73,7 +74,7 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
   // const [session] = useSession() as [Session | null | undefined, boolean];
   const { data: session, status } = useSession();
   const idSession = session ? session.user.id : null;
-
+  const{data:post}=usePostSumary(postId);
   const isLoadingSession = status === 'loading';
   const [qty, setQty] = useState<number>(0);
   const { show } = useModalContext();
@@ -105,8 +106,8 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
 
   useEffect(() => {
     let ratingByMe = false;
-    if (session && post && post.favs) {
-      const favoritedByMe = post.favs.findIndex((f) => f.id == session.user.id) > -1;
+    if (session && post && post?.favs) {
+      const favoritedByMe = post?.favs.findIndex((f) => f.id == session.user.id) > -1;
       setcurrentUserIsFav(() => favoritedByMe);
 
       setMySocialInfo({ favoritedByMe });
@@ -119,16 +120,16 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
   };
 
   const shareUrl = (() => {
-      const parentIsWork = post.works ? post.works.length > 0 : false;
-      const parentIsCycle = !parentIsWork && post.cycles && post.cycles.length;
-      if (parentIsWork) return `${WEBAPP_URL}/work/${post.works[0].id}/post/${post.id}`;
-      if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post.cycles[0].id}/post/${post.id}`;
+      const parentIsWork = post?.works ? post?.works.length > 0 : false;
+      const parentIsCycle = !parentIsWork && post?.cycles && post?.cycles.length;
+      if (parentIsWork) return `${WEBAPP_URL}/work/${post?.works[0].id}/post/${post?.id}`;
+      if (parentIsCycle) return `${WEBAPP_URL}/cycle/${post?.cycles[0].id}/post/${post?.id}`;
     return `${WEBAPP_URL}/${router.asPath}`;
   })();
 
   const shareTextDynamicPart = (() => {
-    const p = post.works ? post.works[0] : null || post.cycles ? post.cycles[0] : null;
-    const about = post.works[0] ? 'postWorkShare' : 'postCycleShare';
+    const p = post?.works ? post?.works[0] : null || post?.cycles ? post?.cycles[0] : null;
+    const about = post?.works[0] ? 'postWorkShare' : 'postCycleShare';
     return `${t(about)} "${p ? p.title : ''}"`;
   })();
 
@@ -143,7 +144,7 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
       if (session) {
         //[user that does action] has saved the [title of book/movie/documentary/cycle] for later. Check it out.
         let translationKey = 'userHasRating';
-        // let notificationContextURL = `/${entityEndpoint}/${post.id}`;
+        // let notificationContextURL = `/${entityEndpoint}/${post?.id}`;
         if (socialInteraction == 'fav') {
           translationKey = 'userHasSaveForLater';
         }
@@ -151,11 +152,11 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
         // const notificationMessage = `${translationKey}!|!${JSON.stringify({
         //   userName: user?.name,
         //   post: entityEndpoint.replace(/\w/, (c) => c.toUpperCase()),
-        //   entityTitle: post.title,
+        //   entityTitle: post?.title,
         // })}`;
 
         // const notificationToUsers = user?.followedBy.map((f) => f.id);
-        const res = await fetch(`/api/${entityEndpoint}/${post.id}/${socialInteraction}?lang=${lang}`, {
+        const res = await fetch(`/api/${entityEndpoint}/${post?.id}/${socialInteraction}?lang=${lang}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -190,18 +191,18 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
           const entityFavKey = 'favPosts';
 
           let favInUser = user[entityFavKey] as { id: number }[];
-          let favs = post.favs;
+          // let favs = post?.favs;
 
           setcurrentUserIsFav(() => payload.doCreate);
 
           if (!payload.doCreate) {
-            favInUser = favInUser.filter((i: { id: number }) => i.id !== post.id);
-            favs = post.favs.filter((i) => i.id != session.user.id);
+            favInUser = favInUser.filter((i: { id: number }) => i.id !== post?.id);
+            // favs = post?.favs.filter((i) => i.id != session.user.id);
           } else {
             favInUser?.push(post as any);
-            favs.push({ id: +session.user.id });
+            // favs.push({ id: +session.user.id });
           }
-          queryClient.setQueryData(['WORK', `${post.id}`], { ...post, favs });
+          queryClient.setQueryData(['WORK', `${post?.id}`], { ...post });
           queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
 
           return { prevUser, prevEntity };
@@ -224,20 +225,20 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
   };
 
   
-  // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
-  const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if (!session) {
-      openSignInModal();
-      return null;
-    }
-    if (canNavigate()) {
-      /*setIsLoadingCreateEureka(true)
-        setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/
-      if (isWorkMosaicItem(post)) router.push({ pathname: `/work/${post.id}`, query: { tabKey: 'posts' } });
-      if (isCycleMosaicItem(post)) router.push({ pathname: `/cycle/${post.id}`, query: { tabKey: 'eurekas' } });
-    }
-  };
+  // // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
+  // const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
+  //   ev.preventDefault();
+  //   if (!session) {
+  //     openSignInModal();
+  //     return null;
+  //   }
+  //   if (canNavigate()) {
+  //     /*setIsLoadingCreateEureka(true)
+  //       setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/
+  //     if (isWorkMosaicItem(post)) router.push({ pathname: `/work/${post?.id}`, query: { tabKey: 'posts' } });
+  //     if (isCycleMosaicItem(post)) router.push({ pathname: `/cycle/${post?.id}`, query: { tabKey: 'eurekas' } });
+  //   }
+  // };
 
   const canNavigate = () => {
     return !(!post || isLoadingSession);
@@ -292,7 +293,7 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
   const getFullSymbol = () => {
     if (post) {
       if (isWorkMosaicItem(post) || isCycleMosaicItem(post))
-        if (post.currentUserRating)
+        if (post?.currentUserRating)
           return <GiBrain className="text-secondary" /*  style={{ color: 'var(--eureka-blue)' }} */ />;
     }
     return <GiBrain className="text-primary" /* style={{ color: 'var(--eureka-green)' }} */ />;
@@ -301,8 +302,8 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
   // const getRatingsCount = () => {
   //   let count = 0;
   //   if (isWorkMosaicItem(post)) {
-  //     count = post._count.ratings;
-  //   } else if (isCycleMosaicItem(post)) count = post._count.ratings;
+  //     count = post?._count.ratings;
+  //   } else if (isCycleMosaicItem(post)) count = post?._count.ratings;
 
   //   return <span className={styles.ratingsCount}>{`${count}`}</span>;
   // };
@@ -333,14 +334,14 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
   const getInitialRating = () => {
     if (post) {
       if (isCycleMosaicItem(post) || isWorkMosaicItem(post)) {
-        return post.ratingAVG;
+        return post?.ratingAVG;
       }
     }
   };
   const getRatingLabelInfo = () => {
     if (post) {
       if (isCycleMosaicItem(post) || isWorkMosaicItem(post))
-        return !post.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}:</span> : '';
+        return !post?.currentUserRating ? <span className={styles.ratingLabelInfo}>{t('Rate it')}:</span> : '';
     }
     return '';
   };
@@ -369,15 +370,7 @@ const PostSocialInteraction: FunctionComponent<Props> = ({
                 {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
               </Button>
             </OverlayTrigger>
-         
         )}
-        {/* <div className={`ms-1`}>
-        {
-              isPost(post) && post?.reactions[0] 
-               ? <span role="img" className="m-1" style={{verticalAlign:"sub"}} aria-label="emoji-ico" dangerouslySetInnerHTML={{__html: `${post?.reactions[0].emoji}`}} />
-               : <></>
-        }
-        </div> */}
         <div className="ms-auto">
           {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
         </div>

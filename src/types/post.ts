@@ -31,6 +31,7 @@ export type PostDetail = Prisma.PostGetPayload<typeof PostDetailSpec> & {
     favs:{select:{id:true,}},
     works:{select:{id:true,title:true}},
     cycles:{select:{id:true,title:true}},
+    reactions:{select:{userId:true,unified:true,emoji:true,createdAt:true}}
   }
  }
  export type PostSumary = Prisma.PostGetPayload<typeof PostSumarySpec>&{

@@ -10,13 +10,15 @@ import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { PostDetail } from '../types/post';
+import usePostsSumary from '../usePostsSumary';
+import { MosaicContext } from '../useMosaicContext';
 
 const take = 8;
 const SearchTabCycles:FunctionComponent = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = `posts-search-${router?.query.q?.toString()}`
+  const cacheKey = [`posts-search-${router?.query.q?.toString()}`]
   const {FilterEnginePosts,filtersCountries} = useFilterEnginePosts()
 
   const getProps = ()=>{
@@ -68,7 +70,7 @@ const SearchTabCycles:FunctionComponent = () => {
 
   const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePosts(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePostsSumary(props,{cacheKey,enabled:!!router.query?.q});
   const [posts,setPosts] = useState<PostDetail[]>([])
   
   useEffect(()=>{
@@ -107,9 +109,15 @@ const SearchTabCycles:FunctionComponent = () => {
 
           <FilterEnginePosts/>
           <Row>
-              {posts.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-                <MosaicItem post={p} postId={p.id} className="" imageLink={true} cacheKey={['POST',p.id.toString()]} size={'md'} />
-                </Col>)}
+              {posts?.map(p=>
+                {
+                  return <Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
+                  <MosaicContext.Provider value={{ showShare: false }}>
+                    <MosaicItem post={p} postId={p.id} className="" imageLink={true} cacheKey={['POST',p.id.toString()]} size={'md'} />
+                  </MosaicContext.Provider>
+                </Col>
+                }
+                )}
         </Row>
         {posts?.length!=total && <Spinner ref={ref} animation="grow" />}
       </>

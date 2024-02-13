@@ -14,7 +14,7 @@ import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
 import useUsers from '@/src/useUsers'
-import SocialInteraction from '../common/PostSocialInteraction';
+import SocialInteraction from '../common/!!!PostSocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import toast from 'react-hot-toast';
 import useCycleSumary from '@/src/useCycleSumary'

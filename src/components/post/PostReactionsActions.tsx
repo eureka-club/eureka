@@ -1,18 +1,16 @@
-import { PostDetail } from '@/src/types/post';
+import { PostSumary } from '@/src/types/post';
 import { Button } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { FunctionComponent, MouseEvent, SyntheticEvent } from 'react';
 import usePostEmojiPicker from './hooks/usePostEmojiPicker';
 import { VscReactions } from 'react-icons/vsc';
 import toast from 'react-hot-toast'
-
-import { Toast as T } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 
 interface Props {
-  post: PostDetail;
+  post: PostSumary;
   cacheKey: string[] | [string, string];
 }
 const MAX_REACTIONS = 2;
@@ -21,8 +19,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { EmojiPicker, setShowEmojisPicker } = usePostEmojiPicker({ post, cacheKey });
-  const { mutate, isLoading: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
-
+  // const { mutate, isLoading: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
 
   const handleReactionClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
@@ -59,7 +56,7 @@ const PostReactionsActions: FunctionComponent<Props> = ({ post, cacheKey }) => {
       return (
         <div>
           {/* <div style={{ position: 'relative' }}> */}
-          <EmojiPicker cacheKey={cacheKey} post={post as PostDetail} onSaved={console.log} />
+          <EmojiPicker cacheKey={cacheKey} post={post} onSaved={console.log} />
           {/* </div> */}
           <Button
             variant='link'

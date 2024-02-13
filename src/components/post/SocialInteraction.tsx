@@ -28,7 +28,7 @@ import { useMosaicContext } from '@/src/useMosaicContext';
 
 import { WEBAPP_URL } from '@/src/constants';
 // import { CycleDetail } from '@/src/types/cycle';
-import { PostDetail } from '@/src/types/post';
+import { PostSumary } from '@/src/types/post';
 // import { WorkDetail } from '@/src/types/work';
 import {
   MySocialInfo,
@@ -51,7 +51,7 @@ interface SocialInteractionClientPayload {
 }
 
 interface Props {
-  post: PostDetail;
+  post: PostSumary;
   parent?: Cycle | Work | null;
   showCounts?: boolean;
   showButtonLabels?: boolean;
@@ -337,9 +337,9 @@ const SocialInteraction: FunctionComponent<Props> = ({
             {` `}
             {parentLinkHref != null ? (
               <Link href={parentLinkHref}>
-                <a title={getParentTitle()} className="text-info">
+                {/* <a title={getParentTitle()} className="text-info"> */}
                   <span>{renderParentTitle()} </span>
-                </a>
+                {/* </a> */}
               </Link>
             ) : (
               <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
@@ -349,10 +349,10 @@ const SocialInteraction: FunctionComponent<Props> = ({
         }
         
         <div className='ms-auto'>
-            <PostReactionsDetail cacheKey={cacheKey} post={post as PostDetail}/>
+            <PostReactionsDetail cacheKey={cacheKey} post={post}/>
         </div>
         <div className={`ms-1`}>
-            <PostReactionsActions cacheKey={cacheKey} post={post as PostDetail}/>
+            <PostReactionsActions cacheKey={cacheKey} post={post}/>
         </div>
         {ss && (
           <div className="">

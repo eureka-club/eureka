@@ -5,16 +5,14 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { QueryClient, dehydrate } from 'react-query';
 import { ButtonGroup, Button, Alert } from 'react-bootstrap';
-import { getPosts } from '@/src/usePosts';
-import { getCycles } from '@/src/useCycles';
-
 import { Session } from '@/src/types';
-
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { getWorksProps } from '@/src/types/work';
 import { getWorksSumary } from '@/src/useWorksSumary';
+import { getCyclesSumary } from '@/src/useCyclesSumary';
+import { getPostsSumary } from '@/src/usePostsSumary';
 
 const topics = [
   'gender-feminisms',
@@ -136,8 +134,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const cyclesData = await getCycles(ctx.locale!,{ ... cyclesProps, take }, origin);
-  qc.prefetchQuery(`cycles-search-${q?.toString()}`, () => cyclesData);
+  const cyclesData = await getCyclesSumary(ctx.locale!,{ ... cyclesProps, take });
+  qc.prefetchQuery([`cycles-search-${q?.toString()}`], () => cyclesData);
   const hasCycles = cyclesData.total > 0;
   const postsProps = {
     where: {
@@ -165,13 +163,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ],
     },
   };
-  const postsData = await getPosts(ctx.locale!,{ ... postsProps, take }, origin);
-  qc.prefetchQuery(`posts-search-${q?.toString()}`, () => postsData);
-  const hasPosts = postsData.total > 0;
+  const postsData = await getPostsSumary(session?.user.id!,ctx.locale,{ ... postsProps, take });
+  debugger;
+  qc.prefetchQuery([`posts-search-${q?.toString()}`], () => postsData);
+  const hasPosts = postsData?.total > 0;
   
   const worksData = await getWorksSumary(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
 
-  qc.prefetchQuery(`works-search-${q?.toString()}`, () => worksData);
+  qc.prefetchQuery([`works-search-${q?.toString()}`], () => worksData);
   const hasWorks = worksData.total > 0;
 
   let metaTags = null;

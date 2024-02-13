@@ -1,22 +1,20 @@
-import { FunctionComponent, MouseEvent, SyntheticEvent, useMemo } from 'react';
+import { FunctionComponent } from 'react';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { Button } from 'react-bootstrap';
-import { PostDetail } from '@/src/types/post';
+import { PostSumary } from '@/src/types/post';
 import { useSession } from 'next-auth/react';
-
-import { Toast as T } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
 import { useModalContext } from '@/src/useModal';
 interface Props {
-  post:PostDetail;
+  post:PostSumary;
   cacheKey:string[];
 }
 const MAX_REACTIONS = 2;
 const PostReactionsDetail: FunctionComponent<Props> = ({post,cacheKey}) => {
   const {data:session} = useSession();
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
   const router = useRouter();
   // const { setShowEmojisPicker } = usePostEmojiPicker({post,cacheKey});
   const {mutate,isLoading:isMutating} = usePostReactionCreateOrEdit({post,cacheKey});

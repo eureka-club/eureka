@@ -1,6 +1,6 @@
 import { Modal } from 'react-bootstrap';
 import React, { useState } from 'react'
-import { PostDetail } from '@/src/types/post'
+import { PostDetail, PostSumary } from '@/src/types/post'
 import { } from 'react-query'
 // import {default as EP, EmojiClickData} from 'emoji-picker-react'
 import dynamic from 'next/dynamic';
@@ -15,7 +15,7 @@ const EP = dynamic(
     { ssr: false }
 );
 interface Props {
-    post: PostDetail;
+    post: PostSumary;
     cacheKey: string[] | [string, string];
     onSaved?: (emoji: EmojiClickData) => void
 }
@@ -31,7 +31,7 @@ const usePostEmojiPicker = (props: Props) => {
     const { mutate, isLoading: isMutating } = usePostReactionCreateOrEdit({ post, cacheKey });
 
     const EmojiPicker: React.FC<Props> = () => {
-        if (!isPost(post)) return <></>;
+        if (post.type!='post') return <></>;
 
         const handleClose = () => setShowEmojisPicker(false)
         const handleSave = (emojiData: EmojiClickData, event: MouseEvent) => {

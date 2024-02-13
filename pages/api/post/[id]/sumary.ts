@@ -4,23 +4,16 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { findSumary } from '@/src/facades/post';
 
 export default getApiHandler()
-  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    const session = await getSession({ req });
-
-    const { id } = req.query;
-    if (typeof id !== 'string') {
-      res.status(404).end();
-      return;
-    }
-
-    const idNum = parseInt(id, 10);
-    if (!Number.isInteger(idNum)) {
+  .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
+    const { id, sessionId } = req.body;
+    
+    if (!Number.isInteger(id)) {
       res.status(404).end();
       return;
     }
 
     try {
-      const post = await findSumary(idNum,session);
+      const post = await findSumary(id,sessionId);
       if (post == null) {
         // res.status(404).end();
         res.status(200).json({ status: 'OK', post: null });

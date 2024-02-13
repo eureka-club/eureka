@@ -17,7 +17,7 @@ const SearchTabworks:FunctionComponent = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = `works-search-${router?.query.q?.toString()}`;
+  const cacheKey = [`works-search-${router?.query.q?.toString()}`];
 
   const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
 

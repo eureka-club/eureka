@@ -18,7 +18,7 @@ import usePost from '@/src/usePostDetail'
 import { useSession} from 'next-auth/react';
 import { PostDetail } from '@/src/types/post';
 import { UserSumary } from '@/src/types/user';
-import PostSocialInteraction from '../common/PostSocialInteraction';
+import SocialInteraction from './SocialInteraction';
 interface Props {
   post?:PostDetail;
   postId: number|string;
@@ -237,16 +237,19 @@ const MosaicItem: FunctionComponent<Props> = ({
               <h2 className="m-0 p-1 fs-6 text-secondary">{renderParentTitle()}</h2>
             )}
           </h2> */}
-        
-            <PostSocialInteraction
+          <SocialInteraction 
+          post={post}
+          cacheKey={cacheKey}
+          />
+            {/* <PostSocialInteraction
               cacheKey={cacheKey}
               showButtonLabels={false}
               showCounts={false}
-              post={post}
+              postId={post.id}
               showTrash={false}
               showSaveForLater={showSaveForLater}
               className="ms-auto"
-            />
+            /> */}
           </Card.Footer>
       )} 
       </Card>

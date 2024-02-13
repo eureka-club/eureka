@@ -12,6 +12,7 @@ import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleDetail } from '../types/cycle';
 import cycle from 'pages/api/cycle';
+import useCyclesSumary from '../useCyclesSumary';
 
 const take = 8;
 interface Props{
@@ -20,7 +21,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = `cycles-search-${router?.query.q?.toString()}`;
+  const cacheKey = [`cycles-search-${router?.query.q?.toString()}`];
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
 
   const getProps = ()=>{
@@ -87,7 +88,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
 
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
 
-  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCycles(lang,props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleDetail[]>([])
 
   useEffect(()=>{

@@ -1,13 +1,11 @@
 import {} from 'react';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
-
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
 import { UserDetail } from '@/src/types/user';
 import useUser from '@/src/useUser';
-import { PostDetail } from '@/src/types/post';
-import { PostReaction } from '@prisma/client';
+import { PostSumary } from '@/src/types/post';
 
 export interface ExecReactionPayload {
   doCreate:boolean;
@@ -16,10 +14,10 @@ export interface ExecReactionPayload {
 }
 interface MutateReturn{
   prevUser:UserDetail|undefined;
-  prevPost:PostDetail|undefined;
+  prevPost:PostSumary|undefined;
 }
 interface Props{
-  post:PostDetail;
+  post:PostSumary;
   cacheKey:string[]|[string,string];
 }
 
@@ -67,7 +65,7 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           await queryClient.cancelQueries(ck);
           
           prevUser = queryClient.getQueryData<UserDetail>(['USER', `${session.user.id}`]);
-          prevPost = queryClient.getQueryData<PostDetail>(ck);
+          prevPost = queryClient.getQueryData<PostSumary>(ck);
       
           let reactionsPost = user.reactions;
           let reactions = post.reactions;
@@ -79,7 +77,12 @@ const usePostReactionCreateOrEdit = (props:Props)=>{
           }   
           else {
             reactionsPost?.push({postId:post.id,unified:payload.unified,emoji:payload.emoji});
-            reactions.push({ userId: +user.id,unified:payload.unified, emoji:payload.emoji,createdAt:new Date() });
+            reactions.push({ 
+              userId: +user.id,
+              unified:payload.unified, 
+              emoji:payload.emoji,
+              createdAt:new Date() 
+            });
           }
           queryClient.setQueryData(ck, { ...post, reactions });
           queryClient.setQueryData(['USER', `${user.id}`], { ...user, reactions:reactionsPost });
