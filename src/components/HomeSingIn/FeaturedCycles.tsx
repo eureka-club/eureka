@@ -9,13 +9,13 @@ interface Props {
 
 const FeaturedCycles:FC<Props> = ({}) => {
     const router = useRouter()
-    const { t } = useTranslation('common');
+    const { t,lang } = useTranslation('common');
     const {data} = useInterestedCycles()
 
     return (data?.cycles && data?.cycles.length) 
     ? <div>      
        <CarouselStatic
-        cacheKey={['CYCLES','INTERESTED']}
+        cacheKey={[`cycles-of-interest-${lang}`]}
         onSeeAll={()=>router.push('/featured-cycles')}
         data={data?.cycles}
         title={t('Interest cycles')}

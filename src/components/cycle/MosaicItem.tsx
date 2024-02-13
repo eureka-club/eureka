@@ -3,8 +3,8 @@ import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useEffect, useState, MouseEvent } from 'react';
-import { useIsFetching } from 'react-query';
+import { FunctionComponent, useState, MouseEvent } from 'react';
+import { QueryClient, useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge} from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
@@ -13,8 +13,6 @@ import { MdGroup } from 'react-icons/md';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import useUsers from '@/src/useUsers'
-import SocialInteraction from '../common/!!!PostSocialInteraction';
 import { useCycleContext } from '../../useCycleContext';
 import toast from 'react-hot-toast';
 import useCycleSumary from '@/src/useCycleSumary'
@@ -39,7 +37,7 @@ interface Props {
   showShare?: boolean;
   showParticipants?: boolean;
   detailed?: boolean;
-  cacheKey?: [string,string];
+  cacheKey?: string[];
   showSocialInteraction?: boolean;
   showCreateEureka?: boolean;
   showSaveForLater?: boolean;
@@ -71,7 +69,6 @@ const MosaicItem: FunctionComponent<Props> = ({
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   const { data: user } = useUserSumary(session?.user.id!,{ enabled: !!session?.user.id });
-  
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const {data:c} = useCycleSumary(cycleId,{enabled:!!cycleId && !cycleItem})
@@ -87,6 +84,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
   
   const isActive = () => cycle ? dayjs().isBetween(cycle.startDate, cycle.endDate, null, '[]') : false;
+  const qc = new QueryClient();
 
   const {
     mutate: execJoinCycle,

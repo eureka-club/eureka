@@ -17,11 +17,10 @@ const GenericMosaicItem:FC<GenericMosaicItemProps> = ({
       size,
       userMosaicDetailed
     }) => {
-    
     if (isCycleMosaicItem(item)) {
       return (
         // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleDetail }}>
-          <MosaicItemCycle detailed cycle={item} cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}/>
+          <MosaicItemCycle detailed cacheKey={cacheKey} cycle={item} cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}/>
         // </CycleContext.Provider>
       );
     }

@@ -25,7 +25,7 @@ const Mosaics:FC<MosaicProps> = ({
     return <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
         {data.map((i, idx: number) => (
             <div key={`mosaic-${idx}-${i.type}`} className={`${mosaicBoxClassName} mx-2`}/*className="pb-5 mx-2"*/>
-            <GenericMosaicItem item={i} showSocialInteraction={showSocialInteraction} customMosaicStyle={customMosaicStyle} size={size} userMosaicDetailed={userMosaicDetailed} cacheKey={cacheKey}/>
+            <GenericMosaicItem cacheKey={cacheKey} item={i} showSocialInteraction={showSocialInteraction} customMosaicStyle={customMosaicStyle} size={size} userMosaicDetailed={userMosaicDetailed}/>
             </div>
         ))}
     </div>

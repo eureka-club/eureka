@@ -15,7 +15,7 @@ type ctx = {
 } | undefined;
 
 const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
-    const {t} = useTranslation('common');
+    const {t,lang} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
     const whereCycleParticipants = {
@@ -26,7 +26,7 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants
     };
 
     return useMutation(
-        async () => {      
+        async () => {     
           let notificationMessage = `userJoinedCycle!|!${JSON.stringify({
             userName: user?.name,
             cycleTitle: cycle?.title,
@@ -100,6 +100,8 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants
             if(user){
               queryClient.invalidateQueries(['USER', `${user.id}`]);
               queryClient.invalidateQueries(['CYCLE',`${cycle?.id}`]);
+              queryClient.invalidateQueries([`cycles-of-interest-${lang}`]);
+              
               queryClient.invalidateQueries(ck)
             }
             queryClient.invalidateQueries(['USER', `${user.id}`, 'cycles-join-requests']);
@@ -112,7 +114,7 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants
 }
 
 const useLeaveUserFromCycleAction = (user:UserSumary,cycle:CycleSumary,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
-    // const {t} = useTranslation('common');
+    const {lang} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
     const whereCycleParticipants = {
@@ -175,6 +177,8 @@ const useLeaveUserFromCycleAction = (user:UserSumary,cycle:CycleSumary,participa
             if(user){
             queryClient.invalidateQueries(['USER', `${user.id}`]);
             queryClient.invalidateQueries(['CYCLE', `${cycle?.id}`]);
+            queryClient.invalidateQueries([`cycles-of-interest-${lang}`]);
+
             queryClient.invalidateQueries(ck)
             }
             queryClient.invalidateQueries(['USER', `${user.id}`, 'cycles-join-requests'])
