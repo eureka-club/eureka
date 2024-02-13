@@ -29,7 +29,6 @@ import styles from './WorkDetail.module.css';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
-import { WorkContext } from '@/src/useWorkContext';
 import useCycles from '@/src/useCycles';
 import usePosts, { getPosts } from '@/src/usePosts';
 import WorkDetailPost from './WorkDetailPost';
@@ -42,8 +41,6 @@ import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
 import { Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
-import useWorkSumary from '@/src/useWorkSumary';
-import useWork from '@/src/useWorkDetail';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
 
@@ -153,18 +150,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   
-  const canEditPost = (): boolean => {
-    if (session && post && session.user.id === post.creatorId) return true;
-    return false;
-  };
-
-  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if (post) {
-      localStorage.setItem('redirect', `/work/${work.id}`);
-      router.push(`/post/${post.id}/edit`);
-    }
-  };
+  
 
   /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();

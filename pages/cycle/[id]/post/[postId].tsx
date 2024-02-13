@@ -1,7 +1,7 @@
 import { NextPage,GetServerSideProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import Head from "next/head";
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Spinner } from 'react-bootstrap';
@@ -15,6 +15,8 @@ import { CycleContext } from '@/src/useCycleContext';
 import { WEBAPP_URL } from '@/src/constants';
 import { Session } from '@/src/types';
 import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
+import { Button } from '@mui/material';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 interface Props {
   session:Session;
   postId:number;
@@ -33,13 +35,10 @@ const whereCycleParticipants = (id:number)=>({
 const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session}) => {
   const router = useRouter();
   const { t } = useTranslation('meta');
-
   // const [post, setPost] = useState<PostDetail>();
   const [currentUserIsParticipant, setCurrentUserIsParticipant] = useState<boolean>(false);
-  
   const { data:cycle, isLoading: isLoadingCycle } = useCycle(cycleId);
   const { data: post, isLoading: isLoadingPost, isFetching: isFetchingPost } = usePostDetail(postId);
-  
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
@@ -48,7 +47,6 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
       enabled:!!cycleId
     }
   )
-
 
   useEffect(() => {
     if (!session) {
@@ -64,6 +62,19 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
 
   const isLoadingOrFetching = () => {
     return !post && (isLoadingCycle || isLoadingPost || isFetchingPost);
+  };
+
+  const canEditPost = (): boolean => {
+    if (session && post && session.user.id === post.creatorId) return true;
+    return false;
+  };
+
+  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    if(post){
+      localStorage.setItem('redirect',`/cycle/${cycle?.id}`)
+      router.push(`/post/${post.id}/edit`)
+    }
   };
 
   return (
@@ -90,6 +101,15 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
         ></meta>
       </Head>
       <SimpleLayout title={`${post ? post.title : ''} · ${cycle ? cycle.title : ''}`}>
+        <ButtonsTopActions>
+          {
+            post && cycle && canEditPost() 
+              ? <Button color="warning" onClick={handleEditPostClick} size="small">
+                {t('Edit')}
+              </Button>
+              : ''
+          }
+        </ButtonsTopActions>
         <>
           {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
           {!isLoadingOrFetching() && post && cycle && (
@@ -121,6 +141,8 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
  let post = await getPostDetail(postId,session?.user.id!);
  let cycle = await getCycle(cycleId,origin);
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator?.name, storedFile: post?.localImages[0].storedFile}
+
+  
 
   const queryClient = new QueryClient() 
    await queryClient.prefetchQuery(['USERS',JSON.stringify(wcu)],()=>getUsers(wcu))

@@ -132,22 +132,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
       </SimpleLayout>
     );
 
-    {/* TODO cuando se cree la pagina de detalle de la eureka por separado
-      esto hay q pasarlo para ella */}
-    // const canEditPost = (): boolean => {
-    //   if (session && post && session.user.id === post.creatorId) return true;
-    //   return false;
-    // };
-
-    {/* TODO cuando se cree la pagina de detalle de la eureka por separado
-      esto hay q pasarlo para ella */}
-    // const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    //   ev.preventDefault();
-    //   if(post){
-    //     localStorage.setItem('redirect',`/cycle/${cycle.id}`)
-    //     router.push(`/post/${post.id}/edit`)
-    //   }
-    // };
+    
   
     const canEditCycle = (): boolean => {
       if (session && cycle) {

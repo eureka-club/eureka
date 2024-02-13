@@ -24,6 +24,7 @@ interface Props{
 const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
   
   const router = useRouter();
+  console.log('from work ', router.query)
   const { t } = useTranslation('common');
   //const [id, setId] = useState<string>('');
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;

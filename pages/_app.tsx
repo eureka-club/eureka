@@ -9,32 +9,31 @@ import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 
 import { createTheme } from '@mui/material/styles';
 
 const materialTheme = createTheme({
   palette: {
     warning: {
-      light: 'blue',
+      light: '#ffafaf',
       main: '#ffafaf',
       dark: '#e3506d',
       contrastText: '#fff',
     },
     primary: {
-      light: 'blue',
+      light: '#13b4bc',
       main: '#13b4bc',
       dark: '#13c0c9',
       contrastText: '#fff',
     },
     secondary: {
-      light: 'blue',
+      light: 'rgb(61, 41, 132)',
       main: 'rgb(61, 41, 132)',
       dark: 'rgb(42, 26, 107)',
       contrastText: '#fff',
     },
     info: {
-      light: 'blue',
+      light: '#0288d1',
       main: '#0288d1',
       dark: '#3596ca',
       contrastText: '#fff',

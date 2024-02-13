@@ -18,7 +18,6 @@ import Avatar from '../common/UserAvatar';
 import usePost from '@/src/usePostDetail'
 import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
-import { useSession } from 'next-auth/react';
 import Spinner from '../Spinner';
 import useUser from '@/src/useUser';
 import { Alert } from '@mui/material';
@@ -42,8 +41,8 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
   const router = useRouter();
 
   //const { data: session, status } = useSession();
-  const { data: cycle } = useCycle(+router?.query.id!, { enabled: !!router?.query.id! });
-  const { data: user } = useUser(session?.user.id!, { enabled: !!session?.user.id });
+  const { data: cycle, isLoading:isLoadingCycle } = useCycle(+router?.query.id!, { enabled: !!router?.query.id! });
+  const { data: user, isLoading:isLoadingUser } = useUser(session?.user.id!, { enabled: !!session?.user.id });
 
   const currentUserIsParticipant = user?.cycles.findIndex(c => c.id == +router.query.id!);
   const isPublicPost = cycle?.access == 1;
@@ -51,37 +50,37 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
   // if(status=='unauthenticated')
   //   router.push(`/cycle/${router.query.id}`);
 
-  const { data: post } = usePost(+postId, {
+  const { data: post, isLoading:isLoadingPost } = usePost(+postId, {
     enabled: !!postId
   })
 
-  if (!post)
+  if (!post && !isLoadingPost)
     return <Alert color='warning'>Not found</Alert>;
 
-  if (cycle && !isPublicPost && !currentUserIsParticipant)
+  if (cycle && !isPublicPost && (!isLoadingUser && !currentUserIsParticipant))
     return <Alert color='warning'>Unauthorized</Alert>;
 
-  if (status == 'loading') return <Spinner />;
+  if (isLoadingPost||isLoadingUser||isLoadingCycle) return <Spinner />;
 
   return (
     <article data-cy="post-detail">
       <MosaicContext.Provider value={{ showShare: true }}>
         <div className={classNames('d-flex d-lg-none flex-row justify-content-between mt-3', styles.postInfo)}>
           <div>
-            <Link href={`/mediatheque/${post.creator.id}`} passHref>
-              <Avatar width={28} height={28} userId={post.creator.id} showFullName />
+            <Link href={`/mediatheque/${post?.creator.id}`} passHref>
+              <Avatar width={28} height={28} userId={post?.creator.id} showFullName />
             </Link>
           </div>
           <div>
             <small className={styles.postDate}>
               {
-                dayjs(post.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
+                dayjs(post?.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
               }
             </small>
           </div>
         </div>
 
-        <h1 className="text-secondary fw-bold mb-2 d-sm-block d-lg-none"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
+        <h1 className="text-secondary fw-bold mb-2 d-sm-block d-lg-none"> {post?.title} </h1> {/*titulo y abajo texto eureka*/}
         <div className='d-flex d-lg-none flex-row flex-wrap'>
           {work != null && (
             <aside className='me-3' >
@@ -100,16 +99,16 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
               </section>
             </aside>
           )}
-          {post.cycles && post.cycles.length > 0 && (
+          {post?.cycles && post?.cycles.length > 0 && (
             <aside className=''>
               <Badge bg="primary" className="rounded-pill fw-light text-dark tagText">
                 {t('common:cycle')}
               </Badge>
               <section className="my-1">
                 <h2 style={{ fontSize: '1rem' }}>
-                  <Link href={`/cycle/${post.cycles[0].id}`} passHref>
+                  <Link href={`/cycle/${post?.cycles[0].id}`} passHref>
                     <p className="text-break mb-0 tagText">
-                      <a className="cursor-pointer">{post.cycles[0].title}</a>
+                      <a className="cursor-pointer">{post?.cycles[0].title}</a>
                     </p>
                   </Link>
                 </h2>
@@ -119,51 +118,51 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
 
         </div>
         <div className='d-flex d-lg-none flex-row flex-wrap my-2'>
-          {post.topics && (
+          {post?.topics && (
             <TagsInput
               className="ms-0 ms-lg-2 d-flex flex-row"
               formatValue={(v: string) => t(`topics:${v}`)}
-              tags={post.topics}
+              tags={post?.topics}
               readOnly
             />
           )}
-          {post.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post.tags} readOnly />}
+          {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
         </div>
         <Row className="mb-5 d-flex flex-column flex-lg-row">
           <Col className='col-lg-4 col-xl-5'>
             <div className='mb-2 d-none d-lg-block'>
-              <MosaicItem cacheKey={cacheKey} className='' postId={post.id} showdetail={false} linkToPost={false} showSaveForLater={true} />
+              <MosaicItem cacheKey={cacheKey} className='' postId={post?.id!} showdetail={false} linkToPost={false} showSaveForLater={true} />
             </div>
             <div className='container d-sm-block d-lg-none mb-2 mt-2 position-relative'>
-              <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post.id} showdetail={false} linkToPost={false} showSaveForLater={true} />
+              <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post?.id!} showdetail={false} linkToPost={false} showSaveForLater={true} />
             </div>
           </Col>
           <Col className='col-lg-8 col-xl-7'>
             <div className="px-4">
               <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>
                 <div>
-                  <Link href={`/mediatheque/${post.creator.id}`} passHref>
+                  <Link href={`/mediatheque/${post?.creator.id}`} passHref>
                     {/* <a>
                   <img
-                    src={post.creator.image || '/img/default-avatar.png'}
+                    src={post?.creator.image || '/img/default-avatar.png'}
                     alt="creator avatar"
                     className={styles.creatorAvatar}
                   />
-                  {post.creator.name}
+                  {post?.creator.name}
                 </a> */}
-                    <Avatar width={28} height={28} userId={post.creator.id} showFullName />
+                    <Avatar width={28} height={28} userId={post?.creator.id} showFullName />
                   </Link>
                 </div>
                 <div>
                   <small className={styles.postDate}>
                     {
-                      dayjs(post.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
-                      // dayjs(post.createdAt).format(DATE_FORMAT_SHORT)
+                      dayjs(post?.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
+                      // dayjs(post?.createdAt).format(DATE_FORMAT_SHORT)
                     }
                   </small>
                 </div>
               </div>
-              <h1 className="text-secondary fw-bold mb-2  d-none d-lg-block"> {post.title} </h1> {/*titulo y abajo texto eureka*/}
+              <h1 className="text-secondary fw-bold mb-2  d-none d-lg-block"> {post?.title} </h1> {/*titulo y abajo texto eureka*/}
               <div className='d-none d-lg-flex flex-row flex-wrap'>
                 {work != null && (
                   <aside className="me-3">
@@ -182,16 +181,16 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                     </section>
                   </aside>
                 )}
-                {post.cycles && post.cycles.length > 0 && (
+                {post?.cycles && post?.cycles.length > 0 && (
                   <aside className="">
                     <Badge bg="primary" className="rounded-pill py-1 px-2 fw-light text-dark tagText">
                       {t('common:cycle')}
                     </Badge>
                     <section className="my-1">
                       <h2 style={{ fontSize: '1rem' }}>
-                        <Link href={`/cycle/${post.cycles[0].id}`} passHref>
+                        <Link href={`/cycle/${post?.cycles[0].id}`} passHref>
                           <p className="text-break mb-0 tagText">
-                            <a className="cursor-pointer">{post.cycles[0].title}</a>
+                            <a className="cursor-pointer">{post?.cycles[0].title}</a>
                           </p>
                         </Link>
                       </h2>
@@ -200,28 +199,28 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                 )}
               </div>
               <div className='d-none d-lg-flex flex-row flex-wrap my-2'>
-                {post.topics && (
+                {post?.topics && (
                   <TagsInput
                     className="ms-0 d-flex flex-row"
                     formatValue={(v: string) => t(`topics:${v}`)}
-                    tags={post.topics}
+                    tags={post?.topics}
                     readOnly
                   />
                 )}
-                {post.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post.tags} readOnly />}
+                {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
               </div>
               <div className='mt-3'>
-                {(post.contentText != null && post.contentText.length != 0) && <UnclampText text={post.contentText} clampHeight="16rem" />}
+                {(post?.contentText != null && post?.contentText.length != 0) && <UnclampText text={post?.contentText} clampHeight="16rem" />}
               </div>
             </div>
             {/*<div className='container d-none d-lg-block'>
             <CommentsList en
-            tity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
+            tity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
           </div>*/}
           </Col>
-          <HyvorComments entity='post' id={`${post.id}`} session={session} />
+          <HyvorComments entity='post' id={`${post?.id}`} session={session} />
           {/*<div className='container d-sm-block d-lg-none mt-3'>
-            <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post.id}`]} />
+            <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
           </div>*/}
         </Row>
       </MosaicContext.Provider>

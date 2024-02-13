@@ -10,6 +10,10 @@ import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
+import { Button } from '@mui/material';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import { MouseEvent } from 'react';
+import { useRouter } from 'next/router';
 interface Props {
   postId:number;
   workId:number;
@@ -21,13 +25,26 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   const { t } = useTranslation('meta');
-
+  const router=useRouter();
   const { data: work, isLoading: loadingWork } = useWork(+workId, { enabled: !!workId });
   const { data: post, isLoading: loadingPost } = usePostDetail(+postId, { enabled: !!postId });
   const isLoadingData = () => {
     if (loadingWork) return true;
     if (loadingPost) return true;
     return false;
+  };
+
+  const canEditPost = (): boolean => {
+    if (session && post && session.user.id === post.creatorId) return true;
+    return false;
+  };
+
+  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    if (post) {
+      localStorage.setItem('redirect', `/work/${work?.id}`);
+      router.push(`/post/${post.id}/edit`);
+    }
   };
 
   const getLayout = (children: JSX.Element, title = '') => {
@@ -57,7 +74,18 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
             content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
           ></meta>
         </Head>
-        <SimpleLayout title={title}>{children}</SimpleLayout>;
+        <SimpleLayout title={title}>
+        <ButtonsTopActions>
+          {post && work && canEditPost() && (
+            <>
+              <Button color="warning" onClick={handleEditPostClick}>
+                {t('edit')}
+              </Button>
+            </>
+          )}
+        </ButtonsTopActions>
+          {children}
+        </SimpleLayout>;
       </>
     );
   };
@@ -77,7 +105,6 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const {id:wid,postId:pid} = query;
   const workId = parseInt(wid ? wid.toString():'')
   const postId = parseInt(pid ? pid.toString():'')
-  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   const locale = ctx.locale??"es";
 
  let post = await getPostDetail(postId,session?.user.id!);
