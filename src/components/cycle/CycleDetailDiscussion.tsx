@@ -23,12 +23,12 @@ interface Props {
   className?: string;
   cacheKey:string[];
 }
-const whereCycleParticipants = (id:number)=>({
-  where:{OR:[
-    {cycles: { some: { id } }},//creator
-    {joinedCycles: { some: { id } }},//participants
-  ], }
-});
+// const whereCycleParticipants = (id:number)=>({
+//   where:{OR:[
+//     {cycles: { some: { id } }},//creator
+//     {joinedCycles: { some: { id } }},//participants
+//   ], }
+// });
 const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cacheKey }) => {
   const {data:session, status} = useSession();
   const router = useRouter();
@@ -44,12 +44,12 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
   },[dataWorks])
 
 
-  const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
-    {
-      enabled:!!cycle,
-      from:'CycleDetailDiscussion'
-    }
-  )
+  // const { data: participants,isLoading:isLoadingParticipants } = useUsers(whereCycleParticipants(cycle.id),
+  //   {
+  //     enabled:!!cycle,
+  //     from:'CycleDetailDiscussion'
+  //   }
+  // )
 
    useEffect(()=>{
        if(router.query.tabKey && router.query.tabKey.toString() === 'eurekas'){ 
@@ -99,10 +99,10 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
  
 
   const isParticipant = ()=>{
-    if(!session)return false;
-    if (session && cycle && participants) {
+    if(!session && !isSessionLoading)return false;
+    if (session && cycle && cycle.participants) {
       if (session.user.id === cycle.creatorId) return true; 
-      const idx = participants.findIndex(p=>p.id==session.user.id)
+      const idx = cycle.participants.findIndex(p=>p.id==session.user.id)
       if(idx>-1)return true;
     }
     return false;
