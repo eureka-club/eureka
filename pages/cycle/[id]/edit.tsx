@@ -1,11 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { BiArrowBack } from 'react-icons/bi';
-import { ButtonGroup, Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-// import { Session } from '../../../src/types';
-import { CycleDetail } from '../../../src/types/cycle';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
 import useCycle,{getCycle} from '@/src/useCycle';
@@ -13,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { Cycle } from '@prisma/client';
 import { Session } from '@/src/types';
 import { dehydrate, QueryClient } from 'react-query';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   notFound?: boolean;
@@ -47,15 +45,8 @@ const EditCyclePage: NextPage<Props> = ({session}) => {
 
   return (
     <SimpleLayout title={t('editCycle')}>
-      <>
-        <ButtonGroup className="mb-1">
-          <Button variant="primary" className='text-white' onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
-        {<EditCycleForm className="mb-5" cycle={cycle as Cycle} />}
-        {/* {notFound && <Alert variant="danger">{t('common:Error')}</Alert>} */}
-      </>
+      <ButtonsTopActions/>
+      <EditCycleForm className="mb-5" cycle={cycle as Cycle} />
     </SimpleLayout>
   );
 };

@@ -6,8 +6,8 @@ import useTranslation from 'next-translate/useTranslation';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateWorkForm from '@/components/forms/CreateWorkForm';
-import { Spinner,ButtonGroup, Button } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
+import { Spinner } from 'react-bootstrap';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   notFound?: boolean;
@@ -28,13 +28,8 @@ const CreateWorkPage: NextPage<Props> = ({ notFound, session }) => {
  if (!notFound) 
   return  (
     <SimpleLayout title={t('title')}>
-         {<>
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
-      <CreateWorkForm noModal/></>}
+      <ButtonsTopActions/>   
+      <CreateWorkForm noModal/>
     </SimpleLayout>
   );
   else

@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
-import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
+import { Spinner} from 'react-bootstrap';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   notFound?: boolean;
@@ -28,14 +28,14 @@ useEffect(() => {
 if (!notFound) 
   return  (
     <SimpleLayout title={t('createCycle')}>
-         {(isLoadingSession) ?
-        <Spinner animation="grow" variant="info" />:<>
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
-      <CreateCycleForm/></>}
+      <ButtonsTopActions/>
+         {
+          (isLoadingSession) 
+          ? <Spinner animation="grow" variant="info" />
+          : <>
+              <CreateCycleForm/>
+            </>
+        }
     </SimpleLayout>
   );
   else

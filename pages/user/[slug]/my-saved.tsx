@@ -1,6 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row, Spinner,Tab,Tabs } from 'react-bootstrap';
+import { Col, Row, Spinner,Tab,Tabs } from 'react-bootstrap';
 import { QueryClient, dehydrate } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
@@ -11,8 +11,8 @@ import {getUser} from '@/src/useUser';
 import CMI from '@/src/components/cycle/MosaicItem'
 import PMI from '@/src/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem'
-import { BiArrowBack } from 'react-icons/bi';
 import {getSession} from 'next-auth/react'
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props{
   id:number;
@@ -74,12 +74,8 @@ const MySaved: NextPage<Props> = ({id}) => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
+      <ButtonsTopActions/>
     <article className='mt-4' data-cy="my-saved">
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
       {
       isLoadingSession 
         ? <Spinner animation="grow"/>

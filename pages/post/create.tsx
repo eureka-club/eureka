@@ -3,13 +3,10 @@ import { useEffect } from 'react';
 import { getSession,useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-// import { Session } from '../../src/types';
-import SimpleLayout from '../../src/components/layouts/SimpleLayout';
-//import CreatePostForm from '../../src/components/forms/CreatePostForm';
-import CreatePostForm from '../../src/components/forms/CreatePostForm';
-import { Spinner, Card, Row, Col, ButtonGroup, Button, Alert } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
-import { stubFalse } from 'lodash';
+import SimpleLayout from '@/src/components/layouts/SimpleLayout';
+import CreatePostForm from '@/src/components/forms/CreatePostForm';
+import { Spinner, Col } from 'react-bootstrap';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   notFound?: boolean;
@@ -30,8 +27,9 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
  if (!notFound) 
   return  (
     <SimpleLayout title={t('title')}>
-         <section className='d-flex flex-column-reverse flex-lg-row'>
-         <Col xs={12} lg={2} className="me-4" >
+        <ButtonsTopActions/>
+        <section className='d-flex flex-column-reverse flex-lg-row'>
+          <Col xs={12} lg={2} className="me-4" >
           <section className='mt-5'>
             <h3 className="text-secondary fw-bold">{t('DoubtsAI')}</h3>
             {/*<Link href="/about"><a className='text-primary text-decoration-underline text-blue' onClick={()=> window.scrollTo(0, 0)}>{t('browserTitleAbout')} </a></Link>*/}
@@ -51,25 +49,21 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
              <section  className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation" >
               <p className="p-2 m-0 text-wrap text-center fs-6">{t('AIAbout5')}</p>
           </section>
-        </Col>    
-        <Col xs={12} lg={10}>
+          </Col>    
+          <Col xs={12} lg={10}>
          <section className='ms-0 ms-lg-4'>  
          {(isLoadingSession) ?
         <Spinner animation="grow" variant="info" />:<>
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
       <CreatePostForm noModal params={query}/></>}
       </section> 
-       </Col>  
-     </section>  
+          </Col>  
+        </section>  
     </SimpleLayout>
   );
   else
    return  (
     <SimpleLayout title={t('title')}>
+        <ButtonsTopActions/>
         <Spinner animation="grow" variant="info" />
     </SimpleLayout>
   );

@@ -1,15 +1,14 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
 import { dehydrate, QueryClient } from 'react-query';
-import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
+import { Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-
 import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
-import { BiArrowBack } from 'react-icons/bi';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props{
   id:number
@@ -38,12 +37,8 @@ const MyPosts: NextPage<Props> = ({id}) => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
+      <ButtonsTopActions/>
     <article className='mt-4' data-cy="my-posts">
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-      </ButtonGroup>
       {
       isLoadingSession 
         ? <Spinner animation="grow"/>

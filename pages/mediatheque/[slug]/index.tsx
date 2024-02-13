@@ -264,8 +264,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
-      <article data-cy="mediatheque">
         <ButtonsTopActions/>
+      <article data-cy="mediatheque">
         {!isLoadingUser && user && (
           <section>
             <Card className="userHeader">

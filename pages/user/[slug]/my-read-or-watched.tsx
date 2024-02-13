@@ -17,7 +17,6 @@ import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
 import { useRouter } from 'next/router';
 import { getUser } from '@/src/useUser';
-import { BiArrowBack } from 'react-icons/bi';
 import { UserDetail } from '@/src/types/user';
 import { QueryClient, dehydrate } from 'react-query';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';

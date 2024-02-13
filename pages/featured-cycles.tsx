@@ -1,16 +1,15 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { dehydrate, QueryClient } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
-
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useInterestCycles, { getInterestedCycles } from '@/src/useInterestedCycles';
 import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
-import { BiArrowBack } from 'react-icons/bi';
 import { getSession } from 'next-auth/react';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props{
 }
@@ -36,12 +35,8 @@ const InterestedCycles: NextPage<Props> = () => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
-    <article className='mt-4' data-cy="my-cycles">
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
+      <ButtonsTopActions/>
+      <article className='mt-4' data-cy="my-cycles">
         <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('Interest cycles')}</h1>
             <Row>
@@ -53,7 +48,7 @@ const InterestedCycles: NextPage<Props> = () => {
             </Row>
             </>
 
-          </article>
+      </article>
     </SimpleLayout>
   </>
 };

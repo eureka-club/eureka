@@ -5,13 +5,13 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
-
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import { Button as MaterialButton } from '@mui/material';
 import { dehydrate, QueryClient, useIsFetching } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import Banner from '@/src/components/Banner';
 import useCycle, { getCycle } from '@/src/useCycle';
-import useUsers, { getUsers } from '@/src/useUsers';
 import { getPosts } from '@/src/usePosts';
 import { CycleContext } from '@/src/useCycleContext';
 import globalModalsAtom from '@/src/atoms/globalModals';
@@ -20,7 +20,7 @@ import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
-import { useEffect } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import { Session } from '@/src/types';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
@@ -132,6 +132,35 @@ const CycleDetailPage: NextPage<Props> = (props) => {
       </SimpleLayout>
     );
 
+    {/* TODO cuando se cree la pagina de detalle de la eureka por separado
+      esto hay q pasarlo para ella */}
+    // const canEditPost = (): boolean => {
+    //   if (session && post && session.user.id === post.creatorId) return true;
+    //   return false;
+    // };
+
+    {/* TODO cuando se cree la pagina de detalle de la eureka por separado
+      esto hay q pasarlo para ella */}
+    // const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    //   ev.preventDefault();
+    //   if(post){
+    //     localStorage.setItem('redirect',`/cycle/${cycle.id}`)
+    //     router.push(`/post/${post.id}/edit`)
+    //   }
+    // };
+  
+    const canEditCycle = (): boolean => {
+      if (session && cycle) {
+        if (session.user.roles === 'admin' || session!.user.id === cycle.creatorId) return true;
+      }
+      return false;
+    };
+
+    const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
+      ev.preventDefault();
+      router.push(`/cycle/${router.query.id}/edit`);
+    };
+
   const getBanner = () => {
     if (cycle && !cycle?.currentUserIsParticipant && router) {
       if (router.asPath.search(/\/cycle\/21/g) > -1)
@@ -204,6 +233,24 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           ></meta>
         </Head>
         <SimpleLayout banner={getBanner()} title={cycle ? cycle.title : ''}>
+        <ButtonsTopActions>
+      {
+        !router.query.postId && canEditCycle() 
+        ? <MaterialButton color="warning" onClick={handleEditClick} size="small">
+              {t('Edit')}
+            </MaterialButton>
+        : '' 
+      }
+      {/* TODO cuando se cree la pagina de detalle de la eureka por separado
+      esto hay q pasarlo para ella */}
+      {/* {
+        post && cycle && canEditPost() 
+          ? <MaterialButton color="warning" onClick={handleEditPostClick} size="small">
+            {t('Edit')}
+          </MaterialButton>
+          : ''
+      } */}
+    </ButtonsTopActions>
           {renderCycleDetailComponent()}
         </SimpleLayout>
       </CycleContext.Provider>

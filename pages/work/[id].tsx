@@ -1,7 +1,7 @@
 import { NextPage,GetServerSideProps,  } from 'next';
 import Head from "next/head";
 import { getSession } from 'next-auth/react';
-import { ReactElement } from 'react';
+import { MouseEvent, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { Spinner, Alert } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
@@ -13,6 +13,8 @@ import useWork,{getWork} from '@/src/useWorkDetail';
 import {getCycles} from '@/src/useCycles'
 import {getPosts} from '@/src/usePosts'
 import { Session } from '@/src/types';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import { Button } from '@mui/material';
 
 interface Props{
   workId: number;
@@ -29,6 +31,17 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
 
 
   const { data: work, isLoading, isFetching, isError, error } = useWork(+workId, { enabled: !!workId });
+  
+  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    localStorage.setItem('redirect', `/work/${work?.id}`);
+    router.push(`/work/${work?.id}/edit`);
+  };
+
+  const canEditWork = (): boolean => {
+    if (session && session.user.roles === 'admin') return true;
+    return false;
+  };
 
   const rendetLayout = (title: string, children: ReactElement) => {
     return (
@@ -57,7 +70,23 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
             content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metas.storedFile}`}
           ></meta>
         </Head>
-        <SimpleLayout title={title}>{children}</SimpleLayout>;
+        <SimpleLayout title={title}>
+        <ButtonsTopActions>
+          {!router.query.postId && canEditWork() && (
+            <Button color="warning" onClick={handleEditClick}>
+              {t('edit')}
+            </Button>
+          )}
+          {/* {post && work && canEditPost() && (
+            <>
+              <Button variant="warning" onClick={handleEditPostClick} size="sm">
+                {t('edit')}
+              </Button>
+            </>
+          )} */}
+        </ButtonsTopActions>
+          {children}
+        </SimpleLayout>;
       </>
     );
   };

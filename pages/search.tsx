@@ -1,10 +1,9 @@
-import { BiArrowBack } from 'react-icons/bi';
 import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { QueryClient, dehydrate } from 'react-query';
-import { ButtonGroup, Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { Session } from '@/src/types';
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -13,6 +12,7 @@ import { getWorksProps } from '@/src/types/work';
 import { getWorksSumary } from '@/src/useWorksSumary';
 import { getCyclesSumary } from '@/src/useCyclesSumary';
 import { getPostsSumary } from '@/src/usePostsSumary';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 const topics = [
   'gender-feminisms',
@@ -73,11 +73,7 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
         </Head>
       )}
       <SimpleLayout title={t('Results')}>
-        <ButtonGroup className="mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
+        <ButtonsTopActions/>
         {/* <SearchInput className="" /> */}
 
         <>

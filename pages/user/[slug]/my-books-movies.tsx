@@ -1,15 +1,15 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
-import { Button, ButtonGroup, Col, Row, Spinner } from 'react-bootstrap';
+import { Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import WMI from '@/src/components/work/MosaicItem';
 import {useRouter} from 'next/router'
 import useUser,{getUser} from '@/src/useUser';
-import { BiArrowBack } from 'react-icons/bi';
 import { UserDetail } from '@/src/types/user';
 import {QueryClient,dehydrate} from 'react-query'
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props{
   id:number
@@ -38,12 +38,8 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
+      <ButtonsTopActions/>
     <article className='mt-4' data-cy="my-books-movies">
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
       {
       isLoadingSession 
         ? <Spinner animation="grow"/>

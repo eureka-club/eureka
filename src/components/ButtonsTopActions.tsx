@@ -12,6 +12,7 @@ export const ButtonsTopActions = (props:Props)=>{
         disableElevation
         variant="contained"
         size="small"
+        className="pb-3"
         >
             <Button 
             color="primary"

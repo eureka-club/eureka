@@ -13,11 +13,9 @@ import {
   Col,
   NavLink,
   Button,
-  ButtonGroup,
   Spinner,
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
-import { BiArrowBack } from 'react-icons/bi';
 // import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { PostDetail } from '@/src/types/post';
@@ -154,17 +152,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     }
   };
 
-  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    localStorage.setItem('redirect', `/work/${work.id}`);
-    router.push(`/work/${work.id}/edit`);
-  };
-
-  const canEditWork = (): boolean => {
-    if (session && session.user.roles === 'admin') return true;
-    return false;
-  };
-
+  
   const canEditPost = (): boolean => {
     if (session && post && session.user.id === post.creatorId) return true;
     return false;
@@ -265,23 +253,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-          {!router.query.postId && canEditWork() && (
-            <Button variant="warning" onClick={handleEditClick} size="sm">
-              {t('edit')}
-            </Button>
-          )}
-          {post && work && canEditPost() && (
-            <>
-              <Button variant="warning" onClick={handleEditPostClick} size="sm">
-                {t('edit')}
-              </Button>
-            </>
-          )}
-        </ButtonGroup>
+        
 
         {
           //  (!editPostOnSmallerScreen.value)

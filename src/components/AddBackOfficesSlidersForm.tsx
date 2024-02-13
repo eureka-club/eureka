@@ -1,22 +1,13 @@
-import { Container, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { i18n, Locale } from 'i18n-config';
-import { ChangeEvent, LegacyRef, MouseEventHandler, useRef, useState } from 'react';
-import { Languages } from '../types';
+import { ChangeEvent, useRef, useState } from 'react';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import LinearProgressMUI from '@/components/common/LinearProgressMUI';
-import { Prisma, LocalImage } from '@prisma/client';
-import { getImg } from '@/src/lib/utils';
 import { Button } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { Editor } from 'tinymce';
-import { setScheduler } from 'cypress/types/bluebird';
 import { QueryClient } from 'react-query';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
 import CropImageFileSelect from './forms/controls/CropImageFileSelect';
 
 interface StateProp {

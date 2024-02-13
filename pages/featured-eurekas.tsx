@@ -4,16 +4,11 @@ import { Col, Row } from 'react-bootstrap';
 import { dehydrate, QueryClient } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
-
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useFeaturedEurekas,{ getFeaturedEurekas } from '@/src/useFeaturedEurekas';
 import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
-import { BiArrowBack } from 'react-icons/bi';
 import { getSession } from 'next-auth/react';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props{

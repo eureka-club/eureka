@@ -3,11 +3,11 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {getSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { Spinner, ButtonGroup, Button } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
+import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
 import { Session } from '@/src/types';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 interface Props {
   session:Session
 }
@@ -24,12 +24,8 @@ const Profile: NextPage<Props> = ({session}) => {
 if (session) 
   return (
     <SimpleLayout title={t('Profile')}>
+      <ButtonsTopActions/>
       <>
-        <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={() => router.back()} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
         <EditUserForm />  
       </>
     </SimpleLayout>

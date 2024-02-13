@@ -4,11 +4,10 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { Spinner, ButtonGroup, Button, Alert } from 'react-bootstrap';
-import { BiArrowBack } from 'react-icons/bi';
-
+import { Spinner, Alert } from 'react-bootstrap';
 import EditWorkForm from '@/components/forms/EditWorkForm'
 import { Session } from '@/src/types';
+import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 
 interface Props {
   session?: Session;
@@ -38,11 +37,6 @@ const render = ()=>{
     return <Alert>{t('notSession')}</Alert>
   else if(router && router.query.id && !notFound){
     return <>
-      <ButtonGroup className="mt-1 mt-md-3 mb-1">
-          <Button variant="primary text-white" onClick={goTo} size="sm">
-            <BiArrowBack />
-          </Button>
-        </ButtonGroup>
       <EditWorkForm/>
     </>
   }
@@ -51,6 +45,7 @@ const render = ()=>{
 }
 
   return <SimpleLayout title={t('title')}>
+    <ButtonsTopActions/>
   {render()}
 </SimpleLayout>
 

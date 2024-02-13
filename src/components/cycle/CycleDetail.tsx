@@ -18,9 +18,9 @@ import {
   Spinner,
 } from 'react-bootstrap';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
-import { BiArrowBack } from 'react-icons/bi';
 import { MosaicContext } from '@/src/useMosaicContext';
 import { useQueryClient } from 'react-query';
+import { Button as MaterialButton } from '@mui/material';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostDetail } from '@/src/types/post';
@@ -42,8 +42,6 @@ import MosaicItemUser from '@/components/user/MosaicItem'
 import { useInView } from 'react-intersection-observer';
 import { CycleDetail } from '@/src/types/cycle';
 import { Session } from '@/src/types';
-import { ButtonsTopActions } from '../ButtonsTopActions';
-import { Button as MaterialButton } from '@mui/material';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { CycleWork } from '@/src/types/cycleWork';
 
@@ -186,27 +184,14 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       });
   };
 
-  const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    router.push(`/cycle/${router.query.id}/edit`);
-  };
+  
 
    /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
   };*/
 
-  const canEditPost = (): boolean => {
-    if (session && post && session.user.id === post.creatorId) return true;
-    return false;
-  };
-
-  const canEditCycle = (): boolean => {
-    if (session && cycle) {
-      if (session.user.roles === 'admin' || session!.user.id === cycle.creatorId) return true;
-    }
-    return false;
-  };  
+    
   
   const renderCycleDetailHeader = () => {
     if (cycle) {
@@ -374,14 +359,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     return <></>;
   };
 
-  const handleEditPostClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if(post){
-      localStorage.setItem('redirect',`/cycle/${cycle.id}`)
-      router.push(`/post/${post.id}/edit`)
-    }
-  };
-
   const getDefaultActiveKey = () => {
     if (cycle) {
       if (cycle.access === 1) {
@@ -421,22 +398,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
   return (
     <>
-    <ButtonsTopActions>
-      {
-        !router.query.postId && canEditCycle() 
-        ? <MaterialButton color="warning" onClick={handleEditClick} size="small">
-              {t('Edit')}
-            </MaterialButton>
-        : '' 
-      }
-      {
-        post && cycle && canEditPost() 
-          ? <MaterialButton color="warning" onClick={handleEditPostClick} size="small">
-            {t('Edit')}
-          </MaterialButton>
-          : ''
-      }
-    </ButtonsTopActions>
+    
 
 {
 // (!editPostOnSmallerScreen.value) ? 
