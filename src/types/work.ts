@@ -96,7 +96,7 @@ export const WorkSumarySpec = {
     publicationYear:true,
     countryOfOrigin:true,
     length:true,
-    localImages: { select: { id:true, storedFile: true } },
+    localImages: { select: { storedFile: true } },
     readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
   }
 }

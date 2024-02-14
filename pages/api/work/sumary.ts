@@ -1,21 +1,17 @@
-import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-
-import { FileUpload, Languages, Session } from '@/src/types';
+import { Languages } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
-import { storeUpload } from '@/src/facades/fileUpload';
-import { createFromServerFields, findAll, findAllWithoutLangRestrict } from '@/src/facades/work';
+import { findAllSumary, findAllWithoutLangRestrict } from '@/src/facades/work';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/src/lib/prisma';
-import { NOT_COVER_IMAGE_RECEIVED, SERVER_ERROR, UNAUTHORIZED } from '@/src/api_code';
+import { SERVER_ERROR } from '@/src/api_code';
 // import redis from '@/src/lib/redis';
-
 
 export default getApiHandler()
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-      const { q = null, props: p = undefined, lang: l } = req.query;
+      const { props: p = undefined, lang: l } = req.query;
 
       const language = l ? Languages[l.toString()] : null;
       const props: Prisma.WorkFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())) : {};
@@ -85,7 +81,7 @@ export default getApiHandler()
 
         let cr = await prisma?.work.aggregate({ where, _count: true });
         const total = cr?._count;
-        data = await findAll(language, session, { take, where, skip, cursor });
+        data = await findAllSumary(language, session, { take, where, skip, cursor });
 
         res.status(200).json({
           data,

@@ -27,7 +27,7 @@ interface Props {
   showSaveForLater?: boolean;
   notLangRestrict?: boolean;
   style?: { [k: string]: string };
-  cacheKey?: [string, string];
+  cacheKey?: string[];
   showTrash?: boolean;
   linkToWork?: boolean;
   imageLink?: boolean;

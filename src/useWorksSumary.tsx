@@ -11,7 +11,7 @@ export const getWorksSumary = async (
   let query = props ? `?props=${encodeURIComponent(JSON.stringify(props))}` : ''  //lang=${lang}&
   if (lang)
     query += `&lang=${lang}`;
-  const url = `${origin || ''}/api/work${query}`
+  const url = `${origin || ''}/api/work/sumary${query}`
   const res = await fetch(url);
   if (!res.ok) return { works: [], fetched: 0, total: -1 };
   const { data: works, fetched, total } = await res.json();
