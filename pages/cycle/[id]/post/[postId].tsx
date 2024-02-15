@@ -139,7 +139,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
  let post = await getPostDetail(postId,session?.user.id!);
- let cycle = await getCycle(cycleId,origin);
+ let cycle = await getCycle(cycleId);
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator?.name, storedFile: post?.localImages[0].storedFile}
 
   

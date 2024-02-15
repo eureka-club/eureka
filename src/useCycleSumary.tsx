@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import { CycleSumary } from './types/cycle';
+import { WEBAPP_URL } from './constants';
 
-export const getCycleSumary = async (id: number,origin=''): Promise<CycleSumary | undefined> => {
+export const getCycleSumary = async (id: number): Promise<CycleSumary | undefined> => {
   if (!id) throw new Error('idRequired');
-  const url = `${origin||''}/api/cycle/${id}/sumary`;
+  const url = `${WEBAPP_URL}/api/cycle/${id}/sumary`;
 
   const res = await fetch(url);
   if (!res.ok) return undefined;

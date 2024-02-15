@@ -268,7 +268,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const wcw = whereCycleWorks(id);
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-  let cycle = await getCycle(id, origin);
+  let cycle = await getCycle(id);
   let metaTags = null;
   if (cycle) {
 

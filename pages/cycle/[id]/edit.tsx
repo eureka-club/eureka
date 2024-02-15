@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
  
   const qc = new QueryClient()
-  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId,origin))
+  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId))
 
   // const cycle = await find(cycleId);
   // if (session == null || (session.user.id !== cycle?.creatorId && !session.user.roles.includes('admin'))) {
