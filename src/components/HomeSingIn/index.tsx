@@ -189,7 +189,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
-            <Stack direction={'row'} justifyItems={'center'} gap={3} className='pt-3'>
+            {/* <Stack direction={'row'} justifyItems={'center'} gap={3} className='pt-3'>
               <section className="p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
                 <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
               </section>
@@ -202,7 +202,7 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
               <section className="p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
                 <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
               </section>
-            </Stack>
+            </Stack> */}
           </section>
         </Col>
       </section>
