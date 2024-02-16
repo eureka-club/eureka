@@ -19,7 +19,7 @@ interface Props{
 
 const useExecReadOrWatchedWork = (props: Props) => {
   const {lang} = useTranslation();
-  const { workId,notLangRestrict } = props;
+  const { workId,notLangRestrict=true } = props;
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const { data: user } = useUser(session?.user?.id || 0, {
@@ -54,7 +54,7 @@ const useExecReadOrWatchedWork = (props: Props) => {
         let prevWork = undefined;
         let cacheKey = undefined;
         if (workId && session && user) {
-          cacheKey = notLangRestrict ? ['WORK', `${workId}`] : ['WORK', `${workId}-${lang}`];
+          cacheKey = ['WORK', `${workId}`];
           await queryClient.cancelQueries(['USER', `${session.user.id}`]);
           await queryClient.cancelQueries(cacheKey);
 

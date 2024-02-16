@@ -94,7 +94,7 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work,session }) => {
             startIcon={<RemoveRedEyeRoundedIcon />}
             onClick={handleClickOpen}
           >
-            Marcar como visto o leído
+            {t('readOrWatchedLbl')}
           </Button>
           <Dialog open={open} onClose={handleClose} scroll="paper">
             <DialogTitle

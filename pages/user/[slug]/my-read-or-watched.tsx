@@ -124,7 +124,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
   const getYears = () => {
     let years = [];
-    for (let i = 0; i < 5; i++)
+    for (let i = 0; i < 7; i++)
       years.push((dayjs().year() - i).toString())
     return years;
   };
