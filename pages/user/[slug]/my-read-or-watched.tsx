@@ -46,6 +46,19 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const [movies, setMovies] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
 
+  let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
+  let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+      
+  const res = Array.from(new Set([
+    ...(bs??[]).map(b=>b.year),
+    ...(ms??[]).map(m=>m.year)
+  ]))
+  .sort(
+    (a,b)=>+a>+b ? -1 : 1
+  );
+  
+  const [years]=useState<number[]>(res);
+  
   useEffect(() => {
     if (query?.tabKey) {
       setTabKey(query.tabKey.toString());
@@ -59,6 +72,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
     if (user && user.readOrWatchedWorks.length) {
       let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
       let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+      
 
       if (yearFilter.length) {
         books = books.filter((b) => b.year.toString() === yearFilter);
@@ -75,7 +89,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
       setBooksTotal(books.length);
       setMoviesTotal(movies.length);
-
+      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearFilter]);
@@ -91,8 +105,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   //console.log(books, 'books');
   //console.log(movies, 'movies');
 
-  function handlerComboxesChangeYear(e: SelectChangeEvent<HTMLTextAreaElement>) {
-    setYearFilter(e.target.value as string);
+  function handlerComboxesChangeYear(e: SelectChangeEvent<HTMLTextAreaElement>) {debugger;
+    setYearFilter(e.target.value.toString());
   }
 
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
@@ -122,12 +136,12 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
     }
   };
 
-  const getYears = () => {
-    let years = [];
-    for (let i = 0; i < 7; i++)
-      years.push((dayjs().year() - i).toString())
-    return years;
-  };
+  // const getYears = () => {
+  //   let years = [];
+  //   for (let i = 0; i < 7; i++)
+  //     years.push((dayjs().year() - i).toString())
+  //   return years;
+  // };
   const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
@@ -250,7 +264,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 onChange={handlerComboxesChangeYear}
                 value={yearFilter}
               >
-                {getYears().map(x => (
+                {years.map(x => (
                   <MenuItem key={x} value={x}>{x}</MenuItem>
                 ))}
               </Select>
@@ -268,7 +282,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 onChange={handlerComboxesChangeYear}
                 value={yearFilter}
               >
-                {getYears().map(x => (
+                {years.map(x => (
                   <MenuItem key={x} value={x}>{x}</MenuItem>
                 ))}
               </Select>
