@@ -366,7 +366,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
               >
                <FiShare2 style={{fontSize: "1.3em",verticalAlign:"bottom"}} />
                 <br />
-                {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>}
+                {/* {showButtonLabels && <span className={classnames(styles.info, styles.active)}>{t('Share')}</span>} */}
               </Button>
             </OverlayTrigger>
           </div>
