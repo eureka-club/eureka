@@ -90,5 +90,7 @@
 //   }
 //   return res;
 // }
-// export default MyUsersFollowed;
-export default ()=><></>
+const MyUsersFollowed = ()=>{
+    return <>not set</>
+}
+export default MyUsersFollowed;
