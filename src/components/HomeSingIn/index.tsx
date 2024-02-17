@@ -1,19 +1,13 @@
 
-import { FunctionComponent, useEffect, useState } from 'react';
-import Link from 'next/link';
+import { FunctionComponent } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import TagsInput from '@/components/forms/controls/TagsInput';
-import { useInView } from 'react-intersection-observer';
-import { CycleDetail } from '@/src/types/cycle';
-import { UserDetail } from '@/src/types/user';
 import Prompt from '@/src/components/post/PostPrompt';
 import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
-import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import { Col } from 'react-bootstrap';
-import { Stack } from '@mui/material';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -24,87 +18,13 @@ const topics = ['gender-feminisms', 'technology', 'environment',
 ];
 
 interface Props {
-  language:string;
 }
 
-const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
-  const { t,lang } = useTranslation('common');
-  const [ref, inView] = useInView({
-    triggerOnce: false,
-    // rootMargin: '200px 0px',
-    // skip: supportsLazyLoading !== false,
-  });
-
-  const [topicIdx, setTopicIdx] = useState(0);
-  const [topicsFetched, setTopicsFetched] = useState(new Set());
-  const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
-
-  // const {data:itemsByTopic} = useItemsByTopic(0,topics[topicIdx],lang!);
-  const [gbt, setGBT] = useState<any[]>([]);
-  // useEffect(()=>{
-  //   let isCanceled = false;
-  //   if(!isCanceled){
-  //     if(itemsByTopic){
-  //       const exist = topicsFetched.has(topics[topicIdx]);
-  //       if(!exist){
-  //          setGBT((prev)=>[...prev,[topics[topicIdx],itemsByTopic]])
-  //           topicsFetched.add(topics[topicIdx]);
-  //           setTopicsFetched(topicsFetched);
-  //       }
-  //     }
-  //   }
-  //   return () => {
-  //     isCanceled = true
-  //   }
-  // },[itemsByTopic])
-
-  // useEffect(() => {
-  //   const idx = topicIdx + 1;
-  //   if (inView && idx < topics.length) {
-  //     setTopicIdx(()=>idx);
-  //   }
-  // }, [inView]);
-
+const HomeSingIn: FunctionComponent<Props> = ({}) => {
+  const { t } = useTranslation('common');
   const getTopicsBadgedLinks = () => {
     return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
-
-  // const renderSpinnerForLoadNextCarousel = () => {
-  //   if (itemsByTopic?.data.length && topicIdx < topics.length - 1) return <Spinner ref={ref} animation="grow" />
-  //   return '';
-  // }
-
-  // const getMediathequeSlug = (id: number, name: string) => {
-  //   const s = `${name}`
-  //   const slug = `${slugify(s, { lower: true })}-${id}`
-  //   return slug
-  // }
-
-  // const seeAll = async (data: CycleMosaicItem[], q: string, showFilterEngine = true): Promise<void> => {
-  //   if (session) {
-  //     const u = session.user
-  //     router.push(`/user/${getMediathequeSlug(u.id, u.name || u.id.toString())}/my-cycles`);
-  //   }
-  // };
-  //       <h1 className="text-secondary fw-bold">{t('myCycles')}</h1>
-
-  // const cyclesJoined = () => {
-  //   if (!session) return <></>
-  //   const k = JSON.stringify(myCyclesWhere(session?.user.id))
-
-  //   return (cycles && cycles.length)
-  //     ? <div data-cy="myCycles">
-  //       <CarouselStatic
-  //         cacheKey={['CYCLES', k]}
-  //         onSeeAll={async () => seeAll(cycles, t('myCycles'))}
-  //         title={t('myCycles')}
-  //         data={cycles}
-  //         iconBefore={<></>}
-  //       // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-  //       />
-  //     </div>
-  //     : <></>;
-  // };
 
   return (
     <>
@@ -117,98 +37,19 @@ const HomeSingIn: FunctionComponent<Props> = ({  language}) => {
         <Col xs={12} lg={2} className="me-2">
           <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
-          {/* <section className="mt-5">
-            <h1 className="d-flex flex-row align-items-center text-secondary  fw-bold" style={{ fontSize: '1.25rem' }}>
-              <span>{t('About Eureka')}{' '}</span>
-              {!showAboutSection && (
-                <span
-                  className={`cursor-pointer d-flex d-lg-none ms-4`}
-                  role="presentation"
-                  onClick={() => setShowAboutSection(true)}
-                >
-                  <BsChevronDown style={{ color: 'var(--color-secondary)' }} />
-                </span>
-              )}
-              {showAboutSection && (
-                <span
-                  className={`cursor-pointer d-flex d-lg-none ms-4`}
-                  role="presentation"
-                  onClick={() => setShowAboutSection(false)}
-                >
-                  <BsChevronUp style={{ color: 'var(--color-secondary)' }} />
-                </span>
-              )}
-            </h1>
-          </section>
-          {showAboutSection && (<div className='d-flex d-lg-none flex-column'>
-            <Link href="/about">
-              <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
-                {t('browserTitleAbout')}{' '}
-              </a>
-            </Link>
-            <section className="mt-3 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
-            </section>
-            <section className="mt-3 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
-            </section>
-            <section className="mt-3 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
-            </section>
-            <section className="mt-3 p-3 mb-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
-            </section>
-          </div>)}
-          <div className='d-none d-lg-flex flex-column'>
-            <Link href="/about">
-              <a className="text-primary text-decoration-underline text-blue" onClick={() => window.scrollTo(0, 0)}>
-                {t('browserTitleAbout')}{' '}
-              </a>
-            </Link>
-            <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
-            </section>
-            <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
-            </section>
-            <section className="mt-5 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
-            </section>
-            <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-              <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
-            </section>
-          </div> */}
-
           <section className="mt-4">
             <FeaturedUsers />
           </section>
-
         </Col>
         <Col xs={12} lg={10} className="mt-5 mt-lg-0">
           <section className="ms-0 ms-lg-5">
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
-            {/* <Stack direction={'row'} justifyItems={'center'} gap={3} className='pt-3'>
-              <section className="p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox1')}</h4>
-              </section>
-              <section className="p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox2')}</h4>
-              </section>
-              <section className="p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox3')}</h4>
-              </section>
-              <section className="p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-                <h4 className="p-2 m-0 text-wrap text-center fs-6">{t('aboutBox4')}</h4>
-              </section>
-            </Stack> */}
           </section>
         </Col>
       </section>
     </>
   );
-
 }
-
 export default HomeSingIn;

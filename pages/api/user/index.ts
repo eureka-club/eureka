@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import getApiHandler from '@/src/lib/getApiHandler';
-import { findAll, findAllSumary } from '@/src/facades/user';
+import { findAllSumary } from '@/src/facades/user';
 
 export const config = {
   api: {
@@ -20,7 +19,7 @@ export default getApiHandler()
     const cursor = c ? JSON.parse(decodeURIComponent(c.toString())) : undefined;
 
     const data = await findAllSumary({where,take,skip,cursor}); 
-    data.forEach(u=>{u.type='user'})
+    // data.forEach(u=>{u.type='user'})
     res.status(200).json({
       data,
       fetched:data.length

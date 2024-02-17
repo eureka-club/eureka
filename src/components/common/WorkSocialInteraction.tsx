@@ -186,17 +186,17 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
 
           const entityFavKey = 'favWorks';
 
-          let favInUser = user[entityFavKey] as { id: number }[];
+          // let favInUser = user[entityFavKey] as { id: number }[];
 
           setMySocialInfo(p=>({...p, favoritedByMe:payload.doCreate}));
 
           if (!payload.doCreate) {
-            favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
+            // favInUser = favInUser.filter((i: { id: number }) => i.id !== entity.id);
           } else {
-            favInUser?.push(entity as any);
+            // favInUser?.push(entity as any);
           }
           queryClient.setQueryData(['WORK', `${entity.id}`], { ...entity });
-          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
+          // queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
 
           return { prevUser, prevEntity };
         }

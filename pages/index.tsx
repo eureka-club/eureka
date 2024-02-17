@@ -82,7 +82,7 @@ const IndexPage: NextPage<Props> = ({language,session}) => {
 
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
         {/* <Suspense fallback={<Spinner animation="grow" />}> */}
-          <HomeSingIn language={language}/>
+          <HomeSingIn/>
           
         {/* </Suspense> */}
       </SimpleLayout>

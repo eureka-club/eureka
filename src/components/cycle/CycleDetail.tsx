@@ -273,7 +273,11 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const renderParticipants = ()=>{
     if(participants){
       return <Row className='mt-3'>
-        {participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id} className="mb-3 d-flex justify-content-center  align-items-center"><MosaicItemUser user={p} /></Col>)}
+        {
+          participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id} className="mb-3 d-flex justify-content-center  align-items-center">
+            <MosaicItemUser user={p} /></Col>
+          )
+        }
       </Row>
     }
     return ''

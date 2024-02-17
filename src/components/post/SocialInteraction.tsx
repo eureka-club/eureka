@@ -200,20 +200,20 @@ const SocialInteraction: FunctionComponent<Props> = ({
           const prevUser = queryClient.getQueryData(['USER', `${session.user.id}`]);
           const prevEntity = queryClient.getQueryData(cacheKey);
 
-          let favPosts = user.favPosts as { id: number }[];
+          // let favPosts = user.favPosts as { id: number }[];
           let favs = post.favs;
 
           setcurrentUserIsFav(() => payload.doCreate);
 
           if (!payload.doCreate) {
-            favPosts = favPosts.filter((i: { id: number }) => i.id !== post.id);
+            // favPosts = favPosts.filter((i: { id: number }) => i.id !== post.id);
             favs = post.favs.filter((i) => i.id != session.user.id);
           } else {
-            favPosts?.push(post as any);
+            // favPosts?.push(post as any);
             favs.push({ id: +session.user.id });
           }
-          queryClient.setQueryData(['WORK', `${post.id}`], { ...post, favs });
-          queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favPosts });
+          queryClient.setQueryData(['POST', `${post.id}`], { ...post, favs });
+          // queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, favPosts });
 
           return { prevUser, prevEntity };
         }

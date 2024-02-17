@@ -1,6 +1,6 @@
-import { Prisma,User } from '@prisma/client';
-import { WorkDetailSpec, WorkSumarySpec } from './work';
-import { CycleDetailSpec, CycleSumarySpec } from './cycle';
+import { Prisma } from '@prisma/client';
+import { WorkSumarySpec } from './work';
+import { CycleSumarySpec } from './cycle';
 import { PostSumarySpec } from './post';
 
 export interface EditUserClientPayload {
@@ -13,7 +13,6 @@ export interface EditUserClientPayload {
   tags?: string;
   photo?:File;
   language?:string|null;
-  
 }
 
 export const UserDetailSpec = {
@@ -72,17 +71,17 @@ export const UserSumarySpec = {
     tags:true,
     photos:true,
     email:true,
-    followedBy:{select:{id:true}},
-    following:{select:{id:true}},
-    favWorks: {
-      select:{id:true}
-    },
-    favCycles: {
-      select:{id:true}
-    },
-    favPosts: {
-      select:{id:true}
-    },
+    // followedBy:{select:{id:true}},
+    // following:{select:{id:true}},
+    // favWorks: {
+    //   select:{id:true}
+    // },
+    // favCycles: {
+    //   select:{id:true}
+    // },
+    // favPosts: {
+    //   select:{id:true}
+    // },
   }
 } 
 

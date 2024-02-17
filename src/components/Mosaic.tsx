@@ -53,9 +53,9 @@ const renderMosaicItem = (
       // </WorkContext.Provider>
     );
   }
-  else if (isUserMosaicItem(item)) {
-    return <MosaicItemUser  user={item} className="mb-2" />;
-  }
+  // else if (isUserMosaicItem(item)) {
+  //   return <MosaicItemUser  user={item} className="mb-2" />;
+  // }
 
   return <></>;
 };
