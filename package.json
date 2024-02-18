@@ -78,6 +78,7 @@
     "handlebars": "^4.7.7",
     "hyvor-talk-react": "^2.0.0",
     "install": "^0.13.0",
+    "ioredis": "^5.3.2",
     "jotai": "^1.6.7",
     "lodash": "^4.17.20",
     "move-file": "^2.0.0",

@@ -1,10 +1,9 @@
-// import Redis from 'ioredis';
+import Redis from 'ioredis';
 
-// const url =
-//   process.env.NODE_ENV === 'development'
-//     ? process.env.UPSTASH_REDIS_REST_URL_STAGING
-//     : process.env.UPSTASH_REDIS_REST_URL;
-// const client = new Redis(url);
-// export default client;
-const res = {}
-export default res;
+const url =
+  process.env.NODE_ENV === 'development'
+    ? process.env.UPSTASH_REDIS_REST_URL_STAGING
+    : process.env.UPSTASH_REDIS_REST_URL;
+const client = new Redis(url!);
+// const client = new Redis();
+export default client;

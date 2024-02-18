@@ -1,4 +1,3 @@
-import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { Languages, Session } from '@/src/types';
@@ -29,48 +28,6 @@ export default getApiHandler()
         // ... session?.user.language && {languages:{contains:session?.user.language}},
       };
       let data = null;
-      
-      // if (typeof q === 'string') {
-      //   const terms = q.split(" ");
-      //   where={
-      //     AND:{
-      //       ... where && where,
-      //       OR:[
-      //         {
-      //           AND:terms.map(t=>(
-      //             { 
-      //               title: { contains: t } 
-      //             }
-      //           ))
-    
-      //         },
-      //         {
-      //           AND:terms.map(t=>(
-      //             { 
-      //               contentText: { contains: t } 
-      //             }
-      //           ))
-    
-      //         },
-      //         {
-      //           AND:terms.map(t=>(
-      //             { 
-      //                tags: { contains: t } 
-      //             }
-      //           ))
-      //         },
-      //         {
-      //           AND:terms.map(t=>(
-      //             { 
-      //                topics: { contains: t } 
-      //             }
-      //           ))
-      //         }
-      //       ],
-      //     ... session?.user.language && {languages:{contains:session?.user.language}},
-      //     }
-      //   };
-      // } 
       
       let cr = await prisma?.cycle.aggregate({where,_count:true})
       const total = cr?._count;

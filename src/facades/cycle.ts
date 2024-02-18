@@ -6,6 +6,8 @@ import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
 import { UserSumary, UserSumarySpec } from '../types/UserSumary';
+import { CYCLES_SUMARY } from '../redis_keys';
+import redis from '@/src/lib/redis';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
@@ -83,20 +85,28 @@ export const findAll = async (session:Session|null,props?: Prisma.CycleFindManyA
   return PopulateCycleDetailWithExtras(res as CycleDetailWithExtras[],session); 
 };
 export const findAllSumary = async (session:Session|null,props?: Prisma.CycleFindManyArgs): Promise<CycleSumary[]> => {
-  const { where, take, skip, cursor } = props || {};
-  const res = await prisma.cycle.findMany({
-    take,
-    skip,
-    cursor,
-    ...(where && { where }),
-    orderBy: { createdAt: 'desc' },
-    select: {
-      ...CycleSumarySpec.select,
-      ratings:{select:{userId:true,qty:true}},
-      usersJoined:{select:{userId:true,pending:true}},
-    }
-  });
-  return PopulateCycleSumaryWithExtras(res,session); 
+  const key = CYCLES_SUMARY(JSON.stringify(props));
+  const prev = await redis.get(key);
+  if(prev)return JSON.parse(prev);
+  else{
+    const { where, take, skip, cursor } = props || {};
+    const res = await prisma.cycle.findMany({
+      take,
+      skip,
+      cursor,
+      ...(where && { where }),
+      orderBy: { createdAt: 'desc' },
+      select: {
+        ...CycleSumarySpec.select,
+        ratings:{select:{userId:true,qty:true}},
+        usersJoined:{select:{userId:true,pending:true}},
+      }
+    });
+    const ppcswe = PopulateCycleSumaryWithExtras(res,session); 
+    await redis.set(key,JSON.stringify(ppcswe),'EX',60*60*24);
+    console.log('cycles form db')
+    return ppcswe;
+  }
 };
 
 export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {
