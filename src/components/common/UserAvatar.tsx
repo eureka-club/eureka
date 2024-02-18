@@ -2,9 +2,9 @@ import { FunctionComponent, SyntheticEvent,MouseEvent, useState, useEffect} from
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
 import LocalImageComponent from '@/src/components/LocalImage'
-import { UserSumary } from '@/src/types/user';
 import slugify from 'slugify'
 import useUserSumary from '@/src/useUserSumary';
+import { UserSumary } from '@/src/types/UserSumary';
 interface Props {
   user?:UserSumary;
   userId?: number;

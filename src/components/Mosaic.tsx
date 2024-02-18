@@ -7,22 +7,17 @@ import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import { CycleDetail } from '../types/cycle';
 import { WorkDetail } from '../types/work';
-import { PostDetail } from '../types/post';
-import { CycleContext } from '../useCycleContext';
 
 const renderMosaicItem = (
   item: MosaicItem,
-  parent: CycleDetail | WorkDetail | PostDetail| undefined,
   showButtonLabels: boolean,
   display: 'h' | 'v',
   showComments: boolean,
-  cacheKey: [string,string],  
+  cacheKey: string[],  
 ) => {
   if (isCycleMosaicItem(item)) {
     return (
-      <CycleContext.Provider value={{ cycle: item as CycleDetail }}>
         <MosaicItemCycle cycleId={item.id} detailed className="mb-2"/>
-      </CycleContext.Provider>
     );
   }
   else if (isPostMosaicItem(item)) {
@@ -53,9 +48,9 @@ const renderMosaicItem = (
       // </WorkContext.Provider>
     );
   }
-  // else if (isUserMosaicItem(item)) {
-  //   return <MosaicItemUser  user={item} className="mb-2" />;
-  // }
+  else if (isUserMosaicItem(item)) {
+    return <MosaicItemUser  user={item} />;
+  }
 
   return <></>;
 };
@@ -95,7 +90,7 @@ const Mosaic: FunctionComponent<Props> = ({
     {items
     .map((item: MosaicItem) => (
         <aside className={`${className} p-4`} key={`${item.type||'mosaic-item'}-${item.id}`}>
-          {renderMosaicItem(item, parent, showButtonLabels, display, showComments, cacheKey)}
+          {renderMosaicItem(item, showButtonLabels, display, showComments, cacheKey)}
         </aside>
       ))}
   </section>

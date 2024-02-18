@@ -1,9 +1,8 @@
 import { useQuery } from 'react-query';
-// import { buildUrl } from 'build-url-ts';
-// import { Country } from './types';
+import { WEBAPP_URL } from './constants';
 
-export const getHyvorComments = async (id: string, origin?: string): Promise<any[]> => {
-  const url = `${origin || ''}/api/hyvor_talk/searchComments?id=${id}`;
+export const getHyvorComments = async (id: string): Promise<any[]> => {
+  const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${id}`;
   const res = await fetch(url);
   const { data: comments } = await res.json();
   if (comments && comments.data)

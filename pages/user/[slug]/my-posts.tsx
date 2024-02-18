@@ -78,7 +78,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
-  await qc.fetchQuery(['MY-POSTS'],()=>getMyPosts(id,session,8,origin));
+  await qc.fetchQuery(['MY-POSTS'],()=>getMyPosts(id,session,8));
   
   res = {
     props:{

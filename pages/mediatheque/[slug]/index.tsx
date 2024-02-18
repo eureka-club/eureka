@@ -34,16 +34,15 @@ interface Props {
 const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const router = useRouter();
   const { notifier } = useNotificationContext();
-
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
 
   const {
-    /* isError, error, */ data: user,
+    data: user,
     isLoading: isLoadingUser,
     isSuccess: isSuccessUser,
-  } = useUser(+id, {
-    enabled: !!+id,
+  } = useUser(id, {
+    enabled: !isNaN(id),
   });
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
 
@@ -289,9 +288,6 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                     <div className="">
                       <p className={styles.description}>{user.aboutMe}</p>
                     </div>
-                    {/*<div className="mt-3 d-sm-block d-md-none">
-                      <UnclampText isHTML={false} text={user.aboutMe || ''} clampHeight="6rem" />
-                    </div>*/}
                     <TagsInput className="d-none d-md-flex flex-row" tags={user.tags || ''} readOnly label="" />
                   </Col>
                   <Col className="mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block">
@@ -326,7 +322,6 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                     )}
                   </Col>
                 </Row>
-                {/* <BsCircleFill className={styles.infoCircle} /> */}
               </Card.Body>
             </Card>
             {isAccessAllowed(session, user, isLoadingUser, isFollowedByMe) && (
@@ -354,9 +349,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                     <section className="ms-0 ms-lg-5">
                       <PostsCreated posts={posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
                       <CyclesJoined cycles={cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
-                      {/*<ReadOrWatched user={user} id={id.toString()} goTo={goTo} t={t} />*/}
                       <SavedForLater user={user} goTo={goTo} t={t} id={id} />
-                      {/* <UsersFollowed user={user} goTo={goTo} t={t} /> */}
                     </section>
                   </Col>
                 </section>
@@ -383,7 +376,6 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
-  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   let id = 0;
   if (ctx.query && ctx.query.slug) {
     const slug = ctx.query.slug.toString();
@@ -397,7 +389,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    const { posts } = await getMyPosts(id!,session, 8, origin);
+    const { posts } = await getMyPosts(id!,session, 8);
 
     await queryClient.prefetchQuery(['MY-POSTS'], () => posts);
     posts.forEach((p) => {

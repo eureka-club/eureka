@@ -16,6 +16,7 @@ import useCycle from '@/src/useCycle';
 import useUsers from '@/src/useUsers';
 import toast from 'react-hot-toast';
 import useUserSumary from '@/src/useUserSumary';
+import { CycleSumary } from '@/src/types/cycle';
 
 interface Props {
   session: Session
@@ -80,7 +81,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
+  } = useJoinUserToCycleAction(user!, cycle as unknown as CycleSumary, participants!, (_data, error) => {
     if (error)
       toast.error(t('Internal Server Error'));
   });

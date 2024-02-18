@@ -1,14 +1,14 @@
 import { useQuery } from 'react-query';
-import { CycleDetail } from './types/cycle';
+import { CycleSumary } from './types/cycle';
 import { Prisma } from '@prisma/client';
+import { WEBAPP_URL } from './constants';
 
 export const getCycles = async (
   lang?:string,
   props?:Prisma.CycleFindManyArgs,
-  origin=''
-): Promise<{cycles:CycleDetail[],fetched:number,total:number}> => {
+): Promise<{cycles:CycleSumary[],fetched:number,total:number}> => {
   const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}&lang=${lang}&`:''
-  const url = `${origin||''}/api/cycle/${query}`
+  const url = `${WEBAPP_URL}/api/cycle/${query}`
   const res = await fetch(url);
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
   const {data:cycles,fetched,total} = await res.json();
@@ -28,7 +28,7 @@ const useCycles = (lang?:string,props?:Prisma.CycleFindManyArgs, options?: Optio
   };
   let ck = cacheKey ? `${cacheKey}` : ['CYCLES', `${JSON.stringify(props)}`];
 
-  return useQuery<{cycles:CycleDetail[],fetched:number,total:number}>(ck, () => getCycles(lang,props), {
+  return useQuery<{cycles:CycleSumary[],fetched:number,total:number}>(ck, () => getCycles(lang,props), {
     staleTime,
     enabled,
     retry:3

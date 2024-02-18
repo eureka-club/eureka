@@ -1,4 +1,4 @@
-import { Cycle, LocalImage } from '@prisma/client';
+import { Cycle } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,7 +9,6 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
 import { QueryClient, dehydrate, useMutation } from 'react-query';
-
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -18,8 +17,8 @@ import { Session } from '../../src/types';
 import { advancedDayjs } from '../../src/lib/utils';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
-import { findAll } from '../../src/facades/cycle';
 import useCycles, { getCycles } from '@/src/useCycles';
+import { CycleSumary } from '@/src/types/cycle';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,7 +29,7 @@ interface Props {
 
 const ListCyclesPage: NextPage<Props> = ({ session }) => {
   const router = useRouter();
-  const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: Cycle) => {
+  const { mutate: execDeleteCycle, isSuccess: isDeleteCycleSucces } = useMutation(async (cycle: CycleSumary) => {
     const res = await fetch(`/api/cycle/${cycle.id}`, {
       method: 'delete',
     });
@@ -42,7 +41,7 @@ const ListCyclesPage: NextPage<Props> = ({ session }) => {
   const {data} = useCycles();
   const cycles = data?.cycles;
 
-  const handleDeleteClick = (cycle: Cycle) => {
+  const handleDeleteClick = (cycle: CycleSumary) => {
     execDeleteCycle(cycle);
   };
 
@@ -126,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const cyclesData = await getCycles(ctx.locale!,undefined, origin);
+  const cyclesData = await getCycles(ctx.locale!,undefined);
   qc.prefetchQuery('list/cycles', () => cyclesData);
 
 

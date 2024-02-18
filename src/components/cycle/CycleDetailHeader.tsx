@@ -23,6 +23,7 @@ import CarouselStatic from '../CarouselStatic';
 import { Box } from '@mui/material';
 import { CycleWork } from '@/src/types/cycleWork';
 import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
+import { CycleSumary } from '@/src/types/cycle';
 interface Props {
   // cycle: CycleDetail;
   cycleId:number;
@@ -253,7 +254,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               showSocialInteraction={false}
               // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
-              title={<CycleSummary cycle={cycle} />}
+              title={<CycleSummary cycle={cycle as unknown as CycleSumary} />}
               data={getWorksSorted() as WorkSumary[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
@@ -276,7 +277,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 cacheKey={['CYCLE', cycle.id.toString()]}
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
-                title={<CycleSummary cycle={cycle} />}
+                title={<CycleSummary cycle={cycle as unknown as CycleSumary} />}
                 data={getWorksSorted() as WorkSumary[]}
                 iconBefore={<></>}
                 customMosaicStyle={{ height: '16em' }}

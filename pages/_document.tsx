@@ -21,7 +21,6 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
           <meta name="google-site-verification" content="DQ6vv8bgVIsNmgpKCdmmvahFJd6-OhWGRhoqjGyW14A" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 
           {/* Google Tag Manager */}
           {/* <script

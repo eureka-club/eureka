@@ -13,7 +13,6 @@ import { MdGroup } from 'react-icons/md';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItem.module.css';
-import { useCycleContext } from '../../useCycleContext';
 import toast from 'react-hot-toast';
 import useCycleSumary from '@/src/useCycleSumary'
 import Avatar from '../common/UserAvatar';
@@ -46,6 +45,7 @@ interface Props {
   imageLink?: boolean;
   size?: string;
   className?: string;
+  linkToCycle?:boolean;
 }
 
 
@@ -63,9 +63,9 @@ const MosaicItem: FunctionComponent<Props> = ({
   imageLink = false,
   size,
   className,
-  cycleId
+  cycleId,
+  linkToCycle=true,
 }) => {
-  const { linkToCycle = true, currentUserIsParticipant } = useCycleContext();
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   const { data: user } = useUserSumary(session?.user.id!,{ enabled: !!session?.user.id });

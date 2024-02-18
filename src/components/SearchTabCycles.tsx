@@ -1,17 +1,13 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col, Tab} from 'react-bootstrap';
-
+import { Spinner,Row, Col} from 'react-bootstrap';
 import MosaicItem from '@/src/components/cycle/MosaicItem'
-
-import useCycles,{getCycles} from '@/src/useCycles'
-
+import {getCycles} from '@/src/useCycles'
 import useFilterEngineCycles from './useFilterEngineCycles';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { CycleDetail } from '../types/cycle';
-import cycle from 'pages/api/cycle';
+import { CycleSumary } from '../types/cycle';
 import useCyclesSumary from '../useCyclesSumary';
 
 const take = 8;
@@ -89,7 +85,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
 
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
-  const [cycles,setCycles] = useState<CycleDetail[]>([])
+  const [cycles,setCycles] = useState<CycleSumary[]>([])
 
   useEffect(()=>{
     let props: Prisma.CycleWhereInput|undefined = undefined;

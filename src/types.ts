@@ -1,10 +1,10 @@
 import { Cycle, Post, User, Work, Prisma } from '@prisma/client';
 
 import { CycleDetail, CycleSumary } from './types/cycle';
-import { PostDetail, PostSumary } from './types/post';
-import { WorkDetail, GoogleBooksProps, TMDBVideosProps, WorkSumary } from './types/work';
-import { UserDetail, UserSumary } from '@/src/types/user';
+import { PostSumary } from './types/post';
+import { GoogleBooksProps, TMDBVideosProps, WorkSumary } from './types/work';
 import { Session as S } from 'next-auth';
+import { UserSumary } from './types/UserSumary';
 export interface FileUpload {
   fieldName: string;
   originalFilename: string;

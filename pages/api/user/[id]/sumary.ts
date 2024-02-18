@@ -1,16 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {Form} from 'multiparty';
-import { getSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { find, findSumary, update } from '@/src/facades/user';
-import { create } from '@/src/facades/notification';
-
+import { findSumary } from '@/src/facades/user';
 import getApiHandler from '@/src/lib/getApiHandler';
-import {prisma} from '@/src/lib/prisma';
-import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
-import { UserDetail, UserSumary } from '@/src/types/user';
-import { Notification } from '@prisma/client';
+import { UserSumary } from '@/src/types/UserSumary';
 
 dayjs.extend(utc);
 export default getApiHandler()

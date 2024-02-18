@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
-import { useQuery, useQueryClient } from 'react-query';
-import { UserDetail, UserSumary } from './types/user';
+import { useQuery } from 'react-query';
 import { buildUrl } from 'build-url-ts';
 import { WEBAPP_URL } from './constants';
+import { UserSumary } from './types/UserSumary';
 
 // import { useAtom } from 'jotai';
 // import globalSearchEngineAtom from './atoms/searchEngine';

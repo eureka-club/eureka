@@ -31,6 +31,7 @@ import useUser from '@/src/useUser';
 import useUsers from '@/src/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import LinearProgress from '@mui/material/LinearProgress';
+import { CycleSumary } from '@/src/types/cycle';
 
 
 
@@ -96,7 +97,7 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
 
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
-  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
+  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle as  unknown as CycleSumary);
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates

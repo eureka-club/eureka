@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { CycleWorkSpec } from './cycleWork';
+import { UserSumarySpec } from './UserSumary';
 export interface ComplementaryMaterial {
   author: string;
   title: string;
@@ -87,7 +88,7 @@ export const CycleSumarySpec = {
     createdAt:true,
     updatedAt:true,
     creator: {
-      select: { id: true, name: true, email: true, countryOfOrigin: true },
+      select: UserSumarySpec.select
     },
     localImages: {
       select: {

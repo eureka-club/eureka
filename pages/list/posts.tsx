@@ -108,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
   const qc = new QueryClient();
-  const postsData = await getPosts(ctx.locale!,undefined, origin);
+  const postsData = await getPosts(ctx.locale!,undefined);
   qc.prefetchQuery('list/cycles', () => postsData);
 
   return {

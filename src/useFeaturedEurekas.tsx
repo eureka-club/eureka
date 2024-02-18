@@ -9,8 +9,8 @@ const backOfficePosts = (ids:number[]) => ({
 }) 
  
 
-export const getFeaturedEurekas = async (lang:string,ids:number[],take:number=8,origin?:string)=>{
-  return getPosts(lang,{...backOfficePosts(ids),take},origin);
+export const getFeaturedEurekas = async (lang:string,ids:number[],take:number=8)=>{
+  return getPosts(lang,{...backOfficePosts(ids),take});
 }
 
 const useFeaturedEurekas = () => {

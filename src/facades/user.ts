@@ -1,7 +1,8 @@
 import { Prisma, User } from '@prisma/client';
-import { UserDetailSpec, UserDetail, UserSumary, UserSumarySpec } from '@/types/user';
+import { UserDetailSpec, UserDetail } from '@/types/user';
 // import { UserDetail } from '../types/user';
 import {prisma} from '@/src/lib/prisma';
+import { UserSumary, UserSumarySpec } from '../types/UserSumary';
 
 export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserDetail | null> => {
   const { select = undefined, include = true,where } = props;

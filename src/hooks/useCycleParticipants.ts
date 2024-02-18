@@ -1,6 +1,6 @@
 import { getCycleParticipants } from "@/src/actions/getCycleParticipants";
 import { useQuery } from "react-query";
-import { UserSumary } from "@/src/types/user";
+import { UserSumary } from "../types/UserSumary";
 
 type Options={
     enabled?:boolean,

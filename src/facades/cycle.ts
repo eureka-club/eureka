@@ -5,7 +5,7 @@ import { CreateCycleServerFields, CreateCycleServerPayload, CycleDetailSpec, Cyc
 import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
-import { UserSumary, UserSumarySpec } from '../types/user';
+import { UserSumary, UserSumarySpec } from '../types/UserSumary';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 

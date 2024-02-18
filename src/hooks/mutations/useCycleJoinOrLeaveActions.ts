@@ -3,11 +3,11 @@ import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import { CycleDetail, CycleSumary } from '@/src/types/cycle';
 import { UserDetail } from '@/src/types/user';
-import { UserSumary } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
 import {useNotificationContext} from '@/src/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
+import { UserSumary } from '@/src/types/UserSumary';
 
 type ctx = {
     ss: UserDetail[] | undefined;

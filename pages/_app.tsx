@@ -54,6 +54,7 @@ import { Session } from '@/src/types';
 import Spinner from '@/src/components/Spinner';
 import ErrorBounddary from '@/src/ErrorBounddary';
 import { ThemeProvider } from '@mui/material';
+import Head from 'next/head';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
@@ -114,6 +115,9 @@ function Loading() {
       }),
   );
   return (<>  
+    <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    </Head>
     <StrictMode>
      <SSRProvider>
         <NextAuthProvider session={session} refetchInterval={5 * 60}>

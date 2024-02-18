@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '../../src/lib/getApiHandler';
 import {Languages, SearchResult} from '@/src/types'
-import { CycleDetail } from '@/src/types/cycle';
+import { CycleDetail, CycleSumary } from '@/src/types/cycle';
 import { PostDetail } from '@/src/types/post';
 import dayjs from 'dayjs';
 import { findAllSumary as fap } from '@/src/facades/post';
-import { findAll as fac } from '@/src/facades/cycle';
+import { findAllSumary as fac } from '@/src/facades/cycle';
 import { findAllSumary as faw } from '@/src/facades/work';
 import { getSession } from 'next-auth/react';
 
@@ -86,7 +86,7 @@ export default getApiHandler()
       ]
     };
 
-    const responseCycle = await fac(null,{where: cyclesWhere}) as CycleDetail[];
+    const responseCycle = await fac(null,{where: cyclesWhere}) as CycleSumary[];
 
     const postsWhere = {
         AND:[{

@@ -1,56 +1,28 @@
-import { lazy,Suspense, useState } from 'react';
 import { NextPage } from 'next';
 import {GetServerSideProps} from 'next';
 import Head from "next/head";
-import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { Session } from '@/src/types';
-// import {getMyCycles,myCyclesWhere} from '@/src/useMyCycles';
 import { dehydrate,QueryClient } from 'react-query';
 import {getbackOfficeData} from '@/src/useBackOffice'
 import { getFeaturedEurekas } from '@/src/useFeaturedEurekas';
 import {getInterestedCycles} from '@/src/useInterestedCycles';
 import { featuredWorksWhere, getFeaturedWorks } from '@/src/useFeaturedWorks';
 import { getHyvorComments } from '@/src/useHyvorComments';
-// import { backOfficeData } from '@/src/types/backoffice';
-import {getItemsByTopic} from '@/src/useItemsByTopic';
 import { getFeaturedUsers } from '@/src/useFeaturedUsers';
-import { UserSumary } from '@/src/types/user';
 import HomeSingIn from '@/src/components/HomeSingIn';
-import Link from 'next/link';
-import { BsChevronDown } from 'react-icons/bs';
-import { Stack } from '@mui/material';
-
-//const HomeNotSingIn = lazy(()=>import('@/components/HomeNotSingIn')); ARQUIMEDES
-// const HomeSingIn = lazy(()=>import('@/src/components/HomeSingIn'));
-
-const topics = ['gender-feminisms', 'technology', 'environment',
- 'racism-discrimination',
-    'wellness-sports','social issues',
-    'politics-economics','philosophy',
-    'migrants-refugees','introspection',
-    'sciences','arts-culture','history',
-];
-// const fetchItems = async (pageParam: number,topic:string):Promise<GetAllByResonse> => {
-//   const url = `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/getAllBy?topic=${topic}&cursor=${pageParam}`;
-//   const q = await fetch(url);
-//   return q.json();
-// };
+import { UserSumary } from '@/src/types/UserSumary';
+import { getUserSumary } from '@/src/useUserSumary';
 
 interface Props{
-  // groupedByTopics: Record<string,GetAllByResonse>;
   session: Session;
   language:string;
 }
 
-const IndexPage: NextPage<Props> = ({language,session}) => {
+const IndexPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('common');
-  const [showAboutSection, setShowAboutSection] = useState<boolean>(false)
-
-  // const {data:session,status} = useSession();
-  // const isLoadingSession = status === "loading"
   return (
     <>
       <Head>
@@ -83,7 +55,6 @@ const IndexPage: NextPage<Props> = ({language,session}) => {
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
         {/* <Suspense fallback={<Spinner animation="grow" />}> */}
           <HomeSingIn/>
-          
         {/* </Suspense> */}
       </SimpleLayout>
     </>
@@ -95,7 +66,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // if(!session)
   // return {props:{groupedByTopics:null}};
   // const id = session.user.id;  
-  const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   // let groupedByTopics:Record<string,GetAllByResonse>={};
   // const user = await  getUserSumary(session?.user.id!);
   const bo =  await getbackOfficeData(ctx.locale!)
@@ -117,39 +87,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   
   let promises:Promise<any>[] = [
-    getFeaturedEurekas(ctx.locale!,postsId,undefined,origin),
-    getInterestedCycles(ctx.locale!,cyclesIds,undefined,origin),
+    getUserSumary(session?.user.id!),
+    getFeaturedEurekas(ctx.locale!,postsId,undefined),
+    getInterestedCycles(ctx.locale!,cyclesIds,undefined),
     getFeaturedWorks(ctx.locale!,worksIds,8),
     getFeaturedUsers(usersIds,8),
-    // getItemsByTopic(0,topics[0],ctx.locale!),
-    // getItemsByTopic(0,topics[1],ctx.locale!),
-    ...worksIds.map(id=>getHyvorComments(`work-${id}`,origin)),
+    ...worksIds.map(id=>getHyvorComments(`work-${id}`)),
   ];
+  
   let resolved = await Promise.all(promises);
-  const featuredEurekas = resolved[0];
-  const interestedCycles = resolved[1];
-  const featuredWorks = resolved[2];
-  const featuredUsers:UserSumary[] = resolved[3];
-  // const itemsByTopic = [resolved[4],resolved[5]];
-  const hyvorComments = resolved.slice(4);
-  // promises = [
-  //   getItemsByTopic(0,topics[0],ctx.locale!),
-  //   getItemsByTopic(0,topics[1],ctx.locale!)
-  // ]
-  // resolved = await Promise.all(promises);
-  // groupedByTopics[topics[0]] = resolved[0];
-  // groupedByTopics[topics[1]] = resolved[1];
+
+  const userOnSession = resolved[0];
+  const featuredEurekas = resolved[1];
+  const interestedCycles = resolved[2];
+  const featuredWorks = resolved[3];
+  const featuredUsers:UserSumary[] = resolved[4];
+  const hyvorComments = resolved.slice(5);
   const qc = new QueryClient();
-
-  // await qc.prefetchQuery({
-  //   queryKey:['ITEMS-BY-TOPIC',`${topics[0]}-${0}`],
-  //   queryFn:()=>itemsByTopic[0]
-  // })
-  // await qc.prefetchQuery({
-  //   queryKey:['ITEMS-BY-TOPIC',`${topics[1]}-${0}`],
-  //   queryFn:()=>itemsByTopic[1]
-  // })
-
+  
+  if(userOnSession)
+    await qc.prefetchQuery({
+      queryKey:["USER",`${userOnSession.id}`,"SUMARY"],
+      queryFn:()=>userOnSession
+    })
   await qc.prefetchQuery({
     queryKey:['BACKOFFICE', `1`],
     queryFn:()=>bo,
@@ -162,6 +122,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     queryKey:[`cycles-of-interest-${ctx.locale}`],
     queryFn:()=>interestedCycles
   })
+    const promisesUser:Promise<void>[]=[]
+    interestedCycles.cycles.forEach((c:{creator:UserSumary}) => {
+      promisesUser.push(qc.prefetchQuery({
+        queryKey:['USER',c.creator.id.toString(),'SUMARY'],
+        queryFn:()=>c.creator
+      }))
+    });
+    await Promise.all(promisesUser);
+
   await qc.prefetchQuery({
     queryKey:['featured-users'],
     queryFn:()=>featuredUsers

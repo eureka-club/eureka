@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { UserSumary } from '@/types/user';
 import { WEBAPP_URL } from './constants';
+import { UserSumary } from './types/UserSumary';
 
 export const getUserSumary = async (id: number): Promise<UserSumary|null> => {
   if (!id) return null;

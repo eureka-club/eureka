@@ -17,7 +17,7 @@ import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePostDetail'
 import { useSession} from 'next-auth/react';
 import { PostDetail } from '@/src/types/post';
-import { UserSumary } from '@/src/types/user';
+import { UserSumary } from '@/src/types/UserSumary';
 import SocialInteraction from './SocialInteraction';
 interface Props {
   post?:PostDetail;

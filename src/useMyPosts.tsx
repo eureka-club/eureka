@@ -19,8 +19,8 @@ export const myPostsProps = (id: number,session:Session|null)=> {
   }
 };
 
-export const getMyPosts = async (id:number,session:Session|null,take:number,origin='')=>{
-  const res =await  getPosts('',{...myPostsProps(id,session),take},origin);
+export const getMyPosts = async (id:number,session:Session|null,take:number)=>{
+  const res =await  getPosts('',{...myPostsProps(id,session),take});
   return res;
 }
 

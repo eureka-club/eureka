@@ -2,7 +2,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent,useState } from 'react';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import UserAvatar from '../common/UserAvatar';
-import { UserSumary } from '../../types/user';
+import { UserSumary } from '@/src/types/UserSumary';
 import useUserSumary from '@/src/useUserSumary';
 import { Grid, Stack } from '@mui/material';
 

@@ -29,6 +29,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { CycleWork } from '@/src/types/cycleWork';
 
 import useUserSumary from '@/src/useUserSumary';
+import { CycleSumary } from '@/src/types/cycle';
 
 interface Props {
   noModal?: boolean;
@@ -100,7 +101,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
-  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle);
+  const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle as unknown as CycleSumary);
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
@@ -371,7 +372,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!, cycle!, participants!, (_data, error) => {
+  } = useJoinUserToCycleAction(user!, cycle as unknown as CycleSumary, participants!, (_data, error) => {
     if (error)
       toast.error(t('Internal Server Error'));
   });

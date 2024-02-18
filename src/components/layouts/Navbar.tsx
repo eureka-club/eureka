@@ -5,12 +5,11 @@ import searchEngine from '@/src/atoms/searchEngine';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent } from 'react';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
 import { Container, Button, Nav, Navbar, Dropdown, Spinner } from 'react-bootstrap';
-
 import { BiUser } from 'react-icons/bi';
 import NotificationsList from '@/components/NotificationsList';
 import { RiDashboardLine } from 'react-icons/ri';
@@ -47,17 +46,11 @@ const NavBar: FunctionComponent = () => {
   const isLoadingSession = status === 'loading';
   const router = useRouter();
   const { t } = useTranslation('navbar');
-  const [userId, setUserId] = useState(-1);
   const [, setSearchEngineState] = useAtom(searchEngine);
   const { show } = useModalContext();
 
-  useEffect(() => {
-    if (session) setUserId(session.user.id);
-  }, [session]);
-
-  const { data: user } = useUserSumary(userId, {
-    enabled: userId != -1,
-    staleTime: 1,
+  const { data: user } = useUserSumary(session?.user.id!, {
+    enabled: !!session,
   });
 
   const handleLanguageSelect = (locale: string | null) => {
@@ -318,9 +311,7 @@ const NavBar: FunctionComponent = () => {
                           </Dropdown.Item>
                         )}
                         <Dropdown.Item onClick={handlerLogout}>
-                          {/* <Button > */}
                           {t('logout')}
-                          {/* </Button> */}
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>

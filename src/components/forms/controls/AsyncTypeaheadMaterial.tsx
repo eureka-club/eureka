@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { Autocomplete, CircularProgress, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
 import { TextField } from '@mui/material';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '@/src/types';
-import { CycleDetail } from '@/src/types/cycle';
+import { CycleDetail, CycleSumary } from '@/src/types/cycle';
 import { WorkDetail } from '@/src/types/work';
 import CycleTypeaheadSearchItem from '@/src/components/cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '@/src/components/work/TypeaheadSearchItem';
@@ -68,7 +68,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
 
       setIsSearchLoading(true);
       const response = await fetch(`/api/search/cycles?${criteria}&include=${includeQP}`);
-      const itemsCL: CycleDetail[] = await response.json();
+      const itemsCL: CycleSumary[] = await response.json();
       setSearchResults(itemsCL);
       setIsSearchLoading(false);
     }
@@ -105,7 +105,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
         )}
         renderOption={(props, option) => {
           if (isCycleMosaicItem(option)) {
-            return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleDetail} /></li>
+            return <li {...props}><CycleTypeaheadSearchItem key={`cycle-${option.id}`} cycle={option as CycleSumary} /></li>
           }
           if (isWorkMosaicItem(option)) {
             return <li {...props}><WorkTypeaheadSearchItem key={`work-${option.id}`} work={option} /></li>
@@ -119,7 +119,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
     return (
       <Autocomplete
         id="typeahead-mui-only-cycles"
-        getOptionLabel={(option) => `${(option as CycleDetail).title}`}
+        getOptionLabel={(option) => `${(option as CycleSumary).title}`}
         size="small"
         loading={isSearchLoading}
         filterOptions={(x) => x}
@@ -144,7 +144,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
           />
         )}
         renderOption={(props, option) => {
-          return <li {...props}>{(option as CycleDetail).title}</li>
+          return <li {...props}>{(option as CycleSumary).title}</li>
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
       />

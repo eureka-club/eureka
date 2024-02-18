@@ -25,6 +25,7 @@ import { Session } from '@/src/types';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
+import { CycleSumary } from '@/src/types/cycle';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -97,7 +98,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess: isJoined,
-  } = useJoinUserToCycleAction((session as any)?.user, cycle!, participants || [], (_data, error) => {
+  } = useJoinUserToCycleAction((session as any)?.user, cycle as unknown as CycleSumary, participants || [], (_data, error) => {
     if (!error) {
       if (cycle && ![2, 4].includes(cycle?.access))
         toast.success(t('OK'))
@@ -290,7 +291,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { works } = await getWorksSumary(ctx.locale!, wcw, origin);
 
   await queryClient.prefetchQuery(['CYCLE', `${id}`, 'PARTICIPANTS'], () => participants);
-  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp, origin));
+  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp));
   await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 
   participants.map((p) => {

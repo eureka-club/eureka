@@ -62,33 +62,6 @@ export type UserDetail = Prisma.UserGetPayload<typeof UserDetailSpec> & {
   type?: 'user',
 };
 
-export const UserSumarySpec = {
-  select:{
-    id:true,
-    name:true,
-    image:true,
-    countryOfOrigin:true,
-    tags:true,
-    photos:true,
-    email:true,
-    // followedBy:{select:{id:true}},
-    // following:{select:{id:true}},
-    // favWorks: {
-    //   select:{id:true}
-    // },
-    // favCycles: {
-    //   select:{id:true}
-    // },
-    // favPosts: {
-    //   select:{id:true}
-    // },
-  }
-} 
-
-export type UserSumary = Prisma.UserGetPayload<typeof UserSumarySpec> & {
-  type?:'user',
-}
-
 export type UserWhitPhoto = Prisma.UserGetPayload<{
   include:{photos:true}
 }>;

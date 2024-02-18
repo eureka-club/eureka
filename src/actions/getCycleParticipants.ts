@@ -1,5 +1,5 @@
 import { WEBAPP_URL } from "../constants"
-import { UserSumary } from "../types/user";
+import { UserSumary } from "../types/UserSumary";
 
 export const getCycleParticipants=async(id:number):Promise<UserSumary[]>=>{
     const fr = await fetch(`${WEBAPP_URL}/api/cycle/${id}/participants`);

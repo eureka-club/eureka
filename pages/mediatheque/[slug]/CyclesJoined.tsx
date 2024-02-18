@@ -1,10 +1,10 @@
-import { CycleDetail } from "@/src/types/cycle";
+import { CycleDetail, CycleSumary } from "@/src/types/cycle";
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { FC } from "react";
 import { useSession } from "next-auth/react";
 
 interface Props{
-    cycles:CycleDetail[];
+    cycles:CycleSumary[];
     goTo:(path:string)=>void;
     t:(val:string)=>string;
     id:string;

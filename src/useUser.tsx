@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query';
 import { UserDetail } from '@/types/user';
-import { useRouter } from 'next/router';
 import { WEBAPP_URL } from './constants';
 
 export const getUser = async (id: number,language?:string): Promise<UserDetail|null> => {
@@ -22,7 +21,6 @@ interface Options {
 }
 
 const useUser = (id: number, options?: Options) => {
-  const router = useRouter();
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
