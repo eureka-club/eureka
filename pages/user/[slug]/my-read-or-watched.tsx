@@ -102,9 +102,6 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
     }, {});
   };
 
-  //console.log(books, 'books');
-  //console.log(movies, 'movies');
-
   function handlerComboxesChangeYear(e: SelectChangeEvent<HTMLTextAreaElement>) {
     setYearFilter(e.target.value.toString());
   }
