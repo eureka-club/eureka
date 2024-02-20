@@ -92,6 +92,6 @@ EXPOSE 6379
 
 ENV PORT 3000
 
-#CMD ["sh", "-c", "redis & node server.js"]
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "redis & node server.js"]
+#CMD ["node", "server.js"]
 
