@@ -54,6 +54,8 @@ RUN echo "NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM => $NEXT_PUBLIC_PUBLIC_ASS
 ENV NODE_ENV production
 ENV NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME 'public-assets'
 
+RUN apk add redis
+
 RUN yarn prisma generate
 RUN yarn build
 
@@ -86,8 +88,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
+EXPOSE 6379
 
 ENV PORT 3000
 
+#CMD ["sh", "-c", "redis & node server.js"]
 CMD ["node", "server.js"]
 
