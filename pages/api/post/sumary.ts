@@ -3,13 +3,13 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import { findAllSumary } from '@/src/facades/post';
 import { Prisma } from '@prisma/client';
 import { Languages } from '@/src/types';
+import {prisma} from '@/src/lib/prisma'
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
     const {sessionId,props,lang:l}=req.body;
     const locale = l?.toString();
     const language = locale ? Languages[locale!] : '';
-    debugger;
 
     let {where:w,take,cursor,skip} = props;
     let AND = w?.AND;
