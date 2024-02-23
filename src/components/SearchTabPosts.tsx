@@ -9,7 +9,7 @@ import usePosts,{getPosts} from '@/src/usePosts'
 import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { PostDetail } from '../types/post';
+import { PostDetail, PostSumary } from '../types/post';
 import usePostsSumary from '../usePostsSumary';
 import { MosaicContext } from '../useMosaicContext';
 
@@ -71,7 +71,7 @@ const SearchTabCycles:FunctionComponent = () => {
   const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...getProps()}})
 
   const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePostsSumary(props,{cacheKey,enabled:!!router.query?.q});
-  const [posts,setPosts] = useState<PostDetail[]>([])
+  const [posts,setPosts] = useState<PostSumary[]>([])
   
   useEffect(()=>{
 

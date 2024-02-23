@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { Session } from '../types';
+import { UserSumarySpec } from './UserSumary';
 
 // export interface PostWithImages extends Post {
 //   localImages: LocalImage[];
@@ -25,8 +26,9 @@ export type PostDetail = Prisma.PostGetPayload<typeof PostDetailSpec> & {
     id:true,
     title:true,
     contentText:true,
+    language:true,
     createdAt:true,
-    creatorId:true,
+    creator:{select:UserSumarySpec.select},
     localImages: {select:{storedFile:true}},
     favs:{select:{id:true,}},
     works:{select:{id:true,title:true}},

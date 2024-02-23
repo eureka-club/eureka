@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { PostDetail } from './types/post';
+import { PostSumary } from './types/post';
 import { Prisma } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { WEBAPP_URL } from './constants';
@@ -10,7 +10,7 @@ export const getPostsSumary = async (
   sessionId:number|null,
   lang?:string,
   props?:Prisma.PostFindManyArgs,
-): Promise<{posts:PostDetail[],fetched:number,total:number}> => {
+): Promise<{posts:PostSumary[],fetched:number,total:number}> => {
   // const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}&lang=${lang}`:''
   const url = `${WEBAPP_URL}/api/post/sumary`
   const res = await fetch(url,{
@@ -45,7 +45,7 @@ const usePostsSumary = (props?:Prisma.PostFindManyArgs, options?: Options) => {
   };
   let ck = cacheKey ? cacheKey : ['POSTS', `${JSON.stringify(props)}`];
  
-  return useQuery<{posts:PostDetail[],fetched:number,total:number}>(ck, () => getPostsSumary(session?.user.id!,lang,props), {
+  return useQuery<{posts:PostSumary[],fetched:number,total:number}>(ck, () => getPostsSumary(session?.user.id!,lang,props), {
     staleTime,
     enabled,
     retry:3

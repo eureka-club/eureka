@@ -17,9 +17,10 @@ import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
 import usePost from '@/src/usePostDetail'
 import { useSession} from 'next-auth/react';
-import { PostDetail } from '@/src/types/post';
+import { PostSumary } from '@/src/types/post';
+import usePostSumary from '@/src/usePostSumary';
 interface Props {
-  post?:PostDetail;
+  post?:PostSumary;
   postId: number|string;
   //display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -61,7 +62,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleDetail|WorkDetail>();
   const {data:session} = useSession()
 
-  const {data} = usePost(+postId,{
+  const {data} = usePostSumary(+postId,{
     enabled:!!postId && !postItem
   })
 
@@ -94,7 +95,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
  
   const canEditPost = ()=>{
     if(session)
-      return post.creatorId == (session as unknown as Session).user.id
+      return post.creator.id == (session as unknown as Session).user.id
     return false;
   }
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {

@@ -62,7 +62,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   const bod = await getbackOfficeData(ctx.locale!)
   if(bod && bod?.CyclesExplorePage){
     const ids = bod?.CyclesExplorePage.split('').map(i=>+i)
-    await qc.fetchQuery(['CYCLES','INTERESTED'],()=>getFeaturedEurekas(ctx.locale!,ids,8));
+    await qc.fetchQuery(['CYCLES','INTERESTED'],()=>getFeaturedEurekas(session?.user.id!,ctx.locale!,ids,8));
   }
   return {
     props:{

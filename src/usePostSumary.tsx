@@ -18,7 +18,7 @@ export const getPostSumary = async (id: number,sessionId:number|null): Promise<P
     }
   });
   if (!res.ok) return null;
-  const result = await res.json();debugger;
+  const result = await res.json();
   return result.post;
 }
 

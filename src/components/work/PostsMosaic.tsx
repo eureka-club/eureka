@@ -2,6 +2,7 @@ import { FunctionComponent,useState,useEffect } from 'react';
 import { WorkDetail } from '@/src/types/work';
 import Mosaic from '../Mosaic';
 import usePosts from '@/src/usePosts'
+import usePostsSumary from '@/src/usePostsSumary';
 
 interface Props {
   work: WorkDetail;
@@ -30,7 +31,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ work }) => {
       }
     }}
   };
-  const {data:dataPosts} = usePosts(workPostsWhere,{enabled:!!work.id})
+  const {data:dataPosts} = usePostsSumary(workPostsWhere,{enabled:!!work.id})
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{

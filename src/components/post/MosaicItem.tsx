@@ -14,13 +14,13 @@ import { WorkDetail } from '@/src/types/work';
 import {useAtom} from 'jotai'
 import globalModals from '@/src/atoms/globalModals'
 import editOnSmallerScreens from '@/src/atoms/editOnSmallerScreens'
-import usePost from '@/src/usePostDetail'
 import { useSession} from 'next-auth/react';
-import { PostDetail } from '@/src/types/post';
+import { PostSumary } from '@/src/types/post';
 import { UserSumary } from '@/src/types/UserSumary';
 import SocialInteraction from './SocialInteraction';
+import usePostSumary from '@/src/usePostSumary';
 interface Props {
-  post?:PostDetail;
+  post?:PostSumary;
   postId: number|string;
   //display?: 'v' | 'h';
   showButtonLabels?: boolean;
@@ -64,7 +64,7 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleDetail|WorkDetail>();
   const {data:session} = useSession()
 
-  const {data:post} = usePost(+postId,{
+  const {data:post} = usePostSumary(+postId,{
     // enabled:!!postId && !postItem
     enabled:!!postId
   })
@@ -113,7 +113,7 @@ const MosaicItem: FunctionComponent<Props> = ({
  
   const canEditPost = ()=>{
     if(session)
-      return post.creatorId == (session as unknown as Session).user.id
+      return post.creator.id == (session as unknown as Session).user.id
     return false;
   }
   const onEditPost = async (e:React.MouseEvent<HTMLButtonElement>) => {
@@ -190,7 +190,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           {post && showdetail && (
           <div className={`${styles.postDetail}`}>
                <div  className={`d-flex flex-row fs-6 `}>
-                <Avatar width={27} height={27} user={post.creator as unknown as UserSumary} userId={post.creatorId} showFullName={false} size= {(!size) ? "xs" :"sm" } />
+                <Avatar width={27} height={27} user={post.creator as unknown as UserSumary} userId={post.creator.id} showFullName={false} size= {(!size) ? "xs" :"sm" } />
                 <span className={` ms-1 me-1 d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>-</span>
                 <span className={`d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>

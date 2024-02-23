@@ -88,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   
   let promises:Promise<any>[] = [
     getUserSumary(session?.user.id!),
-    getFeaturedEurekas(ctx.locale!,postsId,undefined),
+    getFeaturedEurekas(session?.user.id!,ctx.locale!,postsId,undefined),
     getInterestedCycles(ctx.locale!,cyclesIds,undefined),
     getFeaturedWorks(ctx.locale!,worksIds,8),
     getFeaturedUsers(usersIds,8),

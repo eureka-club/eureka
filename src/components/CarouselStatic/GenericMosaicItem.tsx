@@ -4,7 +4,7 @@ import MosaicItemPost from '../post/MosaicItem';
 import MosaicItemWork from '../work/MosaicItem';
 // import MosaicUserItem from '../user/MosaicItem';
 
-import { PostDetail } from '../../types/post';
+import { PostDetail, PostSumary } from '../../types/post';
 import { isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../../types';
 import { GenericMosaicItemProps } from "./types";
 import { WorkSumary } from "@/src/types/work";
@@ -25,7 +25,7 @@ const GenericMosaicItem:FC<GenericMosaicItemProps> = ({
       );
     }
     else if (isPostMosaicItem(item) || (item && item.type == 'post')) {
-      const it: PostDetail = item as PostDetail;
+      const it = item as PostSumary;
       return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} post={it} postId={it.id} size={size} />;
     }
     else if (isWorkMosaicItem(item)) {

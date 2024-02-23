@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '../../src/lib/getApiHandler';
 import {Languages, SearchResult} from '@/src/types'
 import { CycleDetail, CycleSumary } from '@/src/types/cycle';
-import { PostDetail } from '@/src/types/post';
+import { PostDetail, PostSumary } from '@/src/types/post';
 import dayjs from 'dayjs';
 import { findAllSumary as fap } from '@/src/facades/post';
 import { findAllSumary as fac } from '@/src/facades/cycle';
@@ -124,7 +124,7 @@ export default getApiHandler()
       ]
     }
 
-    const responsePost = await fap(session?.user.id!,{where:postsWhere}) as PostDetail[];
+    const responsePost = await fap(session?.user.id!,{where:postsWhere}) as PostSumary[];
     responseCycle.forEach(c=>{c.type="cycle"})
     responsePost.forEach(p=>{p.type="post"})
     const data: SearchResult[] = [

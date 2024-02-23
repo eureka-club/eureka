@@ -1,13 +1,12 @@
 import { FunctionComponent } from 'react';
-// import Spinner from 'react-bootstrap/Spinner';
 import dayjs from 'dayjs'
 import { CycleDetail } from '@/types/cycle';
-import { PostDetail } from '@/types/post';
+import { PostSumary } from '@/types/post';
 import Mosaic from '../Mosaic';
 import { WorkDetail } from '@/src/types/work';
 interface Props {
   parent?: CycleDetail | WorkDetail;
-  posts: PostDetail[];
+  posts: PostSumary[];
   display?: 'h' | 'v';
   showComments?: boolean;
   cacheKey: [string, string];
@@ -47,7 +46,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts,parent, display, showComm
       <>
         <Mosaic
           display={display}
-          stack={orderedPosts as PostDetail[]}
+          stack={orderedPosts as PostSumary[]}
           showComments={showComments}
           cacheKey={cacheKey}
           parent={parent}

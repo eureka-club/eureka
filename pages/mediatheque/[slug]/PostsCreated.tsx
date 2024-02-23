@@ -1,11 +1,11 @@
 import { FC } from "react";
 import CarouselStatic from '@/src/components/CarouselStatic';
-import { PostDetail } from "@/src/types/post";
+import { PostDetail, PostSumary } from "@/src/types/post";
 import { UserDetail } from "@/src/types/user";
 import { useSession } from "next-auth/react";
 
 interface Props{
-  posts:PostDetail[];
+  posts:PostSumary[];
   user:UserDetail;
   id:string;
   goTo:(path:string)=>void;

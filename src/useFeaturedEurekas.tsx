@@ -1,6 +1,7 @@
 import useTranslation from 'next-translate/useTranslation';
 import usePosts,{getPosts} from './usePosts';
 import useBackOffice from '@/src/useBackOffice';
+import usePostsSumary, { getPostsSumary } from './usePostsSumary';
 
 const backOfficePosts = (ids:number[]) => ({
   where:{
@@ -9,8 +10,8 @@ const backOfficePosts = (ids:number[]) => ({
 }) 
  
 
-export const getFeaturedEurekas = async (lang:string,ids:number[],take:number=8)=>{
-  return getPosts(lang,{...backOfficePosts(ids),take});
+export const getFeaturedEurekas = async (sessionId:number,lang:string,ids:number[],take:number=8)=>{
+  return getPostsSumary(sessionId,lang,{...backOfficePosts(ids),take});
 }
 
 const useFeaturedEurekas = () => {
@@ -20,9 +21,8 @@ const useFeaturedEurekas = () => {
   if(bo && bo.PostExplorePage)
     bo.PostExplorePage.split(',').forEach(x=> postsId.push(parseInt(x)));
       
-  return usePosts(backOfficePosts(postsId),
+  return usePostsSumary(backOfficePosts(postsId),
     {enabled:!!postsId,cacheKey:[`eurekas-of-interest-${lang}`]},
-    lang,
   )
 };
 
