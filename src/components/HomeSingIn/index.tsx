@@ -7,7 +7,7 @@ import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
-import { Col } from 'react-bootstrap';
+import { Grid } from '@mui/material';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -33,22 +33,22 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
           <Prompt redirect={true} showTitle={true} />
         </div>
       </section>
-      <section className="d-flex flex-column flex-lg-row">
-        <Col xs={12} lg={2} className="me-2">
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={3} >
           <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-4">
             <FeaturedUsers />
           </section>
-        </Col>
-        <Col xs={12} lg={10} className="mt-5 mt-lg-0">
+        </Grid>
+        <Grid item xs={12} md={9}>
           <section className="ms-0 ms-lg-5">
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />
           </section>
-        </Col>
-      </section>
+        </Grid>
+      </Grid>
     </>
   );
 }
