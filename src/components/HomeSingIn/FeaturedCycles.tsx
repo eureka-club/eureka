@@ -16,6 +16,7 @@ const FeaturedCycles:FC<Props> = ({}) => {
     ? <div>      
        <CarouselStatic
         cacheKey={[`cycles-of-interest-${lang}`]}
+        seeAll={data?.fetched<data.total}
         onSeeAll={()=>router.push('/featured-cycles')}
         data={data?.cycles}
         title={t('Interest cycles')}

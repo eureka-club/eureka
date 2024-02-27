@@ -1,6 +1,5 @@
 import useFeaturedWorks from '@/src/useFeaturedWorks';
-import useFeaturedWorksPosts from '@/src/useFeaturedWorksPostsImages';
-import { Button, Col,Row, Carousel } from 'react-bootstrap';
+import { Col,Row, Carousel } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import MosaicItem from '@/components/work/MosaicItem';
 import WorkPostImages from './WorkPostImages';
