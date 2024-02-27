@@ -17,6 +17,7 @@ const FeaturedEurekas:FC<Props> = ({}) => {
     ? <div>      
        <CarouselStatic
         cacheKey={[`eurekas-of-interest-${lang}`]}
+        seeAll={data?.fetched<data.total}
         onSeeAll={()=>router.push('/featured-eurekas')}
         data={data?.posts}
         title={t('IA Eurekas')}
