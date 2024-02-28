@@ -10,8 +10,9 @@ interface Props{
   id:string;
   goTo:(path:string)=>void;
   t:(val:string)=>string;
+  showSeeAll?:boolean
 }
-const PostsCreated:FC<Props> = ({posts,user,id,goTo,t}) => {
+const PostsCreated:FC<Props> = ({posts,user,id,goTo,t,showSeeAll=true}) => {
     const {data:session} = useSession();
 
     if (user && posts && posts.length) {
@@ -19,6 +20,7 @@ const PostsCreated:FC<Props> = ({posts,user,id,goTo,t}) => {
         <CarouselStatic
           cacheKey={['MY-POSTS',id]}
           className="mb-5"
+          seeAll={showSeeAll}
           onSeeAll={()=>goTo('my-posts')}
           title={t('common:myPosts')}
           data={posts}

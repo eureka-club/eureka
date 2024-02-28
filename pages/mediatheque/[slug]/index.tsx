@@ -46,10 +46,10 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   });
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
 
-  const { data: {posts}={posts:[]} } = useMyPosts(id); 
+  const { data: postsData } = useMyPosts(id); 
   // const [posts, setPosts] = useState(dataPosts?.posts);
 
-  const { data: {cycles}={cycles:[]} } = useMyCycles(id);
+  const { data:cyclesData } = useMyCycles(id);
   // const [cycles, setCycles] = useState(dataCycles?.cycles);
 
   // useEffect(() => {
@@ -59,7 +59,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   // }, [posts, dataCycles?.cycles]);
 
   useEffect(() => {
-    if (posts?.length && cycles?.length) {
+    if (postsData?.posts?.length && cyclesData?.cycles?.length) {
       if (user) {
         const ifbm =
           user && user.followedBy ? user.followedBy.findIndex((i) => i.id === session?.user.id) !== -1 : false;
@@ -69,7 +69,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
         queryClient.invalidateQueries(['USER', `${id}`]);
       }
     }
-  }, [posts, cycles, user, id, isSuccessUser]);
+  }, [postsData?.posts, cyclesData?.cycles, user, id, isSuccessUser]);
 
   const { mutate: mutateFollowing, isLoading: isLoadingMutateFollowing } = useMutation<User>(
     async () => {
@@ -347,8 +347,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                   </Col>
                   <Col xs={12} lg={10} className="mt-5 mt-lg-0">
                     <section className="ms-0 ms-lg-5">
-                      <PostsCreated posts={posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
-                      <CyclesJoined cycles={cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
+                      <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
+                      <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
                       <SavedForLater user={user} goTo={goTo} t={t} id={id} />
                     </section>
                   </Col>

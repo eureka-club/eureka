@@ -38,6 +38,7 @@ const SavedForLater:FC<Props> = ({user,id,goTo,t}) => {
             cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
             onSeeAll={()=>goTo('my-saved')}
             title={t('common:mySaved')}
+            seeAll={items.length>=6}
             data={items.slice(0,6)}
             iconBefore={<BsBookmark />}
             // iconAfter={<BsCircleFill className={styles.infoCircle} />}
