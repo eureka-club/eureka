@@ -10,7 +10,7 @@ import { WorkSumary } from '@/src/types/work';
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks } = useFeaturedWorks();
   const { t } = useTranslation('featuredWorks');
-  if (dataFeaturedWorks && dataFeaturedWorks.works?.length) {
+  if (dataFeaturedWorks?.works && dataFeaturedWorks.works?.length) {
     return (
       <section className=" mb-4">
         <h2 className="text-secondary fw-bold mb-2" style={{ fontSize: '1.5rem' }}>
