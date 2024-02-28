@@ -10,7 +10,7 @@ import { WorkSumary } from '@/src/types/work';
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks } = useFeaturedWorks();
   const { t } = useTranslation('featuredWorks');
-  if (dataFeaturedWorks && dataFeaturedWorks.works.length) {
+  if (dataFeaturedWorks && dataFeaturedWorks.works?.length) {
     return (
       <section className=" mb-4">
         <h2 className="text-secondary fw-bold mb-2" style={{ fontSize: '1.5rem' }}>
@@ -23,7 +23,7 @@ const FeaturedWorks = () => {
             controls={false}
             style={{ width: '100%' }}
           >
-            {dataFeaturedWorks.works.map((work) => (
+            {dataFeaturedWorks.works?.map((work) => (
               <Carousel.Item key={work.id} className="">
                 <Row className="d-flex flex-row w-100  bg-gray-very-light rounded-3 py-4 m-0  pe-0 pe-lg-3">
                   <Col xs={12}  xl={4} className="d-flex justify-content-center">
