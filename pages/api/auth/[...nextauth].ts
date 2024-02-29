@@ -13,6 +13,8 @@ const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
 import { Cycle } from '@prisma/client';
 import { defaultLocale } from 'i18n';
+import { findSumary } from '@/src/facades/user';
+import { UserSumary } from '@/src/types/UserSumary';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
@@ -185,12 +187,27 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           });
         }
       },
-      createUser: async ({ user }) => {
+      createUser: async ({ user }) => {debugger;
         const segment = 'eureka-all-users';
+        
+        const email_address = user.email!;
+        let name = user.name||'';
+        if(!name){
+          const u = await prisma.userCustomData.findFirst({
+            where:{identifier:user.email!}
+          });
+          if(u){
+            name = u.name;
+            if(!name){
+              const b = u.identifier.match(/(\w*)@/g);
+              name = (b && b?.length) ? RegExp.$1 : 'unknown';
+            }
+          }
+        }
         const r = await subscribe_to_segment({
           segment,
-          email_address: user.email!,
-          name: user.name || 'unknown',
+          email_address,
+          name,
           // onSuccess: async (res)=>console.log('ok',res),
           // onFailure: async (err)=>console.error('error',err)
         });
