@@ -28,11 +28,10 @@ export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
         const member = await get_member({email_address})
         if(member){
             const res = await fn_subscribe();
-        debugger;    return res;
+            return res;
         }
         else{
             const rnm = await add_member({email_address,name});
-            debugger;
             if(rnm){
                 const res = await fn_subscribe()
                 return res

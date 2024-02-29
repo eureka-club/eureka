@@ -108,7 +108,7 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const locale = ctx.locale??"es";
 
  let post = await getPostDetail(postId,session?.user.id!);
- let work = await getWork(workId,locale);debugger;
+ let work = await getWork(workId,locale);
  let metaTags = {
    id: post?.id,
    workId: work?.id,

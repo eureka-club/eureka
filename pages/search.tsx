@@ -160,7 +160,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
   const postsData = await getPostsSumary(session?.user.id!,ctx.locale,{ ... postsProps, take });
-  debugger;
   qc.prefetchQuery([`posts-search-${q?.toString()}`], () => postsData);
   const hasPosts = postsData?.total > 0;
   

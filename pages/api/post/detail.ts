@@ -6,7 +6,6 @@ import { find } from '@/src/facades/post';
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    debugger;
     const {id,sessionId} = req.body as {id:number,sessionId:number};
     if (!id) {
       res.status(404).end();
