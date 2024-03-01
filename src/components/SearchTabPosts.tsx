@@ -9,12 +9,14 @@ import usePosts,{getPosts} from '@/src/usePosts'
 import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
-import { PostDetail, PostSumary } from '../types/post';
-import usePostsSumary from '../usePostsSumary';
+import { PostSumary } from '../types/post';
+import usePostsSumary, { getPostsSumary } from '../usePostsSumary';
 import { MosaicContext } from '../useMosaicContext';
+import { useSession } from 'next-auth/react';
 
 const take = 8;
 const SearchTabCycles:FunctionComponent = () => {
+  const {data:session}=useSession();
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
@@ -96,7 +98,7 @@ const SearchTabCycles:FunctionComponent = () => {
     if(posts && inView && posts.length < total){
       const fi = async ()=>{
         const {id} = posts.slice(-1)[0]
-        const r = await getPosts(lang,{...props,skip:1,cursor:{id}});
+        const r = await getPostsSumary(session?.user.id!,lang,{...props,skip:1,cursor:{id}});
         setPosts((c: any)=>[...c,...r.posts])
       }
       fi()

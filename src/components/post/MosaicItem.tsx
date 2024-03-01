@@ -64,17 +64,17 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [postParent,setPostParent] = useState<CycleDetail|WorkDetail>();
   const {data:session} = useSession()
 
-  const {data:post} = usePostSumary(+postId,{
-    // enabled:!!postId && !postItem
-    enabled:!!postId
+  const {data} = usePostSumary(+postId,{
+    enabled:!!postId && !postItem
+    //enabled:!!postId
   })
   
   // const [post,setPost] = useState(data)
-  // const [post,setPost] = useState(postItem)
-  // useEffect(()=>{
-  //   // if(!postItem && data)setPost(data)
-  //   if(data)setPost(data)
-  // },[data])
+  const [post,setPost] = useState(postItem)
+  useEffect(()=>{
+    // if(!postItem && data)setPost(data)
+    if(data)setPost(data)
+  },[data])
 
   useEffect(()=>{
     if(post){
