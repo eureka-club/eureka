@@ -45,7 +45,9 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
           <div className="d-none d-lg-block"><Header show={showHeader} /></div>
           <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>        
         </>}     
-        {showCustomBaner &&<div className="d-none d-lg-block"> <BannerCustomizable/></div>}
+        {showCustomBaner &&<div className="d-none d-lg-block"> 
+          <BannerCustomizable/>
+        </div>}
         {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
         {renderBanner()}
         {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>

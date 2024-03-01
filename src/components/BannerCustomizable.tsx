@@ -23,8 +23,8 @@ const BannerCustomizable: FunctionComponent = ({
   return (
     <>
     {
-      bo?.sliders.length  ?
-        <section
+      bo?.sliders.length  
+        ? <section
           className="d-block bg-primary p-3"
           style={{
             backgroundImage: "url('/img/bg-header.svg')",
@@ -70,7 +70,7 @@ const BannerCustomizable: FunctionComponent = ({
                       </div>
                       <div className="d-flex flex-column mt-4 px-5 py-3" style={{ minWidth: '65%%' }}>
                         <h2 className="h1 font-weight-bold fs-2">{s?.title}</h2>
-                        <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                        <div className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                         
                         <div className="d-flex  mt-2">
                           {!isLoadingSession && !session ? (
@@ -90,8 +90,8 @@ const BannerCustomizable: FunctionComponent = ({
               </div>
             </>
           )}
-        </section>
-        :<></>
+          </section>
+        : <></>
       }
     </>
   );

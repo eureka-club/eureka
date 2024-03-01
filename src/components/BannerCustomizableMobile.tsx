@@ -49,7 +49,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                   <div className="d-flex flex-row" >
                     <div className="d-flex flex-column mt-2 px-3 py-3" style={{minWidth:'65%%'}}>
                       <h1 className="fs-3">{s?.title}</h1>
-                      <p className="p-0 mx-1 text-wrap fs-6" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                      <div className="p-0 mx-1 text-wrap fs-6" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                       <div className="d-flex  mt-2"> 
                       {(!isLoadingSession && !session) 
                             ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
