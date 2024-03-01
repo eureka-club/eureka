@@ -16,7 +16,6 @@ import HomeSingIn from '@/src/components/HomeSingIn';
 import { UserSumary } from '@/src/types/UserSumary';
 import { getUserSumary } from '@/src/useUserSumary';
 import React from 'react';
-import { render } from 'react-dom';
 
 interface Props{
   session: Session;
