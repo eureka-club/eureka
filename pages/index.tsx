@@ -22,21 +22,21 @@ interface Props{
   session: Session;
   language:string;
 }
-interface PropsGeneric<T>{
-  data:T[],
-  render:(value:T)=>JSX.Element
-}
+// interface PropsGeneric<T>{
+//   data:T[],
+//   render:(value:T)=>JSX.Element
+// }
 
 const IndexPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('common');
 
-  const GenericList = <T,> (props: PropsGeneric<T>)=>{
-    return <ul>{
-      props.data.map((d)=><li>
-        {props.render(d)}
-      </li>)
-    }</ul>;
-  }
+  // const GenericList = <T,> (props: PropsGeneric<T>)=>{
+  //   return <ul>{
+  //     props.data.map((d)=><li>
+  //       {props.render(d)}
+  //     </li>)
+  //   }</ul>;
+  // }
 
   return (
     <>
@@ -67,7 +67,7 @@ const IndexPage: NextPage<Props> = ({session}) => {
          */}
       {/*{session && session.user &&  */}
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
-         <GenericList data={[1,2,3,4]}
+         {/* <GenericList data={[1,2,3,4]}
            render={
             (d)=><span>Number: {d}</span>
           }
@@ -77,7 +77,7 @@ const IndexPage: NextPage<Props> = ({session}) => {
            render={
             (d)=><strong className='text-primary'>Character: {d}</strong>
           }
-         />
+         /> */}
           <HomeSingIn/>
       </SimpleLayout>
     </>
