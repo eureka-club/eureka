@@ -4,7 +4,7 @@ import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import { StrictMode, FunctionComponent, useState,useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import {SSRProvider} from 'react-bootstrap'
+// import {SSRProvider} from 'react-bootstrap'
 import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
@@ -119,7 +119,7 @@ function Loading() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
     </Head>
     <StrictMode>
-     <SSRProvider>
+     {/* <SSRProvider> */}
         <NextAuthProvider session={session} refetchInterval={5 * 60}>
           {/* <GlobalEventsContext.Provider value={{...gec}}> 
           //<Provider initialValues={initialState && [[detailPagesAtom, globalModalsAtom, initialState]]}>*/}
@@ -160,8 +160,7 @@ function Loading() {
               </Provider>
           </ThemeProvider>
         </NextAuthProvider>
-
-     </SSRProvider>
+     {/* </SSRProvider> */}
     </StrictMode>
 </>
 

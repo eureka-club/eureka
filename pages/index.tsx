@@ -15,14 +15,29 @@ import { getFeaturedUsers } from '@/src/useFeaturedUsers';
 import HomeSingIn from '@/src/components/HomeSingIn';
 import { UserSumary } from '@/src/types/UserSumary';
 import { getUserSumary } from '@/src/useUserSumary';
+import React from 'react';
+import { render } from 'react-dom';
 
 interface Props{
   session: Session;
   language:string;
 }
+interface PropsGeneric<T>{
+  data:T[],
+  render:(value:T)=>JSX.Element
+}
 
 const IndexPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('common');
+
+  const GenericList = <T,> (props: PropsGeneric<T>)=>{
+    return <ul>{
+      props.data.map((d)=><li>
+        {props.render(d)}
+      </li>)
+    }</ul>;
+  }
+
   return (
     <>
       <Head>
@@ -51,11 +66,19 @@ const IndexPage: NextPage<Props> = ({session}) => {
       </SimpleLayout>
          */}
       {/*{session && session.user &&  */}
-
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
-        {/* <Suspense fallback={<Spinner animation="grow" />}> */}
+         <GenericList data={[1,2,3,4]}
+           render={
+            (d)=><span>Number: {d}</span>
+          }
+         />
+
+          <GenericList data={['a','b','c']}
+           render={
+            (d)=><strong className='text-primary'>Character: {d}</strong>
+          }
+         />
           <HomeSingIn/>
-        {/* </Suspense> */}
       </SimpleLayout>
     </>
   );
@@ -81,9 +104,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let usersIds:number[] = [];
   if(bo){
     if(bo.FeaturedWorks)
-      bo.FeaturedWorks.split(',').forEach((x) => worksIds.push(+x));
+      bo.FeaturedWorks.split(',').forEach((x:any) => worksIds.push(+x));
     if(bo.FeaturedUsers)
-      bo.FeaturedUsers.split(',').forEach((x) => usersIds.push(+x));
+      bo.FeaturedUsers.split(',').forEach((x:any) => usersIds.push(+x));
   }
   
   let promises:Promise<any>[] = [

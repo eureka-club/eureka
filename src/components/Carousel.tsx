@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { v4 } from 'uuid';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { useQueryClient } from 'react-query';
@@ -16,7 +15,6 @@ import styles from './Carousel.module.css';
 import { WorkSumary /* , WorkWithImages */ } from '../types/work';
 import { CycleSumary /* , CycleWithImages */ } from '../types/cycle';
 import { GetAllByResonse } from '@/src/types';
-import { PostSumary } from '../types/post';
 
 type Props = {
   // page: number;
@@ -46,11 +44,10 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
   
   const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [totalWorks, setTotalWorks] = useState(-1);
   const queryClient = useQueryClient();
 
 
-  const renderMosaicItem = (
+  const RenderCarouselItem = (
     item: MosaicItem,
     postsParent?: CycleSumary | WorkSumary,
     topic = '',
@@ -93,13 +90,12 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
   
     return '';
   };
-
   const buildMosaics = () => {
     let result: JSX.Element = <></>;
     if (apiResponse && apiResponse.data) {
       const mosaics = apiResponse.data.map((i, idx:number) => {
         return <div key={`${i.type}-${i.id}`} className="mx-2">
-            {renderMosaicItem(i,undefined, topic, page.toString())}
+            {RenderCarouselItem(i,undefined, topic, page.toString())}
           </div>
       });
       result = <div className="d-flex flex-nowrap w-100 justify-content-xl-left">
