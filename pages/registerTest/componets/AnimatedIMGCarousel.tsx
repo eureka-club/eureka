@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material"
+import { Paper, Stack } from "@mui/material"
 // import { useEffect, useRef } from "react";
 
 interface Props{
@@ -24,17 +24,19 @@ const AnimatedIMGCarousel = ({}:Props)=>{
     //     return ()=>clearInterval(interval);
     // },[]);
 
-    return <Stack 
-    // ref={stackRef} 
-    // sx={{overflow:'hidden'}}
-        sx={{overflow:'scroll'}}
-        direction={'row'} spacing={1} 
-        >
-        {
-            imgs?.length 
-            ? imgs.map((src,idx)=><img key={`imgaic-${idx}`} width={171} src={src}/>)
-            : <></>
-        }
-        </Stack>
+    return <Paper>
+            <Stack 
+        // ref={stackRef} 
+        // sx={{overflow:'hidden'}}
+            sx={{overflow:'scroll'}}
+            direction={'row'} spacing={1} 
+            >
+            {
+                imgs?.length 
+                ? imgs.map((src,idx)=><img key={`imgaic-${idx}`} width={171} src={src}/>)
+                : <></>
+            }
+            </Stack>
+        </Paper>
 }
 export default AnimatedIMGCarousel;

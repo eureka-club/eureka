@@ -48,7 +48,7 @@
     "src/components/common/HyvorComments.tsx",
     "src/ErrorBounddary.tsx",
     ".next/types/**/*.ts"
-  ],
+, "pages/registerTest/components/Article.tsx"  ],
   "exclude": [
     "node_modules"
   ]
