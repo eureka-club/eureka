@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import getApiHandler from '@/src/lib/getApiHandler';
 import { findAllSumary } from '@/src/facades/user';
 
 export const config = {
@@ -8,8 +7,7 @@ export const config = {
   },
 };
 
-export default getApiHandler()
-.get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+export default async (req:NextApiRequest, res:NextApiResponse): Promise<void> => {
   try {
     const { where:w = null,take:t,skip:s,cursor:c } = req.query;
     
@@ -30,4 +28,4 @@ export default getApiHandler()
   } finally {
     //prisma.$disconnect();
   }
-});
+}
