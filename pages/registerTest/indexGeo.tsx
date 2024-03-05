@@ -1,8 +1,8 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import AccordionCustom   from "./componets/AccordionCustom";
-import AnimatedIMGCarousel from "pages/registerTest/componets/AnimatedIMGCarousel";
-import HowIsItWorkCard from "./componets/HowIsItWorkCard";
-import Header from "./componets/Header";
+import AccordionCustom   from "./componetsGeo/AccordionCustom";
+import AnimatedIMGCarousel from "pages/registerTest/componetsGeo/AnimatedIMGCarousel";
+import HowIsItWorkCard from "./componetsGeo/HowIsItWorkCard";
+import Header from "./componetsGeo/Header";
 
 export default function Index() {
     return <main>
