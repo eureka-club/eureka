@@ -2,16 +2,11 @@
   padding:.2em;
 }
 .imageContainer {
-   /* border-radius: 0.5rem 0; */
   box-shadow: 1px 0 7px -2px rgba(0, 0, 0, 0.25);
-  /* margin-bottom: 1rem; */
   overflow: hidden; 
-  
-  
-  /* display: inline-block;  */
-  /* position: relative; */
-  height: 100%;
+  position: relative;
   background-color: #f9f8f87a;
+  height: 100%;
 }
 .imageContainerTiny{
   height: auto;
