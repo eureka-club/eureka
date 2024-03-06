@@ -54,13 +54,14 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, titl
         //   style={{...style,width:`${width}px`,height:`${height}px`}}
         //  />
          <Image 
-         id='geo123'
          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
          alt={alt}
+         {...width && {width}}
+         {...height && {height}}
+         {...(!width&&!height) && {...{layout:'fill'}}}
          className={className}
          onError={onLoadImgError}
          style={{...style,width:`${width}px`,height:`${height}px`}}
-          layout='fill'
          />
       );
 
