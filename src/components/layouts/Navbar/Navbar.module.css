@@ -120,3 +120,24 @@
   color: var(--bs-white);
   width: 6.2em;
 }
+
+
+
+
+
+.langLinkInfo{
+  color:var(--color-primary);
+  font-size: .7rem;
+  font-weight: 800;
+  border:solid 2.3px var(--color-primary);
+  padding: .2rem .3rem;
+  border-radius: 50%;
+}
+.langLinkInfo .active{
+  color:red;
+}
+.NavBarCtr{
+  display: grid;
+  /* gap:1rem; */
+  grid-template-columns: 1fr 3fr;
+}

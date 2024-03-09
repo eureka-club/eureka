@@ -16,7 +16,7 @@ import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { HiOutlineHashtag } from 'react-icons/hi';
 import SearchInput from '@/components/SearchInput';
-import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
+import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL, WEBAPP_URL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './Navbar.module.css';
 import slugify from 'slugify';
@@ -39,7 +39,7 @@ const topics = [
   'history',
 ];
 
-const NavBar: FunctionComponent = () => {
+const NavBarOld: FunctionComponent = () => {
   const queryClient = useQueryClient();
   
   const { data: session, status } = useSession();
@@ -60,7 +60,7 @@ const NavBar: FunctionComponent = () => {
         maxAge: LOCALE_COOKIE_TTL,
         path: '/',
       });
-      window.location.replace(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale}${router.asPath}`);
+      window.location.replace(`${WEBAPP_URL}/${locale}${router.asPath}`);
     }
   };
 
@@ -370,4 +370,4 @@ const NavBar: FunctionComponent = () => {
   );
 };
 
-export default NavBar;
+export default NavBarOld;

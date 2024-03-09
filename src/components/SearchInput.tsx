@@ -8,14 +8,15 @@ import { AiOutlineSearch } from 'react-icons/ai';
 interface Props {
   className?: string;
   style?: Record<string,string>; 
+  disabled?:boolean;
 
 }
-const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => {
+const SearchInput: FunctionComponent<Props> = ({ className = '',style = {},disabled}) => {
   const router = useRouter();
   const { t } = useTranslation('common');
   const formRef=useRef<HTMLFormElement>(null)
   const [searching,setSearching] = useState(false)
-
+  
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
     if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
       setSearching(true)
@@ -31,7 +32,8 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
     }
   }
 
-  return <><div className={`d-none d-lg-block ${className}`} style={{...style}} data-cy="search-engine">
+  return <>
+  <div className={`d-block ${className}`} style={{...style}} data-cy="search-engine">
     <InputGroup className="">
       <InputGroup.Text className="bg-white border border-primary">
         {
@@ -48,6 +50,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
        `}
        </style>
       <Form.Control
+        disabled={disabled}
         aria-label="Search Term"
         aria-describedby="basic-search"
         data-cy="search-engine-control"
@@ -55,7 +58,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
       />
     </InputGroup>
   </div>
-  <div className={`d-block d-lg-none ${className}`} style={{...style}}>
+  {/* <div className={`d-block d-lg-none ${className}`} style={{...style}}>
     <InputGroup className="w-100">
       <style jsx global>
         {`
@@ -90,7 +93,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {}}) => 
             
           </InputGroup.Text>
     </InputGroup>
-  </div>
+  </div> */}
   </>
 };
 

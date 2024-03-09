@@ -3,7 +3,7 @@ import { Container} from 'react-bootstrap';
 import withTitle from '../../HOCs/withTitle';
 import NavbarMobile from '@/components/layouts/NavbarMobile';
 import Header from '@/components/layouts/Header';
-import Navbar from '@/components/layouts/Navbar';
+import Navbar from '@/src/components/layouts/Navbar/Navbar';
 import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
 import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
@@ -31,12 +31,12 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
     <>
       <section>
         {showNavBar && <>
-          <div className="d-none d-lg-block">
+          {/* <div className="d-none d-lg-block"> */}
             <Navbar />
-          </div>
-          <div className="d-lg-none">
+          {/* </div> */}
+          {/* <div className="d-lg-none">
             <NavbarMobile />
-          </div>
+          </div> */}
         </>
         }
       </section>
