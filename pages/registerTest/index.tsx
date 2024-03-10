@@ -83,12 +83,19 @@ export default function index() {
                 <Box display={'flex'} justifyContent={'center'} padding={4}>
                     <Box sx={{width:{xs:'90dvw',md:'85dvw'}}}>
                         <AnimatedIMGCarousel imgsSrc={[
-                            "https://datapopalliance.org/wp-content/uploads/2023/12/3-1.webp",
-                            "https://datapopalliance.org/wp-content/uploads/2023/12/Design-sem-nome-12.webp",
-                            "https://datapopalliance.org/wp-content/uploads/2023/12/2-1.webp",
-                            "https://datapopalliance.org/wp-content/uploads/2023/12/4.webp",
-                            "https://datapopalliance.org/wp-content/uploads/2023/12/5.webp",
-                            "https://datapopalliance.org/wp-content/uploads/2023/12/1-1.webp",
+                            "/img/register/carousel1/c1.webp",
+                            "/img/register/carousel1/c2.webp",
+                            "/img/register/carousel1/c3.webp",
+                            "/img/register/carousel1/c4.webp",
+                            "/img/register/carousel1/c5.webp",
+                            "/img/register/carousel1/c6.webp",
+                            "/img/register/carousel1/c1.webp",
+                            "/img/register/carousel1/c2.webp",
+                            "/img/register/carousel1/c3.webp",
+                            "/img/register/carousel1/c4.webp",
+                            "/img/register/carousel1/c5.webp",
+                            "/img/register/carousel1/c6.webp",
+                            
                         ]}/>
                     </Box>
                 </Box>
@@ -151,17 +158,17 @@ export default function index() {
                     <Box  display={'flex'} justifyContent={'center'} padding={4}>
                         <Box  sx={{width:{xs:'90dvw',md:'85dvw'}}}>
                             <AnimatedIMGCarousel imgsSrc={[
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/1-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/2-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/3-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/4-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/5-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/6-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/7-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/8-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/9-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/10-min.webp",
-                                "https://datapopalliance.org/wp-content/uploads/2023/12/11-min.webp",
+                                "/img/register/carousel2/1-min.webp",
+                                "/img/register/carousel2/2-min.webp",
+                                "/img/register/carousel2/3-min.webp",
+                                "/img/register/carousel2/4-min.webp",
+                                "/img/register/carousel2/5-min.webp",
+                                "/img/register/carousel2/6-min.webp",
+                                "/img/register/carousel2/7-min.webp",
+                                "/img/register/carousel2/8-min.webp",
+                                "/img/register/carousel2/9-min.webp",
+                                "/img/register/carousel2/10-min.webp",
+                                "/img/register/carousel2/11-min.webp",
                             ]}/>
                         </Box>
                     </Box>
