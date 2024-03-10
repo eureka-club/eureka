@@ -55,6 +55,7 @@ import Spinner from '@/src/components/Spinner';
 import ErrorBounddary from '@/src/ErrorBounddary';
 import { ThemeProvider } from '@mui/material';
 import Head from 'next/head';
+import { FormFloating } from 'react-bootstrap';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
@@ -99,7 +100,6 @@ function Loading() {
     dehydratedState = pageProps.dehydratedState;
   }
   const AnyComponent = Component as any;
-  
   // const {Modal} = useModal()
   
   // const gec = useGlobalEventsContext();

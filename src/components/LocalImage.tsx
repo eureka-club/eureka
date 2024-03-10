@@ -1,5 +1,6 @@
 import { FunctionComponent,useState } from 'react';
 import { ASSETS_BASE_URL, STORAGE_MECHANISM_AZURE, STORAGE_MECHANISM_LOCAL_FILES } from '../constants';
+import Image from 'next/image';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 const { NEXT_PUBLIC_PUBLIC_ASSETS_STORAGE_MECHANISM } = process.env;
@@ -44,13 +45,23 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, titl
         // />
         // // eslint-disable-next-line @next/next/no-img-element
         // : 
-        <img
-          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
-          title={title}
-          alt={alt}
-          className={className}
-          onError={onLoadImgError}
-          style={{...style,width:`${width}px`,height:`${height}px`}}
+        // <img
+        //   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+        //   title={title}
+        //   alt={alt}
+        //   className={className}
+        //   onError={onLoadImgError}
+        //   style={{...style,width:`${width}px`,height:`${height}px`}}
+        //  />
+         <Image 
+         src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+         alt={alt}
+         {...width && {width}}
+         {...height && {height}}
+         {...(!width&&!height) && {...{layout:'fill'}}}
+         className={className}
+         onError={onLoadImgError}
+         style={{...style,width:`${width}px`,height:`${height}px`}}
          />
       );
 
