@@ -143,7 +143,7 @@ export default function index() {
                         right:'0',
                         display:{xs:'none',lg:'block'}
                     }}>
-                        <Image src='/img/imgctrx.jpeg'
+                        <Image src='/img/imgctrx.webp'
                             width={150}
                             height={150}
                         />
@@ -250,7 +250,7 @@ export default function index() {
                                 right:'0',
                                 display:{xs:'none',lg:'block'}
                             }}>
-                            <Image src='/img/imgctry.jpeg'
+                            <Image src='/img/imgctry.webp'
                                 width={150}
                                 height={150}
                             />

@@ -184,7 +184,7 @@ export default function CardsAll() {
                 <CardHeader justifyContent="left"
 
                   avatar={
-                    <Avatar src='Anna.webp' aria-label="recipe" >
+                    <Avatar src='/img/Anna.webp' aria-label="recipe" >
 
                     </Avatar>
                   }
@@ -231,7 +231,7 @@ export default function CardsAll() {
                 <CardHeader justifyContent="left"
 
                   avatar={
-                    <Avatar src='Andreia.webp' aria-label="recipe" >
+                    <Avatar src='/img/Andreia.webp' aria-label="recipe" >
 
                     </Avatar>
                   }
@@ -278,7 +278,7 @@ export default function CardsAll() {
                 <CardHeader justifyContent="left"
 
                   avatar={
-                    <Avatar src='David.webp' aria-label="recipe" >
+                    <Avatar src='/img/David.webp' aria-label="recipe" >
 
                     </Avatar>
                   }
