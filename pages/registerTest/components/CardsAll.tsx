@@ -1,37 +1,43 @@
-"use client"
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Box, Grid, Stack } from '@mui/material';
-
-import { Container } from 'postcss';
+import { Box, CardHeader, Grid, Stack } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-
-
 import Divider from '@mui/material/Divider';
-import { red } from '@mui/material/colors';
-import CardHeader from '@mui/material/CardHeader';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import ImageListItem from '@mui/material';
-import Stars from '../componentsHenry/Stars'
+import IconButton from '@mui/material/IconButton';
+import Stars from './Stars';
 
-/*interface Props {
-  variant:string
-}
-*/
-export default function CardsAllll() {
+export default function CardsAll() {
   return (
     <>
-
-      <Stack direction={{ xs: 'column', sm: 'row' }}
-      >
-        <Box >
-
-          <Grid item xs={12} sm={6} paddingInlineEnd={4}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} gap={2}>
+        
+        <Stack id="asUl" gap={5} justifyContent={'space-between'}>
+        <style jsx global>{
+              `
+                  #asUl{
+                      padding:0;
+                      counter-reset:my-counter;
+                  }
+                  #asUl .MuiGrid-item{
+                      list-style:none;
+                  }
+                  #asUl .MuiGrid-item em:before{
+                      counter-increment: my-counter;
+                      padding:.5rem 1.2rem;
+                      margin-right:.5rem;
+                      content:counter(my-counter) ;
+                      border:solid 1px var(--color-secondary);
+                      background:var(--color-secondary);
+                      color:white;
+                      font-size:2rem;
+                      border-radius:100%;
+                  }
+              `
+              }
+          </style>
+          <Grid item xs={12} sm={6}>
             <Box border={0} >
               <Card elevation={0} sx={{
                 maxWidth: 600, transition: "0.2s",
@@ -48,7 +54,8 @@ export default function CardsAllll() {
                                                 borderRight: { xs: 'none', sm: 'solid .2rem ', md: 'solid .2rem ', color:"#504788" }
                                             }}>
 
-                      <img src="1.webp" alt="" width={80} height={80} />
+                      {/* <img src="1.webp" alt="" width={80} height={80} /> */}
+                      <em></em>
 
                     </Box>
 
@@ -72,7 +79,8 @@ export default function CardsAllll() {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} paddingInlineEnd={4} >
+
+          <Grid item xs={12} sm={6}>
             <Box border={0}>
               <Card elevation={0} sx={{
                 maxWidth: 600, transition: "0.2s",
@@ -88,7 +96,8 @@ export default function CardsAllll() {
                                                
                                                borderRight: { xs: 'none', sm: 'solid .2rem ', md: 'solid .2rem ', color:"#504788" }
                                            }}>
-                      <img src="2.webp" alt="" width={80} height={80} />
+                      {/* <img src="2.webp" alt="" width={80} height={80} /> */}
+                      <em></em>
 
                     </Box>
 
@@ -112,7 +121,8 @@ export default function CardsAllll() {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} paddingInlineEnd={4}>
+
+          <Grid item xs={12} sm={6}>
             <Box border={0}>
               <Card elevation={0} sx={{
                 maxWidth: 600, transition: "0.2s",
@@ -128,7 +138,8 @@ export default function CardsAllll() {
                                                
                                                borderRight: { xs: 'none', sm: 'solid .2rem ', md: 'solid .2rem ', color:"#504788" }
                                            }}>
-                      <img src="3.webp" alt="" width={80} height={80} />
+                      {/* <img src="3.webp" alt="" width={80} height={80} /> */}
+                      <em></em>
 
                     </Box>
 
@@ -152,10 +163,12 @@ export default function CardsAllll() {
               </Card>
             </Box>
           </Grid>
-        </Box>
 
-        <Box >
-          <Grid item xs={12} sm={6} paddingBlockEnd={4} paddingRight={1} paddingLeft={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        </Stack>
+
+        <Stack gap={5} justifyContent={'space-between'}>
+
+          <Grid item xs={12} sm={6} paddingRight={1} paddingLeft={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Box maxWidth={500}  >
               <Card elevation={5} sx={{
                 maxWidth: 500, transition: "0.2s",
@@ -201,7 +214,8 @@ export default function CardsAllll() {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} paddingBlockEnd={4} paddingRight={1} paddingLeft={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+
+          <Grid item xs={12} sm={6} paddingRight={1} paddingLeft={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Box maxWidth={500}>
               <Card elevation={5} sx={{
                 maxWidth: 500, transition: "0.2s",
@@ -247,7 +261,8 @@ export default function CardsAllll() {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} paddingBlockEnd={4} paddingRight={1} paddingLeft={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+
+          <Grid item xs={12} sm={6} paddingRight={1} paddingLeft={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Box maxWidth={500} >
               <Card elevation={5} sx={{
                 maxWidth: 500, transition: "0.2s",
@@ -294,11 +309,9 @@ export default function CardsAllll() {
             </Box>
           </Grid>
 
-        </Box>
+        </Stack>
 
-      </Stack >
-
-
+      </Stack>
     </>
   );
 }

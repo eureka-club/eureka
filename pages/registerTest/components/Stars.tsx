@@ -6,7 +6,6 @@ export default function Stars() {
   return (
     <Stack spacing={1}>
       <Rating name="size-small" defaultValue={5} size="small" disabled />
-     
     </Stack>
   );
 }
