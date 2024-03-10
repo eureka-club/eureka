@@ -3,15 +3,16 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem,{MenuItemTypeMap} from '@mui/material/MenuItem';
 import Link from 'next/link';
-import { Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 
 export interface MenuActionProps{
     label:any;
+    title?:string;
     renderMenuItem?:(item:Record<string,any>&{label:any})=>React.ReactElement
     items:Record<string,any>&{label:any}[]
 }
 export default function MenuAction(props: MenuActionProps) {
-    const{label,items,renderMenuItem}=props;
+    const{label,title,items,renderMenuItem}=props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,15 +24,17 @@ export default function MenuAction(props: MenuActionProps) {
 
   return (
     <div>
-      <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        {label}
-      </Button>
+      <Tooltip title={title??''}>
+        <Button
+          id="basic-button"
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          {label}
+        </Button>
+      </Tooltip>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -42,14 +45,16 @@ export default function MenuAction(props: MenuActionProps) {
         }}
       >
         {
-            items.map(i=><MenuItem onClick={()=>{
+            items.map((i,idx)=><MenuItem onClick={()=>{
                 handleClose();
             }}>
-              {
-                renderMenuItem 
-                  ? renderMenuItem(i)
-                  : <Typography sx={{color:'var(--color-primary)'}}>{i.label}</Typography>
-              }
+                <React.Fragment key={`${i}|${idx}`}>
+                {
+                  renderMenuItem 
+                    ? renderMenuItem(i)
+                    : <Typography sx={{color:'var(--color-primary)'}}>{i.label}</Typography>
+                }
+                </React.Fragment>
             </MenuItem>)
         }
       </Menu>

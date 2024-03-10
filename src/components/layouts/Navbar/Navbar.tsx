@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import styles from './Navbar.module.css';
-
+import {Logout,Person,Settings} from '@mui/icons-material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -27,7 +27,7 @@ import { useSession, signOut } from 'next-auth/react';
 import slugify from 'slugify';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-import { Button, Divider, Paper, TextField } from '@mui/material';
+import { Avatar, Button, Divider, Paper, TextField, Tooltip } from '@mui/material';
 import SearchInput from '../../SearchInput';
 import { useRouter } from 'next/router';
 import { QueryClient } from 'react-query';
@@ -163,7 +163,9 @@ export default function NavBar() {
           {t('Topics')}
         </Typography> */}
       </Stack>
-    }/>;
+    }
+    title={t('Topics')}
+    />;
   };
 
   const getMediathequeSlug = () => {
@@ -188,7 +190,9 @@ export default function NavBar() {
           {t('My Mediatheque')}
         </Typography> */}
       </Stack>
-    }/>;
+    }
+    title={t('My Mediatheque')}
+    />;
   };
 
   const aboutLinksInfo = [
@@ -205,7 +209,9 @@ export default function NavBar() {
           {t('About')}
         </Typography> */}
       </Stack>
-    }/>;
+    }
+    title={t('About')}
+    />;
   };
 
   const langsLinksInfo = router?.locales?.map(l=>({
@@ -221,6 +227,7 @@ export default function NavBar() {
         </Typography> */}
       </Stack>
     }
+    title={t('Language')}
     renderMenuItem={
       (i)=>{
         return <Button sx={{padding:0}} variant='text' size='small' onClick={()=>handleLanguageSelect(i.label)}>
@@ -247,9 +254,9 @@ export default function NavBar() {
   };
 
   const sessionLinksInfo = [
-      {label:t('Profile'),link:'/profile'},
-      {label:t('Admin Panel'),link:'/back-office'},
-      {label:t('logout'),onClick:handlerLogout}
+      {label:t('Profile'),link:'/profile',icon:<Person />},
+      {label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />},
+      {label:t('logout'),onClick:handlerLogout,icon: <Logout fontSize="small" />}
   ];
 
   const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -289,21 +296,29 @@ export default function NavBar() {
   const getSessionLinks = () => {
     return <MenuAction items={sessionLinksInfo||[]} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <Box>{getAvatar()}</Box>
+        <Box>
+            {getAvatar()}
+        </Box>
         {/* <Typography variant="caption" gutterBottom>
           {t('About')}
         </Typography> */}
       </Stack>
     }
+    title={t('Account')}
     renderMenuItem={
       (i)=>{
           const baseCmp = ()=><Typography>{i.label}</Typography>;
           if(i.hasOwnProperty('link'))
-            return <Link href={i['link']}>{baseCmp()}
+            return <Link href={i['link']}>
+              <Stack gap={3} direction={'row'}>
+                {i.icon?i.icon:<></>} {baseCmp()}
+              </Stack>
             </Link>
           else if(i.hasOwnProperty('onClick'))
             return <Button sx={{padding:0}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
-              {baseCmp()}
+              <Stack gap={3} direction={'row'}>
+                {i.icon?i.icon:<></>} {baseCmp()}
+              </Stack>
             </Button>;
            return <></> 
       }
