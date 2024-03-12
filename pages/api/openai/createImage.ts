@@ -46,7 +46,10 @@ export default async function handler(
             if(code=="billing_hard_limit_reached"){
               await sendMail({
                 from:{email:process.env.EMAILING_FROM!},
-                to:[{email:process.env.DEV_EMAIL!}],
+                to:[
+                  {email:process.env.DEV_EMAIL!},
+                  {email:process.env.EMAILING_FROM!}
+                ],
                 subject:message,
                 html:`<p>${`OPEN AI ERROR: ${message}`}</p>`
               });
