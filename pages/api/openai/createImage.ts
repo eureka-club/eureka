@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { sendMail } from '@/src/facades/mail';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import OpenAI from "openai";
 
@@ -38,8 +39,22 @@ export default async function handler(
           }
       }
       catch(e){
-        const error = (e as {response:{statusText:string}})
-        return res.status(400).json({ error:error.response?.statusText ??e });
+        if(e?.hasOwnProperty('message')){
+          const {message} = (e as {message:string});
+          if(e?.hasOwnProperty('code')){
+            const {code} = (e as {code:string});
+            if(code=="billing_hard_limit_reached"){
+              await sendMail({
+                from:{email:process.env.EMAILING_FROM!},
+                to:[{email:process.env.DEV_EMAIL!}],
+                subject:message,
+                html:`<p>${`OPEN AI ERROR: ${message}`}</p>`
+              });
+            }
+          }
+          return res.status(200).json({ error:message });
+        }
+        return res.status(200).json({ error:'SERVER ERROR' });
       }
 
   }

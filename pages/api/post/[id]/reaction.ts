@@ -35,7 +35,6 @@ const MAX_REACTIONS = 2;
 
 export default getApiHandler()
   .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    debugger;
     const session = (await getSession({ req })) as unknown as Session;
     const { id } = req.query;
     const { emoji, unified} = req.body;

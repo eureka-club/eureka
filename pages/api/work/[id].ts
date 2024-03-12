@@ -67,7 +67,6 @@ export default getApiHandler()
     // }
     const { id, lang: l } = req.query;
     const language = l ? Languages[l.toString()] : null;
-debugger;
     if (typeof id !== 'string') {
       res.status(404).end();
       return;

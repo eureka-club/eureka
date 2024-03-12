@@ -29,7 +29,7 @@ const PopulatePostSumaryWithExtras = (post:PostSumaryWithExtras,sessionId:number
   
   return post as PostSumary;
 }
-const PopulatePostDetailWithExtras = (post:PostDetailWithExtras,sessionId:number|null)=>{debugger;
+const PopulatePostDetailWithExtras = (post:PostDetailWithExtras,sessionId:number|null)=>{
   const currentUserIsFav = post?.favs?.findIndex(p=>p.id==sessionId)>-1;
   const p:Record<string,any> ={
     currentUserIsFav:currentUserIsFav,

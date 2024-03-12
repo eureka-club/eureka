@@ -9,7 +9,6 @@ export default getApiHandler()
     const {sessionId,props,lang:l}=req.body;
     const locale = l?.toString();
     const language = locale ? Languages[locale!] : '';
-    debugger;
 
     let {where:w,take,cursor,skip} = props;
     let AND = w?.AND;
