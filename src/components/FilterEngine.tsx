@@ -1,12 +1,12 @@
 import { useAtom } from 'jotai';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, ChangeEvent, useState, useEffect } from 'react';
-import { Container, Row, Col, Form, OverlayTrigger, Popover, Button } from 'react-bootstrap';
-import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
+// import TagsInputTypeAhead from './forms/controls/TagsInputTypeAhead';
 import globalSearchEngineAtom from '../atoms/searchEngine';
 import styles from './FilterEngine.module.css';
+import { Checkbox, Container, FormControlLabel, FormGroup, Grid } from '@mui/material';
 interface Props {
   fictionOrNotFilter?: boolean;
   geographyFilter?: boolean;
@@ -80,19 +80,19 @@ const FilterEngine: FunctionComponent<Props> = ({
     // }
   }, [globalSearchEngineState]);
 
-  const fetchCountries = async () => {
-    const res = await fetch(`/api/taxonomy/countries?q=all`);
-    const { result = [] } = await res.json();
-    const codes = result.map((i: { code: string; label: string }) => ({
-      code: i.code,
-      label: t(`countries:${i.code}`),
-    }));
-    return codes;
-  };
+  // const fetchCountries = async () => {
+  //   const res = await fetch(`/api/taxonomy/countries?q=all`);
+  //   const { result = [] } = await res.json();
+  //   const codes = result.map((i: { code: string; label: string }) => ({
+  //     code: i.code,
+  //     label: t(`countries:${i.code}`),
+  //   }));
+  //   return codes;
+  // };
 
-  const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
-    staleTime: 1000 * 60 * 60,
-  });
+  // const { data: countries } = useQuery('COUNTRIESALL', fetchCountries, {
+  //   staleTime: 1000 * 60 * 60,
+  // });
 
   const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, type: string) => {
     e.stopPropagation();
@@ -116,22 +116,22 @@ const FilterEngine: FunctionComponent<Props> = ({
     });    
   };
 
-  const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
-    const fc = {...filtersChecked, [`${q}`]: e.target.checked};
-    setFiltersChecked(fc);
-    if (globalSearchEngineState.countryQuery!.includes(q))
-      setGlobalSearchEngineState({
-        ...globalSearchEngineState,
-        ...{ countryQuery: globalSearchEngineState.countryQuery!.filter((i) => i !== q) },
-      });
-    else
-      setGlobalSearchEngineState({
-        ...globalSearchEngineState,
-        ...{ countryQuery: [...globalSearchEngineState.countryQuery!, q] },
-      });
-    // setCountryQuery(globalSearchEngineState.countryQuery);
-    setItems([]);
-  };
+  // const handlerComboxesChangeRegion = (e: ChangeEvent<HTMLInputElement>, q: string) => {
+  //   const fc = {...filtersChecked, [`${q}`]: e.target.checked};
+  //   setFiltersChecked(fc);
+  //   if (globalSearchEngineState.countryQuery!.includes(q))
+  //     setGlobalSearchEngineState({
+  //       ...globalSearchEngineState,
+  //       ...{ countryQuery: globalSearchEngineState.countryQuery!.filter((i) => i !== q) },
+  //     });
+  //   else
+  //     setGlobalSearchEngineState({
+  //       ...globalSearchEngineState,
+  //       ...{ countryQuery: [...globalSearchEngineState.countryQuery!, q] },
+  //     });
+  //   // setCountryQuery(globalSearchEngineState.countryQuery);
+  //   setItems([]);
+  // };
 
   // useEffect(() => {
   //   setGlobalSearchEngineState({
@@ -140,231 +140,205 @@ const FilterEngine: FunctionComponent<Props> = ({
   //   });
   // }, [onlyByCountries]);
 
-  const getPopoverBooks = () => {
-    return <Popover id='popover-books'>
-      {/* <Popover.Header as="h3">{`Popover books`}</Popover.Header> */}
-      <Popover.Body>
-      <div>
-      <Form.Label>
-                  <strong>{t('Books')}</strong>
-                </Form.Label>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={t('Fiction books')}
-                    checked={filtersChecked['fiction-book']}
-                    onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={t('Nofictions books')}
-                    checked={filtersChecked.book}
-                    onChange={(e) => handlerComboxesChangeType(e, 'book')}
-                  />
-                </Form.Group>
-                <br />
-                <Form.Label>
-                  <strong>{t('Films')}</strong>
-                </Form.Label>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={t('Movies')}
-                    checked={filtersChecked.movie}
-                    onChange={(e) => handlerComboxesChangeType(e, 'movie')}
-                  />
-                </Form.Group>
-                <Form.Group className={styles.formGroup}>
-                  <Form.Check
-                    className={styles.filter}
-                    type="checkbox"
-                    label={t('Documentaries')}
-                    checked={filtersChecked.documentary}
-                    onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
-                  />
-                </Form.Group>
-                </div>
-      </Popover.Body>
-    </Popover>
-  };
+  // const getPopoverBooks = () => {
+  //   return <Popover id='popover-books'>
+  //     {/* <Popover.Header as="h3">{`Popover books`}</Popover.Header> */}
+  //     <Popover.Body>
+  //     <div>
+  //     <Form.Label>
+  //                 <strong>{t('Books')}</strong>
+  //               </Form.Label>
+  //               <Form.Group className={styles.formGroup}>
+  //                 <Form.Check
+  //                   className={styles.filter}
+  //                   type="checkbox"
+  //                   label={t('Fiction books')}
+  //                   checked={filtersChecked['fiction-book']}
+  //                   onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
+  //                 />
+  //               </Form.Group>
+  //               <Form.Group className={styles.formGroup}>
+  //                 <Form.Check
+  //                   className={styles.filter}
+  //                   type="checkbox"
+  //                   label={t('Nofictions books')}
+  //                   checked={filtersChecked.book}
+  //                   onChange={(e) => handlerComboxesChangeType(e, 'book')}
+  //                 />
+  //               </Form.Group>
+  //               <br />
+  //               <Form.Label>
+  //                 <strong>{t('Films')}</strong>
+  //               </Form.Label>
+  //               <Form.Group className={styles.formGroup}>
+  //                 <Form.Check
+  //                   className={styles.filter}
+  //                   type="checkbox"
+  //                   label={t('Movies')}
+  //                   checked={filtersChecked.movie}
+  //                   onChange={(e) => handlerComboxesChangeType(e, 'movie')}
+  //                 />
+  //               </Form.Group>
+  //               <Form.Group className={styles.formGroup}>
+  //                 <Form.Check
+  //                   className={styles.filter}
+  //                   type="checkbox"
+  //                   label={t('Documentaries')}
+  //                   checked={filtersChecked.documentary}
+  //                   onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
+  //                 />
+  //               </Form.Group>
+  //               </div>
+  //     </Popover.Body>
+  //   </Popover>
+  // };
               
-  const getPopoverGeography = () => {
-    return <Popover id='popover-geography'>
-      <Popover.Body>
-      <Form.Label>
-                    <strong>{t('Regions')}</strong>
-                  </Form.Label>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Asia')} `}
-                      checked={filtersChecked.Asia}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Europe')} `}
-                      checked={filtersChecked.Europe}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Latin America and the Caribbean')} `}
-                      checked={filtersChecked['Latin America and the Caribbean']}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Middle East and North Africa')} `}
-                      checked={filtersChecked['Middle East and North Africa']}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Northern America')} `}
-                      checked={filtersChecked['Northern America']}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Oceania')}`}
-                      checked={filtersChecked.Oceania}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
-                    />
-                  </Form.Group>
-                  <Form.Group className={styles.formGroup}>
-                    <Form.Check
-                      className={styles.filter}
-                      type="checkbox"
-                      label={`${t('countries:Sub-Saharan Africa')}`}
-                      checked={filtersChecked['Sub-Saharan Africa']}
-                      onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
-                    />
-                  </Form.Group>
-                  <br />
-                  <Form.Label>
-                    <strong>{t('Countries')}</strong>
-                  </Form.Label>
-                  {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
-                  <TagsInputTypeAhead
-                    data={countries}
-                    items={items}
-                    setItems={setItems}
-                    max={5}
-                    labelKey={(res) => `${t(`countries:${res.code}`)}`}
-                    onTagCreated={() => {
-                      const onlyByCountries = [
-                        ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
-                      ];
-                      setGlobalSearchEngineState({
-                        ...globalSearchEngineState,
-                        ...{ onlyByCountries },
-                      });
-                    }}
-                    onTagDeleted={(code) => {
-                      const onlyByCountries = [
-                        ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
-                      ];
-                      const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
-                      onlyByCountries.splice(idxOBC, 1);
-                      setGlobalSearchEngineState({
-                        ...globalSearchEngineState,
-                        ...{ onlyByCountries },
-                      });
-                    }}
-                  />
-      </Popover.Body>
-    </Popover>
-  };
+  // const getPopoverGeography = () => {
+  //   return <Popover id='popover-geography'>
+  //     <Popover.Body>
+  //     <Form.Label>
+  //                   <strong>{t('Regions')}</strong>
+  //                 </Form.Label>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Asia')} `}
+  //                     checked={filtersChecked.Asia}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Asia')}
+  //                   />
+  //                 </Form.Group>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Europe')} `}
+  //                     checked={filtersChecked.Europe}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Europe')}
+  //                   />
+  //                 </Form.Group>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Latin America and the Caribbean')} `}
+  //                     checked={filtersChecked['Latin America and the Caribbean']}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Latin America and the Caribbean')}
+  //                   />
+  //                 </Form.Group>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Middle East and North Africa')} `}
+  //                     checked={filtersChecked['Middle East and North Africa']}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Middle East and North Africa')}
+  //                   />
+  //                 </Form.Group>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Northern America')} `}
+  //                     checked={filtersChecked['Northern America']}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Northern America')}
+  //                   />
+  //                 </Form.Group>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Oceania')}`}
+  //                     checked={filtersChecked.Oceania}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Oceania')}
+  //                   />
+  //                 </Form.Group>
+  //                 <Form.Group className={styles.formGroup}>
+  //                   <Form.Check
+  //                     className={styles.filter}
+  //                     type="checkbox"
+  //                     label={`${t('countries:Sub-Saharan Africa')}`}
+  //                     checked={filtersChecked['Sub-Saharan Africa']}
+  //                     onChange={(e) => handlerComboxesChangeRegion(e, 'Sub-Saharan Africa')}
+  //                   />
+  //                 </Form.Group>
+  //                 <br />
+  //                 <Form.Label>
+  //                   <strong>{t('Countries')}</strong>
+  //                 </Form.Label>
+  //                 {/* <TagsInputTypeAhead data={countries} items={items} tags={tags} setTags={setTags} /> */}
+  //                 <TagsInputTypeAhead
+  //                   data={countries}
+  //                   items={items}
+  //                   setItems={setItems}
+  //                   max={5}
+  //                   labelKey={(res) => `${t(`countries:${res.code}`)}`}
+  //                   onTagCreated={() => {
+  //                     const onlyByCountries = [
+  //                       ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
+  //                     ];
+  //                     setGlobalSearchEngineState({
+  //                       ...globalSearchEngineState,
+  //                       ...{ onlyByCountries },
+  //                     });
+  //                   }}
+  //                   onTagDeleted={(code) => {
+  //                     const onlyByCountries = [
+  //                       ...new Set([...(globalSearchEngineState.onlyByCountries || []), ...items]),
+  //                     ];
+  //                     const idxOBC = onlyByCountries.findIndex((i: string) => i === code);
+  //                     onlyByCountries.splice(idxOBC, 1);
+  //                     setGlobalSearchEngineState({
+  //                       ...globalSearchEngineState,
+  //                       ...{ onlyByCountries },
+  //                     });
+  //                   }}
+  //                 />
+  //     </Popover.Body>
+  //   </Popover>
+  // };
 
   return (
     (globalSearchEngineState.show && (
       <Container className={styles.container}>
-        <Row className='ms-1'>
-          <Col className='d-flex flex-row flex-wrap'>
-            <Form.Group className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Cycles')}
-                checked={filtersChecked.cycle}
-                onChange={(e) => handlerComboxesChangeType(e, 'cycle')}
-              />
-            </Form.Group>
-            <Form.Group className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Eurekas')}
-                checked={filtersChecked.post}
-                onChange={(e) => handlerComboxesChangeType(e, 'post')}
-              />
-            </Form.Group>
-            <Form.Group className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Films')}
-                checked={filtersChecked.movie && filtersChecked.documentary}
-                onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}
-              />
-            </Form.Group>
-            <Form.Group className={styles.formGroup}>
-              <Form.Check
-                className={styles.filter}
-                inline
-                type="checkbox"
-                label={t('Books')}
-                checked={filtersChecked.book && filtersChecked['fiction-book']}
-                onChange={(e) => handlerComboxesChangeType(e, 'book|fiction-book')}
-              />
-            </Form.Group>
-          </Col>
-          <Col  as={Row} className="pe-0">
+        <Grid container className='ms-1'>
+          <Grid item className='d-flex flex-row flex-wrap'>
+            <FormGroup row>
+              <FormControlLabel label={t('Cycles')} control={
+                <Checkbox checked={filtersChecked.cycle} onChange={(e) => handlerComboxesChangeType(e, 'cycle')}/>
+              }/>
+              <FormControlLabel label={t('Eurekas')} control={
+                <Checkbox checked={filtersChecked.post} onChange={(e) => handlerComboxesChangeType(e, 'post')}/>
+              }/>
+              <FormControlLabel label={t('Films')} control={
+                <Checkbox checked={filtersChecked.movie && filtersChecked.documentary} onChange={(e) => handlerComboxesChangeType(e, 'movie|documentary')}/>
+              }/>
+              <FormControlLabel label={t('Books')} control={
+                <Checkbox checked={filtersChecked.book && filtersChecked['fiction-book']} onChange={(e) => handlerComboxesChangeType(e, 'book|fiction-book')}/>
+              }/>
+            </FormGroup>
+          </Grid>
+          <Grid item className="pe-0">
             <aside className="d-flex justify-content-start justify-content-md-end me-0 pe-0">
 
-            {fictionOrNotFilter && (
+            {/* {fictionOrNotFilter && (
               <OverlayTrigger rootClose placement="bottom" trigger="click" overlay={getPopoverBooks()}>
                 <span className="d-inline-block">
                   <Button variant="light">{t('Fiction/nonfiction')}</Button>
                 </span>
               </OverlayTrigger>
-            )}
+            )} */}
 
-            {geographyFilter && (
+            {/* {geographyFilter && (
               <OverlayTrigger rootClose placement="bottom" trigger="click" overlay={getPopoverGeography()}>
               <span className="d-inline-block">
                 <Button className="ms-3" variant="light">{t('Geography')}</Button>
               </span>
             </OverlayTrigger>
-            )}
+            )} */}
             </aside>
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       </Container>
     )) ||
     null
