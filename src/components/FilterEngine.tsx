@@ -27,6 +27,8 @@ const FilterEngine: FunctionComponent<Props> = ({
     movie: false,
     documentary: false,
     book: false,
+    cycle:false,
+    post:false,
     'fiction-book': false,
   });
   useEffect(() => {
@@ -317,6 +319,7 @@ const FilterEngine: FunctionComponent<Props> = ({
                 inline
                 type="checkbox"
                 label={t('Eurekas')}
+                checked={filtersChecked.post}
                 onChange={(e) => handlerComboxesChangeType(e, 'post')}
               />
             </Form.Group>
