@@ -123,14 +123,14 @@ export interface GetAllByResonse {
 //   }
 
 // }
-
-export type Country = Prisma.TermGetPayload<{
+export const CountrySpec={
   select: {
-    label: true;
-    code: true;
-    parent: { select: { code: true } };
-  };
-}>;
+    label: true,
+    code: true,
+    parent: { select: { code: true, label:true } },
+  }
+}
+export type Country = Prisma.TermGetPayload<typeof CountrySpec>;
 
 export const Languages:Record<string,string> = {
   "en":"english",

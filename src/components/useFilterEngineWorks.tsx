@@ -1,8 +1,7 @@
 import React, { useState,ChangeEvent  } from "react"
 import useTranslation from 'next-translate/useTranslation';
-import FilterEngineCountries,{FiltersRegionsType} from '@/components/FilterEngineCountries'
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
-import useAutocompleteCountries from "./useAutocompleteCountries";
+import useAutocompleteRegions from "./useAutocompleteRegions";
 export interface FiltersType {
   'fiction-book':boolean;
   book:boolean;
@@ -18,17 +17,7 @@ const useFilterEngineWorks = ()=>{
       documentary:true
     })
     
-    const{AutocompleteCountries,countries:filtersCountries}=useAutocompleteCountries()
-    // const [filtersCountries,setFiltersCountries]=useState<string[]>([])
-    const [filtersRegions,setFiltersRegions]=useState<FiltersRegionsType>({
-      Asia:false,
-      Europe:false,
-      ['Latin America and the Caribbean']:false,
-      ['Middle East and North Africa']:false,
-      ['Northern America']:false,
-      Oceania:false,
-      ['Sub-Saharan Africa']:false,
-    })
+    const{AutocompleteRegions,countries:filtersCountries}=useAutocompleteRegions()
 
     const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, q: string) => {
       const fc = {...filtersType, [`${q}`]: e.target.checked};
@@ -54,13 +43,7 @@ const useFilterEngineWorks = ()=>{
       </FormGroup>
     </div>
     <div className="my-3">
-      <AutocompleteCountries/>
-      {/* <FilterEngineCountries 
-        filtersCountries={filtersCountries}
-        setFiltersCountries={setFiltersCountries}
-        filtersRegions={filtersRegions}
-        setFiltersRegions={setFiltersRegions}
-      /> */}
+      <AutocompleteRegions/>
     </div>
     </section>
     }
