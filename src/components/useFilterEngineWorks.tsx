@@ -1,8 +1,8 @@
 import React, { useState,ChangeEvent  } from "react"
 import useTranslation from 'next-translate/useTranslation';
-import { Form } from 'react-bootstrap';
-
 import FilterEngineCountries,{FiltersRegionsType} from '@/components/FilterEngineCountries'
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import useAutocompleteCountries from "./useAutocompleteCountries";
 export interface FiltersType {
   'fiction-book':boolean;
   book:boolean;
@@ -18,7 +18,8 @@ const useFilterEngineWorks = ()=>{
       documentary:true
     })
     
-    const [filtersCountries,setFiltersCountries]=useState<string[]>([])
+    const{AutocompleteCountries,countries:filtersCountries}=useAutocompleteCountries()
+    // const [filtersCountries,setFiltersCountries]=useState<string[]>([])
     const [filtersRegions,setFiltersRegions]=useState<FiltersRegionsType>({
       Asia:false,
       Europe:false,
@@ -37,38 +38,29 @@ const useFilterEngineWorks = ()=>{
     const FilterEngineWork: React.FC = ()=>{
     return <section className="d-flex flex-row align-items-center justify-content-end my-2">
     <div className="my-3">
-      <Form.Check data-cy="check-fiction-book" inline
-      type="checkbox"
-      label={t('Fiction books')}
-      checked={filtersType['fiction-book']}
-      onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}
-      />
-      <Form.Check data-cy="check-book" inline
-      type="checkbox"
-      label={t('Nofictions books')}
-      checked={filtersType['book']}
-      onChange={(e) => handlerComboxesChangeType(e, 'book')}
-      />
-      <Form.Check data-cy="check-movie" inline
-      type="checkbox"
-      label={t('Movies')}
-      checked={filtersType.movie}
-      onChange={(e) => handlerComboxesChangeType(e, 'movie')}
-      />
-      <Form.Check data-cy="check-documentary" inline
-      type="checkbox"
-      label={t('Documentaries')}
-      checked={filtersType.documentary}
-      onChange={(e) => handlerComboxesChangeType(e, 'documentary')}
-      />
+      <FormGroup row>
+        <FormControlLabel label={t('Fiction books')} control={
+          <Checkbox data-cy="check-fiction-book" checked={filtersType['fiction-book']} onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}/>
+        }/>
+        <FormControlLabel label={t('Nofictions books')} control={
+          <Checkbox data-cy="check-book" checked={filtersType['book']} onChange={(e) => handlerComboxesChangeType(e, 'book')}/>
+        }/>
+        <FormControlLabel label={t('Movies')} control={
+          <Checkbox data-cy="check-movie" checked={filtersType.movie} onChange={(e) => handlerComboxesChangeType(e, 'movie')}/>
+        }/>
+        <FormControlLabel label={t('Documentaries')} control={
+          <Checkbox data-cy="check-documentary" checked={filtersType.documentary} onChange={(e) => handlerComboxesChangeType(e, 'documentary')}/>
+        }/>
+      </FormGroup>
     </div>
     <div className="my-3">
-      <FilterEngineCountries 
+      <AutocompleteCountries/>
+      {/* <FilterEngineCountries 
         filtersCountries={filtersCountries}
         setFiltersCountries={setFiltersCountries}
         filtersRegions={filtersRegions}
         setFiltersRegions={setFiltersRegions}
-      />
+      /> */}
     </div>
     </section>
     }
