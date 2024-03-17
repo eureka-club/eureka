@@ -7,7 +7,7 @@ import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 const topics = ['gender-feminisms', 'technology', 'environment',
   'racism-discrimination',
@@ -34,8 +34,9 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
         </div>
       </section>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={3} >
-          <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
+        <Grid item xs={12} md={3}>
+          <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
+          {/* <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2> */}
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-4">
             <FeaturedUsers />

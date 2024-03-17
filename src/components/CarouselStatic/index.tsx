@@ -7,6 +7,7 @@ import globalSearchEngineAtom from '../../atoms/searchEngine';
 import styles from './index.module.css';
 import Mosaics from './Mosaics';
 import { MosaicItem } from '@/src/types';
+import { Typography } from '@mui/material';
 
 type Props = {
   title?: string | JSX.Element;
@@ -70,11 +71,13 @@ const CarouselStatic: FunctionComponent<Props> = ({
           <CardGroup className="mb-3">
             <section className="d-flex flex-row  justify-content-between w-100">
               <Col xs={9}>
-                <h2 className="text-secondary fw-bold">
-                  {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
-                  {` `} {title}
-                  {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
-                </h2>
+                <Typography variant='h6' color={'secondary'}>
+                    {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
+                    {` `} {title}
+                    {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
+                </Typography>
+                {/* <h2 className="text-secondary fw-bold">
+                </h2> */}
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
                 {seeAll && !!dataFiltered.length && (

@@ -1,19 +1,35 @@
 import useFeaturedUsers from '@/src/useFeaturedUsers';
-import { useState } from 'react';
 import MosaicItemUser from '@/components/user/MosaicItem';
 import useTranslation from 'next-translate/useTranslation';
-import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+// import { useMemo, useState } from 'react';
+// import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 
 const FeaturedUsers = () => {
   const { data: users } = useFeaturedUsers();
   const { t } = useTranslation('common');
-  const [showUsersSection, setShowUsersSection] = useState<boolean>(false)
+  // const [showUsersSection, setShowUsersSection] = useState<boolean>(false)
 
+  const Title = ()=> <Typography variant='h6' color={'secondary'}>{t('Featured users')}{' '}</Typography>;
+  const Items = ()=> <Stack>
+    {(users??[]).map((user) => (
+        <MosaicItemUser padding={1}  key={user.id} user={user}
+          sx={{'&:hover':{
+            border:'solid 1px var(--color-secondary)',
+            borderRadius:'.3rem',
+            boxShadow:'1px 1px 0px 2px rgba(243, 246, 249, 0.6)',
+            background:'var(--color-secondary)',
+            color:'white',            
+            transition:'background 1s',
+          }}}
+        />
+    ))}
+  </Stack>
   if (users && users.length) {
-    return (
-      <section className="d-flex flex-column ">
-        <h2 className="d-flex flex-row align-items-center text-secondary  fw-bold">
-          <span>{t('Featured users')}{' '}</span>
+    return <>
+        {/* <Box>
+          <Box sx={{display:{xs:'block'}}}>
           {!showUsersSection && (
             <span
               className={`cursor-pointer d-flex d-lg-none ms-2`}
@@ -32,42 +48,43 @@ const FeaturedUsers = () => {
               <BsChevronUp style={{ color: 'var(--color-secondary)' }} />
             </span>
           )}
-        </h2>
+          </Box>
+        </Box> */}
 
-        {showUsersSection && (
-          <div className='d-flex d-lg-none flex-column'>
+        {/* {showUsersSection && (
+          <Box sx={{display:{sm:'none'}}}>
             {users.map((user) => (
-              <div key={user.id} className="d-flex justify-content-center justify-content-lg-start">
+              <Box key={user.id}>
                 <MosaicItemUser user={user} />
-              </div>
+              </Box>
             ))}
-          </div>
-        )}
-        <div className='d-none d-lg-flex flex-column gap-3'>
-          {users.map((user) => {
-            return <div key={user?.id} className="d-flex justify-content-center justify-content-lg-start">
-            <MosaicItemUser user={user} />
-          </div>
-          })}
-        </div>
+          </Box>
+        )} */}
 
-
-
-      </section>
-    );
+        {/* Descktops */}
+        <Box sx={{display:{xs:'none',md:'block'}}}>
+          {Title()}
+          {Items()}
+        </Box>
+        {/* Mobiles */}
+        <Box sx={{display:{md:'none'}}}>
+          <Accordion elevation={1}>
+            <AccordionSummary expandIcon={<ExpandMore color='secondary' />} color='secondary'>
+              {Title()}
+            </AccordionSummary>
+            <AccordionDetails>
+              {Items()}
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+        {/* <Stack gap={{xs:2,md:1}} direction={{xs:'row',md:'column'}} flexWrap={'wrap'}>
+            {users.map((user) => (
+              <Stack key={user.id}>
+                <MosaicItemUser  user={user} />
+              </Stack>
+            ))}
+        </Stack> */}
+      </>
   } else return <></>;
-
-  /*return (users && users.length) 
-    ? <div>      
-       {<CarouselStatic
-        cacheKey={['USERS','FEATURED']}
-        //onSeeAll={()=>router.push('/featured-users')}
-        seeAll={false}
-        data={users}
-        title={t('Featured users')}
-        userMosaicDetailed = {true}
-      />}
-      </div>
-    : <></>;*/
 };
 export default FeaturedUsers;
