@@ -358,7 +358,7 @@ const EditWorkForm: FunctionComponent = () => {
                   </div>
                 )}
               </ImageFileSelect>
-              <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={75} className='ms-2 rounded-2' />
+              <LocalImageComponent filePath={work.localImages[0].storedFile} alt='' width={100} height={150} className='ms-2 rounded-2' />
             </Col>
             <Col className="mt-4 mt-lg-0">
               <div className='mb-4'>

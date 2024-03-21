@@ -16,8 +16,7 @@ export default function useAutocompleteRegions(){
     function AutocompleteRegions() {
         // const{onChange}=props;
         const { t } = useTranslation('searchEngine');
-        const{data:countries}=useCountries();console.log(countries)
-        
+        const{data:countries}=useCountries();
         
         const regions = React.useMemo(()=>{
           let regionsGrouped:Record<string,{code:string,label:string,countries:Opt[]}>={};

@@ -21,7 +21,7 @@ export default async function handler(
   if(req.method=='POST'){
     const {list_id=process.env.MAILCHIMP_AUDIENCE,email_address,name,status='subscribed'} = req.body.params
     const merge_fields = {
-      FNAME:name,
+      FNAME:name??email_address.replace(/(\w+)@.+/,'$1'),
     }
     if(email_address){
         if(list_id){

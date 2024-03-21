@@ -1,12 +1,12 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
 import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
-import { TextField,FormGroup,FormControl,InputLabel,Input,FormHelperText,FormControlLabel, Box} from '@mui/material';
+import { TextField,FormControl, Box, Chip, Avatar, Stack} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation'; 
 import { useAtom } from 'jotai'; 
 import { useRouter } from 'next/router';
 import searchEngine from '@/src/atoms/searchEngine';
 import { BiPlus} from 'react-icons/bi';
-
+import Link from 'next/link';
 export type TagsInputProp = {
   tags: string;
   setTags?: (value: string) => void;
@@ -74,14 +74,47 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
     setSearchEngineState((res)=>({...res,itemsFound:[]}))
     router.push(`/search?q=${v}`);    
   };
+  const getChipLabel = (v:string,idx:number)=>{
+    return <Box>
+                <>{formatValue ? formatValue(v) : v}{' '}
+                {!readOnly && (
+                  !loading[v] && <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
+                    X
+                  </Badge> || <Spinner size="sm" animation="grow"/>
+                )}
+                {readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}</>
+    </Box>
+  }
   return ( 
     <Form.Group controlId="tags" >
       {/*label && <Form.Label>{label}</Form.Label>*/}
-      <div className={`${className}`}>
+      <Stack gap={'.2rem'} direction={'row'} className={`${className}`}>
         {items.map((v, idx) => {
-          return (<Box key={idx}>
-            <span key={`${idx + 1}${t}`} data-cy="tag">
-              <Badge
+          return (
+            <Link key={`${idx + 1}${t}`} href={`/search?q=${v}`}  data-cy="tag">
+                <Chip 
+                  size="small" 
+                  label={getChipLabel(v,idx)} 
+                  variant="outlined"
+                  avatar={<Avatar>{v[0].toUpperCase()}</Avatar>}
+                  // avatar={<HiTrendingUp color='white'/>}
+                  // avatar={<Psychology/>}
+                  sx={{
+                    cursor:'pointer',
+                    background: 'color-mix(in srgb, var(--color-secondary) 50%, transparent)',
+                    color:'black',
+                    transition:'background 1s',
+                    '&:hover':{
+                      'svg':{
+                        color:'white',
+                      },
+                      color:'white',
+                      background: 'var(--color-secondary)!important',
+                    }
+                  }}
+                />
+              
+              {/* <Badge
                 className="fw-light fs-6 cursor-pointer"
                 pill
                 bg="secondary px-2 py-1 mb-1 me-1"
@@ -94,8 +127,8 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                   </Badge> || <Spinner size="sm" animation="grow"/>
                 )}
                 {readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
-              </Badge>{' '}
-            </span> </Box>
+              </Badge>{' '} */}
+            </Link>
 
           );
         })}
@@ -131,7 +164,7 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
           </div>
           </>
         )}
-      </div>
+      </Stack>
     </Form.Group>
   );
 };

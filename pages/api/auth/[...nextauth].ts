@@ -189,7 +189,6 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       },
       createUser: async ({ user }) => {
         const segment = 'eureka-all-users';
-        
         const email_address = user.email!;
         let name = user.name||'';
         if(!name){
