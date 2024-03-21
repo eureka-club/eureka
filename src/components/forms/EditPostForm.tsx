@@ -704,7 +704,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
             <Col className="mb-4">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial
-                  data={topics}
+                  data={topics??[]}
                   items={formValues.topics}
                   setItems={handleSetTopics}
                   formatValue={(v: string) => t(`topics:${v}`)}

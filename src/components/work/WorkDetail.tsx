@@ -1,4 +1,4 @@
-import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense } from 'react';
+import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense, useMemo } from 'react';
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
@@ -43,6 +43,8 @@ import { Box } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
+import { TagsLinks } from '../common/TagsLinks';
+import useTopics, { TopicItem } from '@/src/useTopics';
 
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
@@ -68,6 +70,19 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   const { data: work } = useWorkDetail(workId, {
     enabled: !!workId,
   });
+console.log(work)
+  const{data:topicsAll}=useTopics();
+  const topics:TopicItem[] = useMemo(()=>{
+    if(work && topicsAll){
+      return (work?.topics??"")
+        .split(',')
+        .map(ts=>{
+        const topic = topicsAll?.find(t=>t.code==ts);
+        return {code:ts,emoji:topic ? topic.emoji: '',label:ts};
+      });
+    }
+    return [];
+  },[work,topicsAll]);
 
   const workCyclessWhere = {
     where: {
@@ -297,14 +312,15 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           </div>
                           <span className="ms-1 text-gray">{t('common:ratings')}</span>
                         </Box>
-                        {work.topics && (
+                        <TagsLinks topics={topics??[]}/>
+                        {/* {work.topics && (
                           <TagsInput
                             className="ms-0 ms-lg-2 d-flex flex-row"
                             formatValue={(v: string) => t(`topics:${v}`)}
                             tags={work.topics}
                             readOnly
                           />
-                        )}
+                        )} */}
                         {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
                       </div>
                       {work.link != null && (

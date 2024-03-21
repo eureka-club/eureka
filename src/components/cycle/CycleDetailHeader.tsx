@@ -1,5 +1,4 @@
 import { useSession } from 'next-auth/react';
-import { Work } from '@prisma/client';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState,useEffect } from 'react';
 import { Col, Row,Spinner,Button } from 'react-bootstrap';
@@ -24,8 +23,9 @@ import { Box } from '@mui/material';
 import { CycleWork } from '@/src/types/cycleWork';
 import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
 import { CycleSumary } from '@/src/types/cycle';
+import useTopics, { TopicItem } from '@/src/useTopics';
+import { TagsLinks } from '../common/TagsLinks';
 interface Props {
-  // cycle: CycleDetail;
   cycleId:number;
   post?: PostDetail;
   work?: WorkDetail;
@@ -43,34 +43,21 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   cycleId,
   onCarouselSeeAllAction,
   show: s = true
-  // onParticipantsAction,
-  // post,
-  // work,
-  // isCurrentUserJoinedToCycle,
-  // participantsCount,
-  // postsCount,
-  // worksCount,
-  // mySocialInfo,
 }) => {
-  // const [globalSearchEngineState, setGlobalSearchEngineState] = useAtom(globalSearchEngineAtom);
-  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
-  // const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
-  // const router = useRouter();
   const [show, setShow] = useState<boolean>(s);
-  // const queryClient = useQueryClient();
-
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
-
-  const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId})
+  const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId});
+  
+  const{data:topicsAll}=useTopics();
+  const topics:TopicItem[] =  cycle?.topics?.split(',').map(ts=>{
+    const topic = topicsAll?.find(t=>t.code==ts);
+    return {code:ts,emoji:topic ? topic.emoji: '',label:ts};
+  })??[];
   
   const works = cycle?.cycleWorksDates?.length 
     ? cycle?.cycleWorksDates?.map(c=>c.work)
     : cycle?.works
-  // const [works,setWorks] = useState(dataWorks?.works)
-  // useEffect(()=>{
-  //   if(dataWorks)setWorks(dataWorks.works)
-  // },[dataWorks])
 
   const [qty, setQty] = useState(cycle?.ratingAVG||0);
   const [qtyByUser,setqtyByUser] = useState(0);
@@ -234,12 +221,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <span className="ms-1 text-gray">{t('common:ratings')}</span>
             {cycle.topics && (
               <section className=" d-flex flex-nowrap ms-2">
-                <TagsInput
+                <TagsLinks topics={topics??[]}/>
+                {/* <TagsInput
+                  avatarValue={getTopicEmoji(topicItem)}
                   formatValue={(v: string) => t(`topics:${v}`)}
                   className="d-flex flex-row"
                   tags={cycle.topics}
                   readOnly
-                />
+                /> */}
                 <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
               </section>
             )}

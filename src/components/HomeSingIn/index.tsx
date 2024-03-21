@@ -8,22 +8,16 @@ import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
 import { Grid, Typography } from '@mui/material';
-
-const topics = ['gender-feminisms', 'technology', 'environment',
-  'racism-discrimination',
-  'wellness-sports', 'social issues',
-  'politics-economics', 'philosophy',
-  'migrants-refugees', 'introspection',
-  'sciences', 'arts-culture', 'history',
-];
-
+import useTopics from '@/src/useTopics';
+import { TagsLinks } from '../common/TagsLinks';
 interface Props {
 }
-
 const HomeSingIn: FunctionComponent<Props> = ({}) => {
   const { t } = useTranslation('common');
+  const{data:topics}=useTopics();debugger;
   const getTopicsBadgedLinks = () => {
-    return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
+    return <TagsLinks topics={topics??[]}/>
+    //return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
 
   return (

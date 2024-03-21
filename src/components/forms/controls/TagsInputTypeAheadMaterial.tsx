@@ -2,6 +2,7 @@ import { FunctionComponent, useState ,useEffect, useRef, Dispatch, SetStateActio
 import useTranslation from 'next-translate/useTranslation';
 import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
 import { TextField } from '@mui/material';
+import { TopicItem } from '@/src/useTopics';
 
 export type TagsInputProp = {
   // tags: string;
@@ -9,7 +10,7 @@ export type TagsInputProp = {
   label?: string;
   //labelKey?: (res: { code: string }) => string;
   readOnly?: boolean | undefined;
-  data: { code: string; label: string }[];
+  data: TopicItem[];
   items: string[];
   setItems?: (value: string[]) => void; //Dispatch<SetStateAction<string[]>>;
   max?: number;

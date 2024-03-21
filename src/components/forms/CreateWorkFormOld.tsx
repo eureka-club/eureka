@@ -349,7 +349,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
               <FormGroup controlId="topics">
                 <FormLabel>{t('topicsLabel')}</FormLabel>
                 <TagsInputTypeAhead
-                  data={topics}
+                  data={topics??[]}
                   items={items}
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}

@@ -387,7 +387,7 @@ const EditWorkForm: FunctionComponent = () => {
             <Col className="mt-4 mt-lg-0">
               <FormGroup controlId="countryOrigin">
                 <TagsInputTypeAheadMaterial
-                  data={countrySearchResults}
+                  data={countrySearchResults??[]}
                   items={countryOrigin}
                   setItems={setCountryOrigin}
                   formatValue={(v: string) => t(`countries:${v}`)}
@@ -447,7 +447,7 @@ const EditWorkForm: FunctionComponent = () => {
             <Col className="">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial
-                  data={topics}
+                  data={topics??[]}
                   items={items}
                   setItems={setItems}
                   formatValue={(v: string) => t(`topics:${v}`)}

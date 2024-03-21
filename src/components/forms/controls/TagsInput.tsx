@@ -90,13 +90,14 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
       {/*label && <Form.Label>{label}</Form.Label>*/}
       <Stack gap={'.2rem'} direction={'row'} className={`${className}`}>
         {items.map((v, idx) => {
+         const label = v.replace(/^\s*/,'');
           return (
             <Link key={`${idx + 1}${t}`} href={`/search?q=${v}`}  data-cy="tag">
                 <Chip 
                   size="small" 
                   label={getChipLabel(v,idx)} 
                   variant="outlined"
-                  avatar={<Avatar>{v[0].toUpperCase()}</Avatar>}
+                  avatar={<Avatar>{label[0].replace(/^\s*/,'').toUpperCase()}</Avatar>}
                   // avatar={<HiTrendingUp color='white'/>}
                   // avatar={<Psychology/>}
                   sx={{

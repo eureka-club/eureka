@@ -695,7 +695,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
             <Form.Group controlId="topics">
               <Form.Label>{t('newCycleMainTopicsLabel')}</Form.Label>
               <TagsInputTypeAhead
-                data={topics}
+                data={topics??[]}
                 items={items}
                 setItems={setItems}
                 labelKey={(res) => t(`topics:${res.code}`)}

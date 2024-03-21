@@ -85,7 +85,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
   const { t } = useTranslation('cycleDetail');
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const [newEurekaImageFile, setNewEurekaImageFile] = useState<File | null>(null);
-  const { data: topics } = useTopics();
+  const { data: topics} = useTopics();
   const [eurekaTopics, setEurekaTopics] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('');
   const editorRef = useRef<any>(null);
@@ -545,7 +545,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                   {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
-                    data={topics}
+                    data={topics??[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}

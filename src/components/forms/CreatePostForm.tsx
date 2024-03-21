@@ -613,7 +613,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
             <Col className="mb-4">
               <FormGroup controlId="topics">
                 <TagsInputTypeAheadMaterial
-                  data={topics}
+                  data={topics??[]}
                   items={items}
                   setItems={setItems}
                   formatValue={(v: string) => t(`topics:${v}`)}
