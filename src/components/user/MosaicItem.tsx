@@ -27,9 +27,9 @@ const MosaicItem: FunctionComponent<Propss> = ({ user:user_,userId,...otherProps
          {
            user?.countryOfOrigin 
              ? 
-               <em>
+               <Typography variant='caption'>
                  <AiOutlineEnvironment /> {t(`countries:${user?.countryOfOrigin}`)}
-               </em>
+               </Typography>
              : <></>
          }
     </Stack>
