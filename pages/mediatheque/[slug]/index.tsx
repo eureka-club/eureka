@@ -396,6 +396,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
   let id = 0;
+  const take = 50;
   if (ctx.query && ctx.query.slug) {
     const slug = ctx.query.slug.toString();
     const li = slug.split('-').slice(-1);
@@ -408,14 +409,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    const { posts } = await getMyPosts(id!,session, 8);
+    const { posts } = await getMyPosts(id!,session, take);
 
     await queryClient.prefetchQuery(['MY-POSTS'], () => posts);
     posts.forEach((p) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
 
-    const { cycles } = await getMyCycles(id!, 8);
+    const { cycles } = await getMyCycles(id!, take);
     await queryClient.prefetchQuery(['MY-CYCLES',id.toString()], () => cycles);
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
