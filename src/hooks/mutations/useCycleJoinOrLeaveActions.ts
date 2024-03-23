@@ -101,6 +101,8 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants
               queryClient.invalidateQueries(['USER', `${user.id}`]);
               queryClient.invalidateQueries(['CYCLE',`${cycle?.id}`]);
               queryClient.invalidateQueries([`cycles-of-interest-${lang}`]);
+              queryClient.invalidateQueries(["MY-CYCLES",`${user.id}`]);
+
               
               queryClient.invalidateQueries(ck)
             }
@@ -178,6 +180,7 @@ const useLeaveUserFromCycleAction = (user:UserSumary,cycle:CycleSumary,participa
             queryClient.invalidateQueries(['USER', `${user.id}`]);
             queryClient.invalidateQueries(['CYCLE', `${cycle?.id}`]);
             queryClient.invalidateQueries([`cycles-of-interest-${lang}`]);
+            queryClient.invalidateQueries(["MY-CYCLES",`${user.id}`]);
 
             queryClient.invalidateQueries(ck)
             }

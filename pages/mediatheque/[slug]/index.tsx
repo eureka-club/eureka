@@ -360,7 +360,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         }
                         {
                           filtersChecked.cycle
-                            ? <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
+                            ? <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} />
                             : <></>
                         }
                         <SavedForLater 
