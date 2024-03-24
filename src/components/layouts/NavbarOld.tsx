@@ -98,10 +98,6 @@ const NavBarOld: FunctionComponent = () => {
 
   const handlerLogin = () => {
     show(<SignInForm />);
-
-    /*localStorage.setItem('loginRedirect',router.asPath);
-    router.push({pathname: `/`}, undefined, { scroll: false });
-    window.scrollTo(0, 60);*/
   };
 
   const getMediathequeSlug = () => {

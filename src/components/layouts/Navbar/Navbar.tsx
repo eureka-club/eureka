@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import styles from './Navbar.module.css';
-import {Logout,Person,Settings} from '@mui/icons-material';
+import {Language, Login, Logout,Person,Settings} from '@mui/icons-material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -34,6 +34,11 @@ import { QueryClient } from 'react-query';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL, WEBAPP_URL } from '@/src/constants';
 import LocalImage from '../../LocalImage';
 import { BiUser } from 'react-icons/bi';
+import SignInForm from '../../forms/SignInForm';
+import { useModalContext } from '@/src/useModal';
+import useSignInModal from '@/src/useSignInModal';
+import NotificationsList from '../../NotificationsList';
+import { IoNotificationsCircleOutline } from 'react-icons/io5';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -156,8 +161,7 @@ export default function NavBar() {
     return <MenuAction items={topics} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
         <HiOutlineHashtag
-          className={`${styles.navbarIconNav} border border-2 border-primary`}
-          style={{ scale: '90%', padding: '2px' }}
+          fontSize={'2rem'}
         />
         {/* <Typography variant="caption" gutterBottom>
           {t('Topics')}
@@ -185,7 +189,7 @@ export default function NavBar() {
   const getMediathequeLinks = () => {
     return <MenuAction items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <RiDashboardLine className={styles.navbarIconNav} />
+        <RiDashboardLine fontSize={'2rem'} />
         {/* <Typography variant="caption" gutterBottom>
           {t('My Mediatheque')}
         </Typography> */}
@@ -204,7 +208,7 @@ export default function NavBar() {
   const getAboutLinks = () => {
     return <MenuAction items={aboutLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <AiOutlineInfoCircle className={styles.navbarIconNav} />
+        <AiOutlineInfoCircle fontSize={'2rem'} />
         {/* <Typography variant="caption" gutterBottom>
           {t('About')}
         </Typography> */}
@@ -221,7 +225,9 @@ export default function NavBar() {
   const getLangsLinks = () => {
     return <MenuAction items={langsLinksInfo||[]} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <Typography className={styles.langLinkInfo}>{router.locale}</Typography>
+        <Badge badgeContent={router.locale} color="secondary">
+          <Language sx={{fontSize:'2rem'}}/>
+        </Badge>
         {/* <Typography variant="caption" gutterBottom>
           {t('About')}
         </Typography> */}
@@ -253,11 +259,22 @@ export default function NavBar() {
     signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_WEBAPP_URL}` });
   };
 
-  const sessionLinksInfo = [
+  // const { show } = useModalContext();
+  const{SignInModal,setOpen}=useSignInModal();
+  const handlerLogin = () => {
+    // show(<SignInForm />);
+    setOpen(true);
+  };
+
+  const sessionLinksInfo = session?.user 
+    ? [
       {label:t('Profile'),link:'/profile',icon:<Person />},
       {label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />},
       {label:t('logout'),onClick:handlerLogout,icon: <Logout fontSize="small" />}
-  ];
+    ]
+    :[
+      {label:t('login'),onClick:handlerLogin,icon: <Login fontSize="small" />}
+    ]
 
   const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
@@ -268,37 +285,34 @@ export default function NavBar() {
       if (!user?.photos.length)
         return (
           <img
-            width={30}
-            height={29.5}
+            width={23}
+            height={23}
             onError={avatarError}
             className={styles.navbarIconNav}
             src={user.image || '/img/default-avatar.png'}
             alt={user.name || ''}
+            style={{border:'solid 2px var(--color-primary)'}}
           />
         );
       return (
         <LocalImage
           className={`rounded rounded-circle`}
-          width={30}
-          height={29.5}
+          width={23}
+          height={23}
           filePath={`users-photos/${user.photos[0].storedFile}`}
           alt={user.name || ''}
+          style={{border:'solid 2px var(--color-primary)'}}
         />
       );
     }
     return <BiUser className={styles.navbarIconNav} />;
   };
-
-
-
   
 
   const getSessionLinks = () => {
     return <MenuAction items={sessionLinksInfo||[]} label={
-      <Stack justifyContent={'center'} alignItems={'center'}>
-        <Box>
+      <Stack sx={{width:'32px',height:'32px'}} justifyContent={'center'} alignItems={'center'}>
             {getAvatar()}
-        </Box>
         {/* <Typography variant="caption" gutterBottom>
           {t('About')}
         </Typography> */}
@@ -327,6 +341,41 @@ export default function NavBar() {
   };
 
 
+  const notificationLinksInfo = [
+    {label:t('Profile'),link:'/profile',icon:<Person />},
+    {label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />},
+    {label:t('logout'),onClick:handlerLogout,icon: <Logout fontSize="small" />}
+  ];
+  const getNotificationsLinks = () => {
+    return <MenuAction items={notificationLinksInfo||[]} label={
+      <Stack justifyContent={'center'} alignItems={'center'}>
+        <IoNotificationsCircleOutline fontSize={'2rem'} />
+      </Stack>
+    }
+    title={t('Account')}
+    renderMenuItem={
+      (i)=>{
+          const baseCmp = ()=><Typography>{i.label}</Typography>;
+          if(i.hasOwnProperty('link'))
+            return <Link href={i['link']}>
+              <Stack gap={3} direction={'row'}>
+                {i.icon?i.icon:<></>} {baseCmp()}
+              </Stack>
+            </Link>
+          else if(i.hasOwnProperty('onClick'))
+            return <Button sx={{padding:0}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
+              <Stack gap={3} direction={'row'}>
+                {i.icon?i.icon:<></>} {baseCmp()}
+              </Stack>
+            </Button>;
+           return <></> 
+      }
+    }
+    />;
+  };
+  
+
+
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -349,6 +398,7 @@ export default function NavBar() {
       {getAboutLinks()}
       {getLangsLinks()}
       {getSessionLinks()}
+      {getNotificationsLinks()}
     </Menu>
   );
 
@@ -376,31 +426,7 @@ export default function NavBar() {
             {getAboutLinks()}
             {getLangsLinks()}
             {getSessionLinks()}
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
+            {getNotificationsLinks()}
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -418,6 +444,7 @@ export default function NavBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <SignInModal logoImage/>
     </Box>
   );
 }
