@@ -1,4 +1,4 @@
-import { useState, FunctionComponent, useEffect } from 'react';
+import { useState, FunctionComponent, useEffect, useMemo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Spinner,Row, Col} from 'react-bootstrap';
@@ -17,9 +17,8 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = [`cycles-search-${router?.query.q?.toString()}`];
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
-
+  
   const getProps = ()=>{
     const res:Prisma.CycleWhereInput = {
       OR:[
@@ -28,62 +27,63 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
             { 
               title: { contains: t } 
             }
-          ))
-  
-        },
-        {
-          AND:terms.map(t=>(
-            { 
-              contentText: { contains: t } 
+            ))
+            
+          },
+          {
+            AND:terms.map(t=>(
+              { 
+                contentText: { contains: t } 
+              }
+              ))
+              
+            },
+            {
+              AND:terms.map(t=>(
+                { 
+                  tags: { contains: t } 
+                }
+                ))
+              },
+              {
+                AND:terms.map(t=>(
+                  { 
+                    topics: { contains: t } 
+                  }
+                  ))
+                }
+              ],
             }
-          ))
-  
-        },
-        {
-          AND:terms.map(t=>(
-            { 
-                tags: { contains: t } 
+            if(filtersType){
+              const access = {
+                access:{
+                  in:[
+                    ...filtersType.public ? [1,4] : [],
+                    ...filtersType.private ? [2] : [],
+                  ]
+                }
+              }
+              res.AND = {
+                ...res.AND ? res.AND : {},
+                ...access
+              };
             }
-          ))
-        },
-        {
-          AND:terms.map(t=>(
-            { 
-                topics: { contains: t } 
+            if(filtersCountries && filtersCountries.length){
+              res.AND = {
+                ...res.AND ? res.AND : {},
+                creator:{
+                  countryOfOrigin:{
+                    in:filtersCountries
+                  }
+                }
+              }
             }
-          ))
-        }
-      ],
-    }
-    if(filtersType){
-      const access = {
-        access:{
-          in:[
-            ...filtersType.public ? [1,4] : [],
-            ...filtersType.private ? [2] : [],
-          ]
-        }
-      }
-      res.AND = {
-        ...res.AND ? res.AND : {},
-        ...access
-      };
-    }
-    if(filtersCountries && filtersCountries.length){
-      res.AND = {
-        ...res.AND ? res.AND : {},
-        creator:{
-          countryOfOrigin:{
-            in:filtersCountries
-          }
-        }
-      }
-    }
-    return res;
-  };
-
-  const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
-
+            return res;
+          };
+          
+          const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
+          const cacheKey = useMemo(()=>[`cycles-search-${JSON.stringify(props)}`],[props]);
+          
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleSumary[]>([])
 

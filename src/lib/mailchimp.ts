@@ -9,7 +9,7 @@ export interface MailchimpSubscribe{
     name:string;
 }
 
-export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
+export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{debugger;
     const {segment='eureka-all-users',email_address,name} = props
     const url =`/segments/add_member`
     try{
@@ -27,6 +27,9 @@ export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
         }
         const member = await get_member({email_address})
         if(member){
+            if(!member.full_name){
+                await update_member({email_address,full_name:name});
+            }
             const res = await fn_subscribe();
             return res;
         }
@@ -80,6 +83,26 @@ export const get_member = async (props:MailchimpListMember)=>{
         throw e
     }
 }
+export interface MailchimpListMemberUpdate{
+    email_address:string;
+    full_name:string;
+}
+export const update_member = async (props:MailchimpListMemberUpdate)=>{
+    const {email_address,full_name} = props
+    const url =`/list/update_member`
+    try{
+        const m = await instance.patch(url,{
+            email_address,
+            full_name
+        });
+        return m.data?.member;
+    }
+    catch(e){
+        console.error(e)
+        throw e
+    }
+}
+
 
 export interface MailchimpListAddMember{
     list_id?:string;

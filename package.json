@@ -42,6 +42,7 @@
     "@mailchimp/mailchimp_transactional": "^1.0.47",
     "@mui/icons-material": "^5.15.6",
     "@mui/joy": "^5.0.0-alpha.73",
+    "@mui/lab": "^5.0.0-alpha.168",
     "@mui/material": "^5.10.16",
     "@mui/x-data-grid": "^5.17.14",
     "@next-auth/prisma-adapter": "^1.0.5",

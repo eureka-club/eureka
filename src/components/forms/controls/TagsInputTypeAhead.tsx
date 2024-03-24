@@ -9,6 +9,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 // import { SearchResult } from '../../../types';
 // import useCountries from '../../../useCountries';
 import styles from './TagsInputTypeAhead.module.css';
+import { TopicItem } from '@/src/useTopics';
 // import globalSearchEngineAtom from '../../../atoms/searchEngine';
 
 export type TagsInputProp = {
@@ -17,7 +18,7 @@ export type TagsInputProp = {
   label?: string;
   labelKey?: (res: { code: string }) => string;
   readOnly?: boolean | null;
-  data: { code: string; label: string }[];
+  data: TopicItem[];
   items: string[];
   setItems: Dispatch<SetStateAction<string[]>>;
   max?: number;

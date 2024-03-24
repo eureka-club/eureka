@@ -16,15 +16,26 @@ interface Props{
     user:UserDetail;
     goTo:(path:string)=>void;
     t:(val:string)=>string;
-    
+    showCycles?:boolean;
+    showPosts?:boolean;
+    showBooks?:boolean;
+    showMovies?:boolean;
 }
-const SavedForLater:FC<Props> = ({user,id,goTo,t}) => {
+const SavedForLater:FC<Props> = ({user,id,goTo,t,showCycles=true,showPosts=true,showBooks=true,showMovies=true}) => {
   const SFL = useMySaved(id)
 
   const {data:session} = useSession();
-
     if (SFL){
-      const items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as MosaicItem[];
+      let items = [...SFL.favPosts,...SFL.favCycles,...SFL.favWorks] as MosaicItem[];
+      if(!showCycles)
+        items = items.filter(i=>i.type!='cycle');
+      if(!showPosts)
+        items = items.filter(i=>i.type!='post');
+      if(!showBooks)
+        items = items.filter(i=>!['book','fiction-book'].includes(i.type!));
+      if(!showMovies)
+        items = items.filter(i=>!['movie','documentary'].includes(i.type!));
+
       items.sort((f, s) => {
         const fCD = dayjs(f.createdAt);
         const sCD = dayjs(s.createdAt);

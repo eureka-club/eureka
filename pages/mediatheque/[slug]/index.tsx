@@ -26,6 +26,8 @@ import RenderAccessInfo from './RenderAccessInfo';
 import dayjs from 'dayjs';
 import { PostDetail } from '@/src/types/post';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import useFilterMediatheque from '@/src/components/useFilterMediatheque';
+import { Box, Stack } from '@mui/material';
 
 interface Props {
   id: number;
@@ -36,6 +38,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const { notifier } = useNotificationContext();
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
+  const {FilterMediatheque,filtersChecked}=useFilterMediatheque();
 
   const {
     data: user,
@@ -325,35 +328,51 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
               </Card.Body>
             </Card>
             {isAccessAllowed(session, user, isLoadingUser, isFollowedByMe) && (
-              <>
-                <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
-                <FilterEngine fictionOrNotFilter={false} geographyFilter={false} />
-                <section className="d-flex flex-column flex-lg-row">
-                  <Col xs={12} lg={2} className="me-2">
-                    <h2 onClick={(e) => goToReadOrWatched(e, null, null)} className="text-secondary text-center  cursor-pointer" style={{ textDecoration: "underline" }}>{`${t('readOrWatchedWorks')}`}</h2>
-                    <h2 className="text-secondary text-center fs-5">{`(${getReadOrWatchedTotal()})`}</h2>
-                    <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-                      <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'books', dayjs().year().toString())}>
-                        {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
-                      </h2>
-                      <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getReadCurrentYear()})`}</h2>
-                    </section>
-                    <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-                      <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'movies', dayjs().year().toString())}>
-                        {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
-                      </h2>
-                      <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear()})`}</h2>
-                    </section>
-                  </Col>
-                  <Col xs={12} lg={10} className="mt-5 mt-lg-0">
-                    <section className="ms-0 ms-lg-5">
-                      <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
-                      <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} t={t} />
-                      <SavedForLater user={user} goTo={goTo} t={t} id={id} />
-                    </section>
-                  </Col>
-                </section>
-              </>
+              <Stack rowGap={6}>
+                <Stack rowGap={1}>
+                  <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
+                  <FilterMediatheque/>
+                </Stack>
+                  {/* <FilterEngine fictionOrNotFilter={false} geographyFilter={false} /> */}
+                  <section className="d-flex flex-column flex-lg-row">
+                    <Col xs={12} lg={2} className="me-2">
+                      <h2 onClick={(e) => goToReadOrWatched(e, null, null)} className="text-secondary text-center  cursor-pointer" style={{ textDecoration: "underline" }}>{`${t('readOrWatchedWorks')}`}</h2>
+                      <h2 className="text-secondary text-center fs-5">{`(${getReadOrWatchedTotal()})`}</h2>
+                      <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+                        <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'books', dayjs().year().toString())}>
+                          {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
+                        </h2>
+                        <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getReadCurrentYear()})`}</h2>
+                      </section>
+                      <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+                        <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'movies', dayjs().year().toString())}>
+                          {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
+                        </h2>
+                        <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear()})`}</h2>
+                      </section>
+                    </Col>
+                    <Col xs={12} lg={10} className="mt-5 mt-lg-0">
+                      <section className="ms-0 ms-lg-5">
+                        {
+                          filtersChecked.post
+                             ? <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
+                             : <></>
+                        }
+                        {
+                          filtersChecked.cycle
+                            ? <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} />
+                            : <></>
+                        }
+                        <SavedForLater 
+                          showCycles={filtersChecked.cycle} 
+                          showPosts={filtersChecked.post} 
+                          showBooks={filtersChecked.book} 
+                          showMovies={filtersChecked.movie} 
+                          user={user} goTo={goTo} t={t} id={id} />
+                      </section>
+                    </Col>
+                  </section>
+              </Stack>
             )}
           </section>
         )}
@@ -377,6 +396,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
   let id = 0;
+  const take = 50;
   if (ctx.query && ctx.query.slug) {
     const slug = ctx.query.slug.toString();
     const li = slug.split('-').slice(-1);
@@ -389,14 +409,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    const { posts } = await getMyPosts(id!,session, 8);
+    const { posts } = await getMyPosts(id!,session, take);
 
     await queryClient.prefetchQuery(['MY-POSTS'], () => posts);
     posts.forEach((p) => {
       queryClient.setQueryData(['POST', `${p.id}`], () => p);
     });
 
-    const { cycles } = await getMyCycles(id!, 8);
+    const { cycles } = await getMyCycles(id!, take);
     await queryClient.prefetchQuery(['MY-CYCLES',id.toString()], () => cycles);
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);

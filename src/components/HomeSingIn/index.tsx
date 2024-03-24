@@ -7,23 +7,17 @@ import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeSingIn/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
-import { Grid } from '@mui/material';
-
-const topics = ['gender-feminisms', 'technology', 'environment',
-  'racism-discrimination',
-  'wellness-sports', 'social issues',
-  'politics-economics', 'philosophy',
-  'migrants-refugees', 'introspection',
-  'sciences', 'arts-culture', 'history',
-];
-
+import { Grid, Typography } from '@mui/material';
+import useTopics from '@/src/useTopics';
+import { TagsLinks } from '../common/TagsLinks';
 interface Props {
 }
-
 const HomeSingIn: FunctionComponent<Props> = ({}) => {
   const { t } = useTranslation('common');
+  const{data:topics}=useTopics();debugger;
   const getTopicsBadgedLinks = () => {
-    return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
+    return <TagsLinks topics={topics??[]}/>
+    //return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
   };
 
   return (
@@ -34,8 +28,9 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
         </div>
       </section>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={3} >
-          <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2>
+        <Grid item xs={12} md={3}>
+          <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
+          {/* <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2> */}
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-4">
             <FeaturedUsers />
