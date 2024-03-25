@@ -9,7 +9,7 @@ export interface MailchimpSubscribe{
     name:string;
 }
 
-export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{debugger;
+export const subscribe_to_segment = async (props:MailchimpSubscribe)=>{
     const {segment='eureka-all-users',email_address,name} = props
     const url =`/segments/add_member`
     try{

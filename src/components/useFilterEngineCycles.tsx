@@ -12,7 +12,7 @@ const useFilterEngineCycles = ()=>{
     
     const{AutocompleteRegions,countries:filtersCountries}=useAutocompleteRegions();
 
-    const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, q: string) => {debugger;
+    const handlerComboxesChangeType = (e: ChangeEvent<HTMLInputElement>, q: string) => {
       const fc = {...filtersType, [`${q}`]: e.target.checked};
       setFiltersType(fc);
       // if(filtersTypeChanged)

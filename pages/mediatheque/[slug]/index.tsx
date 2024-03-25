@@ -235,7 +235,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   };
 
  const getReadOrWatchedTotal = () => {
-    return user?.readOrWatchedWorks.length;
+    return user?.readOrWatchedWorks?.length;
   };
 
   const getReadCurrentYear = () => {

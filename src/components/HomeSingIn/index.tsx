@@ -14,7 +14,7 @@ interface Props {
 }
 const HomeSingIn: FunctionComponent<Props> = ({}) => {
   const { t } = useTranslation('common');
-  const{data:topics}=useTopics();debugger;
+  const{data:topics}=useTopics();
   const getTopicsBadgedLinks = () => {
     return <TagsLinks topics={topics??[]}/>
     //return <TagsInput className='d-flex flex-wrap' formatValue={(v: string) => t(`topics:${v}`)} tags={[...topics].join()} readOnly />;
