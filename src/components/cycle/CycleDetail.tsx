@@ -93,7 +93,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const{data:participants}=useCycleParticipants(cycle?.id!,{enabled:!!cycle?.id!});
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
-  const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
+  const {data:dataPosts} = usePosts(cyclePostsProps,{
+    enabled:!!cycleId,
+    cacheKey:['CYCLE',`${cycle?.id}`,'POSTS']
+  })
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
 

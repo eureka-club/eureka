@@ -49,7 +49,6 @@ import { WorkDetail } from '@/src/types/work';
 // import { isNullOrUndefined } from 'util';
 
 interface Props {
-  cacheKey: string[];
   cycle: CycleDetail;
   discussionItem?: string;
   setDiscussionItem: (val: string | undefined) => void;
@@ -73,12 +72,12 @@ const whereCycleParticipants = (id: number) => ({
 });
 
 const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
-  cacheKey,
   cycle,
   discussionItem,
   setDiscussionItem,
   close,
 }) => {
+  const cacheKey=['CYCLE',`${cycle.id}`,'POSTS'];
   const queryClient = useQueryClient();
   const router = useRouter();
   const { data: session } = useSession();
@@ -268,7 +267,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
         const previewsItems = queryClient.getQueryData<PostDetail[]>(cacheKey);
         return { previewsItems, cacheKey };
       },
-      onSettled: (_eureka, error, _variables, context) => {
+      onSettled: (_eureka, error, _variables, context) => {debugger;
         if (error) {
           if (context) {
             queryClient.setQueryData(context.cacheKey, context.previewsItems);
