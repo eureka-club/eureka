@@ -442,11 +442,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setResultWorks([]);
         setSelectedWork(null);
     };
-
     return (
 
         <Form onSubmit={handleSubmit}>
-            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={loading}
             >
                 <SpinnerComp />
@@ -564,7 +563,9 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                         <FormControl size="small" fullWidth>
                                             <InputLabel id="language-label">*{t('languageFieldLabel')}</InputLabel>
                                             <Select
-                                                defaultValue={formValues.language}
+                                                disabled
+                                                value={formValues.language}
+                                                onChange={(e)=>setFormValues(res=>({...res,language:e.target.value}))}
                                                 labelId="language-label"
                                                 id="language"
                                                 name='language'
@@ -665,13 +666,18 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 </Col>
                             </Row>
                             <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
-                                <Col className="">
                                     <FormGroup controlId="description">
-                                        <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
-                                        <Textarea minRows={5} name="description" value={formValues.description} onChange={handleChangeTextField} />
-
+                                        {/* <FormLabel>{t('workSummaryFieldLabel')}</FormLabel> */}
+                                        {/* <Textarea minRows={5} name="description" value={formValues.description} onChange={handleChangeTextField} /> */}
+                                        <TextField
+                                            fullWidth
+                                            name="description"
+                                            label={t('workSummaryFieldLabel')}
+                                            multiline
+                                            minRows={5} 
+                                            value={formValues.description} onChange={handleChangeTextField}
+                                        />
                                     </FormGroup>
-                                </Col>
                             </Row>
 
                         </>
