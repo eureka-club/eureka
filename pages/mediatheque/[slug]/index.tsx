@@ -240,7 +240,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
 
   const getReadCurrentYear = () => {
     if (user) {
-      if (user.readOrWatchedWorks.length) return user.readOrWatchedWorks.filter(x => ['book', 'fiction-book'].includes(x.work!.type) && x.year === dayjs().year()).length;
+      if (user.readOrWatchedWorks?.length) return user.readOrWatchedWorks.filter(x => ['book', 'fiction-book'].includes(x.work!.type) && x.year === dayjs().year()).length;
       else return 0;
     }
   };
