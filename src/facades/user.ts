@@ -6,9 +6,13 @@ import { UserSumary, UserSumarySpec } from '../types/UserSumary';
 
 export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): Promise<UserDetail | null> => {
   const { select = undefined, include = true,where } = props;
+  const readOrWatchedWorks = UserDetailSpec.include.readOrWatchedWorks;
   const user: any = await prisma.user.findFirst({
     where,
-    include:UserDetailSpec.include
+    include:{...UserDetailSpec.include,readOrWatchedWorks: {
+      ...readOrWatchedWorks,
+      distinct:['workId']
+    }},
   });
   user.favWorks.forEach((w:any)=>{
     w.currentUserIsFav = true
