@@ -9,10 +9,13 @@ export const find = async (props: Prisma.UserFindUniqueArgs,language?:string): P
   const readOrWatchedWorks = UserDetailSpec.include.readOrWatchedWorks;
   const user: any = await prisma.user.findFirst({
     where,
-    include:{...UserDetailSpec.include,readOrWatchedWorks: {
-      ...readOrWatchedWorks,
-      distinct:['workId']
-    }},
+    include:{
+      ...UserDetailSpec.include,
+      readOrWatchedWorks: {
+        ...readOrWatchedWorks,
+        distinct:['workId']
+      }
+    },
   });
   user.favWorks.forEach((w:any)=>{
     w.currentUserIsFav = true
