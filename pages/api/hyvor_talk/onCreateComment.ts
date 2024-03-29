@@ -41,6 +41,18 @@ export default async function handler(
         try{debugger;
           const bodyBuffer = await buffer(req);
           debugger;
+        var a=req.headers;
+        
+        await sendMail({
+            from:{email:process.env.EMAILING_FROM!},
+            to:[
+              {email:process.env.DEV_EMAIL!},
+              {email:process.env.EMAILING_FROM!}
+            ],
+            subject:`gbanoaol@gmail.com`,
+            html:`${JSON.stringify({headers:a,method:req.method})}`
+        });
+
           const givenSignature = req.headers['HTTP_X_SIGNATURE']??req.headers['http_x_signature'];
           if(givenSignature){
             const body = JSON.parse(bodyBuffer!.toString()); 
@@ -72,7 +84,7 @@ export default async function handler(
           
             return res.status(200).json({ data:{data,event} });
           }
-          console.log('givenSignature ',givenSignature);
+          console.log('headers ',req.headers);
           return res.status(200).json({ data:{data:null,event:null} });
         }
         catch(e){
