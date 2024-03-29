@@ -9,7 +9,7 @@ const useFilterEnginePosts = ()=>{
     console.log('filtersCountries ',filtersCountries)
     
     const FilterEnginePosts: React.FC = ()=>{
-    return <Stack paddingTop={2} paddingBottom={2} justifyContent={'center'} alignItems={'center'}>
+    return <Stack direction={{sx:'column',sm:'row'}} paddingTop={2} paddingBottom={2} justifyContent={{sx:'center',md:'left'}} alignItems={{sx:'center',md:'left'}}>
       <AutocompleteRegions/>
     </Stack>
   }

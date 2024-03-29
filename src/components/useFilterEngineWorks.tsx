@@ -25,8 +25,8 @@ const useFilterEngineWorks = ()=>{
     };
     
     const FilterEngineWork: React.FC = ()=>{
-    return <Stack paddingTop={2} paddingBottom={2} justifyContent={'center'} alignItems={'center'}>
-      <FormGroup row sx={{justifyContent:'center'}}>
+    return <Stack direction={{sx:'column',sm:'row'}} paddingTop={2} paddingBottom={2} justifyContent={{sx:'center',md:'left'}} alignItems={{sx:'center',md:'left'}}>
+    <FormGroup row sx={{justifyContent:{sx:'center',md:'left'}}}>
         <FormControlLabel label={t('Fiction books')} control={
           <Checkbox data-cy="check-fiction-book" checked={filtersType['fiction-book']} onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}/>
         }/>

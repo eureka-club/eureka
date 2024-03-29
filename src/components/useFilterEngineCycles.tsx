@@ -21,8 +21,8 @@ const useFilterEngineCycles = ()=>{
     
     const FilterEngineCycles: React.FC = ()=>{
       
-    return <Stack paddingTop={2} paddingBottom={2} justifyContent={'center'} alignItems={'center'}>
-      <FormGroup row sx={{justifyContent:'center'}}>
+    return <Stack direction={{sx:'column',sm:'row'}} paddingTop={2} paddingBottom={2} justifyContent={{sx:'center',md:'left'}} alignItems={{sx:'center',md:'left'}}>
+      <FormGroup row sx={{justifyContent:{sx:'center',md:'left'}}}>
         <FormControlLabel label={t('private')}control={
           <Checkbox data-cy="check-private" checked={filtersType['private']} onChange={(e) => handlerComboxesChangeType(e, 'private')}/>
         }/>
