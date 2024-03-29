@@ -37,8 +37,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-    if(req.method=='POST'||req.method=='post'){
-        try{
+    // if(req.method=='POST'||req.method=='post'){
+        try{debugger;
           const bodyBuffer = await buffer(req);
           debugger;
           const givenSignature = req.headers['HTTP_X_SIGNATURE']??req.headers['http_x_signature'];
@@ -76,5 +76,5 @@ export default async function handler(
         catch(e){
           return res.status(400).json({ error:'Server Error' });
         }
-    }
+    // }
 }
