@@ -37,7 +37,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-    if(req.method=='POST'){
+    if(req.method=='POST'||req.method=='post'){
         try{
           const bodyBuffer = await buffer(req);
           debugger;
