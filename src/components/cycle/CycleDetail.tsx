@@ -20,7 +20,7 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { MosaicContext } from '@/src/useMosaicContext';
 import { useQueryClient } from 'react-query';
-import { Button as MaterialButton } from '@mui/material';
+import { Grid, Button as MaterialButton } from '@mui/material';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostDetail } from '@/src/types/post';
@@ -275,13 +275,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   const renderParticipants = ()=>{
     if(participants){
-      return <Row className='mt-3'>
-        {
-          participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id} className="mb-3 d-flex justify-content-center  align-items-center">
-            <MosaicItemUser user={p} /></Col>
-          )
-        }
-      </Row>
+      return <Grid container spacing={2}>
+      {participants.map(p=><Grid item xs={6} sm={4} md={2} key={p.email}><MosaicItemUser user={p} /></Grid>)}
+  </Grid>
+      
     }
     return ''
   }
