@@ -1,0 +1,61 @@
+
+.tabDos {
+    margin: 20px auto;
+    max-width: 1000px;
+    width: 95%;
+  
+  }
+  
+  .tabDos .tabDosheaders {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #bbb;
+  }
+  
+  .tabDos .tabDosheaders .tabDosheader {
+    position: relative;
+    padding: 0px 20px;
+    height: 30px;
+    line-height: 20px;
+    z-index: 2;
+    cursor: pointer;
+    color: #222;
+    font-weight: 600;
+    border-radius: 7px;
+  }
+  
+  .tabDos .tabDosheaders .tabDosheader:before {
+    content: "";
+    position:absolute;
+    bottom: 10x;
+    left: 20px;
+    width: 25px;
+    height: 4px;
+    background: #888;
+    border-radius: 10px;
+    margin-top: 21px;
+  }
+  
+  .tabDos .tabDosheaders .tabDosheader.active {
+    color: #13B4BC;
+    border: 1px solid #bbb;
+    border-bottom: none;
+    box-shadow: 0px 1px 0px #fff;
+  
+  
+  }
+  
+  
+  
+  .tabDos .tabDosheaders .tabDosheader.active:before {
+    background: #13B4BC;
+  
+  }
+  
+  .tabDos .tabDosbody>p {
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  
+  
