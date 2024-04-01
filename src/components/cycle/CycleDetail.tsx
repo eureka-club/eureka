@@ -297,7 +297,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     {renderPosts()}
                   </MosaicContext.Provider>
                 </Col>
-              </Row> 
+              </Row>
           </TabPane>
           <TabPane eventKey="guidelines">
             <section className="text-primary">

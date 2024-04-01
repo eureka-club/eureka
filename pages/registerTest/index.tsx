@@ -119,7 +119,10 @@ export default function index() {
                 <Box display={"flex"} justifyContent={"center"} alignItems={"center"} >
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '95dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Headland One'} fontSize={30} textAlign="center">
-                            ¿Cómo Funciona?
+                            ¿Te cansaste de las interacciones sin sentido en las redes sociales?
+                        </Typography>
+                        <Typography fontFamily={'Headland One'} fontSize={16} textAlign="center">
+                        Activa tu mente con tu próximo libro o película, y senti-pensar sobre un tema que importa.
                         </Typography>
                     </Box>
                 </Box>
@@ -136,7 +139,7 @@ export default function index() {
                 <Box  display={"flex"} justifyContent={"center"} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Bookman Old Style'} fontSize={30} textAlign="center">
-                            Únete a más de 500 personas en nuestra comunidad
+                            Únete a más de 1000 personas en nuestra comunidad
                         </Typography>
                     </Box>
                 </Box>
@@ -179,7 +182,7 @@ export default function index() {
                 <Box display={"flex"} justifyContent={"center"} alignItems={"center"}  paddingLeft={1} paddingRight={1}>
                     <Box sx={{ maxWidth: { lg: '30dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Bookman Old Style'} fontSize={30} textAlign="center">
-                            ¿Para Quién es el Club de Lectura y Cine 'Tecnología desde miradas feministas'?
+                        ¿Para quién es Eureka?
                         </Typography>
                     </Box>
                 </Box>
@@ -199,10 +202,10 @@ export default function index() {
                                 ✓ Para quienes deseen profundizar en temas contemporáneos.
                                 <br></br>
                                 <br></br>
+                                ✓ Para quienes tengan interés en comprender cómo temas como la tecnología y la IA impactan su vida, su comunidad y el mundo.
+                                <br></br>
+                                <br></br>
                                 ✓ Para quienes ya no quieran participar en debates en redes sociales que a menudo terminan en peleas, falta de respeto y agresividad.
-                                <br></br>
-                                <br></br>
-                                ✓ Para quienes tengan curiosidad sobre el papel de la IA y la tecnología en la construcción de futuros innovadores y posibles.
                                 <br></br>
                                 <br></br>
                                 ✓ Para quienes tengan interés en comprender cómo temas como la tecnología y la IA impactan su vida, su comunidad y el mundo.
@@ -213,16 +216,18 @@ export default function index() {
                                 md={4}
                                 fontFamily="Book antigua"
                             >
-                                ✓ Para quienes quieran conectar con personas que comparten su interés por la tecnología, el feminismo y la justicia social.
+                                ✓ Para quienes quieran conectar con personas apasionadas por justicia social, 
+                                que buscan ser agentes de cambio positivo y contribuir a un futuro mejor.
                                 <br></br>
                                 <br></br>
                                 ✓ Para quienes deseen expandir horizontes, y sean amantes de la lectura, películas y el aprendizaje.
                                 <br></br>
                                 <br></br>
-                                ✓ Para quienes busquen un ambiente seguro y libre de juicios. Un espacio donde tus ideas son valoradas y las conversaciones son constructivas.
+                                ✓ Para quienes busquen un ambiente seguro y libre de juicios. 
+                                Un espacio donde tus ideas son valoradas y las conversaciones son constructivas.
                                 <br></br>
                                 <br></br>
-                                ✓ Para personas apasionadas por la justicia social, que buscan ser agentes de cambio positivo y contribuir a un futuro mejor.
+                               
                             </Grid>
 
                         </Grid>
@@ -282,8 +287,8 @@ export default function index() {
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '50dvw', xs: '70dvw' } }}>
                         <Typography fontFamily={'arial'} fontSize={19} textAlign="center">
                             ¡Ha llegado el momento de encontrar tu
-                            comunidad y expandir tus horizontes! El club de lectura
-                            <b>‘Tecnología desde miradas feministas’</b> da inicio en enero 2024.
+                            comunidad y expandir tus horizontes! 
+                            <b>Inscríbete a Eureka para  aprender, reflexionar y debatir con una comunidad exclusiva.</b>
                         </Typography>
                     </Box>
                 </Box>
@@ -291,9 +296,11 @@ export default function index() {
                 <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '36dvw', sm: '46dvw', xs: '70dvw' } }}>
                         <Typography fontFamily={'arial'} fontSize={16} textAlign="center" >
-                            ¡Eureka es el primer club de lectura y cine enfocado en la justicia social para América Latina!
-                            Cada mes, durante 5 meses, recibirás recomendaciones de libros y películas increíbles sobre género, tecnología
-                            y feminismo, ideales para aprender, reflexionar y debatir con una comunidad exclusiva.
+                        ¡Eureka es el primer club de lectura y cine enfocado en la justicia social para 
+                        América Latina! Nuestra curaduría es realizada por un equipo multidisciplinar de
+                         personas (humanas) expertas ciencias sociales, literatura y cine. Aquí discutimos 
+                         temas de actualidad como tecnología, medio ambiente y feminismo de forma a la vez
+                          profunda y divertida.
                         </Typography>
                     </Box>
                 </Box>

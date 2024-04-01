@@ -60,16 +60,13 @@ export default function CardsAll() {
                     </Box>
 
                     <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Recibe Recomendaciones Exclusivas</Typography>
+                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Crea ‘Momentos Eureka’ con Inteligencia Artificial</Typography>
                       <br></br>
                       <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
 
-                        Cada mes, <b>de enero a mayo de 2024</b>, recibirás dos
-                        recomendaciones curadas (un libro y una película)
-                        que exploran la intersección de la tecnología con
-                        cuestiones feministas y sociales.
-                        Seleccionamos obras que desafían, inspiran y
-                        amplían horizontes, priorizando autoras latinoamericanas.
+                      'Momentos Eureka' son revelaciones personales inspiradas por libros y películas. 
+                      Utiliza nuestra herramienta de inteligencia artificial para visualizar y compartir 
+                      tus reflexiones a través de imágenes únicas.
 
                       </Typography>
                     </Box>
@@ -102,16 +99,13 @@ export default function CardsAll() {
                     </Box>
 
                     <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Tiempo para Reflexión</Typography>
+                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Únete a un Club de Lectura y Cine</Typography>
                       <br></br>
                       <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
 
-                        Después de recibir las recomendaciones,
-                        es hora de sumergirse en las obras.
-                        Tómate un tiempo para leer el libro
-                        del mes (compartiremos un cronograma)
-                        y ver la película, reflexionando
-                        individualmente sobre nuevas perspectivas e ideas.
+                      Nuestros Clubs son viajes de descubrimiento colectivo sobre los temas actuales que moldean
+                       nuestro mundo.  Es el espacio perfecto para tener  discusiones profundas y constructivas en
+                        un ambiente seguro, libre de juicios y críticas.
 
                       </Typography>
                     </Box>
@@ -144,17 +138,15 @@ export default function CardsAll() {
                     </Box>
 
                     <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Participa en Interesantes Discusiones</Typography>
+                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Crea tu Lista Anual de Libros Leídos y Películas Vistas</Typography>
                       <br></br>
                       <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
 
-                        Una vez finalizada la lectura, únete a una vibrante
-                        comunidad en línea a través de nuestro foro y encuentros
-                        exclusivos en línea. Aquí, puedes compartir tus impresiones,
-                        ideas y reflexiones mediante publicaciones e imágenes.
-                        Éste es el espacio perfecto para tener discusiones profundas
-                        y constructivas en un ambiente seguro, libre de juicios y críticas.
-
+                      Mantén un registro de tus exploraciones literarias 
+                      y cinematográficas. Cada libro leído y película vista 
+                      se almacena ordenadamente en tu Mediateca, 
+                      permitiéndote llevar un seguimiento personal de tu viaje de 
+                      aprendizaje y entretenimiento a lo largo del año
                       </Typography>
                     </Box>
                   </Stack>

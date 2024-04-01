@@ -24,54 +24,68 @@ export default function Acordionc() {
   const data = [
     {
       id: "Panel 1",
-      heading: "¿El club de lectura y cine es gratuito?",
+      heading: "¿El acceso a Eureka es gratuito?",
       secondaryHeading: "",
-      details: "Sí, nuestro club de lectura y cine es totalmente gratuito. Creemos en el acceso libre al conocimiento y en la importancia de compartir ideas."
+      details: "El acceso a Eureka y la participación en muchos de nuestros Clubs de Lectura y Cine son gratuitos. Ofrecemos una amplia variedad de Clubs, incluyendo algunos que son de pago, los cuales proveen experiencias adicionales y contenidos exclusivos."
     },
     {
       id: "Panel 2 ",
-      heading: "¿Los libros recomendados están disponibles en español?",
+      heading: "¿Cómo funcionan los Clubs de Lectura y Cine de Eureka?",
       secondaryHeading: "",
-      details: "Sí, todas nuestras recomendaciones de libros están disponibles en español, asegurando que cualquier persona pueda participar en las lecturas y discusiones."
+      details: "Un Club de Lectura y Cine en Eureka es una experiencia colectiva donde exploramos un tema de actualidad a través de libros y películas seleccionados. Incluye encuentros mensuales virtuales, discusiones asincrónicas y mucho más para enriquecer tu conocimiento y contribuir al cambio social."
     },
 
     {
       id: "Panel 3 ",
-      heading: "¿Cómo accedo a los libros y películas del club?",
+      heading: "¿Eureka proporciona acceso gratuito a los libros y películas recomendados?",
       secondaryHeading: "",
-      details: "Te recomendamos dónde encontrar las obras seleccionadas, pero cada quien es responsable de acceder a ellas y/o comprarlas."
+      details: "Siempre que es posible, ofrecemos acceso a películas a través de colaboraciones especiales y cuando el contenido es de dominio público. Sin embargo, no proporcionamos libros o películas gratuitos regularmente. Facilitamos recomendaciones sobre dónde puedes encontrar los libros y películas seleccionados para que cada persona de nuestra comunidad busque acceder a ellos por sus propios medios."
     },
     {
       id: "Panel 4 ",
-      heading: "¿Los hombres pueden participar del club de lectura?",
+      heading: "¿Cómo se seleccionan los libros y películas para cada Club de Lectura y Cine?",
       secondaryHeading: "",
-      details: "¡Absolutamente! Nuestro club de lectura es inclusivo y abierto a cualquiera que tenga interés en explorar las intersecciones entre feminismo, tecnología y sociedad."
+      details: "Los contenidos son cuidadosamente seleccionados por nuestro equipo multidisciplinario para garantizar una rica experiencia de aprendizaje. Buscamos obras que sean relevantes para los temas contemporáneos y aprovechamos para darle visibilidad a obras de autoría latinoamericana, y/o grupos históricamente marginalizados."
     },
     {
       id: "Panel 5 ",
-      heading: "¿Es necesario tener conocimientos previos sobre feminismo y tecnología?",
+      heading: "¿Es necesario tener conocimientos previos antes de unirse a un Club de Lectura y Cine?",
       secondaryHeading: "",
-      details: "No es necesario tener conocimientos previos. Nuestro club está abierto a cualquier persona que desee aprender y explorar estos temas, independientemente de su nivel de familiaridad con ellos."
+      details: "No, no es necesario tener conocimientos previos sobre los temas que tratamos, como feminismo y tecnología. Eureka acoge tanto a personas principiantes como expertas, proporcionando un espacio inclusivo para aprender, compartir y expandir tus horizontes en cualquier área de interés."
     },
     {
       id: "Panel 6 ",
-      heading: "¿Cuánto tiempo debo dedicar a la lectura y a las discusiones?",
+      heading: "¿Qué es un 'Momentos Eureka' y porque se hace con inteligencia artificial?",
       secondaryHeading: "",
-      details: "Puedes dedicar el tiempo que consideres necesario. Nuestro club es flexible, permitiéndote participar según tu disponibilidad y ritmo de lectura. Para ayudarte a organizarte, cada mes compartiremos un cronograma de lectura."
+      details: "Un 'Momento Eureka' es tu reflexión personal trás leer un libro o ver una película. Decimos que es una revelación individual que puede ayudar a transformar el entendimiento colectivo.  Inspirada por metodologías de educación popular, Eureka te permite crear una imagen con la ayuda de inteligencia artificial para ilustrar y compartir tu ‘Momento Eureka’."
     },
 
     {
       id: "Panel 7 ",
-      heading: "¿El club organiza encuentros en línea o presenciales?",
+      heading: "¿Cómo puedo llevar un registro de los libros y películas que he leído y visto?",
       secondaryHeading: "",
-      details: "Actualmente, nuestras actividades son todas en línea, pero estamos abiertas a organizar encuentros presenciales en el futuro, dependiendo del interés y la disponibilidad de personas que participan en el club."
+      details: "Puedes organizar fácilmente los libros y películas que has leído o visto cada año con nuestra función “Mis libros y películas”. Para agregarlos a esta lista anual, simplemente haz clic en “Agregar a mi lista” en la página de la obra y selecciona el año en que la leíste o viste."
     },
 
     {
       id: "Panel 8 ",
-      heading: "¿Cómo accedo a la comunidad y al foro en línea?",
+      heading: "¿Qué son los resúmenes de audio en Eureka?",
       secondaryHeading: "",
-      details: "Tras inscribirte en el club, recibirás un enlace por correo electrónico para acceder a nuestra comunidad en línea. Allí podrás participar en las discusiones e interactuar con las personas inscritas."
+      details: "Los resúmenes de audio que ofrecemos en Eureka son versiones condensadas de libros, las cuales te ayudan a captar las ideas principales de las obras destacadas en solo 15-20 minutos."
+    },
+
+    {
+      id: "Panel 9 ",
+      heading: "¿Eureka organiza encuentros en línea o presenciales?",
+      secondaryHeading: "",
+      details: "Actualmente, nuestras actividades son todas en línea, pero estamos abiertas a organizar encuentros presenciales en el futuro, dependiendo del interés y la disponibilidad de personas que participan en el Club."
+    },
+
+    {
+      id: "Panel 10 ",
+      heading: "¿Qué es mi Mediateca?",
+      secondaryHeading: "",
+      details: "Tu Mediateca es un espacio personal donde se reúnen tus contribuciones y descubrimientos. Aquí encuentras tus 'Momentos Eureka', los Clubes en los que has participado, y un registro de los libros y películas que has explorado o guardado para luego. También es el lugar para compartir sobre ti y seguir a otros miembros de la comunidad."
     },
 
   ];
