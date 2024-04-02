@@ -1,0 +1,9 @@
+{
+  "urlLabel": "Visitez l'URL",
+  "title": "L'utilisateur {{name}} a laissé un commentaire sur: {{title}}",
+  "replyingCommentTitle": "L'utilisateur {{name}} a répondu à votre commentaire dans : {{title}}",
+  "aboutEureka": "Nous sommes le premier club en ligne de livres et films pour le changement social. Notre objectif: nourrir l'esprit pour transformer le monde.",
+  "emailReason": "Vous avez reçu cet e-mail car vous réinitialisez votre mot de passe pour Eureka.",
+  "subject":"Récupération de mot de passe pour Eureka",
+  "ignoreEmailInf": "Si vous n'êtes pas la créatrice ou modératrice de ce cycle, vous pouvez l'ignorer en toute sécurité."
+}

@@ -1,32 +1,39 @@
-// import { sendMail } from '@/src/facades/mail';
+import { sendEmailOnCommentCreated, sendMail } from '@/src/facades/mail';
+import getT from 'next-translate/getT';
+
 import { create } from '@/src/facades/notification';
 // import Notifier from '@/src/lib/Notifier';
 // import { compare, compareSync } from 'bcryptjs';
 // import { createHash, createHmac, timingSafeEqual } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { defaultLocale } from 'i18n';
+import { readFile } from 'fs';
+import { join } from 'path';
+import { promisify } from 'util';
+import { find } from '@/src/facades/post';
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
-const buffer = (req:any) => {
-    return new Promise((resolve, reject) => {
-      const chunks: any[] = [];
+// const buffer = (req:any) => {
+//     return new Promise((resolve, reject) => {
+//       const chunks: any[] = [];
   
-      req.on('data', (chunk: any) => {
-        chunks.push(chunk);
-      });
+//       req.on('data', (chunk: any) => {
+//         chunks.push(chunk);
+//       });
   
-      req.on('end', () => {
-        resolve(Buffer.concat(chunks));
-      });
+//       req.on('end', () => {
+//         resolve(Buffer.concat(chunks));
+//       });
   
-      req.on('error', reject);
-    });
-  };
+//       req.on('error', reject);
+//     });
+//   };
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
+// export const config = {
+//     api: {
+//       bodyParser: false,
+//     },
+//   };
 
 type Data = {
   data?: Object;
@@ -36,60 +43,89 @@ type Data = {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
-) {
+) {debugger;
     if(req.method?.toLowerCase()=='post'){
         try{
+          const locale = req.cookies.NEXT_LOCALE || defaultLocale;
+          const path = join(process.cwd(),'locales',locale,'onCommentCreated.json');
+
+          const rf = promisify(readFile);
+          const jsonStr = await rf(path);
+          const json = JSON.parse(jsonStr.toString());
+          const dict = (k:string,specs?:Record<string,any>)=>{
+            let val = json[k];
+            if(specs){debugger;
+              const specsEntries = Object.entries(specs);
+              if(specsEntries.length){
+                let i = 0;
+                for(;i<specsEntries.length;i++){
+                  const re=new RegExp(`{{${specsEntries[i][0]}}}`);
+                  val = val.replace(re,specsEntries[i][1]);
+                }
+              }
+            }
+            return val;
+          }
+          // const t = await getT(locale, 'onCommentCreated');
+
+          // const bodyBuffer = await buffer(req);
+          
           debugger;
-          const bodyBuffer = await buffer(req);
-          debugger;
-        // await sendMail({
-        //     from:{email:process.env.EMAILING_FROM!},
-        //     to:[
-        //       {email:process.env.DEV_EMAIL!},
-        //       {email:process.env.EMAILING_FROM!}
-        //     ],
-        //     subject:`gbanoaol@gmail.com`,
-        //     html:`${JSON.stringify({headers:a,method:req.method})}`
-        // });
 
           const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
           if(givenSignature){
-            const bodyJSON = bodyBuffer!.toString();
-            const body = JSON.parse(bodyJSON); 
+            // const bodyJSON = bodyBuffer!.toString();
+            const body = req.body//JSON.parse(bodyJSON); 
             const {
-                event,
+                //event,
                 data
             } = body;
-            // const signatureHmac = await createHmac('sha256',secretKey!).update(bodyJSON);  
-            // const signature = signatureHmac.digest('hex');
-            // if(timingSafeEqual(Buffer.from(signature),Buffer.from(givenSignature))){
-            // return res.status(200).json({ data:{data:null,event:null} });
-
-            // }
-            // return res.status(200).json({ data:{data:null,event:null} });
-
+            const emailReason=dict('emailReason');
+            const aboutEureka=dict('aboutEureka');
+            const ignoreEmailInf=dict('ignoreEmailInf');
+            let url = data?.page?.url??'';
             // const userId = data?.user?.sso_id??undefined;
+            const parent = data?.parent;
             const name = data?.user?.name??undefined;
             // // const body_html = data?.body_html??'';
             const title = data?.page?.title??'';
-            // // const identifier = data?.page?.identifier??'';
-            const url = data?.page?.url??'';
-          
-            // await sendMail({
-            //       from:{email:process.env.EMAILING_FROM!},
-            //       to:[
-            //         {email:process.env.DEV_EMAIL!},
-            //         {email:process.env.EMAILING_FROM!}
-            //       ],
-            //       subject:`gbanoaol@gmail.com`,
-            //       html:`${givenSignature}`
-            // });
+            const identifier = data?.page?.identifier??'';
+            const [elementType,elementId] = (identifier?.split('-')??[undefined,undefined]);
             
-            let sense = (event??'').replace(/^\w+\.(\w+)/g,'$1');
-            const msg=`hyvor-talk-comment-${sense}!|!{"userName":"${name}","cycleTitle":"${title}"}`;
-            await create(msg,url,127,[2,127]);
-          
-            return res.status(200).json({ data:{data,event} });
+            let to:{email:string}[] = []
+
+            if(elementType=='post'){
+              if(parent){
+                to=[{email:`${parent.email}`}];
+                url=url?`${url}?ht-comment-id=${data.id}`:'';
+              }
+              else{
+                const post = await prisma?.post.findFirst({
+                  where:{id:+elementId},
+                  select:{creator:{select:{name:true,email:true}}}
+                });
+                if(post)to=[{email:post?.creator?.email!}]
+              }
+            }
+            
+            //let sense = (event??'').replace(/^\w+\.(\w+)/g,'$1');
+            //const msg=`hyvor-talk-comment-${sense}!|!{"userName":"${name}","cycleTitle":"${title}"}`;
+            let titleLbl = parent ? 'replyingCommentTitle' : 'title';
+            
+            const emailSend = await sendEmailOnCommentCreated({
+              to,
+              subject:dict(titleLbl,{name,title}),
+              specs:{
+                title:dict(titleLbl,{name,title}),
+                url,
+                urlLabel:dict('urlLabel'),
+                ignoreEmailInf,
+                aboutEureka,
+                emailReason,
+              }
+            });
+            
+            return res.status(200).json({ data:{emailSend} });
           }
           return res.status(200).json({ data:{data:null,event:null} });
         }

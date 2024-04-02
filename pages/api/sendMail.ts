@@ -13,10 +13,10 @@ export default async function handler(
     
     // const r = await send()
     // res.status(200).json({data:r})
-    const {to,subject,text,html,from_name} = req.body;
+    const {from,to,subject,text,html,from_name} = req.body;
     
     const message = {
-      from_email: process.env.EMAILING_FROM,
+      from_email: from??process.env.EMAILING_FROM,
       from_name: from_name||'EUREKA',
       subject,
       ...text && {text},

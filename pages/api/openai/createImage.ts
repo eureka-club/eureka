@@ -45,7 +45,7 @@ export default async function handler(
             const {code} = (e as {code:string});
             if(code=="billing_hard_limit_reached"){
               await sendMail({
-                from:{email:process.env.EMAILING_FROM!},
+                from:process.env.EMAILING_FROM!,
                 to:[
                   {email:process.env.DEV_EMAIL!},
                   {email:process.env.EMAILING_FROM!}

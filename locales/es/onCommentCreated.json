@@ -1,0 +1,9 @@
+{
+  "urlLabel": "Visite la URL",
+  "title": "El usuario {{name}} dejó un comentario en: {{title}}",
+  "replyingCommentTitle": "El usuario {{name}} ha respondido tu comentario en: {{title}}",
+  "aboutEureka": "Eureka es el primer club digital de libros y películas para el cambio social. Nuestro objetivo: activar mentes para transformar el mundo.",
+  "emailReason": "Recibiste este correo electrónico porque estás restableciendo tu contraseña para Eureka.",
+  "subject":"Restablecer tu contraseña de Eureka",
+  "ignoreEmailInf": "Si no eres creadora o moderadora de este ciclo, puedes ignorar este correo electrónico."
+}
