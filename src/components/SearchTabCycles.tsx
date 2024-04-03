@@ -82,7 +82,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
           };
           
           const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
-          const cacheKey = useMemo(()=>[`cycles-search-${JSON.stringify(props)}`],[props]);
+          const cacheKey = [`cycles-search-${lang}`];
           
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleSumary[]>([])
