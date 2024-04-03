@@ -72,8 +72,8 @@ export default async function handler(
           
           debugger;
 
-          const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
-          if(givenSignature){
+          //const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
+          //if(givenSignature){
             // const bodyJSON = bodyBuffer!.toString();
             const body = req.body//JSON.parse(bodyJSON); 
             const {
@@ -126,8 +126,8 @@ export default async function handler(
             });
             
             return res.status(200).json({ data:{emailSend} });
-          }
-          return res.status(200).json({ data:{data:null,event:null} });
+          //}
+          //return res.status(200).json({ data:{data:null,event:null} });
         }
         catch(e){
           return res.status(400).json({ error:'Server Error' });
