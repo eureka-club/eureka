@@ -1,7 +1,4 @@
 import { sendEmailOnCommentCreated, sendMail } from '@/src/facades/mail';
-import getT from 'next-translate/getT';
-
-import { create } from '@/src/facades/notification';
 // import Notifier from '@/src/lib/Notifier';
 // import { compare, compareSync } from 'bcryptjs';
 // import { createHash, createHmac, timingSafeEqual } from 'crypto';
@@ -10,7 +7,8 @@ import { defaultLocale } from 'i18n';
 import { readFile } from 'fs';
 import { join } from 'path';
 import { promisify } from 'util';
-import { find } from '@/src/facades/post';
+import {prisma} from '@/src/lib/prisma';
+
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
 // const buffer = (req:any) => {
