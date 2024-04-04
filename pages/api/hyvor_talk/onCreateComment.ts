@@ -128,8 +128,8 @@ export default async function handler(
           //return res.status(200).json({ data:{data:null,event:null} });
         }
         catch(e){
-          console.error(JSON.stringify(e));
-          return res.status(400).json({ error:JSON.stringify(e) });
+          console.error(e);
+          return res.status(400).json({ error:e?.toString() });
         }
     }
 }
