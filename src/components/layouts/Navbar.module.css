@@ -64,10 +64,11 @@
   color: var(--eureka-green);
 }
 .sessionActions button{
-  padding-bottom: 0!important;
+  height: 38px;
+  /* padding-bottom: .46rem!important; */
 }
-.langSwitch img {
-  border-radius: 50%;
+.sessionActions img,.langSwitch img {
+  /* border-radius: 50%; */
   /* box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); */
   height: 24px;
 }
