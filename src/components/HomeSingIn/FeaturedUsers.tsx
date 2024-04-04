@@ -14,16 +14,7 @@ const FeaturedUsers = () => {
   const Title = ()=> <Typography variant='h6' color={'secondary'}>{t('Featured users')}{' '}</Typography>;
   const Items = ()=> <Stack>
     {(users??[]).map((user) => (
-        <MosaicItemUser padding={1}  key={user.id} user={user}
-          sx={{'&:hover':{
-            border:'solid 1px var(--color-secondary)',
-            borderRadius:'.3rem',
-            boxShadow:'1px 1px 0px 2px rgba(243, 246, 249, 0.6)',
-            background:'var(--color-secondary)',
-            color:'white',            
-            transition:'background 1s',
-          }}}
-        />
+        <MosaicItemUser padding={1}  key={user.id} user={user}/>
     ))}
   </Stack>
   if (users && users.length) {
