@@ -94,7 +94,7 @@ export default async function handler(
 
             if(elementType=='post'){
               if(parent){
-                to=[{email:`${parent.email}`}];
+                to=[{email:`${parent.user?.email}`}];
                 url=url?`${url}?ht-comment-id=${data.id}`:'';
               }
               else{
