@@ -42,7 +42,7 @@ type Data = {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
-) {debugger;
+) {
     if(req.method?.toLowerCase()=='post'){
         try{
           const locale = req.cookies.NEXT_LOCALE || defaultLocale;
@@ -53,7 +53,7 @@ export default async function handler(
           const json = JSON.parse(jsonStr.toString());
           const dict = (k:string,specs?:Record<string,any>)=>{
             let val = json[k];
-            if(specs){debugger;
+            if(specs){
               const specsEntries = Object.entries(specs);
               if(specsEntries.length){
                 let i = 0;
@@ -65,12 +65,8 @@ export default async function handler(
             }
             return val;
           }
-          // const t = await getT(locale, 'onCommentCreated');
 
           // const bodyBuffer = await buffer(req);
-          
-          debugger;
-
           //const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
           //if(givenSignature){
             // const bodyJSON = bodyBuffer!.toString();
@@ -92,7 +88,7 @@ export default async function handler(
             const [elementType,elementId] = (identifier?.split('-')??[undefined,undefined]);
             
             let to:{email:string}[] = [];
-
+            
             if(parent){
                 to=[{email:`${parent.user?.email}`}];
                 url=url?`${url}?ht-comment-id=${data.id}`:'';
@@ -104,6 +100,14 @@ export default async function handler(
                   select:{creator:{select:{name:true,email:true}}}
                 });
                 if(post)to=[{email:post?.creator?.email!}]
+              }
+              else if(elementType=='cycle'){
+                {
+                  const url = `${WEBAPP_URL}/api/cycle/${elementId}/participants`;
+                  const fr = await fetch(url);
+                  const {participants} = await fr.json();
+                  to=participants.map((p:{email:string})=>({email:p.email}));
+                }
               }
               else{
                 const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${elementType}-${elementId}`;
