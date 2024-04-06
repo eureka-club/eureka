@@ -78,6 +78,7 @@ export default async function handler(
             const emailReason=dict('emailReason');
             const aboutEureka=dict('aboutEureka');
             const ignoreEmailInf=dict('ignoreEmailInf');
+            const unsubscribe=dict('unsubscribe');
             let url = data?.page?.url??'';
             // const userId = data?.user?.sso_id??undefined;
             const parent = data?.parent;
@@ -88,7 +89,7 @@ export default async function handler(
             const [elementType,elementId] = (identifier?.split('-')??[undefined,undefined]);
             
             let to:{email:string}[] = [];
-            
+
             if(parent){
                 to=[{email:`${parent.user?.email}`}];
                 url=url?`${url}?ht-comment-id=${data.id}`:'';
@@ -130,6 +131,7 @@ export default async function handler(
                 ignoreEmailInf,
                 aboutEureka,
                 emailReason,
+                unsubscribe
               }
             });
             
