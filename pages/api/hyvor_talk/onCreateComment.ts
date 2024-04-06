@@ -8,6 +8,7 @@ import { readFile } from 'fs';
 import { join } from 'path';
 import { promisify } from 'util';
 import {prisma} from '@/src/lib/prisma';
+import { WEBAPP_URL } from '@/src/constants';
 
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
@@ -90,22 +91,27 @@ export default async function handler(
             const identifier = data?.page?.identifier??'';
             const [elementType,elementId] = (identifier?.split('-')??[undefined,undefined]);
             
-            let to:{email:string}[] = []
+            let to:{email:string}[] = [];
 
-            if(elementType=='post'){
-              if(parent){
+            if(parent){
                 to=[{email:`${parent.user?.email}`}];
                 url=url?`${url}?ht-comment-id=${data.id}`:'';
-              }
-              else{
+            }
+            else{
+              if(elementType=='post'){
                 const post = await prisma?.post.findFirst({
                   where:{id:+elementId},
                   select:{creator:{select:{name:true,email:true}}}
                 });
                 if(post)to=[{email:post?.creator?.email!}]
               }
+              else{
+                const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${elementType}-${elementId}`;
+                const fr = await fetch(url);
+                const json = await fr.json();
+                to=json?.data?.data?.map((j:{user:{email:string}})=>({email:j.user.email}));
+              }
             }
-            
             //let sense = (event??'').replace(/^\w+\.(\w+)/g,'$1');
             //const msg=`hyvor-talk-comment-${sense}!|!{"userName":"${name}","cycleTitle":"${title}"}`;
             let titleLbl = parent ? 'replyingCommentTitle' : 'title';
