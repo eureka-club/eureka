@@ -10,18 +10,22 @@ export interface MailDataRequired {
   from:string,
   to:{email:string}[],
   subject:string,
-  html:string,
-  templateId?:string,
-  dynamicTemplateData?:Record<string,any>,
+  html?:string,
+  template_name?:string,
+  template_content?:{name:string,content:any}[],
 }
 const sendEmailWebhook = async (opt: MailDataRequired) => {
-  const { from, to, subject, html = '' } = opt;
+  const { from, to, subject, template_name = '', template_content=[], html = '' } = opt;
   try {
     const res = await axios.post(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/sendMail`,{
       from,
       to,
       subject,
-      html,
+      ...template_name && {
+        template_name,
+        template_content
+      },
+      ...!template_name && {html},
     });
     
     if (res.status==200) return true;
@@ -81,14 +85,13 @@ type EmailRequestJoinCycleResponseSpecs = {
 };
 
 export const sendMail = async (opt: MailDataRequired): Promise<boolean> => {
-  const { to, subject, html = '', templateId = null, dynamicTemplateData = null } = opt;
+  const { to, subject, html = '', template_name = '', template_content = [] } = opt;
   const msg = {
     from:process.env.EMAILING_FROM!,
     to,
     subject,
-    html,
-    ...(templateId && { templateId }),
-    ...(dynamicTemplateData && { dynamicTemplateData }),
+    ...!template_name && {html},
+    ...template_name && { template_name,template_content },
   };
 
   try {
@@ -110,9 +113,21 @@ export type OnCommentCreatedProps = {
   specs:Record<string,any>,
 } & Pick<MailDataRequired,'to'|'subject'>;
 export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
-  let html = '';
+            debugger;
+            let html = '';
   const {to,subject,specs}=props;
-  if (Object.values(specs).length && process.env.TEMPLATE_ORIGIN === 'local') {
+  if(to.length){
+    const tc = Object.entries(specs).map(([name,content])=>({name,content}));
+    const res = await sendEmailWebhook({
+      from:process.env.EMAILING_FROM!,
+      to,
+      subject,
+      template_name:'hyvortalkoncommentcreated',
+      template_content:tc
+  });
+  return res;
+  }
+  else if (Object.values(specs).length && process.env.TEMPLATE_ORIGIN === 'local') {
     const templatePath = path.join(process.cwd(), 'public', 'templates', 'hyvor_talk_comment_created.html');
     // eslint-disable-next-line no-console
     const templateStr = await readFile(templatePath);
@@ -123,7 +138,8 @@ export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
           from:process.env.EMAILING_FROM!,
           to,
           subject,
-          html
+          html,
+          
       });
       return res;
     }
@@ -145,8 +161,8 @@ export const sendMailSingIn = async (opt: MailDataRequired, specs: EmailSingInSp
       opts.html = template(specs);
     }
   } else {
-    opts.templateId = 'eureka_singin';
-    opts.dynamicTemplateData = { url: ' ' }; // TODO
+    opts.template_name = 'eureka_singin';
+    opts.template_content = [{ name:'url',content:''}]; // TODO
   }
   // const res = await sendMail(opts);
 
@@ -167,8 +183,8 @@ export const sendMailRequestJoinCycle = async (
       opts.html = template(specs);
     }
   } else {
-    opts.templateId = 'request_join_cycle';
-    opts.dynamicTemplateData = { url: ' ' }; // TODO
+    opts.template_name = 'request_join_cycle';
+    opts.template_content = [{ name: 'url', content:'' }]; // TODO
   }
   // const res = await sendMail(opts);
   const res = await sendEmailWebhook(opts);
@@ -188,8 +204,8 @@ export const sendMailRequestJoinCycleResponse = async (
       opts.html = template(specs);
     }
   } else {
-    opts.templateId = 'request_join_cycle_response';
-    opts.dynamicTemplateData = { url: ' ' }; // TODO
+    opts.template_name = 'request_join_cycle_response';
+    opts.template_content = [{ name: 'url',content:'' }]; // TODO
   }
   // const res = await sendMail(opts);
   const res = await sendEmailWebhook(opts);

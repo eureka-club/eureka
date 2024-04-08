@@ -75,9 +75,10 @@ export default async function handler(
                 //event,
                 data
             } = body;
-            const emailReason=dict('emailReason');
-            const aboutEureka=dict('aboutEureka');
-            const ignoreEmailInf=dict('ignoreEmailInf');
+            debugger;
+            const reason=dict('emailReason');
+            const about=dict('aboutEureka');
+            const ignore=dict('ignoreEmailInf');
             const unsubscribe=dict('unsubscribe');
             let url = data?.page?.url??'';
             // const userId = data?.user?.sso_id??undefined;
@@ -121,18 +122,19 @@ export default async function handler(
             //const msg=`hyvor-talk-comment-${sense}!|!{"userName":"${name}","cycleTitle":"${title}"}`;
             let titleLbl = parent ? 'replyingCommentTitle' : 'title';
             
+            //hyvortalkoncommentcreated
             const emailSend = await sendEmailOnCommentCreated({
               to,
               subject:dict(titleLbl,{name,title}),
               specs:{
                 title:dict(titleLbl,{name,title}),
                 url,
-                urlLabel:dict('urlLabel'),
-                ignoreEmailInf,
-                aboutEureka,
-                emailReason,
+                urllabel:dict('urlLabel'),
+                ignore,
+                about,
+                reason,
                 unsubscribe
-              }
+              },
             });
             
             return res.status(200).json({ data:{emailSend} });
