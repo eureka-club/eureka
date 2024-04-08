@@ -107,7 +107,10 @@ export default async function handler(
                 {
                   const url = `${WEBAPP_URL}/api/cycle/${elementId}/participants`;
                   const fr = await fetch(url);
-                  const {participants} = await fr.json();
+                  const {participants:p} = await fr.json();
+                  const participants = (p as {email:string}[]);
+                  const idx = participants.findIndex(p=>p.email==data.user.email);
+                  if(idx>=0)participants.splice(idx,1);
                   to=participants.map((p:{email:string})=>({email:p.email}));
                 }
               }
@@ -115,7 +118,10 @@ export default async function handler(
                 const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${elementType}-${elementId}`;
                 const fr = await fetch(url);
                 const json = await fr.json();
-                to=json?.data?.data?.map((j:{user:{email:string}})=>({email:j.user.email}));
+                json?.data?.data?.forEach((e:{user:{email:string}}) => {
+                  if(e.user.email!=data.user.email)to.push({email:e.user.email});
+                });
+                //to=json?.data?.data?.map((j:{user:{email:string}})=>({email:j.user.email}));
               }
             }
             //let sense = (event??'').replace(/^\w+\.(\w+)/g,'$1');
@@ -123,6 +129,8 @@ export default async function handler(
             let titleLbl = parent ? 'replyingCommentTitle' : 'title';
             
             //hyvortalkoncommentcreated
+            if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
+
             const emailSend = await sendEmailOnCommentCreated({
               to,
               subject:dict(titleLbl,{name,title}),
