@@ -1,5 +1,4 @@
-import { sendEmailOnCommentCreated, sendMail } from '@/src/facades/mail';
-// import Notifier from '@/src/lib/Notifier';
+import { sendEmailOnCommentCreated } from '@/src/facades/mail';
 // import { compare, compareSync } from 'bcryptjs';
 // import { createHash, createHmac, timingSafeEqual } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -105,13 +104,19 @@ export default async function handler(
               }
               else if(elementType=='cycle'){
                 {
-                  const url = `${WEBAPP_URL}/api/cycle/${elementId}/participants`;
-                  const fr = await fetch(url);
-                  const {participants:p} = await fr.json();
-                  const participants = (p as {email:string}[]);
-                  const idx = participants.findIndex(p=>p.email==data.user.email);
-                  if(idx>=0)participants.splice(idx,1);
-                  to=participants.map((p:{email:string})=>({email:p.email}));
+                  const cycle = await prisma.cycle.findFirst({
+                    where:{id:+elementId},
+                    select:{
+                      creator:{select:{email:true}},
+                      participants:{select:{email:true}},
+                    }
+                  })
+                  if(cycle){
+                    const idx = cycle?.participants.findIndex(p=>p.email==data.user.email);
+                    if(idx>=0)cycle?.participants.splice(idx!,1);
+                    to=cycle.participants.map((p)=>({email:p.email!}));
+                    if(cycle.creator.email!=data.user.email)to.push({email:cycle.creator.email!});
+                  }
                 }
               }
               else{
@@ -126,10 +131,10 @@ export default async function handler(
             }
             //let sense = (event??'').replace(/^\w+\.(\w+)/g,'$1');
             //const msg=`hyvor-talk-comment-${sense}!|!{"userName":"${name}","cycleTitle":"${title}"}`;
-            let titleLbl = parent ? 'replyingCommentTitle' : 'title';
+            if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
             
             //hyvortalkoncommentcreated
-            if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
+            let titleLbl = parent ? 'replyingCommentTitle' : 'title';
 
             const emailSend = await sendEmailOnCommentCreated({
               to,
