@@ -135,22 +135,24 @@ export default async function handler(
             
             //hyvortalkoncommentcreated
             let titleLbl = parent ? 'replyingCommentTitle' : 'title';
+                if(false){
+                  const emailSend = await sendEmailOnCommentCreated({
+                    to,
+                    subject:dict(titleLbl,{name,title}),
+                    specs:{
+                      title:dict(titleLbl,{name,title}),
+                      url,
+                      urllabel:dict('urlLabel'),
+                      ignore,
+                      about,
+                      reason,
+                      unsubscribe
+                    },
+                  });
 
-            const emailSend = await sendEmailOnCommentCreated({
-              to,
-              subject:dict(titleLbl,{name,title}),
-              specs:{
-                title:dict(titleLbl,{name,title}),
-                url,
-                urllabel:dict('urlLabel'),
-                ignore,
-                about,
-                reason,
-                unsubscribe
-              },
-            });
+                }
             
-            return res.status(200).json({ data:{emailSend} });
+            return res.status(200).json({ data:{emailSend:false} });
           //}
           //return res.status(200).json({ data:{data:null,event:null} });
         }
