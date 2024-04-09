@@ -1,10 +1,20 @@
 {
-  "urlLabel": "Visitez l'URL",
-  "title": "L'utilisateur {{name}} a laissé un commentaire sur: {{title}}",
-  "replyingCommentTitle": "L'utilisateur {{name}} a répondu à votre commentaire dans : {{title}}",
-  "aboutEureka": "Nous sommes le premier club en ligne de livres et films pour le changement social. Notre objectif: nourrir l'esprit pour transformer le monde.",
-  "emailReason": "Vous avez reçu cet e-mail car vous réinitialisez votre mot de passe pour Eureka.",
-  "subject":"Récupération de mot de passe pour Eureka",
-  "ignoreEmailInf": "Si vous n'êtes pas la créatrice ou modératrice de ce cycle, vous pouvez l'ignorer en toute sécurité.",
+  "subject-post":"Quelqu'un a commenté sur ton Moment Eureka !",
+  "subject-cycle":"Quelqu'un a commenté dans le cycle {{title}}, auquel tu participes !",
+  "subject-work":"Quelqu'un d'autre a commenté sur {{title}} !",
+  "subject-comment":"Quelqu'un a répondu à ton commentaire sur {{title}} !",
+
+  "title-post": "{{name}} vient de laisser un commentaire sur ton Moment Eureka : {{title}} !",
+  "title-cycle":"{{name}} vient de laisser un commentaire dans le cycle {{title}} !",
+  "title-work":"{{name}} vient de laisser un commentaire sur {{title}} !",
+  "title-comment":"{{name}} vient de répondre à ton commentaire sur {{title}} !",
+
+  "about-post":"Tes réflexions inspirent et gèrent des discussions. Merci de contribuer à notre communauté !",
+  "about-cycle":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !",
+  "about-work":"Envie de participer ? Notre communauté l'apprécie !",
+  "about-comment":"Envie de participer ? Notre communauté l'apprécie !",
+
+  "aboutEnd":"A très vite, Eureka",
+  "urlLabel": "Voir le commentaire",
   "unsubscribe":"Se désabonner"
 }

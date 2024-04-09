@@ -62,7 +62,6 @@ export default async function handler(
         const parent = data?.parent;
         const name = data?.user?.name??undefined;
         // // const body_html = data?.body_html??'';
-        const title = data?.page?.title??'';
         const identifier = data?.page?.identifier??'';
         const [elementType,elementId] = (identifier?.split('-')??[undefined,undefined]);
         let cycle=null;
@@ -143,33 +142,36 @@ export default async function handler(
               let i = 0;
               for(;i<specsEntries.length;i++){
                 const re=new RegExp(`{{${specsEntries[i][0]}}}`);
-                val = val.replace(re,specsEntries[i][1]);
+                const vr = val.replace(re,specsEntries[i][1]);
+                val = vr ?? val;
               }
             }
           }
           return val;
         }
-        const reason=dict('emailReason');
-        const about=dict('aboutEureka');
-        const ignore=dict('ignoreEmailInf');
+        const elementTitle=data.page.title;
+        const subject=dict(`subject-${elementType}`,{title:elementTitle});
+        const title=dict(`title-${elementType}`,{title:elementTitle,name});
+        const about=dict(`about-${elementType}`);
+        const aboutEnd=dict(`aboutEnd`);
         const unsubscribe=dict('unsubscribe');
+        const urllabel=dict('urlLabel');
             
         //hyvortalkoncommentcreated
-        let titleLbl = parent ? 'replyingCommentTitle' : 'title';
         if(false){
           const emailSend = await sendEmailOnCommentCreated({
             to,
-            subject:dict(titleLbl,{name,title}),
+            subject,
             specs:{
-              title:dict(titleLbl,{name,title}),
-              url,
-              urllabel:dict('urlLabel'),
-              ignore,
+              etitle:title,
               about,
-              reason,
+              aboutEnd,
+              eurl:url,
+              urllabel,
               unsubscribe
             },
           });
+          return res.status(200).json({ data:{emailSend} });
 
         }
           

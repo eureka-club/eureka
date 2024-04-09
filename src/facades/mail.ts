@@ -114,7 +114,7 @@ export type OnCommentCreatedProps = {
 } & Pick<MailDataRequired,'to'|'subject'>;
 export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
             debugger;
-            let html = '';
+            // let html = '';
   const {to,subject,specs}=props;
   if(to.length){
     const tc = Object.entries(specs).map(([name,content])=>({name,content}));
@@ -127,25 +127,25 @@ export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
   });
   return res;
   }
-  else if (Object.values(specs).length && process.env.TEMPLATE_ORIGIN === 'local') {
-    const templatePath = path.join(process.cwd(), 'public', 'templates', 'hyvor_talk_comment_created.html');
-    // eslint-disable-next-line no-console
-    const templateStr = await readFile(templatePath);
-    if (templateStr) {
-      const template = Handlebars.compile(templateStr);
-      html = template(specs);
-      const res = await sendEmailWebhook({
-          from:process.env.EMAILING_FROM!,
-          to,
-          subject,
-          html,
+  // else if (Object.values(specs).length && process.env.TEMPLATE_ORIGIN === 'local') {
+  //   const templatePath = path.join(process.cwd(), 'public', 'templates', 'hyvor_talk_comment_created.html');
+  //   // eslint-disable-next-line no-console
+  //   const templateStr = await readFile(templatePath);
+  //   if (templateStr) {
+  //     const template = Handlebars.compile(templateStr);
+  //     html = template(specs);
+  //     const res = await sendEmailWebhook({
+  //         from:process.env.EMAILING_FROM!,
+  //         to,
+  //         subject,
+  //         html,
           
-      });
-      return res;
-    }
-  }
+  //     });
+  //     return res;
+  //   }
+  // }
   else{
-    console.error(`bad request on sendEmailOfCommentCreated`);
+    console.error(`bad request on sendEmailOnCommentCreated`);
     return null;
   }
 }
