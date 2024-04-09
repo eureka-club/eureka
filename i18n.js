@@ -12,6 +12,7 @@ module.exports = {
     '/work/create': ['createWorkForm', 'countries'],
     '/cycle/create': ['createCycleForm', 'countries'],
     'rgx:^/cycle/\\[id\\]/edit': ['createCycleForm', 'countries'],
+    '/about': ['about'],
     '/aboutUs': ['aboutUs'],
     '/search': ['countries'],
     '/profile': ['common', 'profile', 'countries'],
