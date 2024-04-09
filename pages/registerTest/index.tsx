@@ -2,15 +2,13 @@ import * as React from 'react';
 import { Box, Stack } from '@mui/material';
 import { AppBar, Toolbar,ImageListItem, Typography, Grid } from "@mui/material";
 import Acordionc from "./components/Acordionc"
-import PiePagina from "./components/PiePagina"
 import CardsAll from "./components/CardsAll"
 import ButtonSubscription from './components/ButtonSubscription';
-import { useRouter } from 'next/router';
 import AnimatedIMGCarousel from './components/AnimatedIMGCarousel';
 import Image from 'next/image';
+import PiePagina from './components/PiePagina';
 
 export default function index() {
-    const router=useRouter();
     return (
 
         <>

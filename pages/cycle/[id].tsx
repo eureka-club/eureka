@@ -291,7 +291,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { works } = await getWorksSumary(ctx.locale!, wcw, origin);
 
   await queryClient.prefetchQuery(['CYCLE', `${id}`, 'PARTICIPANTS'], () => participants);
-  await queryClient.prefetchQuery(['POSTS', JSON.stringify(wcp)], () => getPosts(ctx.locale!, wcp));
+  await queryClient.prefetchQuery(['CYCLE', `${id}`,'POSTS'], () => getPosts(ctx.locale!, wcp));
   await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 
   participants.map((p) => {

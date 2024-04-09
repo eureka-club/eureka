@@ -454,7 +454,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                   {/* <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel> */}
                   <TagsInputTypeAheadMaterial
                     style={{ background: 'white' }}
-                    data={topics}
+                    data={topics??[]}
                     items={eurekaTopics}
                     setItems={setEurekaTopics}
                     max={3}

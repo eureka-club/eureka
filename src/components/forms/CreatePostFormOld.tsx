@@ -563,7 +563,7 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
               <FormGroup controlId="topics">
                 <FormLabel>{t('topicsPostLabel')}</FormLabel>
                 <TagsInputTypeAhead
-                  data={topics}
+                  data={topics??[]}
                   items={items}
                   setItems={setItems}
                   labelKey={(res) => t(`topics:${res.code}`)}

@@ -1,4 +1,4 @@
-import { useState, FunctionComponent, useEffect } from 'react';
+import { useState, FunctionComponent, useEffect, useMemo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { Spinner,Row, Col, Tab} from 'react-bootstrap';
@@ -20,7 +20,6 @@ const SearchTabCycles:FunctionComponent = () => {
   const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
-  const cacheKey = [`posts-search-${router?.query.q?.toString()}`]
   const {FilterEnginePosts,filtersCountries} = useFilterEnginePosts()
 
   const getProps = ()=>{
@@ -71,6 +70,7 @@ const SearchTabCycles:FunctionComponent = () => {
   };
 
   const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...getProps()}})
+  const cacheKey = useMemo(()=>[`posts-search-${JSON.stringify(props)}`],[props])
 
   const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePostsSumary(props,{cacheKey,enabled:!!router.query?.q});
   const [posts,setPosts] = useState<PostSumary[]>([])

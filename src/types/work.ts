@@ -109,7 +109,7 @@ export type WorkSumary = Prisma.CycleGetPayload<typeof WorkSumarySpec> & {
 export interface CreateWorkClientPayload {
   cover: File;
   type: string;
-  isbn: string | null;
+  isbn?: string | null;
   title: string;
   author: string;
   authorGender: string | null;

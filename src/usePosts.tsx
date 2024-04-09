@@ -21,7 +21,7 @@ export const getPosts = async (
 interface Options {
   staleTime?: number;
   enabled?: boolean;
-  cacheKey?:string|string[];
+  cacheKey?:string[];
 }
 
 const usePosts = (props?:Prisma.PostFindManyArgs, options?: Options,lang?:string) => {

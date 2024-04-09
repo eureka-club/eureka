@@ -405,6 +405,7 @@ model Term {
   code        String
   description String @map(name: "content_text") @db.VarChar(4000)
   weight      Int?   @default(1)
+  emoji       String?
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")

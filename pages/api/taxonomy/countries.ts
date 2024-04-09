@@ -10,6 +10,7 @@ import {prisma} from '@/src/lib/prisma';
 
 // import i18nConfig from '../../../i18n';
 import countries from '../../../locales/es/countries.json'
+import { CountrySpec } from '@/src/types';
 
 export const config = {
   api: {
@@ -17,7 +18,8 @@ export const config = {
   },
 };
 dayjs.extend(utc);
-export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+export default getApiHandler()
+  .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   // const session = (await getSession({ req })) as unknown as Session;
   // if (session == null || !session.user.roles.includes('admin')) {
   //   res.status(401).json({ status: 'Unauthorized' });
@@ -58,11 +60,7 @@ export default getApiHandler().get<NextApiRequest, NextApiResponse>(async (req, 
     }
 
     const result = await prisma.term.findMany({
-      select:{
-        label:true,
-        code:true,
-        parent:{select:{code:true}}
-      },      
+      select:CountrySpec.select,      
       where: {
         taxonomy: {
           code: 'region',

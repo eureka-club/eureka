@@ -20,7 +20,7 @@ const WorkPostImages: FunctionComponent<Props> = ({ work, workId, workTitle }) =
       <section className="d-flex flex-column">
         <h3 className="text-secondary fs-5 mb-2">{`${t("ImagesAbout")} ${workTitle}`}</h3>
         <div className="d-flex flex-wrap justify-content-center justify-content-xl-around">
-          {posts.slice(0,4).map((post) => (
+          {posts.slice(0,3).map((post) => (
             <div className='cursor-pointer' key={post.id} onClick={() => router.push(`/work/${workId}/post/${post.id}`)}>
               <LocalImageComponent
                 className="pe-xl-1"

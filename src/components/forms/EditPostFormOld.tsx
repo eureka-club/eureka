@@ -530,7 +530,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                 <FormGroup controlId="topics">
                   <FormLabel>{t('createWorkForm:topicsLabel')}</FormLabel>
                   <TagsInputTypeAhead
-                    data={topics}
+                    data={topics??[]}
                     items={items}
                     setItems={setItems}
                     labelKey={(res) => t(`topics:${res.code}`)}

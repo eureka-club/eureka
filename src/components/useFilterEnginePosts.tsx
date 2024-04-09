@@ -1,33 +1,17 @@
-import React, { useState  } from "react"
+import React from "react"
 // import useTranslation from 'next-translate/useTranslation';
-
-import FilterEngineCountries,{FiltersRegionsType} from '@/components/FilterEngineCountries'
+import useAutocompleteRegions from "./useAutocompleteRegions"
+import { Stack } from "@mui/material";
 
 const useFilterEnginePosts = ()=>{
   // const { t } = useTranslation('searchEngine');
+    const{AutocompleteRegions,countries:filtersCountries}=useAutocompleteRegions();
+    console.log('filtersCountries ',filtersCountries)
     
-    const [filtersCountries,setFiltersCountries]=useState<string[]>([])
-    const [filtersRegions,setFiltersRegions]=useState<FiltersRegionsType>({
-      Asia:false,
-      Europe:false,
-      ['Latin America and the Caribbean']:false,
-      ['Middle East and North Africa']:false,
-      ['Northern America']:false,
-      Oceania:false,
-      ['Sub-Saharan Africa']:false,
-    })
-    
-const FilterEnginePosts: React.FC = ()=>{
-    return <section className="d-flex flex-row align-items-center justify-content-end my-2">
-    <div className="my-3">
-      <FilterEngineCountries 
-        filtersCountries={filtersCountries}
-        setFiltersCountries={setFiltersCountries}
-        filtersRegions={filtersRegions}
-        setFiltersRegions={setFiltersRegions}
-      />
-    </div>
-    </section>
+    const FilterEnginePosts: React.FC = ()=>{
+    return <Stack direction={{sx:'column',sm:'row'}} paddingTop={2} paddingBottom={2} justifyContent={{sx:'center',md:'left'}} alignItems={{sx:'center',md:'left'}}>
+      <AutocompleteRegions/>
+    </Stack>
   }
   return {FilterEnginePosts,filtersCountries};
 }

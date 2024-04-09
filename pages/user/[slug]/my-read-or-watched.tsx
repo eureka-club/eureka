@@ -46,8 +46,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const [movies, setMovies] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
 
-  let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
-  let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+  let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
+  let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
       
   const res = Array.from(new Set([
     ...(bs??[]).map(b=>b.year),
@@ -70,8 +70,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
   useEffect(() => {
     if (user && user.readOrWatchedWorks.length) {
-      let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work!.type)).reverse();
-      let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work!.type)).reverse();
+      let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
+      let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
       
 
       if (yearFilter.length) {

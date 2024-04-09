@@ -129,9 +129,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       ],
     },
+    take
   };
-  const cyclesData = await getCyclesSumary(ctx.locale!,{ ... cyclesProps, take });
-  qc.prefetchQuery([`cycles-search-${q?.toString()}`], () => cyclesData);
+  const cyclesData = await getCyclesSumary(ctx.locale!,cyclesProps);
+  qc.prefetchQuery([`cycles-search-${ctx.locale}`], () => cyclesData);
   const hasCycles = cyclesData.total > 0;
   const postsProps = {
     where: {

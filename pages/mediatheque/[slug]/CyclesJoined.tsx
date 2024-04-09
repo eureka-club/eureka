@@ -1,18 +1,17 @@
-import { CycleDetail, CycleSumary } from "@/src/types/cycle";
+import { CycleSumary } from "@/src/types/cycle";
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { FC } from "react";
-import { useSession } from "next-auth/react";
+import useTranslation from "next-translate/useTranslation";
 
 interface Props{
     cycles:CycleSumary[];
     goTo:(path:string)=>void;
-    t:(val:string)=>string;
     id:string;
     showSeeAll?:boolean
 }
 
-const CyclesJoined:FC<Props> = ({cycles,id,goTo,t,showSeeAll=true}) => {
-  const {data:session} = useSession();
+const CyclesJoined:FC<Props> = ({cycles,id,goTo,showSeeAll=true}) => {
+  const { t } = useTranslation('mediatheque');
 
     return (cycles && cycles.length) 
     ?<div data-cy="cycles-created-or-joined">
