@@ -1,10 +1,20 @@
 {
-  "urlLabel": "Visite la URL",
-  "title": "El usuario {{name}} dejó un comentario en: {{title}}",
-  "replyingCommentTitle": "El usuario {{name}} ha respondido tu comentario en: {{title}}",
-  "aboutEureka": "Eureka es el primer club digital de libros y películas para el cambio social. Nuestro objetivo: activar mentes para transformar el mundo.",
-  "emailReason": "Recibiste este correo electrónico porque estás restableciendo tu contraseña para Eureka.",
-  "subject":"Restablecer tu contraseña de Eureka",
-  "ignoreEmailInf": "Si no eres creadora o moderadora de este ciclo, puedes ignorar este correo electrónico.",
-  "unsubscribe":"Cancelar subscripción"
+  "subject-post":"¡Alguien comentó en tu Momento Eureka!",
+  "subject-cycle":"¡Alguien comentó en el ciclo {{title}}, en el que estás participando!",
+  "subject-work":"¡Alguien más comentó en {{title}}!",
+  "subject-comment":"¡Alguien respondió a tu comentario en {{title}}!",
+
+  "title-post": "{{name}} acaba de dejar un comentario en tu Momento Eureka: {{title}}!",
+  "title-cycle":"{{name}} acaba de dejar un comentario en el ciclo {{title}}!",
+  "title-work":"{{name}} acaba de dejar un comentario en {{title}}!",
+  "title-comment":"{{name}} acaba de responder a tu comentario en {{title}}!",
+
+  "about-post":"Tus reflexiones están inspirando y generando conversaciones. ¡Gracias por contribuir con nuestra comunidad!",
+  "about-cycle":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!",
+  "about-work":"¿Quieres contribuir? ¡Nuestra comunidad lo agradece!",
+  "about-comment":"¿Quieres contribuir? ¡Nuestra comunidad lo agradece!",
+
+  "aboutEnd":"Abrazos, Eureka",
+  "urlLabel": "Ver comentario",
+  "unsubscribe":"Darse de baja"
 }
