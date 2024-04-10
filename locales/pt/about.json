@@ -1,74 +1,74 @@
 {
-    "lbl1H":"Tired of meaningless interactions on social media?",
-    "lbl1B":"Activate your mind with your next book or movie, to think and feel about a topic that matters.",
+    "lbl1H":"Cansou das interações sem sentido nas redes sociais?",
+    "lbl1B":"Ative sua mente com seu próximo livro ou filme, e senti-pensar sobre um tema que importa.",
     
-    "lbl2H":"Create 'Eureka Moments' with Artificial Intelligence",
-    "lbl2B":"'Eureka Moments' are personal revelations inspired by books and movies. Use our artificial intelligence tool to visualize and share your reflections through unique images.",
+    "lbl2H":"Crie 'Momentos Eureka' com Inteligência Artificial",
+    "lbl2B":"''Momentos Eureka' são revelações individuais inspiradas por livros e filmes. Use nossa ferramenta de inteligência artificial para visualizar e compartilhar suas reflexões por meio de imagens únicas.",
   
-    "lbl3H":"Join a Book and Movie Club",
-    "lbl3B":"Our Clubs are collective discovery journeys about current topics shaping our world. It's the perfect space for deep and constructive discussions in a safe environment, free from judgments and criticisms.",
+    "lbl3H":"Junte-se a um Clube de Leitura e Cinema",
+    "lbl3B":"Nossos Clubes são viagens de descoberta coletiva sobre os temas atuais que estão moldando nosso mundo. É o espaço perfeito para ter discussões profundas e construtivas em um ambiente seguro, livre de julgamentos e críticas.",
   
-    "lbl4H":"Create Your Annual List of Books and Movies",
-    "lbl4B":"Keep a record of your literary and cinematic explorations. Each read book and watched movie is neatly stored in your list, allowing you to personally track your learning and entertainment journey throughout the year.",
+    "lbl4H":"Crie sua Lista Anual de Livros Lidos e Filmes Assistidos",
+    "lbl4B":"Mantenha um registro de suas explorações literárias e cinematográficas. Cada livro lido e filme assistido é armazenado na sua lista, permitindo um acompanhamento do seu ano.",
   
-    "lbl5":"Join over 1000 people in our community",
+    "lbl5":"Junte-se à mais de 1000 pessoas na nossa comunidade",
     
-    "lbl6":"Who’s Eureka for?",
-    "lbl6L1":"For those who want to connect with people passionate about social justice, seeking to be agents of positive change and contribute to a better future.",
-    "lbl6L2":"For those who wish to expand horizons, and love reading, films, and learning.",
-    "lbl6L3":"For those looking for a safe and judgment-free environment. A space where your ideas are valued and conversations are constructive.",
-    "lbl6R1":"For those who want to read and watch more works by Latin American authors.",
-    "lbl6R2":"For those who wish to delve into contemporary topics.",
-    "lbl6R3":"For those interested in understanding how topics like technology and AI impact their life, their community, and the world.",
-    "lbl6R4":"For those who no longer want to engage in social media debates that often end in fights, disrespect, and aggression.",
+    "lbl6":"Para Quem é a Eureka?",
+    "lbl7":"Para quem quer se conectar com pessoas apaixonadas por justiça social, que buscam ser agentes de mudança positiva e contribuir para um futuro melhor.",
+    "lbl8":"Para quem quer expandir horizontes, ama leitura, filmes e aprendizado.",
+    "lbl9":"Para quem busca um ambiente seguro e livre de julgamentos. Um espaço onde suas ideias são valorizadas e as conversas são construtivas.",
+    "lbl10":"Para quem busca ler e assistir mais obras com autoria latino-americana.",
+    "lbl11":"Para quem quer se aprofundar em temas contemporâneos.",
+    "lbl12":"Para quem quer entender como temas como a tecnologia e a IA impactam suas vidas, suas comunidades e o mundo.",
+    "lbl13":"Para quem não aguenta mais participar de debates nas mídias sociais que frequentemente acabam em brigas, desrespeito e agressividade.",
   
-    "lbl14":"FAQ",
+    "lbl14":"Ainda tem dúvidas?",
   
-    "lbl15H":"Is access to Eureka free?",
-    "lbl15B":"Access to Eureka and participation in many of our Book and Movie Clubs are free. We offer a wide variety of Clubs, including some that are paid, which provide additional experiences and exclusive content.",
+    "lbl15H":"O acesso à Eureka é gratuito?",
+    "lbl15B":"O acesso à Eureka e a participação na maioria dos nossos Clubes de Leitura e Cinema são gratuitos. Oferecemos uma ampla variedade de Clubes, incluindo alguns pagos que proporcionam experiências adicionais e conteúdos exclusivos.",
   
-    "lbl16H":"How do Eureka's Book and Movie Clubs work?",
-    "lbl16B":"A Book and Movie Club on Eureka is a collective experience where we explore a trending topic through selected books and films. It includes monthly virtual meetings, asynchronous discussions, and much more to enrich your knowledge and contribute to social change.",
+    "lbl16H":"Como funcionam os Clubes de Leitura e Cinema da Eureka?",
+    "lbl16B":"Um Clube de Leitura e Cinema na Eureka é uma experiência coletiva onde exploramos um tema atual através de livros e filmes selecionados. Inclui encontros virtuais mensais, discussões assíncronas e muito mais para enriquecer seu conhecimento e contribuir para a mudança social.",
   
-    "lbl17H":"Does Eureka provide free access to recommended books and films?",
-    "lbl17B":"Whenever possible, we offer access to films through special collaborations and when the content is in the public domain. However, we do not regularly provide free books or films. We facilitate recommendations on where you can find the selected books and films so that each person in our community is responsible for accessing them on their own.",
+    "lbl17H":"A Eureka oferece acesso gratuito aos livros e filmes recomendados?",
+    "lbl17B":"Sempre que possível, oferecemos acesso a filmes por meio de parcerias especiais e quando o conteúdo é de domínio público. No entanto, não fornecemos regularmente livros ou filmes gratuitos. Facilitamos recomendações sobre onde você pode encontrar os livros e filmes selecionados para que cada pessoa da nossa comunidade busque acessá-los por seus próprios meios.",
   
-    "lbl18H":"How are the books and films for each Reading and Film Club selected?",
-    "lbl18B":"The contents are carefully selected by our multidisciplinary team to ensure a rich learning experience. We look for contents that are relevant to contemporary issues and take the opportunity to highlight works by Latin American authors and directors, and/or by historically marginalized groups.",
+    "lbl18H":"Como são selecionados os livros e filmes para cada Clube de Leitura e Cinema?",
+    "lbl18B":"Os conteúdos são cuidadosamente selecionados pela nossa equipe multidisciplinar para garantir uma rica experiência de aprendizado. Buscamos obras que sejam relevantes para os temas contemporâneos e aproveitamos para dar visibilidade a obras de autoria latino-americana e/ou grupos historicamente marginalizados.",
   
-    "lbl19H":"Is prior knowledge needed before joining a Book and Movie Club?",
-    "lbl19B":"No, prior knowledge of the topics we will discuss, for example feminism and technology, is not necessary. Eureka welcomes both beginners and experts, providing an inclusive space to learn, share, and expand your horizons in any area of interest.",
+    "lbl19H":"É necessário ter conhecimentos prévios antes de participar de um Clube de Leitura e Cinema?",
+    "lbl19B":"Não, não é necessário ter conhecimentos prévios sobre os temas que tratamos, como feminismo e tecnologia. A Eureka acolhe tanto pessoas iniciantes quanto especialistas, proporcionando um espaço inclusivo para aprender, compartilhar e expandir seus horizontes em qualquer área de interesse.",
   
-    "lbl20H":"What is a 'Eureka Moment' and why is it done with artificial intelligence?",
-    "lbl20B":"An 'Eureka Moment' is your personal reflection after reading a book or watching a movie. We say it is an individual revelation that can help transform collective understanding. Inspired by popular education methodologies, Eureka allows you to create an image with the help of artificial intelligence to illustrate and share your 'Eureka Moment'.",
+    "lbl20H":"O que é um 'Momentos Eureka' e por que se faz com inteligência artificial?",
+    "lbl20B":"Um 'Momento Eureka' é a sua reflexão pessoal após ler um livro ou assistir a um filme. Dizemos que é uma revelação individual que pode ajudar a transformar o entendimento coletivo. Inspirada por metodologias de educação popular, a Eureka permite que você crie uma imagem com a ajuda da inteligência artificial para ilustrar e compartilhar o seu 'Momento Eureka'.",
   
-    "lbl21H":"How can I keep track of the books and films I have read and watched?",
-    "lbl21B":"You can easily organize the books and films you have read or watched each year with our “My Books and Movies” feature. To add them to your annual list, simply click on 'Add to my Books and Movies' on the page of the work and select the year you read or watched it.",
+    "lbl21H":"Como posso manter um registro dos livros e filmes que li e assisti?",
+    "lbl21B":"Você pode organizar facilmente os livros e filmes que leu ou assistiu a cada ano com a nossa função “Meus livros e filmes”. Para adicioná-los a esta lista anual, basta clicar em 'Adicionar à minha lista' na página da obra e selecionar o ano em que a leu ou assistiu.",
   
-    "lbl22H":"What are the audio summaries?",
-    "lbl22B":"The audio summaries that we offer on Eureka are condensed versions of books, which help you grasp the main ideas of the featured works in just 15-20 minutes.",
+    "lbl22H":"O que são os resumos de áudio na Eureka?",
+    "lbl22B":"Os resumos de áudio que oferecemos na Eureka são versões condensadas de livros, que ajudam a captar as ideias principais das obras em destaque em 15-20.",
   
-    "lbl23H":"Does Eureka organize online or face-to-face meetings?",
-    "lbl23B":"Currently, our activities are all online, but we are open to organizing face-to-face meetings in the future, depending on the interest and availability of Club participants.",
+    "lbl23H":"A Eureka organiza encontros online ou presenciais?",
+    "lbl23B":"Atualmente, nossas atividades são todas online, mas estamos abertas a organizar encontros presenciais no futuro, dependendo do interesse e disponibilidade das pessoas que participam do Clube.",
   
-    "lbl24H":"What is my Mediatheque?",
-    "lbl24B":"Your Mediatheque is a personal space to gather your contributions and discoveries. Here you can find your 'Eureka Moments', the Clubs you have participated in, and a record of the books and films you have explored or saved for later. It is also the place to share about yourself and follow other community members.",
+    "lbl24H":"O que é a minha Mediateca?",
+    "lbl24B":"Sua Mediateca é um espaço pessoal onde se reúnem suas contribuições e descobertas. Aqui você encontra seus 'Momentos Eureka', os Clubes dos quais participou e um registro dos livros e filmes que explorou ou salvou para mais tarde. Também é o lugar para compartilhar sobre si mesmo e seguir outros membros da comunidade.",
   
-    "lbl25H":"Is Eureka accessible internationally?",
-    "lbl25B":"Absolutely! Eureka is a digital community and is open to participants from all over the world. Currently, our content and discussions are available in Spanish, Portuguese, and English, but we are constantly expanding our language accessibility.",
+    "lbl25H":"A Eureka é acessível internacionalmente?",
+    "lbl25B":"Com certeza! A Eureka é uma comunidade digital e está aberta a participantes de todo o mundo. Atualmente, nosso conteúdo e discussões estão disponíveis em espanhol, português e inglês, mas estamos expandindo nossa acessibilidade linguística constantemente.",
   
-    "lbl26H":"What is the Eureka Moment podcast?",
-    "lbl26B":"The Eureka Moment is our podcast that invites you to explore and reflect on social and scientific issues. Accessible and dynamic, it is ideal for those who want to delve into the current issues that shape our world.",
+    "lbl26H":"O que é o podcast Momento Eureka?",
+    "lbl26B":"Momento Eureka é o nosso podcast que convida a explorar e refletir sobre temas sociais e científicos. Acessível e dinâmico, é ideal para quem quer entender os assuntos atuais que estão moldando o nosso mundo.",
   
-    "lbl27H":"What is Eureka's moderation policy and data usage?",
-    "lbl27B":"Our Manifesto details the principles that guide our community, including moderation and data usage. By joining Eureka, you agree to share certain personal information, which we carefully protect and never share with third parties without your consent.",
+    "lbl27H":"Qual é a política de moderação e uso de dados na Eureka?",
+    "lbl27B":"Nosso Manifesto detalha os princípios que orientam nossa comunidade, incluindo a moderação e o uso de dados. Ao se juntar à Eureka, você concorda em compartilhar certas informações pessoais, as quais protegemos cuidadosamente e nunca compartilhamos com terceiros sem o seu consentimento.",
   
-    "lbl28":"What are you waiting for?",
+    "lbl28":"Está esperando o quê?",
     
-    "lbl29":"The time has come to find your community and expand your horizons! Join Eureka to learn, reflect, and debate with an exclusive community.",
+    "lbl29":"Chegou a hora de encontrar sua comunidade e expandir seus horizontes! Se inscreve na Eureka para aprender, refletir e debater com uma comunidade exclusiva.",
   
-    "lbl30":"Eureka is the first Book and Film Club focused on social justice! Our curation is carried out by a multidisciplinary team of experts in social sciences, technology, literature, and cinema. Here we delve into current issues shaping our world, such as technology, the environment, and feminism, in an accessible and dynamic way.",
+    "lbl30":"Eureka é o primeiro Clube de Leitura e Cinema focado em justiça social para a América Latina! Nossa curadoria é realizada por uma equipe multidisciplinar de especialistas em ciências sociais, tecnologia, literatura e cinema. Aqui, aprofundamos em assuntos atuais que estão moldando nosso mundo, como tecnologia, meio ambiente e feminismo, de forma acessível e dinâmica.",
   
-    "subscription":"I want to register"
+    "subscription":"Eu quero me cadastrar"
   }
   

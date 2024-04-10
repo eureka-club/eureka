@@ -166,9 +166,9 @@ const About = () => {
                                 fontFamily="Book antigua"
                             >
                                 <Stack gap={4}>
-                                    <Typography>✓ {t('lbl6L1')}</Typography>
-                                    <Typography>✓ {t('lbl6L2')}</Typography>
-                                    <Typography>✓ {t('lbl6L3')}</Typography>
+                                    <Typography>✓ {t('lbl7')}</Typography>
+                                    <Typography>✓ {t('lbl8')}</Typography>
+                                    <Typography>✓ {t('lbl9')}</Typography>
                                 </Stack>
                             </Grid>
 
@@ -178,10 +178,10 @@ const About = () => {
                                 fontFamily="Book antigua"
                             >
                                 <Stack gap={4}>
-                                    <Typography>✓ {t('lbl6R1')}</Typography>
-                                    <Typography>✓ {t('lbl6R2')}</Typography>
-                                    <Typography>✓ {t('lbl6R3')}</Typography>
-                                    <Typography>✓ {t('lbl6R4')}</Typography>
+                                    <Typography>✓ {t('lbl10')}</Typography>
+                                    <Typography>✓ {t('lbl11')}</Typography>
+                                    <Typography>✓ {t('lbl12')}</Typography>
+                                    <Typography>✓ {t('lbl13')}</Typography>
                                 </Stack>
                             </Grid>
 
