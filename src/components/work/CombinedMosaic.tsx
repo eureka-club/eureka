@@ -64,7 +64,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
         }
       }
     }
-  },{enabled:!!work.id})
+  })
   const [posts,setPosts] = useState(dataPosts?.posts);
 
   useEffect(()=>{

@@ -30,7 +30,7 @@ const useCyclesSumary = (lang?:string,props?:Prisma.CycleFindManyArgs, options?:
   return useQuery<{cycles:CycleSumary[],fetched:number,total:number}>(ck, () => getCyclesSumary(lang,props), {
     staleTime,
     enabled,
-    retry:3
+    // retry:3
   });
 };
 

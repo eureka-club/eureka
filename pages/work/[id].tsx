@@ -31,7 +31,9 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
 
-  const { data: work, isLoading, isFetching, isError, error } = useWork(+workId, { enabled: !!workId });
+  const { data: work, isLoading, isFetching, isError, error } = useWork(+workId
+    // , { enabled: !!workId }
+  );
   
   const handleEditClick = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();

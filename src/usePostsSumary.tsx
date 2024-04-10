@@ -48,7 +48,7 @@ const usePostsSumary = (props?:Prisma.PostFindManyArgs, options?: Options) => {
   return useQuery<{posts:PostSumary[],fetched:number,total:number}>(ck, () => getPostsSumary(session?.user.id!,lang,props), {
     staleTime,
     enabled,
-    retry:3
+    // retry:3
   });
 };
 
