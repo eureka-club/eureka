@@ -15,7 +15,7 @@ const featuredWorksPostsWhere = (id: number) => ({
 });
 
 const useFeaturedWorksPostsImages = (id: number) => {
-  const { data: dataFeaturedWorksPosts } = usePosts(featuredWorksPostsWhere(id), { enabled: !!id });
+  const { data: dataFeaturedWorksPosts } = usePosts(featuredWorksPostsWhere(id));
 
   let images: any[] = [];
   if (dataFeaturedWorksPosts && dataFeaturedWorksPosts.posts.length) {

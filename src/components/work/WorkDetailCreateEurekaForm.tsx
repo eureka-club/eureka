@@ -97,9 +97,11 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
   const { notifier } = useNotificationContext();
   // const gec = useGlobalEventsContext();
 
-  const { data: work } = useWork(workItem.id, {
-    enabled: !!workItem.id
-  })
+  const { data: work } = useWork(workItem.id, 
+  //   {
+  //   enabled: !!workItem.id
+  // }
+)
 
 
   const clearPayload = () => {

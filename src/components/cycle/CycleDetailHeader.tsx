@@ -47,7 +47,9 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const [show, setShow] = useState<boolean>(s);
   const {data:session} = useSession();
   const { t } = useTranslation('cycleDetail');
-  const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId,{enabled:!!cycleId});
+  const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId
+    // ,{enabled:!!cycleId}
+  );
   
   const{data:topicsAll}=useTopics();
   const topics:TopicItem[] =  cycle?.topics?.split(',').map(ts=>{

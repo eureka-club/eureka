@@ -82,9 +82,11 @@ const CreatePostForm: FunctionComponent<Props> = ({noModal = false}) => {
       setWorkId(router.query.id.toString());
     }
   },[router])
-  const { data: work } = useWork(+workId, {
-    enabled:!!workId
-  });
+  const { data: work } = useWork(+workId,
+  //    {
+  //   enabled:!!workId
+  // }
+);
 
   const {data:user} = useUser(userId!,{
     enabled:!!userId
