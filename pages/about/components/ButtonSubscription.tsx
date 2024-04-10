@@ -1,5 +1,6 @@
 import { Button, Typography } from "@mui/material";
 import useTranslation from "next-translate/useTranslation";
+import Link from "next/link";
 
 const ButtonSubscription = ()=>{
     const {t}=useTranslation('about');
@@ -32,7 +33,7 @@ const ButtonSubscription = ()=>{
             }
         }
     `}</style>
-            <Button>{t("subscription")}</Button>
+            <Link href="/register"><Button>{t("subscription")}</Button></Link>
 </Typography>
 }
 export default ButtonSubscription;
