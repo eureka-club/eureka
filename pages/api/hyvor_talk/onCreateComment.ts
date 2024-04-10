@@ -158,7 +158,7 @@ export default async function handler(
         const urllabel=dict('urlLabel');
             
         //hyvortalkoncommentcreated
-        if(false){
+        if(data.page.url.includes("eurekaclub-staging")){
           const emailSend = await sendEmailOnCommentCreated({
             to,
             subject,
@@ -172,7 +172,6 @@ export default async function handler(
             },
           });
           return res.status(200).json({ data:{emailSend} });
-
         }
           
         return res.status(200).json({ data:{emailSend:false} });
