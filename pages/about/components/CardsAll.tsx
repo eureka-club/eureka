@@ -108,10 +108,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “Eureka Club me proporcionó un viaje increíble de aprendizaje y reflexión
-                    sobre la justicia social. Participar en el club me hizo replantear mi visión del mundo.
-                    Lo recomiendo a todos los que deseen expandir sus horizontes y actuar en pro de la justicia.”
-
+                    {t('lbl31')}
                   </Typography>
                 </CardContent>
 
@@ -186,10 +183,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “Participar en el club fue una de las mejores decisiones que he tomado.
-                    Los temas me ayudaron a comprender cómo podemos construir un mundo más justo y sostenible.
-                    Cada libro recomendado inspiró cambios en mi vida personal y profesional.”
-
+                    {t('lbl32')}
                   </Typography>
                 </CardContent>
 
@@ -264,10 +258,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “¡Eureka Club es una comunidad increíble! Tenía algunas dudas sobre cómo
-                    un hombre podría encajar en un espacio enfocado en el feminismo, pero pronto
-                    me di cuenta de que era un lugar de aprendizaje y crecimiento para todos.”
-
+                    {t('lbl33')}
                   </Typography>
                 </CardContent>
 
