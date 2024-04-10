@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { BsCircleFill } from 'react-icons/bs';
 import { RiAlertLine } from 'react-icons/ri';
 import { CgArrowLongRight } from 'react-icons/cg';
@@ -40,7 +40,6 @@ const ManifestPage: NextPage<Props> = ({session}) => {
         <meta name="description" content={t('meta:manifestDescription')}></meta>
     </Head>    
     <SimpleLayout title={t('browserTitleWelcome')}>
-      <Container>
         <section className="mb-5">
           <Row>
             <Col xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
@@ -433,7 +432,6 @@ const ManifestPage: NextPage<Props> = ({session}) => {
         </span>
         </Row>
        </section> 
-      </Container>
     </SimpleLayout>
     </>
   );
