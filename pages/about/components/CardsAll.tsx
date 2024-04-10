@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Stars from './Stars';
 import useTranslation from 'next-translate/useTranslation';
+import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 export default function CardsAll() {
   const{t}=useTranslation('about');
@@ -85,7 +86,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}} 
 
                   avatar={
                     <Avatar src='/img/Anna.webp' aria-label="recipe" >
@@ -108,7 +109,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    {t('lbl31')}
+                    <FaQuoteLeft/>{t('lbl31')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
@@ -160,7 +161,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}}
 
                   avatar={
                     <Avatar src='/img/Andreia.webp' aria-label="recipe" >
@@ -183,7 +184,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    {t('lbl32')}
+                    <FaQuoteLeft/>{t('lbl32')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
@@ -235,7 +236,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}}
 
                   avatar={
                     <Avatar src='/img/David.webp' aria-label="recipe" >
@@ -258,7 +259,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    {t('lbl33')}
+                    <FaQuoteLeft/>{t('lbl33')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 

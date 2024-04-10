@@ -17,7 +17,7 @@ const About = () => {
 
         
             <Stack direction={'column'} gap={3} sx={{ backgroundColor: "white" }}>
-                {/* <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                {/* <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '80dvw', sm: '80dvw', xs: '100dvw' }, backgroundColor: "#ecf0f1" }}>
                         <Typography fontFamily={'Helvetica'}
                             fontSize={"40px"} textAlign="center">
@@ -26,7 +26,7 @@ const About = () => {
                     </Box>
                 </Box>
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '50dvw', xs: '70dvw' } }}>
                         <Typography fontFamily={'Open Sans, Helvetica'} fontSize={19} justifyContent={"center"} alignItems={"center"} textAlign="center">
                             El club de lectura y cine para personas que desean descubrir,
@@ -36,7 +36,7 @@ const About = () => {
 
                 </Box>
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '45dvw', sm: '45dvw', xs: '70dvw' } }}>
                         <Typography fontFamily={'Open Sans, Helvetica'} fontSize={17} justifyContent={"center"} alignItems={"center"} textAlign="center">
                             <b>Cada mes, durante 5 meses,</b> recibirás recomendaciones de libros y
@@ -47,7 +47,7 @@ const About = () => {
                     </Box>
                 </Box>
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '40dvw', xs: '100dvw' } }}>
                         <ButtonSubscription/>
                         <Typography fontFamily={'Headland One'} fontSize={15} textAlign="center" justifyContent={"center"} alignItems={"center"} >
@@ -56,7 +56,7 @@ const About = () => {
                     </Box>
                 </Box> */}
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"} >
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} >
                     <Box sx={{ maxWidth: { lg: '80dvw', sm: '95dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Headland One'} fontSize={30} textAlign="center">
                         {t('lbl1H')}
@@ -67,7 +67,7 @@ const About = () => {
                     </Box>
                 </Box>
 
-                <Box display={'flex'} justifyContent={'center'} padding={4}>
+                <Box sx={{display:'flex',justifyContent:'center'}} padding={4}>
                     <Box sx={{width:{xs:'90dvw',md:'85dvw'}}}>
                         <AnimatedIMGCarousel imgsSrc={[
                             "/img/register/carousel1/c1.webp",
@@ -89,7 +89,7 @@ const About = () => {
 
             </Stack>
 
-            <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+            <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                 <Box sx={{ maxWidth: { lg: '30dvw', sm: '95dvw', xs: '100dvw' } }}>
                 </Box>
             </Box>
@@ -97,7 +97,7 @@ const About = () => {
             <Stack gap={5} paddingTop={5} paddingBottom={5}>
                 
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"} >
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} >
                     <Box sx={{ maxWidth: { lg: '100dvw', sm: '400dvw', xs: '100dvw' } }} >
                         <CardsAll />
                     </Box>
@@ -106,7 +106,7 @@ const About = () => {
             </Stack>
 
             <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{backgroundColor:'white'}}>
-                <Box  display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box  sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Bookman Old Style'} fontSize={30} textAlign="center">
                             {t('lbl5')}
@@ -128,7 +128,7 @@ const About = () => {
                             height={150}
                         />
                     </Box>
-                    <Box  display={'flex'} justifyContent={'center'} padding={4}>
+                    <Box  sx={{display:'flex',justifyContent:'center'}} padding={4}>
                         <Box  sx={{width:{xs:'90dvw',md:'85dvw'}}}>
                             <AnimatedIMGCarousel imgsSrc={[
                                 "/img/register/carousel2/1-min.webp",
@@ -149,16 +149,16 @@ const About = () => {
             </Stack>
             
             <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{ backgroundColor: "#ecf0f1" }}>
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}  paddingLeft={1} paddingRight={1}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}  paddingLeft={1} paddingRight={1}>
                     <Box sx={{ maxWidth: { lg: '30dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Bookman Old Style'} fontSize={30} textAlign="center">
                         {t('lbl6')}
                         </Typography>
                     </Box>
                 </Box>
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '99dvw', sm: '90dvw', xs: '100dvw' } }}>
-                        <Grid container gap={4} justifyContent={'center'}>
+                        <Grid container gap={4}  sx={{justifyContent:'center'}}>
                             
                             <Grid item xs={12}
                                 sm={6}
@@ -188,7 +188,7 @@ const About = () => {
                         </Grid>
                     </Box>
                 </Box>
-                {/* <Box display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{ backgroundColor: "#ecf0f1",padingTop:'2rem' }}>
+                {/* <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} sx={{ backgroundColor: "#ecf0f1",padingTop:'2rem' }}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '95dvw', xs: '100dvw' } }}>
                         <ButtonSubscription/>
                         <Typography fontFamily={'Headland One'} fontSize={15} textAlign="center" justifyContent={"center"} alignItems={"center"} >
@@ -201,7 +201,7 @@ const About = () => {
             
             <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{ backgroundColor: "white" }}>
             
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"} >
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} >
                     <Box sx={{ maxWidth: { lg: '30dvw', sm: '95dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'Bookman Old Style'} fontSize={30} textAlign="center">
                             {t('lbl14')}
@@ -209,7 +209,7 @@ const About = () => {
                     </Box>
                 </Box>
 
-                <Box sx={{position:'relative'}}  display={"flex"} justifyContent={"center"} alignItems={"center"} paddingLeft={1} paddingRight={1}>
+                <Box  sx={{position:'relative', display:'flex',justifyContent:'center'}} alignItems={"center"} paddingLeft={1} paddingRight={1}>
                         <Box sx={{
                                 position:'absolute',
                                 zIndex:1,
@@ -229,7 +229,7 @@ const About = () => {
             </Stack>
 
             <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{ backgroundColor: "#00cec9" }}>
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '30dvw', sm: '95dvw', xs: '100dvw' } }}>
                         <Typography fontFamily={'arial'}
                             variant="h4" textAlign="center"  >
@@ -238,7 +238,7 @@ const About = () => {
                     </Box>
                 </Box>
                 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '50dvw', xs: '70dvw' } }}>
                         <Typography fontFamily={'arial'} fontSize={19} textAlign="center">
                             {t('lbl29')}
@@ -246,7 +246,7 @@ const About = () => {
                     </Box>
                 </Box>
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '36dvw', sm: '46dvw', xs: '70dvw' } }}>
                         <Typography fontFamily={'arial'} fontSize={16} textAlign="center" >
                         {t('lbl30')}
@@ -254,7 +254,7 @@ const About = () => {
                     </Box>
                 </Box>
 
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '95dvw', xs: '100dvw' } }}>
                         <ButtonSubscription/>
                         {/* <Typography fontFamily={'Headland One'} fontSize={15} textAlign="center" justifyContent={"center"} alignItems={"center"} >
@@ -267,7 +267,7 @@ const About = () => {
 
 
 
-            {/* <Box display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{ backgroundColor: "#535c68" }}>
+            {/* <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} sx={{ backgroundColor: "#535c68" }}>
                 <Box sx={{ maxWidth: { lg: '60dvw', sm: '95dvw', xs: '100dvw' } }}>
                     <PiePagina />
                 </Box>
