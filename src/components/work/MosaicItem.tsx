@@ -54,15 +54,16 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { cycle } = useCycleContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [work, setWork] = useState(workItem);
-  const { data } = useWorkSumary(workId
+  const { data:work } = useWorkSumary(workId
   //   ,{
   //   enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
   // }
 );
-  useEffect(() => {
-    if (data && !workItem) setWork(data);
-  }, [data]);
+// const [work, setWork] = useState(data);
+
+  // useEffect(() => {
+  //   if (data && !workItem) setWork(data);
+  // }, [data]);
 
   if (!work) return <></>;
   const { id, title, localImages, type } = work;

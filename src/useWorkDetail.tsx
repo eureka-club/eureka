@@ -28,7 +28,7 @@ const useWorkDetail = (id: number, options?: Options): UseQueryResult<WorkDetail
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  const ck =  ['WORK', `${id}`];
+  const ck =  ['WORK', `${id}`, 'SUMARY'];
   return useQuery<WorkDetail|undefined>(ck, () => getWork(id, !notLangRestrict ? lang!:undefined),
    {
     staleTime,

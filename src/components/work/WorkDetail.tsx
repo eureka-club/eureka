@@ -14,6 +14,7 @@ import {
   NavLink,
   Button,
   Spinner,
+  Stack,
 } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 // import { useSession } from 'next-auth/react';
@@ -39,7 +40,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -372,15 +373,27 @@ console.log(work)
                         </Box>
                       </div>
                       <Box className="" mt={1}>
-                      {work.contentText != null && (
-                        <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
-                      )}
+                      {
+                        work.contentText != null
+                          ? <UnclampText isHTML={false} text={work.contentText} />
+                          // ? (
+                          //   <Stack>
+                          //     <Typography id="asd" sx={{height:'5rem',overflowX:'hidden'}}>{work?.contentText!}</Typography>
+                          //     <Button variant='link' onClick={()=>{
+                          //         const t:HTMLDivElement = document.querySelector('#asd')!;
+                          //         t.style.height= t.style.height=='5rem' ? 'auto' : '5rem';
+                          //     }}>More</Button>
+                          //   </Stack>
+                          // )
+                          : <></>
+                      }
                     </Box>
                     {/* <HyvorComments entity='work' id={`${work.id}`}  /> */}
                   </section>
                   {/* <div className='container d-none d-lg-block mt-5'>
                   <CommentsList entity={work} parent={undefined}/>
                 </div>*/}
+                    {/* {useMemo(()=><HyvorComments entity="work" id={`${work.id}`} session={session} />,[work.id])} */}
                     <HyvorComments entity="work" id={`${work.id}`} session={session} />
                 </Col>
                   {/* <div className='container d-sm-block d-lg-none mt-3'>
