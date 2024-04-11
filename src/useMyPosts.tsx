@@ -41,7 +41,7 @@ const useMyPosts = (id:number,take=8,options?:Options) => {
   return useQuery<{posts:PostSumary[],fetched:number,total:number}>(ck, async () => await getMyPosts(id,session,take), {
     staleTime,
     enabled,
-    retry:3
+    // retry:3
   });
 };
 

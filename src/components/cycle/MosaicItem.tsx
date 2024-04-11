@@ -71,7 +71,9 @@ const MosaicItem: FunctionComponent<Props> = ({
   const { data: user } = useUserSumary(session?.user.id!,{ enabled: !!session?.user.id });
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const {data:c} = useCycleSumary(cycleId,{enabled:!!cycleId && !cycleItem})
+  const {data:c} = useCycleSumary(cycleId
+    // ,{enabled:!!cycleId && !cycleItem}
+  )
   const cycle = cycleItem??c;
   const {show} = useModalContext()
   const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);

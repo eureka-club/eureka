@@ -34,9 +34,11 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
   
   const { t } = useTranslation('cycleDetail');
 
-   const {data:work} = useWork(workId,{
-    enabled:!!workId
-  })
+   const {data:work} = useWork(workId,
+  //   {
+  //   enabled:!!workId
+  // }
+)
 
   const [isCreateEureka, setIsCreateEureka] = useState<boolean>(true);
   const [discussionItem, setDiscussionItem] = useState<string | undefined>(undefined); // by default empty but required

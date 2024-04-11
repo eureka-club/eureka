@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Stars from './Stars';
 import useTranslation from 'next-translate/useTranslation';
+import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 export default function CardsAll() {
   const{t}=useTranslation('about');
@@ -85,7 +86,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}} 
 
                   avatar={
                     <Avatar src='/img/Anna.webp' aria-label="recipe" >
@@ -108,10 +109,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “Eureka Club me proporcionó un viaje increíble de aprendizaje y reflexión
-                    sobre la justicia social. Participar en el club me hizo replantear mi visión del mundo.
-                    Lo recomiendo a todos los que deseen expandir sus horizontes y actuar en pro de la justicia.”
-
+                    <FaQuoteLeft/>{t('lbl31')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
@@ -163,7 +161,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}}
 
                   avatar={
                     <Avatar src='/img/Andreia.webp' aria-label="recipe" >
@@ -186,10 +184,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “Participar en el club fue una de las mejores decisiones que he tomado.
-                    Los temas me ayudaron a comprender cómo podemos construir un mundo más justo y sostenible.
-                    Cada libro recomendado inspiró cambios en mi vida personal y profesional.”
-
+                    <FaQuoteLeft/>{t('lbl32')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
@@ -241,7 +236,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}}
 
                   avatar={
                     <Avatar src='/img/David.webp' aria-label="recipe" >
@@ -264,10 +259,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “¡Eureka Club es una comunidad increíble! Tenía algunas dudas sobre cómo
-                    un hombre podría encajar en un espacio enfocado en el feminismo, pero pronto
-                    me di cuenta de que era un lugar de aprendizaje y crecimiento para todos.”
-
+                    <FaQuoteLeft/>{t('lbl33')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
