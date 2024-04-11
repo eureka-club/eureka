@@ -61,7 +61,7 @@ const About = () => {
                         <Typography fontFamily={'Headland One'} fontSize={30} textAlign="center">
                         {t('lbl1H')}
                         </Typography>
-                        <Typography fontFamily={'Headland One'} fontSize={16} textAlign="center">
+                        <Typography fontFamily={'Inter'} fontSize={16} textAlign="center" fontStyle={'bold'}>
                         {t('lbl1B')}
                         </Typography>
                     </Box>
