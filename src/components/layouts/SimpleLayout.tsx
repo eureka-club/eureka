@@ -8,6 +8,7 @@ import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
 import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
 import Footer from '@/components/layouts/Footer';
+import { Box } from '@mui/material';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -17,10 +18,11 @@ type Props = {
   showCustomBaner?: boolean;
   showNavBar?:boolean;
   showFooter?:boolean;
-  allPageSize?:boolean
+  allPageSize?:boolean;
+  fullWidth?:boolean
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false}) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false,fullWidth=false}) => {
 
   const renderBanner = () => {
     if (banner) return <>{banner}</>;
@@ -50,9 +52,17 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </div>}
         {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
         {renderBanner()}
-        {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
-        : (showHeader || showCustomBaner) ?  <Container className='mt-4'>{children}</Container>
-        : <Container className='mainContainer'>{children}</Container> }
+        {
+        (!showNavBar || allPageSize) 
+          ? <div className='m-0'>{children}</div>
+            : (showHeader || showCustomBaner) 
+            ? !fullWidth 
+              ? <Container className='mt-4'>{children}</Container>
+              :<Box className='mt-4'>{children}</Box>
+          : !fullWidth 
+            ? <Container className='mainContainer'>{children}</Container> 
+            : <Box className='mainContainer'>{children}</Box> 
+        }
       </section>
       {showFooter && (<Footer/>)}
     </>    

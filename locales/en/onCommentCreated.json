@@ -1,0 +1,20 @@
+{
+  "subject-post":"Someone commented on your Eureka Moment!",
+  "subject-cycle":"Someone commented on the cycle {{title}}, you're participating in!",
+  "subject-work":"Someone else commented on {{title}}!",
+  "subject-comment":"Someone responded to your comment on {{title}}!",
+
+  "title-post": "The user {{name}} left a comment on: {{title}}",
+  "title-cycle":"{{name}} just left a comment on the cycle {{title}}!",
+  "title-work":"{{name}} just left a comment on {{title}}!",
+  "title-comment":"{{name}} just responded to your comment on {{title}}!",
+
+  "about-post":"Your reflections are inspiring and generating discussions. Thank you for contributing to our community!",
+  "about-cycle":"How about joining and contributing to the conversation? Our community appreciates it!",
+  "about-work":"Wanna weigh in? Our community appreciates it!",
+  "about-comment":"Wanna weigh in? Our community appreciates it!",
+
+  "aboutEnd":"Cheers, Eureka",
+  "urlLabel": "View Comment",
+  "unsubscribe":"Unsubscribe"
+}

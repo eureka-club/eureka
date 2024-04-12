@@ -92,7 +92,7 @@ const mailchimpErrorHandler = async (email_address:string,segment:string)=>{
   const subject =`Failed subscribing ${email_address} to the segment: ${segment}`;
   
   await sendMail({
-    from:{email:process.env.EMAILING_FROM!},
+    from:process.env.EMAILING_FROM!,
     to:[{email:process.env.DEV_EMAIL!}],
     subject,
     html:`<p>${subject}</p>`

@@ -367,7 +367,7 @@ console.log(work)
                       </div>
                       <Box className="" mt={1}>
                       {work.contentText != null && (
-                        <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
+                        <UnclampText isHTML={false} text={work.contentText} />
                       )}
                     </Box>
                     {/* <HyvorComments entity='work' id={`${work.id}`}  /> */}
