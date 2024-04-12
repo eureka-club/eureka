@@ -42,6 +42,7 @@ import styles from './SocialInteraction.module.css';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
 import _ from 'lodash';
+import { Box } from '@mui/material';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -189,7 +190,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
           if ('prevEntity' in context) queryClient.setQueryData(cacheKey, context?.prevEntity);
         }
         queryClient.invalidateQueries(['USER', `${session?.user.id}`]);
-        queryClient.invalidateQueries(cacheKey);
+        // queryClient.invalidateQueries(cacheKey);
       },
     },
   );
@@ -373,10 +374,10 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
         )}
 
         {loadingSocialInteraction && (
-          <div className="mt-1 ms-1 me-2">
+          <Box>
             {' '}
             <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
-          </div>
+          </Box>
         )}
       <div className="ms-auto d-flex justify-content-end">
 
