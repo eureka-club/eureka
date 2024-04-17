@@ -7,10 +7,12 @@ import ButtonSubscription from './ButtonSubscription';
 import AnimatedIMGCarousel from './AnimatedIMGCarousel';
 import Image from 'next/image';
 import useTranslation from 'next-translate/useTranslation';
+import { useSession } from 'next-auth/react';
 // import PiePagina from './components/PiePagina';
 
 const About = () => {
     const{t}=useTranslation('about');
+    const{data:session}=useSession()
     return (
 
         <>
@@ -256,7 +258,11 @@ const About = () => {
 
                 <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '95dvw', xs: '100dvw' } }}>
-                        <ButtonSubscription/>
+                        {
+                            !session?.user 
+                                ? <ButtonSubscription/>
+                                : <></>
+                        }
                         {/* <Typography fontFamily={'Headland One'} fontSize={15} textAlign="center" justifyContent={"center"} alignItems={"center"} >
                             Y la mejor parte: <b>!<u>Es gratuito</u>! <Typography variant='caption' fontSize={25}>😉</Typography></b>
                         </Typography> */}
