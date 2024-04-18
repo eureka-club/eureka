@@ -27,23 +27,25 @@ const UnclampText = ({text,isHTML}:Props)=>{
         ? <Box  id="uct" sx={sx} dangerouslySetInnerHTML={{ __html: text }} />
         : <Typography  id="uct" sx={sx}>{text}</Typography>
     }
-  <Button variant='outlined' onClick={()=>{
-    const val = !textIsUnclamped;
-    setTextIsUnclamped(p=>val);
-    const t:HTMLDivElement = document.querySelector('#uct')!;
+    <Box>
+      <Button variant='outlined' size='small' onClick={()=>{
+        const val = !textIsUnclamped;
+        setTextIsUnclamped(p=>val);
+        const t:HTMLDivElement = document.querySelector('#uct')!;
 
-    if(!val){
-      t.setAttribute('style','height:10rem')
-    }
-    else
-    t.setAttribute('style','height:auto')
-   }}>
-    {
-      textIsUnclamped 
-        ? <BiArrowToTop fontSize='1.2rem'/>
-        : <BiArrowToBottom fontSize='1.2rem'/>
-    }
-  </Button>
+        if(!val){
+          t.setAttribute('style','height:10rem')
+        }
+        else
+        t.setAttribute('style','height:auto')
+      }}>
+        {
+          textIsUnclamped 
+            ? <BiArrowToTop fontSize='1.2rem'/>
+            : <BiArrowToBottom fontSize='1.2rem'/>
+        }
+      </Button>
+    </Box>
 </Stack>
 }
 // const UnclampText: FunctionComponent<Props> = ({ clampHeight, text, showButtomMore = true, isHTML = true }) => {
