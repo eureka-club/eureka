@@ -63,9 +63,9 @@ export default function CardsAll() {
                     </Box>
 
                     <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">{t('lbl2H')}</Typography>
+                      <Typography paddingLeft={0}  variant="h5">{t('lbl2H')}</Typography>
                       <br></br>
-                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
+                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
                       {t('lbl2B')}
                       </Typography>
                     </Box>
@@ -137,10 +137,10 @@ export default function CardsAll() {
 
                     </Box>
 
-                    <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">{t('lbl3H')}</Typography>
+                    <Box>
+                      <Typography paddingLeft={0}  variant="h5">{t('lbl3H')}</Typography>
                       <br></br>
-                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
+                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
                       {t('lbl3B')}
                       </Typography>
                     </Box>
@@ -212,10 +212,10 @@ export default function CardsAll() {
 
                     </Box>
 
-                    <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">{t('lbl4H')}</Typography>
+                    <Box>
+                      <Typography paddingLeft={0}  variant="h5">{t('lbl4H')}</Typography>
                       <br></br>
-                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
+                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
                       {t('lbl4B')}
                       </Typography>
                     </Box>

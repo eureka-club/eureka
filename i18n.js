@@ -14,6 +14,7 @@ module.exports = {
     'rgx:^/cycle/\\[id\\]/edit': ['createCycleForm', 'countries'],
     '/about': ['about'],
     '/aboutUs': ['aboutUs'],
+    '/about': ['about'],
     '/search': ['countries'],
     '/profile': ['common', 'profile', 'countries'],
     '/manifest': ['manifest'],

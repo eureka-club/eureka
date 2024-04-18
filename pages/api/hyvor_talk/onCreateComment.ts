@@ -68,17 +68,21 @@ export default async function handler(
         let post=null;
         let work=null;
 
+        let elementTitle=data.page.title;
+
         let to:{email:string}[] = [];
         switch(elementType){
           case 'cycle':
             cycle = await prisma.cycle.findFirst({
               where:{id:+elementId},
               select:{
+                title:true,
                 languages:true,
                 creator:{select:{email:true}},
                 participants:{select:{email:true}},
               }
             });
+            elementTitle=cycle?.title;
             const languages = cycle?.languages.split(",")
             locale=languages?.length ? languages[0] : locale;
           break;
@@ -86,17 +90,20 @@ export default async function handler(
             post = await prisma?.post.findFirst({
               where:{id:+elementId},
               select:{
+                title:true,
                 language:true,
                 creator:{select:{name:true,email:true}}
               }
             });
+            elementTitle=post?.title;
             locale=post?.language ?? locale;
           break;  
           case 'work':
             work = await prisma.work.findFirst({
               where:{id:+elementId},
-              select:{language:true}
+              select:{title:true,language:true}
             });
+            elementTitle=work?.title;
             locale=work?.language ?? locale;
           break;  
         }
@@ -149,7 +156,7 @@ export default async function handler(
           }
           return val;
         }
-        const elementTitle=data.page.title;
+        
         const subject=dict(`subject-${elementType}`,{title:elementTitle});
         const title=dict(`title-${elementType}`,{title:elementTitle,name});
         const about=dict(`about-${elementType}`);

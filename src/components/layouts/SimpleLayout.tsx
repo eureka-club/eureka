@@ -22,7 +22,7 @@ type Props = {
   fullWidth?:boolean
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children,fullWidth=false, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false}) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false,fullWidth=false}) => {
 
   const renderBanner = () => {
     if (banner) return <>{banner}</>;
@@ -56,11 +56,15 @@ const SimpleLayout: FunctionComponent<Props> = ({ children,fullWidth=false, show
         {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
         {renderBanner()}
         {
-          (!showNavBar || allPageSize) 
-            ? <div className='m-0'>{children}</div>
+        (!showNavBar || allPageSize) 
+          ? <div className='m-0'>{children}</div>
             : (showHeader || showCustomBaner) 
-              ?  <Ctr className='mt-4'>{children}</Ctr>
-              : <Ctr className='mainContainer'>{children}</Ctr> 
+            ? !fullWidth 
+              ? <Container className='mt-4'>{children}</Container>
+              :<Box className='mt-4'>{children}</Box>
+          : !fullWidth 
+            ? <Container className='mainContainer'>{children}</Container> 
+            : <Box className='mainContainer'>{children}</Box> 
         }
       </Box>
       {showFooter && (<Footer/>)}
