@@ -58,9 +58,9 @@ const About = () => {
                     </Box>
                 </Box> */}
 
-                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} >
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} paddingBlockStart={5} paddingLeft={2}paddingRight={2}>
                     <Box sx={{ maxWidth: { lg: '80dvw', sm: '95dvw', xs: '100dvw' } }}>
-                        <Typography fontSize={30} textAlign="center">
+                        <Typography fontSize={30} textAlign="center" sx={{color:'#3D2984'}}>
                         {t('lbl1H')}
                         </Typography>
                         <Typography fontSize={16} textAlign="center" fontStyle={'bold'}>
@@ -99,7 +99,7 @@ const About = () => {
             <Stack gap={5} paddingTop={5} paddingBottom={5}>
                 
 
-                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} >
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} paddingLeft={2} paddingRight={2}>
                     <Box sx={{ maxWidth: { lg: '100dvw', sm: '400dvw', xs: '100dvw' } }} >
                         <CardsAll />
                     </Box>
@@ -107,7 +107,7 @@ const About = () => {
 
             </Stack>
 
-            <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{backgroundColor:'white'}}>
+            <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{backgroundColor:'white'}} paddingLeft={2} paddingRight={2}>
                 <Box  sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Typography fontSize={30} textAlign="center">
@@ -151,14 +151,14 @@ const About = () => {
             </Stack>
             
             <Stack gap={5} paddingTop={5} paddingBottom={5} sx={{ backgroundColor: "#ecf0f1" }}>
-                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}  paddingLeft={1} paddingRight={1}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}  paddingLeft={2} paddingRight={2}>
                     <Box sx={{ maxWidth: { lg: '30dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Typography fontSize={30} textAlign="center">
                         {t('lbl6')}
                         </Typography>
                     </Box>
                 </Box>
-                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} paddingLeft={2} paddingRight={2}>
                     <Box sx={{ maxWidth: { lg: '99dvw', sm: '90dvw', xs: '100dvw' } }}>
                         <Grid container gap={4}  sx={{justifyContent:'center'}}>
                             
