@@ -60,7 +60,7 @@ const About = () => {
 
                 <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} paddingBlockStart={5} paddingLeft={2}paddingRight={2}>
                     <Box sx={{ maxWidth: { lg: '80dvw', sm: '95dvw', xs: '100dvw' } }}>
-                        <Typography fontSize={30} textAlign="center" sx={{color:'#3D2984'}}>
+                        <Typography variant='h1' fontSize={'2rem'} textAlign="center" sx={{color:'var(--color-secondary)',fontFamily:`"Open Sans", sans-serif`}}>
                         {t('lbl1H')}
                         </Typography>
                         <Typography fontSize={16} textAlign="center" fontStyle={'bold'}>
