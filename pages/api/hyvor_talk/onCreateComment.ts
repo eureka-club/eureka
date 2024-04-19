@@ -164,26 +164,21 @@ export default async function handler(
         const unsubscribe=dict('unsubscribe');
         const urllabel=dict('urlLabel');
             
-        //hyvortalkoncommentcreated
-        if(data.page.url.includes("eurekaclub-staging")){
-          const emailSend = await sendEmailOnCommentCreated({
-            to,
-            subject,
-            specs:{
-              etitle:title,
-              about,
-              aboutEnd,
-              eurl:url,
-              urllabel,
-              unsubscribe
-            },
-          });
+        const emailSend = await sendEmailOnCommentCreated({
+          to,
+          subject,
+          specs:{
+            etitle:title,
+            about,
+            aboutEnd,
+            eurl:url,
+            urllabel,
+            unsubscribe
+          },
+        });
+        if(emailSend)
           return res.status(200).json({ data:{emailSend} });
-        }
-          
         return res.status(200).json({ data:{emailSend:false} });
-        //}
-        //return res.status(200).json({ data:{data:null,event:null} });
       }
       catch(e){
           console.error(e);
