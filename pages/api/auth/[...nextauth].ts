@@ -62,7 +62,7 @@ import { UserSumary } from '@/src/types/UserSumary';
             ],
             from: {
               email: process.env.EMAILING_FROM!,
-              name: 'EUREKA-CLUB',
+              name: 'Eureka-CLUB',
             },
             subject: `Sign in to ${site} on: ${new Date().toUTCString()}`,
             html: '',
@@ -282,11 +282,11 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             to: [
               {
                 email,
-                name: 'EUREKA',
+                name: 'Eureka',
               },
             ],
             from: process.env.EMAILING_FROM!,
-            subject: `Sign in to EUREKA on: ${new Date().toUTCString()}`,
+            subject: `Sign in to Eureka on: ${new Date().toUTCString()}`,
             html: `<a href="{{url}}" target="_blank"
             style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #000000; text-decoration: none; text-decoration: none;border-radius: 5px; padding: 10px 20px; border: 1px solid green; display: inline-block;">
             Click here to finalize your login to Eureka

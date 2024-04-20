@@ -124,7 +124,7 @@ const handlerRecoveryLogin = ()=>{
         <Link href="/" replace>  
         <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         </Link>
-        <p className={styles.EurekaText}>EUREKA</p>
+        <p className={styles.EurekaText}>Eureka</p>
         </Container>)}
       </ModalHeader>
       <ModalBody className="pt-0">

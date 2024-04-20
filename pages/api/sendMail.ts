@@ -26,7 +26,7 @@ export default async function handler(
     }));
     const message = {
       from_email: from??process.env.EMAILING_FROM,
-      from_name: from_name||'EUREKA',
+      from_name: from_name||'Eureka',
       subject,
       ...(!template_name && text) && {text},
       ...(!template_name && html) && {html},

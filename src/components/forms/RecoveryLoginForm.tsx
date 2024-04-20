@@ -58,7 +58,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
        <Link href="/" replace>  
           <img  className={`cursor-pointer ${styles.eurekaImage}`} src="/logo.svg" alt="Eureka" /> 
         </Link>   
-        <p className={styles.EurekaText}>EUREKA</p>
+        <p className={styles.EurekaText}>Eureka</p>
         </Container>
       
         <div className="d-flex flex-column align-items-center justify-content-center">
