@@ -20,7 +20,7 @@ import {
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { MosaicContext } from '@/src/useMosaicContext';
 import { useQueryClient } from 'react-query';
-import { Button as MaterialButton } from '@mui/material';
+import { Grid, Button as MaterialButton } from '@mui/material';
 
 import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostDetail } from '@/src/types/post';
@@ -81,22 +81,30 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
     }
   },[router])
 
-  const {data:cycle,isLoading} = useCycle(+cycleId,{
-    enabled:!!cycleId
-  });
+  const {data:cycle,isLoading} = useCycle(+cycleId
+  //   ,{
+  //   enabled:!!cycleId
+  // }
+);
   console.log("cycle ", cycle)
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
 
-  const{data:participants}=useCycleParticipants(cycle?.id!,{enabled:!!cycle?.id!});
+  const{data:participants}=useCycleParticipants(cycle?.id!
+    ,{enabled:!!cycle?.id!}
+  );
 
   const cyclePostsProps = {take:8,where:{cycles:{some:{id:+cycleId}}}}
-  const {data:dataPosts} = usePosts(cyclePostsProps,{enabled:!!cycleId})
+  const {data:dataPosts} = usePosts(cyclePostsProps,['CYCLE',`${cycle?.id}`,'POSTS']
+  //   ,{
+  //   enabled:!!cycleId,
+  //   cacheKey:['CYCLE',`${cycle?.id}`,'POSTS']
+  // }
+)
   const [posts,setPosts] = useState(dataPosts?.posts)
   const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched);
-
 
   useEffect(()=>{
     if(dataPosts && dataPosts.posts){
@@ -106,21 +114,21 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   },[dataPosts])
 
 
-  useEffect(()=>{
-    if(inView && hasMorePosts){
-      if(posts){
-        const loadMore = async ()=>{
-          const {id} = posts.slice(-1)[0];
-          const o = {...cyclePostsProps,skip:1,cursor:{id}};
-          const {posts:pf,fetched} = await getPosts(lang,o)
-          setHasMorePosts(fetched);
-          const posts_ = [...(posts||[]),...pf];
-          setPosts(posts_);
-        }
-        loadMore();
-      }
-    }
-  },[inView]);
+  // useEffect(()=>{console.log('aca no')
+  //   if(inView && hasMorePosts){
+  //     if(posts){
+  //       const loadMore = async ()=>{
+  //         const {id} = posts.slice(-1)[0];
+  //         const o = {...cyclePostsProps,skip:1,cursor:{id}};
+  //         const {posts:pf,fetched} = await getPosts(lang,o)
+  //         setHasMorePosts(fetched);
+  //         const posts_ = [...(posts||[]),...pf];
+  //         setPosts(posts_);
+  //       }
+  //       loadMore();
+  //     }
+  //   }
+  // },[inView]);
   
 
 
@@ -272,13 +280,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   };
   const renderParticipants = ()=>{
     if(participants){
-      return <Row className='mt-3'>
-        {
-          participants.map(p=><Col xs={12} sm={4} lg={3} key={p.id} className="mb-3 d-flex justify-content-center  align-items-center">
-            <MosaicItemUser user={p} /></Col>
-          )
-        }
-      </Row>
+      return <Grid container spacing={2}>
+      {participants.map(p=><Grid item xs={6} sm={4} md={2} key={p.email}><MosaicItemUser user={p} /></Grid>)}
+  </Grid>
+      
     }
     return ''
   }
@@ -297,7 +302,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                     {renderPosts()}
                   </MosaicContext.Provider>
                 </Col>
-              </Row> 
+              </Row>
           </TabPane>
           <TabPane eventKey="guidelines">
             <section className="text-primary">
@@ -418,12 +423,10 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
           <Col>
             {detailPagesState.selectedSubsectionCycle != null && (
               <TabContainer
-                //defaultActiveKey={}
                 onSelect={handleSubsectionChange}
                 activeKey={tabKey || getDefaultActiveKey()}
                 transition={false}
               >
-                {/* language=CSS */}
                 <style jsx global>
                   {`
                     .nav-tabs .nav-item.show .nav-link,
@@ -464,7 +467,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
                               className={styles.dangerouslySetInnerHTML}
                               dangerouslySetInnerHTML={{ __html: cycle.contentText }}
                             />
-                            {/* <UnclampText text={cycle.contentText} clampHeight="7rem" /> */}
                           </div>
                         )}
                         <div ref={cycleWorksRef}>

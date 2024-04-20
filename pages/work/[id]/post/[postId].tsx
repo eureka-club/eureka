@@ -26,7 +26,9 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
   const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
   const { t } = useTranslation('meta');
   const router=useRouter();
-  const { data: work, isLoading: loadingWork } = useWork(+workId, { enabled: !!workId });
+  const { data: work, isLoading: loadingWork } = useWork(+workId
+    // , { enabled: !!workId }
+  );
   const { data: post, isLoading: loadingPost } = usePostDetail(+postId, { enabled: !!postId });
   const isLoadingData = () => {
     if (loadingWork) return true;

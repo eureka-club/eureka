@@ -41,8 +41,12 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
   const router = useRouter();
 
   //const { data: session, status } = useSession();
-  const { data: cycle, isLoading:isLoadingCycle } = useCycle(+router?.query.id!, { enabled: !!router?.query.id! });
-  const { data: user, isLoading:isLoadingUser } = useUser(session?.user.id!, { enabled: !!session?.user.id });
+  const { data: cycle, isLoading:isLoadingCycle } = useCycle(+router?.query.id!
+    // , { enabled: !!router?.query.id! }
+  );
+  const { data: user, isLoading:isLoadingUser } = useUser(session?.user.id!
+    // , { enabled: !!session?.user.id }
+  );
 
   const currentUserIsParticipant = user?.cycles.findIndex(c => c.id == +router.query.id!);
   const isPublicPost = cycle?.access == 1;
@@ -50,9 +54,11 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
   // if(status=='unauthenticated')
   //   router.push(`/cycle/${router.query.id}`);
 
-  const { data: post, isLoading:isLoadingPost } = usePost(+postId, {
-    enabled: !!postId
-  })
+  const { data: post, isLoading:isLoadingPost } = usePost(+postId
+  //   , {
+  //   enabled: !!postId
+  // }
+)
 
   if (!post && !isLoadingPost)
     return <Alert color='warning'>Not found</Alert>;
@@ -210,7 +216,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                 {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
               </div>
               <div className='mt-3'>
-                {(post?.contentText != null && post?.contentText.length != 0) && <UnclampText text={post?.contentText} clampHeight="16rem" />}
+                {(post?.contentText != null && post?.contentText.length != 0) && <UnclampText text={post?.contentText} isHTML />}
               </div>
             </div>
             {/*<div className='container d-none d-lg-block'>

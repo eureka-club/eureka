@@ -1,6 +1,9 @@
 import { Button, Typography } from "@mui/material";
+import useTranslation from "next-translate/useTranslation";
+import Link from "next/link";
 
 const ButtonSubscription = ()=>{
+    const {t}=useTranslation('about');
     return <Typography id='sub-btn' fontFamily={'Open Sans, Helvetica'} fontSize={19} justifyContent={"center"} alignItems={"center"} textAlign="center">
     <style jsx global>{`
         #sub-btn{
@@ -30,7 +33,7 @@ const ButtonSubscription = ()=>{
             }
         }
     `}</style>
-            <Button>Inscríbete en el club</Button>
+            <Link href="/register"><Button>{t("subscription")}</Button></Link>
 </Typography>
 }
 export default ButtonSubscription;

@@ -67,9 +67,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     // skip: supportsLazyLoading !== false,
   });
 
-  const { data: work } = useWorkDetail(workId, {
-    enabled: !!workId,
-  });
+  const { data: work } = useWorkDetail(workId
+  //   , {
+  //   enabled: !!workId,
+  // }
+);
 console.log(work)
   const{data:topicsAll}=useTopics();
   const topics:TopicItem[] = useMemo(()=>{
@@ -103,8 +105,12 @@ console.log(work)
       },
     },
   });
-  const { data: dataCycles } = useCycles('',workCyclessWhere, { enabled: !!workId });
-  const { data: dataPosts } = usePosts(workPostsWhere, { enabled: !!workId }); //OJO this trigger just once -load the same data that page does
+  const { data: dataCycles } = useCycles('',workCyclessWhere
+  // , { enabled: !!workId }
+);
+  const { data: dataPosts } = usePosts(workPostsWhere
+    // , { enabled: !!workId }
+  ); //OJO this trigger just once -load the same data that page does
   const [posts, setPosts] = useState(dataPosts?.posts);
   const [cycles, setCycles] = useState(dataCycles?.cycles);
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>('posts');
@@ -367,7 +373,7 @@ console.log(work)
                       </div>
                       <Box className="" mt={1}>
                       {work.contentText != null && (
-                        <UnclampText isHTML={false} text={work.contentText} clampHeight="8rem" />
+                        <UnclampText isHTML={true} text={work.contentText} />
                       )}
                     </Box>
                     {/* <HyvorComments entity='work' id={`${work.id}`}  /> */}

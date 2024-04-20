@@ -1,6 +1,6 @@
 import React, { useState,ChangeEvent  } from "react"
 import useTranslation from 'next-translate/useTranslation';
-import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, Stack } from "@mui/material";
 import useAutocompleteRegions from "./useAutocompleteRegions";
 export interface FiltersType {
   'fiction-book':boolean;
@@ -25,9 +25,8 @@ const useFilterEngineWorks = ()=>{
     };
     
     const FilterEngineWork: React.FC = ()=>{
-    return <section className="d-flex flex-row align-items-center justify-content-end my-2">
-    <div className="my-3">
-      <FormGroup row>
+    return <Stack direction={{sx:'column',sm:'row'}} paddingTop={2} paddingBottom={2} justifyContent={{sx:'center',md:'left'}} alignItems={{sx:'center',md:'left'}}>
+    <FormGroup row sx={{justifyContent:{sx:'center',md:'left'}}}>
         <FormControlLabel label={t('Fiction books')} control={
           <Checkbox data-cy="check-fiction-book" checked={filtersType['fiction-book']} onChange={(e) => handlerComboxesChangeType(e, 'fiction-book')}/>
         }/>
@@ -41,11 +40,8 @@ const useFilterEngineWorks = ()=>{
           <Checkbox data-cy="check-documentary" checked={filtersType.documentary} onChange={(e) => handlerComboxesChangeType(e, 'documentary')}/>
         }/>
       </FormGroup>
-    </div>
-    <div className="my-3">
       <AutocompleteRegions/>
-    </div>
-    </section>
+    </Stack>
     }
     return {FilterEngineWork,filtersType,filtersCountries};
 }

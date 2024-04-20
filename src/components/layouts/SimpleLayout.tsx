@@ -1,4 +1,4 @@
-import { FunctionComponent} from 'react';
+import { FunctionComponent, HtmlHTMLAttributes} from 'react';
 import { Container} from 'react-bootstrap';
 import withTitle from '../../HOCs/withTitle';
 import NavbarMobile from '@/components/layouts/NavbarMobile';
@@ -8,6 +8,7 @@ import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
 import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
 import Footer from '@/components/layouts/Footer';
+import { Box } from '@mui/material';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -17,16 +18,20 @@ type Props = {
   showCustomBaner?: boolean;
   showNavBar?:boolean;
   showFooter?:boolean;
-  allPageSize?:boolean
+  allPageSize?:boolean;
+  fullWidth?:boolean
 };
 
-const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false}) => {
+const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, banner,showCustomBaner=false,showNavBar = true,showFooter=true , allPageSize=false,fullWidth=false}) => {
 
   const renderBanner = () => {
     if (banner) return <>{banner}</>;
     return ``;
   };
-
+  const Ctr = ({children,...args}:{children:JSX.Element | JSX.Element[]}&HtmlHTMLAttributes<HTMLDivElement>)=>{
+    if(!fullWidth)return <Container {...args}>{children}</Container>;
+    return <Box {...args}>{children}</Box>;
+  }
   return (
     <>
       <section>
@@ -40,7 +45,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </>
         }
       </section>
-      <section className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}> 
+      <Box sx={!fullWidth ? {paddingBottom:'2rem'}:{}} className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}> 
         {showHeader && <>
           <div className="d-none d-lg-block"><Header show={showHeader} /></div>
           <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>        
@@ -50,10 +55,18 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </div>}
         {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
         {renderBanner()}
-        {(!showNavBar || allPageSize) ? <div className='m-0'>{children}</div>
-        : (showHeader || showCustomBaner) ?  <Container className='mt-4'>{children}</Container>
-        : <Container className='mainContainer'>{children}</Container> }
-      </section>
+        {
+        (!showNavBar || allPageSize) 
+          ? <div className='m-0'>{children}</div>
+            : (showHeader || showCustomBaner) 
+            ? !fullWidth 
+              ? <Container className='mt-4'>{children}</Container>
+              :<Box className='mt-4'>{children}</Box>
+          : !fullWidth 
+            ? <Container className='mainContainer'>{children}</Container> 
+            : <Box className='mainContainer'>{children}</Box> 
+        }
+      </Box>
       {showFooter && (<Footer/>)}
     </>    
   );

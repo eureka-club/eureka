@@ -7,8 +7,11 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Stars from './Stars';
+import useTranslation from 'next-translate/useTranslation';
+import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 export default function CardsAll() {
+  const{t}=useTranslation('about');
   return (
     <>
       <Stack id="asUl" direction={{ xs: 'column'}} gap={2}>
@@ -60,17 +63,10 @@ export default function CardsAll() {
                     </Box>
 
                     <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Recibe Recomendaciones Exclusivas</Typography>
+                      <Typography paddingLeft={0}  variant="h5">{t('lbl2H')}</Typography>
                       <br></br>
-                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
-
-                        Cada mes, <b>de enero a mayo de 2024</b>, recibirás dos
-                        recomendaciones curadas (un libro y una película)
-                        que exploran la intersección de la tecnología con
-                        cuestiones feministas y sociales.
-                        Seleccionamos obras que desafían, inspiran y
-                        amplían horizontes, priorizando autoras latinoamericanas.
-
+                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
+                      {t('lbl2B')}
                       </Typography>
                     </Box>
                   </Stack>
@@ -90,7 +86,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}} 
 
                   avatar={
                     <Avatar src='/img/Anna.webp' aria-label="recipe" >
@@ -113,10 +109,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “Eureka Club me proporcionó un viaje increíble de aprendizaje y reflexión
-                    sobre la justicia social. Participar en el club me hizo replantear mi visión del mundo.
-                    Lo recomiendo a todos los que deseen expandir sus horizontes y actuar en pro de la justicia.”
-
+                    <FaQuoteLeft/>{t('lbl31')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
@@ -144,18 +137,11 @@ export default function CardsAll() {
 
                     </Box>
 
-                    <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Tiempo para Reflexión</Typography>
+                    <Box>
+                      <Typography paddingLeft={0}  variant="h5">{t('lbl3H')}</Typography>
                       <br></br>
-                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
-
-                        Después de recibir las recomendaciones,
-                        es hora de sumergirse en las obras.
-                        Tómate un tiempo para leer el libro
-                        del mes (compartiremos un cronograma)
-                        y ver la película, reflexionando
-                        individualmente sobre nuevas perspectivas e ideas.
-
+                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
+                      {t('lbl3B')}
                       </Typography>
                     </Box>
                   </Stack>
@@ -175,7 +161,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}}
 
                   avatar={
                     <Avatar src='/img/Andreia.webp' aria-label="recipe" >
@@ -198,10 +184,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “Participar en el club fue una de las mejores decisiones que he tomado.
-                    Los temas me ayudaron a comprender cómo podemos construir un mundo más justo y sostenible.
-                    Cada libro recomendado inspiró cambios en mi vida personal y profesional.”
-
+                    <FaQuoteLeft/>{t('lbl32')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 
@@ -229,18 +212,11 @@ export default function CardsAll() {
 
                     </Box>
 
-                    <Box >
-                      <Typography paddingLeft={0} fontFamily={"Calibri"} variant="h5">Participa en Interesantes Discusiones</Typography>
+                    <Box>
+                      <Typography paddingLeft={0}  variant="h5">{t('lbl4H')}</Typography>
                       <br></br>
-                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2" fontFamily={"Calibri"} fontSize={17}>
-
-                        Una vez finalizada la lectura, únete a una vibrante
-                        comunidad en línea a través de nuestro foro y encuentros
-                        exclusivos en línea. Aquí, puedes compartir tus impresiones,
-                        ideas y reflexiones mediante publicaciones e imágenes.
-                        Éste es el espacio perfecto para tener discusiones profundas
-                        y constructivas en un ambiente seguro, libre de juicios y críticas.
-
+                      <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
+                      {t('lbl4B')}
                       </Typography>
                     </Box>
                   </Stack>
@@ -260,7 +236,7 @@ export default function CardsAll() {
                 alignItems: "left",
                 
               }}>
-                <CardHeader justifyContent="left"
+                <CardHeader sx={{justifyContent:"left"}}
 
                   avatar={
                     <Avatar src='/img/David.webp' aria-label="recipe" >
@@ -283,10 +259,7 @@ export default function CardsAll() {
                 <CardContent>
 
                   <Typography textAlign={"justify"} variant="body2" color="text.secondary">
-                    “¡Eureka Club es una comunidad increíble! Tenía algunas dudas sobre cómo
-                    un hombre podría encajar en un espacio enfocado en el feminismo, pero pronto
-                    me di cuenta de que era un lugar de aprendizaje y crecimiento para todos.”
-
+                    <FaQuoteLeft/>{t('lbl33')}<FaQuoteRight/>
                   </Typography>
                 </CardContent>
 

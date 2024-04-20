@@ -52,16 +52,23 @@
   padding-right: 0;
   /* margin: 0 0 0 1em; */
 }
+.sessionActions button,
 .langSwitch button,
 .langSwitch button:hover,
+.sessionActions button:hover,
 .langSwitch button:focus,
+.sessionActions button:focus,
 .langSwitch button:not(:disabled):not(.disabled):active {
   background-color: transparent;
   border: none;
   color: var(--eureka-green);
 }
-.langSwitch img {
-  border-radius: 50%;
+.sessionActions button{
+  height: 38px;
+  /* padding-bottom: .46rem!important; */
+}
+.sessionActions img,.langSwitch img {
+  /* border-radius: 50%; */
   /* box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); */
   height: 24px;
 }

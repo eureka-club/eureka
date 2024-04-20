@@ -21,7 +21,7 @@ export default async function handler(
   if(req.method=='PATCH'){
     const {email_address,full_name} = req.body;
     const list_id=process.env.MAILCHIMP_AUDIENCE;
-    if(email_address){debugger;
+    if(email_address){
         const subscriber_hash  = createHash('md5').update(email_address.toString()).digest('hex')
 
         let member = null

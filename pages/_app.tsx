@@ -13,6 +13,9 @@ import Backdrop from '@mui/material/Backdrop';
 import { createTheme } from '@mui/material/styles';
 
 const materialTheme = createTheme({
+  typography:{
+      fontFamily:"'Open Sans',sans-serif"
+  },
   palette: {
     warning: {
       light: '#ffafaf',

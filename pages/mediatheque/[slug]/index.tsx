@@ -235,12 +235,12 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   };
 
  const getReadOrWatchedTotal = () => {
-    return user?.readOrWatchedWorks.length;
+    return user?.readOrWatchedWorks?.length;
   };
 
   const getReadCurrentYear = () => {
     if (user) {
-      if (user.readOrWatchedWorks.length) return user.readOrWatchedWorks.filter(x => ['book', 'fiction-book'].includes(x.work!.type) && x.year === dayjs().year()).length;
+      if (user.readOrWatchedWorks?.length) return user.readOrWatchedWorks.filter(x => ['book', 'fiction-book'].includes(x?.work?.type??'') && x.year === dayjs().year()).length;
       else return 0;
     }
   };
@@ -249,7 +249,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     if (user) {
       if (user.readOrWatchedWorks.length)
         return user.readOrWatchedWorks.filter(
-          (x) => ['movie', 'documentary'].includes(x.work!.type) && x.year === dayjs().year(),
+          (x) => ['movie', 'documentary'].includes(x.work?.type??'') && x.year === dayjs().year(),
         ).length;
       else return 0;
     }

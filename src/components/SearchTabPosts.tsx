@@ -81,7 +81,7 @@ const SearchTabCycles:FunctionComponent = () => {
     if(router.query.q && (filtersCountries)){
       props = getProps();
     }
-    if(props){debugger;
+    if(props){
       setProps(s=>({...s,where:{...props}}))
     }
   },[filtersCountries,router.query.q])

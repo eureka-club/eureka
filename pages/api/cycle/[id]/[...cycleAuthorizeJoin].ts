@@ -84,10 +84,7 @@ export default getApiHandler()
               email,
             },
           ],
-          from: {
-            email: process.env.EMAILING_FROM!,
-            name: 'EUREKA-CLUB',
-          },
+          from: process.env.EMAILING_FROM!,
           subject: `${emailReason.slice(0, 50)}`,
           html: '',
         };

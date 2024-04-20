@@ -8,10 +8,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionGroup from '@mui/material/Accordion'
 import { root } from "postcss";
 import { Box, Grid } from "@mui/material";
+import useTranslation from "next-translate/useTranslation";
 
 
-export default function Acordionc() {
-
+export default function Acordion() {
+  const{t}=useTranslation('about');
   const [expanded, setExpanded] = React.useState<string|false>(false);
 
   const handleChange =
@@ -19,59 +20,92 @@ export default function Acordionc() {
       setExpanded(isExpanded ? panel : false);
     };
 
-  
-
   const data = [
     {
       id: "Panel 1",
-      heading: "¿El club de lectura y cine es gratuito?",
+      heading: t('lbl15H'),
       secondaryHeading: "",
-      details: "Sí, nuestro club de lectura y cine es totalmente gratuito. Creemos en el acceso libre al conocimiento y en la importancia de compartir ideas."
+      details: t('lbl15B')
     },
     {
       id: "Panel 2 ",
-      heading: "¿Los libros recomendados están disponibles en español?",
+      heading: t('lbl16H'),
       secondaryHeading: "",
-      details: "Sí, todas nuestras recomendaciones de libros están disponibles en español, asegurando que cualquier persona pueda participar en las lecturas y discusiones."
+      details: t('lbl16B')
     },
 
     {
       id: "Panel 3 ",
-      heading: "¿Cómo accedo a los libros y películas del club?",
+      heading: t('lbl17H'),
       secondaryHeading: "",
-      details: "Te recomendamos dónde encontrar las obras seleccionadas, pero cada quien es responsable de acceder a ellas y/o comprarlas."
+      details: t('lbl17B')
     },
     {
       id: "Panel 4 ",
-      heading: "¿Los hombres pueden participar del club de lectura?",
+      heading: t('lbl18H'),
       secondaryHeading: "",
-      details: "¡Absolutamente! Nuestro club de lectura es inclusivo y abierto a cualquiera que tenga interés en explorar las intersecciones entre feminismo, tecnología y sociedad."
+      details: t('lbl18B')
     },
     {
       id: "Panel 5 ",
-      heading: "¿Es necesario tener conocimientos previos sobre feminismo y tecnología?",
+      heading: t('lbl19H'),
       secondaryHeading: "",
-      details: "No es necesario tener conocimientos previos. Nuestro club está abierto a cualquier persona que desee aprender y explorar estos temas, independientemente de su nivel de familiaridad con ellos."
+      details: t('lbl19B')
     },
     {
       id: "Panel 6 ",
-      heading: "¿Cuánto tiempo debo dedicar a la lectura y a las discusiones?",
+      heading: t('lbl20H'),
       secondaryHeading: "",
-      details: "Puedes dedicar el tiempo que consideres necesario. Nuestro club es flexible, permitiéndote participar según tu disponibilidad y ritmo de lectura. Para ayudarte a organizarte, cada mes compartiremos un cronograma de lectura."
+      details: t('lbl20B')
     },
 
     {
       id: "Panel 7 ",
-      heading: "¿El club organiza encuentros en línea o presenciales?",
+      heading: t('lbl21H'),
       secondaryHeading: "",
-      details: "Actualmente, nuestras actividades son todas en línea, pero estamos abiertas a organizar encuentros presenciales en el futuro, dependiendo del interés y la disponibilidad de personas que participan en el club."
+      details: t('lbl21B')
     },
 
     {
       id: "Panel 8 ",
-      heading: "¿Cómo accedo a la comunidad y al foro en línea?",
+      heading: t('lbl22H'),
       secondaryHeading: "",
-      details: "Tras inscribirte en el club, recibirás un enlace por correo electrónico para acceder a nuestra comunidad en línea. Allí podrás participar en las discusiones e interactuar con las personas inscritas."
+      details: t('lbl22B')
+    },
+
+    {
+      id: "Panel 9 ",
+      heading: t('lbl23H'),
+      secondaryHeading: "",
+      details: t('lbl23B')
+    },
+
+    {
+      id: "Panel 10 ",
+      heading: t('lbl24H'),
+      secondaryHeading: "",
+      details: t('lbl24B')
+    },
+
+    {
+      id: "Panel 11 ",
+      heading: t('lbl25H'),
+      secondaryHeading: "",
+      details: t('lbl25B')
+    },
+
+    {
+      id: "Panel 12 ",
+      heading: t('lbl26H'),
+      secondaryHeading: "",
+      details: t('lbl26B')
+    },
+
+    {
+      id: "Panel 13 ",
+      heading: t('lbl27H'),
+      secondaryHeading: "",
+      details: t('lbl27B')
     },
 
   ];

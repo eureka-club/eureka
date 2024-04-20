@@ -1,0 +1,20 @@
+{
+  "subject-post":"Quelqu'un a commenté sur ton Moment Eureka !",
+  "subject-cycle":"Quelqu'un a commenté dans le cycle {{title}}, auquel tu participes !",
+  "subject-work":"Quelqu'un d'autre a commenté sur {{title}} !",
+  "subject-comment":"Quelqu'un a répondu à ton commentaire sur {{title}} !",
+
+  "title-post": "{{name}} vient de laisser un commentaire sur ton Moment Eureka : {{title}} !",
+  "title-cycle":"{{name}} vient de laisser un commentaire dans le cycle {{title}} !",
+  "title-work":"{{name}} vient de laisser un commentaire sur {{title}} !",
+  "title-comment":"{{name}} vient de répondre à ton commentaire sur {{title}} !",
+
+  "about-post":"Tes réflexions inspirent et gèrent des discussions. Merci de contribuer à notre communauté !",
+  "about-cycle":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !",
+  "about-work":"Envie de participer ? Notre communauté l'apprécie !",
+  "about-comment":"Envie de participer ? Notre communauté l'apprécie !",
+
+  "aboutEnd":"A très vite, Eureka",
+  "urlLabel": "Voir le commentaire",
+  "unsubscribe":"Se désabonner"
+}

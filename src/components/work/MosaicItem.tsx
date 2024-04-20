@@ -55,9 +55,11 @@ const MosaicItem: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [work, setWork] = useState(workItem);
-  const { data } = useWorkSumary(workId,{
-    enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
-  });
+  const { data } = useWorkSumary(workId
+  //   ,{
+  //   enabled: !!workId && !workItem, notLangRestrict: notLangRestrict
+  // }
+);
   useEffect(() => {
     if (data && !workItem) setWork(data);
   }, [data]);

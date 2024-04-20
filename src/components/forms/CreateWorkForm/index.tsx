@@ -207,19 +207,18 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
+        // if (coverFile == null) {
+        //     return;
+        // }
 
-        if (coverFile == null) {
-            return;
-        }
-
-        const payload: CreateWorkClientPayload = {
+        const payload: Partial<CreateWorkClientPayload> = {
             type: formValues?.type!,
             title: formValues?.title!,
-            isbn: formValues?.isbn!,
+            ...useApiSearch && {isbn: formValues?.isbn!},
             author: formValues?.author!,
             authorGender: formValues.authorGender ? formValues.authorGender : null,
             authorRace: formValues.authorRace ? formValues.authorRace : null,
-            cover: coverFile,
+            ...coverFile && {cover: coverFile},
             contentText: formValues.description ? formValues.description : null,
             link: formValues.link ? formValues.link : null,
             countryOfOrigin: countryOrigin || null,
@@ -230,8 +229,19 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
             topics: items.join(','),
             language: formValues?.language!,
         };
-        // console.log(payload,'payload')
-        await execCreateWork(payload);
+        const requireds =['type','title','cover','author','language','authorGender','authorRace']
+        let hasMissingFields=false;
+        for(let r of requireds){
+            const q1 = !(r in payload);
+            const q2 = !payload[r as keyof CreateWorkClientPayload];
+            if(q1||q2){
+                toast.error(`Missing ${r}`);
+                hasMissingFields=true;
+                break;
+            }
+        }
+        if(!hasMissingFields)
+            await execCreateWork(payload as CreateWorkClientPayload);
     };
 
 
@@ -442,11 +452,10 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         setResultWorks([]);
         setSelectedWork(null);
     };
-
     return (
 
         <Form onSubmit={handleSubmit}>
-            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={loading}
             >
                 <SpinnerComp />
@@ -564,7 +573,9 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                         <FormControl size="small" fullWidth>
                                             <InputLabel id="language-label">*{t('languageFieldLabel')}</InputLabel>
                                             <Select
-                                                defaultValue={formValues.language}
+                                                disabled={useApiSearch}
+                                                value={formValues.language}
+                                                onChange={(e)=>setFormValues(res=>({...res,language:e.target.value}))}
                                                 labelId="language-label"
                                                 id="language"
                                                 name='language'
@@ -665,13 +676,18 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                 </Col>
                             </Row>
                             <Row className='d-flex flex-column flex-lg-row mt-4 mb-5'>
-                                <Col className="">
                                     <FormGroup controlId="description">
-                                        <FormLabel>{t('workSummaryFieldLabel')}</FormLabel>
-                                        <Textarea minRows={5} name="description" value={formValues.description} onChange={handleChangeTextField} />
-
+                                        {/* <FormLabel>{t('workSummaryFieldLabel')}</FormLabel> */}
+                                        {/* <Textarea minRows={5} name="description" value={formValues.description} onChange={handleChangeTextField} /> */}
+                                        <TextField
+                                            fullWidth
+                                            name="description"
+                                            label={t('workSummaryFieldLabel')}
+                                            multiline
+                                            minRows={5} 
+                                            value={formValues.description} onChange={handleChangeTextField}
+                                        />
                                     </FormGroup>
-                                </Col>
                             </Row>
 
                         </>

@@ -90,9 +90,11 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
       setWorkId(router.query.id.toString());
     }
   }, [router])
-  const { data: work } = useWorkSumary(+workId, {
-    enabled: !!workId
-  });
+  const { data: work } = useWorkSumary(+workId
+  //   , {
+  //   enabled: !!workId
+  // }
+);
 
   const { data: user } = useUser(userId!, {
     enabled: !!userId

@@ -17,7 +17,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-  <footer className=" text-center m-0 mt-4" style={{ background: 'var(--eureka-grey-light'}}>
+  <footer className=" text-center m-0" style={{ background: 'var(--eureka-grey-light'}}>
     <div className="container d-flex flex-column-reverse flex-xl-row justify-content-xl-between align-items-lg-center">
       <section className="mb-1 mb-xl-0">
         <div className="text-center d-flex flex-column flex-xl-row justify-content-around pt-3 text-secondary fs-6">
