@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
-import MenuItem,{MenuItemTypeMap} from '@mui/material/MenuItem';
-import Link from 'next/link';
+import MenuItem from '@mui/material/MenuItem';
 import { Tooltip, Typography } from '@mui/material';
 
 export interface MenuActionProps{
@@ -45,16 +44,16 @@ export default function MenuAction(props: MenuActionProps) {
         }}
       >
         {
-            items.map((i,idx)=><MenuItem onClick={()=>{
+            items.map((i,idx)=><MenuItem key={`${i}|${idx}`} onClick={()=>{
                 handleClose();
             }}>
-                <React.Fragment key={`${i}|${idx}`}>
+                <>
                 {
                   renderMenuItem 
                     ? renderMenuItem(i)
                     : <Typography sx={{color:'var(--color-primary)'}}>{i.label}</Typography>
                 }
-                </React.Fragment>
+                </>
             </MenuItem>)
         }
       </Menu>
