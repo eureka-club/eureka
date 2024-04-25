@@ -62,7 +62,7 @@ import Link from 'next/link';
     const sessionLinksInfo = session?.user 
     ? [
       {label:t('Profile'),link:'/profile',icon:<Person />},
-      {label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />},
+      ... session.user.roles=='admin' ? [{label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />}] : [],
       {label:t('logout'),onClick:handlerLogout,icon: <Logout fontSize="small" />}
     ]
     :[
