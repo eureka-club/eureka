@@ -4,7 +4,7 @@ import { RiDashboardLine } from "react-icons/ri";
 import useTranslation from "next-translate/useTranslation";
 import { useSession } from "next-auth/react";
 import slugify from 'slugify';
-
+import { FaRegListAlt } from "react-icons/fa";
 
 export const MediathequeLinks = () => {
     const { t } = useTranslation('navbar');
@@ -26,7 +26,7 @@ export const MediathequeLinks = () => {
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <RiDashboardLine fontSize={'2rem'} />
+        <FaRegListAlt fontSize={'2rem'} />
         {/* <Typography variant="caption" gutterBottom>
           {t('My Mediatheque')}
         </Typography> */}
