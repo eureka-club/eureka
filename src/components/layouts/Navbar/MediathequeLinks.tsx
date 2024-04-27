@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
 import MenuAction from "./MenuAction";
-import { RiDashboardLine } from "react-icons/ri";
 import useTranslation from "next-translate/useTranslation";
 import { useSession } from "next-auth/react";
 import slugify from 'slugify';
