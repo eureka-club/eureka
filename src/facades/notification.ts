@@ -3,6 +3,7 @@ import {prisma} from '@/src/lib/prisma';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {NotificationSumary, NotificationSumarySpec} from '@/src/types/notification'
+import { findSumary } from './user';
 dayjs.extend(utc);
 /* export interface findProps {
   id: number;
@@ -35,6 +36,15 @@ export const remove = async (id: number): Promise<Notification> => {
     where: { id },
   });
 };
+
+export const removeNotificationForUser = async (notificationId:number,userId:number)=>{
+  const res = await prisma.notificationsOnUsers.delete({
+    where:{
+      userId_notificationId:{userId,notificationId}
+    },
+  });
+  return res;
+}
 
 export const update = async (
   notificationId: number, 

@@ -5,6 +5,7 @@ import LocalImageComponent from '@/src/components/LocalImage'
 import slugify from 'slugify'
 import useUserSumary from '@/src/useUserSumary';
 import { UserSumary } from '@/src/types/UserSumary';
+import { Avatar } from '@mui/material';
 interface Props {
   user?:UserSumary;
   userId?: number;
@@ -66,16 +67,22 @@ const UserAvatar: FunctionComponent<Props> = ({
   return (
     <>
       {user && (
-        <section className={`fs-6 ${styles[size]} cursor-pointer ${className}`}>
+        
+        <section className={`${styles[size]} cursor-pointer ${className}`}>
             <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
 
                 {(!user?.photos || !user?.photos.length) ?
-                <img
+                <Avatar 
                 onError={onLoadImgError}
-                className={`${styles.cycleCreatorAvatar}`}
-                src={user.image || '/img/default-avatar.png'}
-                alt={user.name||''}
-              /> : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
+                alt={user.name||''} 
+                src={user.image || '/img/default-avatar.png'} />
+              //   <img
+              //   onError={onLoadImgError}
+              //   className={`${styles.cycleCreatorAvatar}`}
+              //   src={user.image || '/img/default-avatar.png'}
+              //   alt={user.name||''}
+              // /> 
+              : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
                  {renderUserName()}
             </a>
         </section>

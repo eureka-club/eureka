@@ -15,7 +15,7 @@ export default async function handler(
     // const r = await send()
     // res.status(200).json({data:r})
     const {from,to,subject,text,html,from_name,template_name, template_content} = req.body;
-    debugger;
+     
     const global_merge_vars = template_content;
     const merge_vars = to.map((t:{email:string})=>({
       rcpt:t.email,
