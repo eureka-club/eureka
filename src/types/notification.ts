@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { UserSumarySpec } from './UserSumary';
 
 
 export interface EditNotificationClientPayload {
@@ -18,7 +19,7 @@ export const NotificationSumarySpec = {
       createdAt:true,
       message:true,
       contextURL:true,
-      fromUser:{select:{id:true}},
+      fromUser:{select:UserSumarySpec.select},
     }},
     user:{select:{id:true}},
     viewed:true,

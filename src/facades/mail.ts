@@ -113,7 +113,7 @@ export type OnCommentCreatedProps = {
   specs:Record<string,any>,
 } & Pick<MailDataRequired,'to'|'subject'>;
 export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
-            debugger;
+             
             // let html = '';
   const {to,subject,specs}=props;
   if(to.length){

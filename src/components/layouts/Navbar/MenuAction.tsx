@@ -8,10 +8,11 @@ export interface MenuActionProps{
     label:any;
     title?:string;
     renderMenuItem?:(item:Record<string,any>&{label:any})=>React.ReactElement
-    items:Record<string,any>&{label:any}[]
+    items?:Record<string,any>&{label:any}[];
+    children?:React.ReactElement;
 }
 export default function MenuAction(props: MenuActionProps) {
-    const{label,title,items,renderMenuItem}=props;
+    const{label,title,items,renderMenuItem,children}=props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,7 +45,8 @@ export default function MenuAction(props: MenuActionProps) {
         }}
       >
         {
-            items.map((i,idx)=><MenuItem key={`${i}|${idx}`} onClick={()=>{
+          items 
+            ? items.map((i,idx)=><MenuItem key={`${i}|${idx}`} onClick={()=>{
                 handleClose();
             }}>
                 <>
@@ -55,6 +57,7 @@ export default function MenuAction(props: MenuActionProps) {
                 }
                 </>
             </MenuItem>)
+            : children
         }
       </Menu>
     </div>

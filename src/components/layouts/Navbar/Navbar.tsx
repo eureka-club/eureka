@@ -92,9 +92,10 @@ export default function NavBar() {
               <AboutLinks/>
               <LangsLinks/>
               <SessionLinks/>
-              <NotificationsLinks/>
             </Menu>
+          <NotificationsLinks/>
           </Box>
+
         </Toolbar>
       </AppBar>
       

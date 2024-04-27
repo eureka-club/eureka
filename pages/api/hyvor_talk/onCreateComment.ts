@@ -53,7 +53,7 @@ export default async function handler(
             //event,
             data
         } = body;
-        debugger;
+         
         
         let locale = req.cookies.NEXT_LOCALE || defaultLocale;
         
