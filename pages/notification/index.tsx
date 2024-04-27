@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import SimpleLayout from "@/src/components/layouts/SimpleLayout";
 import { ListGroup, Spinner } from 'react-bootstrap';
 import useNotifications from '@/src/useNotifications';
@@ -9,24 +9,20 @@ import MosaicItemNotification from '@/src/components/notification/MosaicItem';
 const Notifications: React.FC = () =>{
     const {data:session, status} = useSession();
     const isLoadingSession = status === "loading"
-    const [userId,setUserId] = useState<number>(0);
     
-    useEffect(()=>{
-        if(session){
-            const u = session.user;
-            setUserId(u.id);
-        }
-    },[session]);
+    const userId=session?.user.id!
 
-    const {data:notidications} = useNotifications(userId,{
-        enabled:!!userId
+    const {data} = useNotifications(userId,{
+        enabled:!!userId,
+        take:-1//get all
     });
+    const{notifications,total}=data??{notifications:[],total:0};
 
     return <SimpleLayout>
         <>
             {isLoadingSession && <Spinner animation="grow" variant="info" />}
             {!isLoadingSession && <ListGroup>
-                {notidications?.map((n)=><ListGroup.Item key={n.notification.id}><MosaicItemNotification notification={n} /></ListGroup.Item>)}
+                {notifications?.map((n)=><ListGroup.Item key={n.notification.id}><MosaicItemNotification notification={n} /></ListGroup.Item>)}
             </ListGroup>}
         </>
     </SimpleLayout>

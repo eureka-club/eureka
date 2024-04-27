@@ -19,15 +19,27 @@ export const find = async (notificationId: number): Promise<NotificationSumary |
   });
 };
 
-export const findAll = async (userId: number): Promise<NotificationSumary[] | null> => {
-  return prisma.notificationsOnUsers.findMany({
+export const findAll = async (userId: number,take=5): Promise<{notifications:NotificationSumary[],total:number,news:number}> => {
+  const totalQ = prisma.notificationsOnUsers.count({
+    where:{userId}
+  });
+  const newsQ = prisma.notificationsOnUsers.count({
+    where:{userId,viewed:false}
+  });
+  const notificationsQ = prisma.notificationsOnUsers.findMany({
     orderBy: { notificationId: 'desc' }, 
     select:NotificationSumarySpec.select,
     where:{
       userId,
       //viewed:false,      
-    }
+    },
+    // skip,
+    ...take!=-1 && {take}
   });
+  const [notifications,total,news]=await prisma.$transaction([
+    notificationsQ,totalQ,newsQ
+  ]);
+  return {notifications,total,news};
 };
 
 //TODO requires detach from NotificationsOnUsers

@@ -16,7 +16,6 @@ import HomeSingIn from '@/src/components/HomeSingIn';
 import { UserSumary } from '@/src/types/UserSumary';
 import { getUserSumary } from '@/src/useUserSumary';
 import React from 'react';
-import Notifications from '@/src/components/Notifications';
 
 interface Props{
   session: Session;
@@ -28,11 +27,8 @@ interface Props{
 // }
 
 const IndexPage: NextPage<Props> = ({session}) => {
-  const { t } = useTranslation('common'); 
-  const onNotificationClickHandler=(e:any,id:number)=>{
-    alert(id)
-  }
-  return <Notifications onNotificationClick={onNotificationClickHandler}/>
+  const { t } = useTranslation('common');
+
   // const GenericList = <T,> (props: PropsGeneric<T>)=>{
   //   return <ul>{
   //     props.data.map((d)=><li>

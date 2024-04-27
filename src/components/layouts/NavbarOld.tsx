@@ -11,7 +11,7 @@ import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
 import { Container, Button, Nav, Navbar, Dropdown, Spinner } from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';
-import NotificationsList from '@/components/NotificationsList';
+// import NotificationsList from '@/components/NotificationsList';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { HiOutlineHashtag } from 'react-icons/hi';
@@ -327,7 +327,7 @@ const NavBarOld: FunctionComponent = () => {
                     </Nav>
                    {session && session.user && ( <>
                    <Nav.Item data-cy="notifications-btn">
-                  <NotificationsList />
+                  {/* <NotificationsList /> */}
                 </Nav.Item>
                    <Nav className="ms-2 d-flex align-items-center ">
                       

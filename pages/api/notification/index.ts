@@ -18,29 +18,36 @@ import { NotificationSumary } from '@/src/types/notification';
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
   try {
-    const { id,userId } = req.query;
+    const { id,userId,take:take_ } = req.query;
+    const take = take_?+take_.toString()!:undefined;
     let notifications;
+    let total=-1;
+    let news=0;
     // const {userId} = req.body;
     if (id && !userId) {
       notifications = await find(parseInt(id.toString()));
     } else if(userId) {
-      const notifications = await findAll(parseInt(userId.toString()));
+      const {notifications:notifications_,total:total_,news:news_} = await  findAll(parseInt(userId.toString()),take);
+      total=total_;
+      news=news_;
+      notifications=notifications_;
       const allreadyExist = new Set();
-      const result:NotificationSumary[] | null = [];
-      notifications?.reduce((p,c)=>{
-        const key = `${c.user.id}:${c.notification.contextURL}:${c.notification.message}:${c.notification.fromUser.id}`;
-        if(!allreadyExist.has(key)){
-          p.push(c)
-          allreadyExist.add(key);
-        }
-        return p;
-      },result)
-      return res.status(200).json({ notifications:result });
+      // const result:NotificationSumary[] | null = [];
+      // notifications?.reduce((p,c)=>{
+      //   const key = `${c.user.id}:${c.notification.contextURL}:${c.notification.message}:${c.notification.fromUser.id}`;
+      //   if(!allreadyExist.has(key)){
+      //     p.push(c)
+      //     allreadyExist.add(key);
+      //   }
+      //   return p;
+      // },result)
+      return res.status(200).json({ notifications,total,news });
     }
     else {
-      notifications = await prisma.notification.findMany();      
+      total=await prisma.notification.count();
+      notifications = await prisma.notification.findMany();
     }
-    res.status(200).json({ notifications });
+    res.status(200).json({ notifications,total,news });
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
     res.status(500).json({ error: 'server error' });

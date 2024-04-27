@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
-import NotificationsList from '@/components/NotificationsList';
+// import NotificationsList from '@/components/NotificationsList';
 
 import { Navbar } from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';
@@ -167,7 +167,7 @@ const NavBar: FunctionComponent = () => {
             </Button>
           </div>
           <div className="me-1">
-            <NotificationsList />
+            {/* <NotificationsList /> */}
           </div>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse

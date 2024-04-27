@@ -40,7 +40,7 @@ return <Stack direction={'row'} gap={.5}>
               </aside>
               <Circle sx={{
                 fontSize:'.6rem',
-                ...notification.viewed 
+                ...!notification.viewed 
                   ? {color:'var(--color-primary-raised)'}
                   : {color:'lightgray'}
               }}/>

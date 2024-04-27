@@ -1,32 +1,30 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Badge, Box, Stack } from "@mui/material";
 import MenuAction from "./MenuAction";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
-import { Person, Settings } from "@mui/icons-material";
 import useTranslation from "next-translate/useTranslation";
-import Link from "next/link";
 import Notifications from "../../Notifications";
+import useNotifications from "@/src/useNotifications";
+import { useSession } from "next-auth/react";
 
 export const NotificationsLinks = () => {
-    const { t } = useTranslation('navbar');
-    
-    const onNotificationClickHandler=(e:any,id:number)=>{
-      alert(id)
-    }
+  const { t } = useTranslation('navbar');
 
-    const notificationLinksInfo = [
-        {label:'',link:'/a',icon:<Person />},
-        {label:t('B'),link:'/b',icon:<Settings fontSize="small" />},
-    ];
-    return <MenuAction key='NotificationsLinks' label={
-      <Stack justifyContent={'center'} alignItems={'center'}>
+  const{data:session}=useSession();
+  if(!session?.user)return <></>;
+  
+  const{data:notificationsData}=useNotifications(session?.user?.id!);
+  const{news}=notificationsData??{news:0};
+  return <MenuAction key='NotificationsLinks' label={
+    <Stack justifyContent={'center'} alignItems={'center'}>
+      <Badge badgeContent={news} color="secondary">
         <IoNotificationsCircleOutline fontSize={'2rem'} />
-      </Stack>
-    }
-    title={t('Account')}
-    
-    >
-      <Box sx={{width:'300px'}}>
-        <Notifications onNotificationClick={onNotificationClickHandler}/>
-      </Box>
-    </MenuAction>;
-  };
+      </Badge>
+    </Stack>
+  }
+  title={t('Account')}
+  >
+    <Box sx={{width:'350px'}}>
+      <Notifications/>
+    </Box>
+  </MenuAction>;
+};
