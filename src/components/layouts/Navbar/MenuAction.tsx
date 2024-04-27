@@ -3,12 +3,13 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Tooltip, Typography } from '@mui/material';
+import Link from 'next/link';
 
 export interface MenuActionProps{
     label:any;
     title?:string;
     renderMenuItem?:(item:Record<string,any>&{label:any})=>React.ReactElement
-    items?:Record<string,any>&{label:any}[];
+    items?:Record<string,any>&{label:any,link?:string}[];
     children?:React.ReactElement;
 }
 export default function MenuAction(props: MenuActionProps) {
@@ -53,7 +54,9 @@ export default function MenuAction(props: MenuActionProps) {
                 {
                   renderMenuItem 
                     ? renderMenuItem(i)
-                    : <Typography sx={{color:'var(--color-primary)'}}>{i.label}</Typography>
+                    : i.link 
+                      ? <Link href={i.link}><Typography sx={{color:'var(--color-primary)'}}>{i.label}</Typography></Link> 
+                      : <Typography sx={{color:'var(--color-primary)'}}>{i.label}</Typography>
                 }
                 </>
             </MenuItem>)
