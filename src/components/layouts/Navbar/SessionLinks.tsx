@@ -61,12 +61,24 @@ import Link from 'next/link';
 
     const sessionLinksInfo = session?.user 
     ? [
-      {label:t('Profile'),link:'/profile',icon:<Person />},
+      {
+        label:t('Profile'),
+        link:'/profile',
+        // icon:<Person />
+      },
       ... session.user.roles=='admin' ? [{label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />}] : [],
-      {label:t('logout'),onClick:handlerLogout,icon: <Logout fontSize="small" />}
+      {
+        label:t('logout'),
+        onClick:handlerLogout,
+        // icon: <Logout fontSize="small" />
+      }
     ]
     :[
-      {label:t('login'),onClick:handlerLogin,icon: <Login fontSize="small" />}
+      {
+        label:t('login'),
+        onClick:handlerLogin,
+        // icon: <Login fontSize="small" />
+      }
     ]
 
     return <MenuAction key='SessionLinks' items={sessionLinksInfo||[]} label={
@@ -80,17 +92,16 @@ import Link from 'next/link';
     title={t('Account')}
     renderMenuItem={
       (i)=>{
-          const baseCmp = ()=><Typography>{i.label}</Typography>;
           if(i.hasOwnProperty('link'))
             return <Link href={i['link']}>
               <Stack gap={3} direction={'row'}>
-                {i.icon?i.icon:<></>} {baseCmp()}
+                {i.icon?i.icon:<></>} <Typography color={'var(--color-primary)'}>{i.label}</Typography>
               </Stack>
             </Link>
           else if(i.hasOwnProperty('onClick'))
-            return <Button sx={{padding:0}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
+            return <Button sx={{padding:0,textTransform:'capitalize'}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
               <Stack gap={3} direction={'row'}>
-                {i.icon?i.icon:<></>} {baseCmp()}
+                {i.icon?i.icon:<></>} <Typography>{i.label}</Typography>
               </Stack>
             </Button>;
            return <></> 
