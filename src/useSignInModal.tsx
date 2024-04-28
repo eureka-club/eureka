@@ -164,6 +164,13 @@ const useSignInModal = ()=>{
                 <Stack rowGap={2}>
                     <Paper elevation={2} sx={{padding:'1rem'}}>
                         <Stack rowGap={2}>
+                          <Stack justifyContent={'center'} alignItems={'center'} rowGap={(1)}>
+                            <Link href="/" replace>
+                              <Image src="/logo.svg" alt="Eureka" width={75} height={75} />  
+                              {/* <img  className={`cursor-pointer`} src="/logo.svg" alt="Eureka" />  */}
+                            </Link>   
+                            <Typography>Eureka</Typography>
+                          </Stack>
                             <Stack justifyContent={'center'} alignItems={'center'} rowGap={2}>
                                 <Button onClick={handleSignInGoogle} variant="contained" sx={{textTransform:'none',width:'100%'}} >
                                     <Image src='/img/logo-google.png' width={23} height={23}/>

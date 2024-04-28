@@ -1,17 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 // import { Session } from '../../src/types';
-import { Work, Cycle } from '@prisma/client';
 import getApiHandler from '../../src/lib/getApiHandler';
 import {prisma} from '../../src/lib/prisma';
-import bcrypt, { encodeBase64 } from 'bcryptjs'
-import dayjs from 'dayjs';
 import axios from 'axios';
 import path from 'path';
 import readFile from '@/src/facades/readFile';
 import getT from 'next-translate/getT';
 import Handlebars from 'handlebars';
 import { defaultLocale } from 'i18n';
-
 
 export default getApiHandler()
 .post<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
