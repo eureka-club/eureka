@@ -32,6 +32,7 @@ export default function MenuAction(props: MenuActionProps) {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
+          sx={{textTransform:'capitalize'}}
         >
           {label}
         </Button>
