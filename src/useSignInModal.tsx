@@ -34,7 +34,7 @@ interface Props {
 const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>{
   const { t } = useTranslation('signInForm');
   const[loading,setLoading]=React.useState(false);
-  const handleSubmitSignInHandler=async (e:any)=>{debugger;
+  const handleSubmitSignInHandler=async (e:any)=>{
     setLoading(true)
     await handleSubmitSignIn(e);
     setLoading(false);
@@ -74,7 +74,7 @@ const useSignInModal = ()=>{
       const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
         e.preventDefault();
         e.stopPropagation();
-        const form = formRef.current;debugger;
+        const form = formRef.current;
         if(!form?.email.value){
           toast.error(t('EmailRequired'))
           form?.email.focus();
@@ -87,7 +87,6 @@ const useSignInModal = ()=>{
         }
         if(form){
           const ur = await userRegistered(form.email.value);
-          debugger;
               if(!ur){
                 toast.error('Error');
                 return;

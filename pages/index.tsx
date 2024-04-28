@@ -108,7 +108,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if(bo.FeaturedUsers)
       bo.FeaturedUsers.split(',').forEach((x:any) => usersIds.push(+x));
   }
-  debugger;
   let promises:Promise<any>[] = [
     getUserSumary(session?.user.id!),
     getFeaturedEurekas(session?.user.id!,ctx.locale!,postsId,undefined),

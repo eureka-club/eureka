@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import MenuAction from "./MenuAction";
 import { HiOutlineHashtag } from "react-icons/hi";
 import useTranslation from "next-translate/useTranslation";
@@ -24,14 +24,14 @@ export const TopicsLinks = () => {
 
     return <MenuAction key='TopicsLinks' items={topics()} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <HiOutlineHashtag
+        {/* <HiOutlineHashtag
           fontSize={'2rem'}
-        />
-        {/* <Typography variant="caption" gutterBottom>
+        /> */}
+        <Typography>
           {t('Topics')}
-        </Typography> */}
+        </Typography>
       </Stack>
     }
-    title={t('Topics')}
+    // title={t('Topics')}
     />;
   };

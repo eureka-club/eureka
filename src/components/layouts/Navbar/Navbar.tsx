@@ -16,6 +16,8 @@ import SearchInput from '../../SearchInput';
 import { LangsLinks } from './LangsLinks';
 import { SessionLinks } from './SessionLinks';
 import { NotificationsLinks } from './NotificationsLinks';
+import UserAllowedOperationsLinks from './UserAllowedOperationsLinks';
+import { Stack } from '@mui/material';
 
 export default function NavBar() {
   const { t } = useTranslation('navbar');
@@ -53,14 +55,15 @@ export default function NavBar() {
           <Box id="asd" sx={{ flexGrow: 1,paddingLeft:'1rem' }}>
             <SearchInput className="" style={{ width: '100%' }} />
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Stack direction={'row'} alignItems={'center'} sx={{ display: { xs: 'none', md: 'flex' } }}>
             <TopicsLinks/>
             <MediathequeLinks/>
             <AboutLinks/>
-            <LangsLinks/>
+            <UserAllowedOperationsLinks/>
             <SessionLinks/>
+            <LangsLinks/>
             <NotificationsLinks/>
-          </Box>
+          </Stack>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -90,8 +93,9 @@ export default function NavBar() {
               <TopicsLinks/>
               <MediathequeLinks/>
               <AboutLinks/>
-              <LangsLinks/>
+              <UserAllowedOperationsLinks/>
               <SessionLinks/>
+              <LangsLinks/>
             </Menu>
           <NotificationsLinks/>
           </Box>

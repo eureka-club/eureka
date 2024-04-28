@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import MenuAction from "./MenuAction";
 import useTranslation from "next-translate/useTranslation";
 import { useSession } from "next-auth/react";
@@ -25,12 +25,12 @@ export const MediathequeLinks = () => {
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        <FaRegListAlt fontSize={'2rem'} />
-        {/* <Typography variant="caption" gutterBottom>
-          {t('My Mediatheque')}
-        </Typography> */}
+        {/* <FaRegListAlt fontSize={'2rem'} /> */}
+        <Typography>
+          {t('Mediatheque')}
+        </Typography>
       </Stack>
     }
-    title={t('My Mediatheque')}
+    // title={t('My Mediatheque')}
     />;
   };
