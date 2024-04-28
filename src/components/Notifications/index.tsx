@@ -47,7 +47,7 @@ const Notifications = ({}:Props)=>{
                 ? <ListItem>
                     <Link href={`/notification`}>
                         <ListItemButton>
-                            <ListItemText sx={{display:'inline-flex'}}>
+                            <ListItemText sx={{display:'inline-flex',color:'var(--color-primary)'}}>
                                 {t('viewAllNotifications')}
                             </ListItemText>
                         </ListItemButton>
