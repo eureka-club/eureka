@@ -10,7 +10,7 @@ export const NotificationsLinks = () => {
   const { t } = useTranslation('navbar');
 
   const{data:session}=useSession();
-  if(!session?.user)return <></>;
+  // if(!session?.user)return <></>;
   
   const{data:notificationsData}=useNotifications(session?.user?.id!);
   const{news}=notificationsData??{news:0};

@@ -31,10 +31,21 @@ interface Props {
     joinToCycle?:number;
 }
   
+const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>{
+  const { t } = useTranslation('signInForm');
+  const[loading,setLoading]=React.useState(false);
+  const handleSubmitSignInHandler=async (e:any)=>{debugger;
+    setLoading(true)
+    await handleSubmitSignIn(e);
+    setLoading(false);
+  }
+  return <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignInHandler} className={`btn-eureka ${'styles.submitButton'} me-1`}>
+  {t('login')} {loading && <CircularProgress size={'sm'}/>}
+  </Button>
+}
 const useSignInModal = ()=>{
     const { t } = useTranslation('signInForm');
     const [open, setOpen] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
     const formRef=React.useRef<HTMLFormElement>(null)
 
     function SignInModal({noModal,joinToCycle,logoImage}:Props) {
@@ -61,64 +72,57 @@ const useSignInModal = ()=>{
         return null;
       }
       const handleSubmitSignIn = async (e:React.MouseEvent<HTMLButtonElement>)=>{
-        const form = formRef.current;
-        setLoading(true);
+        e.preventDefault();
+        e.stopPropagation();
+        const form = formRef.current;debugger;
         if(!form?.email.value){
           toast.error(t('EmailRequired'))
-          setLoading(false)
+          form?.email.focus();
           return false;
         }
         if(!form?.password.value){
           toast.error(t('PasswordRequired'))
-          setLoading(false)
-    
+          form?.password.focus();
           return false;
         }
         if(form){
           const ur = await userRegistered(form.email.value);
+          debugger;
               if(!ur){
                 toast.error('Error');
-                setLoading(false)
-    
                 return;
               }
               if(ur.isUser){
-               if(!ur.provider && !ur.hasPassword){
+                if(!ur.provider && !ur.hasPassword){
                     toast.error(t('RegisterAlert'))
-                        setLoading(false)
-               }
-               else if(ur.provider=='google'){
+                }
+                else if(ur.provider=='google'){
                 toast.error(t('RegisteredUsingGoogleProvider'))
-                setLoading(false)
-               }
-               else {
+                }
+                else {
                 const callbackUrl = !!joinToCycle&&joinToCycle>0 
                 ? `/cycle/${joinToCycle}?join=true`
                 : localStorage.getItem('loginRedirect')?.toString()||'/';
-                signIn('credentials' ,{
+                const res = await signIn('credentials' ,{
                   callbackUrl,
                   email:form.email.value,
-                  password:form.password.value
-                })
-                .then(res=>{
-                  const r = res as unknown as {error:string}
-                  if(res && r.error){
-                    toast.error(t('InvalidSesion'))
-                    setLoading(false)
-                  }
-                  else{
-                    close()
+                  password:form.password.value,
+                  redirect:false
+                });
+                if(res && res.error){
+                  toast.error(t('InvalidSesion'))
+                }
+                else{
+                    setOpen(false);
                     localStorage.setItem('loginRedirect',router.asPath)
                     router.push(localStorage.getItem('loginRedirect') || '/').then(()=>{
                       localStorage.setItem('loginRedirect','')
                     })
-                  }
-                })
-              }
+                }
+                }
               }
               else{
                 toast.error(t('isNotUser'))
-                setLoading(false)
               }
             }
           }
@@ -169,39 +173,41 @@ const useSignInModal = ()=>{
                                 <Typography color={'primary'}>{t('alternativeText')}</Typography>
                                 {/* <span className={`${'styles.alternativeLabel'}`}>{t('alternativeText')}</span> */}
                             </Stack>
-                            <Stack direction={'column'} rowGap={2}>
-                            <FormControl>
-                                <TextField
-                                    required
-                                    variant="outlined"
-                                    label={t('emailFieldLabel')}
-                                />
-                            </FormControl>
-                            <FormControl>
-                                <InputLabel htmlFor="outlined-adornment-password">{t('passwordFieldLabel')}</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        // onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                        >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                    }
-                                    label={t('passwordFieldLabel')}
-                                />
-                            </FormControl>
-                            <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignIn} className={`btn-eureka ${'styles.submitButton'} me-1`}>
-                            {t('login')} {loading && <CircularProgress size={'sm'}/>}
-                            </Button>
-                            <Button onClick={handlerRecoveryLogin} variant="outlined">{t('forgotPassText')}</Button>
-                            </Stack>
+                              <form ref={formRef}>
+                                <Stack direction={'column'} rowGap={2}>
+                                  <FormControl>
+                                      <TextField
+                                          name='email'
+                                          required
+                                          variant="outlined"
+                                          label={t('emailFieldLabel')}
+                                      />
+                                  </FormControl>
+                                  <FormControl>
+                                      <InputLabel htmlFor="outlined-adornment-password">{t('passwordFieldLabel')}</InputLabel>
+                                      <OutlinedInput
+                                          name="password"
+                                          id="outlined-adornment-password"
+                                          type={showPassword ? 'text' : 'password'}
+                                          endAdornment={
+                                          <InputAdornment position="end">
+                                              <IconButton
+                                              aria-label="toggle password visibility"
+                                              onClick={handleClickShowPassword}
+                                              // onMouseDown={handleMouseDownPassword}
+                                              edge="end"
+                                              >
+                                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                                              </IconButton>
+                                          </InputAdornment>
+                                          }
+                                          label={t('passwordFieldLabel')}
+                                      />
+                                  </FormControl>
+                                  <SubmitButton handleSubmitSignIn={handleSubmitSignIn}/>
+                                  <Button onClick={handlerRecoveryLogin} variant="outlined">{t('forgotPassText')}</Button>
+                                </Stack>
+                              </form>
                         </Stack>
                     </Paper>
                     <Typography sx={{padding:'0 2rem'}} textAlign={'center'} variant='caption'>{t('RegisterNotice')}</Typography>

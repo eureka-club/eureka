@@ -1,13 +1,14 @@
 import { useQuery } from 'react-query';
 import { NotificationSumary } from '@/types/notification';
+import { WEBAPP_URL } from './constants';
 
-export const getRecord = async (userId: number,take_?:number): Promise<{notifications:NotificationSumary[],total:number,news:number}> => {
+export const getNotifications = async (userId: number,take_?:number): Promise<{notifications:NotificationSumary[],total:number,news:number}> => {
   const take=take_?`&take=${take_}`:'';
-  const url = `/api/notification?userId=${userId}${take}`;
+  const url = `${WEBAPP_URL}/api/notification?userId=${userId}${take}`;
   const res = await fetch(url);
   if (!res.ok) return {notifications:[],total:0,news:0};
   
-  const {notifications,total,news} = await res.json();debugger;
+  const {notifications,total,news} = await res.json();
   return {notifications,total,news};
 };
 
@@ -22,7 +23,7 @@ const useNotifications = (id: number, options?: Options) => {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<{notifications:NotificationSumary[],total:number,news:number}>(['USER', `${id}`, 'NOTIFICATIONS'], () => getRecord(id,take), {
+  return useQuery<{notifications:NotificationSumary[],total:number,news:number}>(['USER', `${id}`, 'NOTIFICATIONS'], () => getNotifications(id,take), {
     staleTime,
     enabled,
   });

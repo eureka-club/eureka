@@ -16,6 +16,7 @@ import HomeSingIn from '@/src/components/HomeSingIn';
 import { UserSumary } from '@/src/types/UserSumary';
 import { getUserSumary } from '@/src/useUserSumary';
 import React from 'react';
+import { getNotifications } from '@/src/useNotifications';
 
 interface Props{
   session: Session;
@@ -107,13 +108,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if(bo.FeaturedUsers)
       bo.FeaturedUsers.split(',').forEach((x:any) => usersIds.push(+x));
   }
-  
+  debugger;
   let promises:Promise<any>[] = [
     getUserSumary(session?.user.id!),
     getFeaturedEurekas(session?.user.id!,ctx.locale!,postsId,undefined),
     getInterestedCycles(ctx.locale!,cyclesIds,undefined),
     getFeaturedWorks(ctx.locale!,worksIds,8),
     getFeaturedUsers(usersIds,8),
+    ...session?.user.id ?[getNotifications(session?.user.id!)]:[],
     ...worksIds.map(id=>getHyvorComments(`work-${id}`)),
   ];
   
@@ -124,7 +126,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const interestedCycles = resolved[2];
   const featuredWorks = resolved[3];
   const featuredUsers:UserSumary[] = resolved[4];
-  const hyvorComments = resolved.slice(5);
+  const notifications = resolved[5];
+  const hyvorComments = resolved.slice(6);
   const qc = new QueryClient();
   
   if(userOnSession)
@@ -173,6 +176,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       queryFn:()=>hyvorComments[idx]
     })
   });
+
+  if(session?.user.id){
+    qc.prefetchQuery({
+      queryKey:['USER', `${session?.user.id}`, 'NOTIFICATIONS'],
+      queryFn:()=>notifications
+    })
+  }
   
   // const k = myCyclesWhere(session.user.id)
   // await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8,origin))

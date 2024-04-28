@@ -48,15 +48,15 @@ import Link from 'next/link';
   export const SessionLinks = () => {
     const { t } = useTranslation('navbar');
     const{data:session}=useSession();
-    const{setOpen}=useSignInModal();
+    const{setOpen,SignInModal}=useSignInModal();
 
 
     const handlerLogout = () => {
         signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_WEBAPP_URL}` });
     };
     const handlerLogin = () => {
-    // show(<SignInForm />);
-    setOpen(true);
+      //show(<SignInForm />);
+      setOpen(true);
     };
 
     const sessionLinksInfo = session?.user 
@@ -81,31 +81,34 @@ import Link from 'next/link';
       }
     ]
 
-    return <MenuAction key='SessionLinks' items={sessionLinksInfo||[]} label={
-      <Stack sx={{width:'32px',height:'32px'}} justifyContent={'center'} alignItems={'center'}>
-            {getAvatar(session)}
-        {/* <Typography variant="caption" gutterBottom>
-          {t('About')}
-        </Typography> */}
-      </Stack>
-    }
-    title={t('Account')}
-    renderMenuItem={
-      (i)=>{
-          if(i.hasOwnProperty('link'))
-            return <Link href={i['link']}>
-              <Stack gap={3} direction={'row'}>
-                {i.icon?i.icon:<></>} <Typography color={'var(--color-primary)'}>{i.label}</Typography>
-              </Stack>
-            </Link>
-          else if(i.hasOwnProperty('onClick'))
-            return <Button sx={{padding:0,textTransform:'capitalize'}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
-              <Stack gap={3} direction={'row'}>
-                {i.icon?i.icon:<></>} <Typography>{i.label}</Typography>
-              </Stack>
-            </Button>;
-           return <></> 
+    return <>
+      <MenuAction key='SessionLinks' items={sessionLinksInfo||[]} label={
+        <Stack sx={{width:'32px',height:'32px'}} justifyContent={'center'} alignItems={'center'}>
+              {getAvatar(session)}
+          {/* <Typography variant="caption" gutterBottom>
+            {t('About')}
+          </Typography> */}
+        </Stack>
       }
-    }
-    />;
+      title={t('Account')}
+      renderMenuItem={
+        (i)=>{
+            if(i.hasOwnProperty('link'))
+              return <Link href={i['link']}>
+                <Stack gap={3} direction={'row'}>
+                  {i.icon?i.icon:<></>} <Typography color={'var(--color-primary)'}>{i.label}</Typography>
+                </Stack>
+              </Link>
+            else if(i.hasOwnProperty('onClick'))
+              return <Button sx={{padding:0,textTransform:'capitalize'}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
+                <Stack gap={3} direction={'row'}>
+                  {i.icon?i.icon:<></>} <Typography>{i.label}</Typography>
+                </Stack>
+              </Button>;
+            return <></> 
+        }
+      }
+      />
+      <SignInModal/>
+    </>
   };
