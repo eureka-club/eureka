@@ -2,6 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import MenuAction from "./MenuAction";
 import { HiOutlineHashtag } from "react-icons/hi";
 import useTranslation from "next-translate/useTranslation";
+import { GiOpenBook } from "react-icons/gi";
 
 export const TopicsLinks = () => {
     const { t } = useTranslation('navbar');
@@ -24,9 +25,9 @@ export const TopicsLinks = () => {
 
     return <MenuAction key='TopicsLinks' items={topics()} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        {/* <HiOutlineHashtag
+        {<GiOpenBook
           fontSize={'2rem'}
-        /> */}
+        /> }
         <Typography>
           {t('Topics')}
         </Typography>

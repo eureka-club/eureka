@@ -25,7 +25,7 @@ const UserAllowedOperationsLinks = ()=>{
         // title={t('actions')}
         label={
             <Stack justifyContent={'center'} alignItems={'center'}>
-                {/* <Menu sx={{fontSize:'2rem'}} /> */}
+                { <Menu sx={{fontSize:'2rem'}} /> }
                 <Typography>
                 {t('create')}
                 </Typography>
