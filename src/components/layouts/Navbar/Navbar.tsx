@@ -17,10 +17,13 @@ import { LangsLinks } from './LangsLinks';
 import { SessionLinks } from './SessionLinks';
 import { NotificationsLinks } from './NotificationsLinks';
 import UserAllowedOperationsLinks from './UserAllowedOperationsLinks';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import { useSession } from 'next-auth/react';
+import { SearchInputLink } from './SearchInputLink';
 
 export default function NavBar() {
   const { t } = useTranslation('navbar');
+  const{data:session}=useSession();
   const{SignInModal}=useSignInModal();
 
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -42,29 +45,40 @@ export default function NavBar() {
       <AppBar position="fixed" sx={{backgroundColor:'white',boxShadow:'none',color:'black',borderBottom:'solid 1px var(--color-primary)'}}>
           <Toolbar>
           <Link href="/" replace>
-              <a className="d-flex align-items-center">
-                  <aside className="d-flex justify-content-around align-items-center">
+              <a>
+                  <Stack direction={'row'} gap={2}>
                     <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
-                    <Box sx={{display:{xs:'none',sm:'inline-block'}}}>
-                      <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                      <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p>
-                    </Box>
-                  </aside>
+                    <Stack sx={{display:{xs:'none',lg:'inherit'}}} alignItems={'left'} justifyContent={'center'}>
+                      <Typography variant='h5' sx={{
+                        fontFamily:'Calibri Light',fontWeight:500,lineHeight:'1.2rem'
+                        }} color='secondary'>Eureka</Typography>
+                      <Typography variant='caption' sx={{lineHeight:'1.2rem'}} color="secondary">{t('tagline')}</Typography>
+                      {/* <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div> */}
+                      {/* <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p> */}
+                    </Stack>
+                  </Stack>
               </a>
           </Link>
-          <Box id="asd" sx={{ flexGrow: 1,paddingLeft:'1rem' }}>
-            <SearchInput className="" style={{ width: '100%' }} />
+          <Box id="asd" sx={{ 
+            // flexGrow: 1,
+            marginLeft:'auto',
+            paddingLeft:'1rem' 
+            }}>
+            {/* <Box sx={{display:{xs:'none',sm:'inherit'}}}> */}
+              {/* <SearchInput /> */}
+              {/* </Box> */}
           </Box>
           <Stack direction={'row'} alignItems={'center'} sx={{ display: { xs: 'none', md: 'flex' } }}>
             <TopicsLinks/>
             <MediathequeLinks/>
             <AboutLinks/>
-            <UserAllowedOperationsLinks/>
+            {session?.user ? <UserAllowedOperationsLinks/>:<></>}
+            <SearchInputLink />
             <SessionLinks/>
             <LangsLinks/>
-            <NotificationsLinks/>
+            {session?.user ? <NotificationsLinks/>:<></>}
           </Stack>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }} alignItems={'center'}>
             <IconButton
               size="large"
               aria-label="show more"
@@ -97,9 +111,9 @@ export default function NavBar() {
               <SessionLinks/>
               <LangsLinks/>
             </Menu>
-          <NotificationsLinks/>
+            <SearchInputLink />
+            {session?.user ? <NotificationsLinks/>:<></>}
           </Box>
-
         </Toolbar>
       </AppBar>
       

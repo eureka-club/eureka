@@ -1,100 +1,44 @@
-import { useRouter } from 'next/router';
+import * as React from 'react';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 import useTranslation from 'next-translate/useTranslation';
-import React, { FunctionComponent,useRef, useState } from 'react';
-import { Form,InputGroup,Button,Spinner } from 'react-bootstrap';
+import { useRouter } from 'next/router';
 
-import { AiOutlineSearch } from 'react-icons/ai';
-
-interface Props {
-  className?: string;
-  style?: Record<string,string>; 
-  disabled?:boolean;
-
-}
-const SearchInput: FunctionComponent<Props> = ({ className = '',style = {},disabled}) => {
-  const router = useRouter();
-  const { t } = useTranslation('common');
-  const formRef=useRef<HTMLFormElement>(null)
-  const [searching,setSearching] = useState(false)
-  
+export default function SearchInput() {
+    const { t } = useTranslation('common');
+    const router=useRouter();
+    const[term,setterm]=React.useState('');
+    const searchAction=()=>{
+        router.push(`/search?q=${term}`)
+    }
   const onTermKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>{
+    e.preventDefault();
     if(e.code == 'Enter' || e.code == 'NumpadEnter' ){
-      setSearching(true)
-      router.push(`/search?q=${e.currentTarget.value}`).then((res)=>{setSearching(false);return res})
+        router.push(`/search?q=${e.currentTarget.value}`)
+        //   .then((res)=>{setSearching(false);return res})
     }
   }
 
-   const onSearch= (e:React.MouseEvent<HTMLButtonElement>)=>{
-    const form = formRef.current;
-    if(form && form.search.value) {
-      setSearching(true)
-      router.push(`/search?q=${form.search.value}`).then((res)=>{setSearching(false);return res})
-    }
-  }
-
-  return <>
-  <div className={`d-block ${className}`} style={{...style}} data-cy="search-engine">
-    <InputGroup className="">
-      <InputGroup.Text className="bg-white border border-primary">
-        {
-          searching 
-          ? <Spinner animation="border" size="sm" />
-          : <AiOutlineSearch className="text-primary focus-border-color-green"/>
-        }
-      </InputGroup.Text>
-      <style jsx global>
-        {`
-          .form-control:focus {
-            box-shadow: none;
-        }          
-       `}
-       </style>
-      <Form.Control
-        disabled={disabled}
-        aria-label="Search Term"
-        aria-describedby="basic-search"
-        data-cy="search-engine-control"
-        className={`${className} border-start-0`} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
+  return (
+    <Paper
+    elevation={0}
+      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: {xs:'350px',lg:'500px'}}}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder={t('common:search')}
+        inputProps={{ 'aria-label': t('common:search') }}
+        onKeyUp={onTermKeyUp}
+        value={term}
+        onChange={(e)=>setterm(e.currentTarget.value)}
       />
-    </InputGroup>
-  </div>
-  {/* <div className={`d-block d-lg-none ${className}`} style={{...style}}>
-    <InputGroup className="w-100">
-      <style jsx global>
-        {`
-          .form-control:focus {
-            box-shadow: none;
-        }          
-       `}
-       </style>
-       <Form ref={formRef} style={{width:'250px'}}>
-         <Form.Group controlId='search'>
-            <Form.Control
-            aria-label="Username"
-            aria-describedby="basic-search"
-            className={`${className} `} type="text" placeholder={t('common:search')} onKeyUp={onTermKeyUp}
-
-          />
-         </Form.Group>
-      </Form>
-       <InputGroup.Text className="d-lg-none text-white border border-primary cursor-pointer bg-primary">
-            <Button 
-            size="sm" 
-            variant="link" 
-            className="p-0 text-white text-decoration-none"
-            onClick={onSearch}
-            >
-                {
-          searching 
-          ? <Spinner animation="border" size="sm"/>
-          : <AiOutlineSearch className="text-white focus-border-color-green"/>
-        }
-              </Button>
-            
-          </InputGroup.Text>
-    </InputGroup>
-  </div> */}
-  </>
-};
-
-export default SearchInput;
+      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+      <IconButton disabled={!term} color="primary" sx={{ p: '10px' }} aria-label="directions" onClick={searchAction}>
+        <SearchIcon />
+      </IconButton>
+    </Paper>
+  );
+}

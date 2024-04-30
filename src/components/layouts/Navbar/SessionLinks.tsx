@@ -66,7 +66,7 @@ import Link from 'next/link';
         link:'/profile',
         // icon:<Person />
       },
-      ... session.user.roles=='admin' ? [{label:t('Admin Panel'),link:'/back-office',icon:<Settings fontSize="small" />}] : [],
+      ... session.user.roles=='admin' ? [{label:t('Admin Panel'),link:'/back-office'}] : [],
       {
         label:t('logout'),
         onClick:handlerLogout,
@@ -100,7 +100,7 @@ import Link from 'next/link';
                 </Stack>
               </Link>
             else if(i.hasOwnProperty('onClick'))
-              return <Button sx={{padding:0,textTransform:'capitalize'}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
+              return <Button sx={{padding:0,textTransform:'capitalize',justifyContent:'left'}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
                 <Stack gap={3} direction={'row'}>
                   {i.icon?i.icon:<></>} <Typography>{i.label}</Typography>
                 </Stack>

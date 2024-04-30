@@ -14,7 +14,7 @@ import { Navbar } from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';
 import { RiDashboardLine } from 'react-icons/ri';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-import SearchInput from '@/components/SearchInput';
+import SearchInput from '@/src/components/SearchInputOLD';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL } from '@/src/constants';
 import ChevronToggle from '@/components/ui/dropdown/ChevronToggle';
 import styles from './NavbarMobile.module.css';

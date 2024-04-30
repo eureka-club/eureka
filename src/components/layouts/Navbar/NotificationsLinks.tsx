@@ -23,8 +23,13 @@ export const NotificationsLinks = () => {
   }
   title={t('Account')}
   >
-    <Box sx={{width:'350px'}}>
-      <Notifications/>
-    </Box>
+    {
+      notificationsData?.notifications.length
+        ? <Box sx={{width:'350px'}}>
+        <Notifications/>
+      </Box>
+      :<></>
+    }
+    
   </MenuAction>;
 };

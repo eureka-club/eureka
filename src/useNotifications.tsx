@@ -3,6 +3,7 @@ import { NotificationSumary } from '@/types/notification';
 import { WEBAPP_URL } from './constants';
 
 export const getNotifications = async (userId: number,take_?:number): Promise<{notifications:NotificationSumary[],total:number,news:number}> => {
+  if(!userId)return {notifications:[],total:0,news:0}
   const take=take_?`&take=${take_}`:'';
   const url = `${WEBAPP_URL}/api/notification?userId=${userId}${take}`;
   const res = await fetch(url);

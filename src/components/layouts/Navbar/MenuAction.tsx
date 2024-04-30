@@ -17,6 +17,7 @@ export default function MenuAction(props: MenuActionProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if(items?.length||children)
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
