@@ -16,11 +16,11 @@ export const AboutLinks = () => {
     return <MenuAction items={aboutLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
         { <AiOutlineInfoCircle fontSize={'2rem'} />}
-        <Typography>
+        <Typography variant="caption" gutterBottom>
           {t('About')}
         </Typography>
       </Stack>
     }
-    // title={t('About')}
+     title={t('About')}
     />;
   };

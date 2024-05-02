@@ -12,103 +12,103 @@ import { Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 
 
-  const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = '/img/default-avatar.png';
-  };
-  const getAvatar = (session:Session|null) => {
-    const user = session?.user;
-    if (user && user?.photos) {
-      if (!user?.photos.length)
-        return (
-          <img
-            width={23}
-            height={23}
-            onError={avatarError}
-            className={styles.navbarIconNav}
-            src={user.image || '/img/default-avatar.png'}
-            alt={user.name || ''}
-            style={{border:'solid 2px var(--color-primary)'}}
-          />
-        );
+const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  e.currentTarget.src = '/img/default-avatar.png';
+};
+const getAvatar = (session: Session | null) => {
+  const user = session?.user;
+  if (user && user?.photos) {
+    if (!user?.photos.length)
       return (
-        <LocalImage
-          className={`rounded rounded-circle`}
+        <img
           width={23}
           height={23}
-          filePath={`users-photos/${user.photos[0].storedFile}`}
+          onError={avatarError}
+          className={styles.navbarIconNav}
+          src={user.image || '/img/default-avatar.png'}
           alt={user.name || ''}
-          style={{border:'solid 2px var(--color-primary)'}}
+          style={{ border: 'solid 2px var(--color-primary)' }}
         />
       );
-    }
-    return <BiUser className={styles.navbarIconNav} />;
+    return (
+      <LocalImage
+        className={`rounded rounded-circle`}
+        width={23}
+        height={23}
+        filePath={`users-photos/${user.photos[0].storedFile}`}
+        alt={user.name || ''}
+        style={{ border: 'solid 2px var(--color-primary)' }}
+      />
+    );
+  }
+  return <BiUser className={styles.navbarIconNav} />;
+};
+
+
+export const SessionLinks = () => {
+  const { t } = useTranslation('navbar');
+  const { data: session } = useSession();
+  const { setOpen, SignInModal } = useSignInModal();
+
+
+  const handlerLogout = () => {
+    signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_WEBAPP_URL}` });
   };
-  
+  const handlerLogin = () => {
+    //show(<SignInForm />);
+    setOpen(true);
+  };
 
-  export const SessionLinks = () => {
-    const { t } = useTranslation('navbar');
-    const{data:session}=useSession();
-    const{setOpen,SignInModal}=useSignInModal();
-
-
-    const handlerLogout = () => {
-        signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_WEBAPP_URL}` });
-    };
-    const handlerLogin = () => {
-      //show(<SignInForm />);
-      setOpen(true);
-    };
-
-    const sessionLinksInfo = session?.user 
+  const sessionLinksInfo = session?.user
     ? [
       {
-        label:t('Profile'),
-        link:'/profile',
+        label: t('Profile'),
+        link: '/profile',
         // icon:<Person />
       },
-      ... session.user.roles=='admin' ? [{label:t('Admin Panel'),link:'/back-office'}] : [],
+      ...session.user.roles == 'admin' ? [{ label: t('Admin Panel'), link: '/back-office' }] : [],
       {
-        label:t('logout'),
-        onClick:handlerLogout,
+        label: t('logout'),
+        onClick: handlerLogout,
         // icon: <Logout fontSize="small" />
       }
     ]
-    :[
+    : [
       {
-        label:t('login'),
-        onClick:handlerLogin,
+        label: t('login'),
+        onClick: handlerLogin,
         // icon: <Login fontSize="small" />
       }
     ]
 
-    return <>
-      <MenuAction key='SessionLinks' items={sessionLinksInfo||[]} label={
-        <Stack sx={{width:'32px',height:'32px'}} justifyContent={'center'} alignItems={'center'}>
-              {getAvatar(session)}
-          {/* <Typography variant="caption" gutterBottom>
-            {t('About')}
-          </Typography> */}
-        </Stack>
-      }
+  return <>
+    <MenuAction key='SessionLinks' items={sessionLinksInfo || []} label={
+      <Stack justifyContent={'center'} alignItems={'center'} >
+        {getAvatar(session) }
+        {<Typography variant="caption" gutterBottom paddingTop={0.9}>
+          {t('Account')}
+        </Typography>}
+      </Stack>
+    }
       title={t('Account')}
       renderMenuItem={
-        (i)=>{
-            if(i.hasOwnProperty('link'))
-              return <Link href={i['link']}>
-                <Stack gap={3} direction={'row'}>
-                  {i.icon?i.icon:<></>} <Typography color={'var(--color-primary)'}>{i.label}</Typography>
-                </Stack>
-              </Link>
-            else if(i.hasOwnProperty('onClick'))
-              return <Button sx={{padding:0,textTransform:'capitalize',justifyContent:'left'}} variant='text' size='small' onClick={()=>i['onClick'](i.label)}>
-                <Stack gap={3} direction={'row'}>
-                  {i.icon?i.icon:<></>} <Typography>{i.label}</Typography>
-                </Stack>
-              </Button>;
-            return <></> 
+        (i) => {
+          if (i.hasOwnProperty('link'))
+            return <Link href={i['link']}>
+              <Stack gap={3} direction={'row'}>
+                {i.icon ? i.icon : <></>} <Typography color={'var(--color-primary)'}>{i.label}</Typography>
+              </Stack>
+            </Link>
+          else if (i.hasOwnProperty('onClick'))
+            return <Button sx={{ padding: 0, textTransform: 'capitalize', justifyContent: 'left' }} variant='text' size='small' onClick={() => i['onClick'](i.label)}>
+              <Stack gap={3} direction={'row'}>
+                {i.icon ? i.icon : <></>} <Typography>{i.label}</Typography>
+              </Stack>
+            </Button>;
+          return <></>
         }
       }
-      />
-      <SignInModal/>
-    </>
-  };
+    />
+    <SignInModal />
+  </>
+};

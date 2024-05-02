@@ -24,15 +24,15 @@ export const TopicsLinks = () => {
       ];
 
     return <MenuAction key='TopicsLinks' items={topics()} label={
-      <Stack justifyContent={'center'} alignItems={'center'}>
+      <Stack justifyContent={'center'} alignItems={'center'} >
         {<GiOpenBook
           fontSize={'2rem'}
         /> }
-        <Typography>
+        <Typography variant="caption" gutterBottom>
           {t('Topics')}
         </Typography>
       </Stack>
     }
-    // title={t('Topics')}
+     title={t('Topics')}
     />;
   };

@@ -22,11 +22,11 @@ const UserAllowedOperationsLinks = ()=>{
     }
     return <MenuAction
         key='UserAllowedOperationsLinks' 
-        // title={t('actions')}
+        title={t('actions')}
         label={
             <Stack justifyContent={'center'} alignItems={'center'}>
                 { <Menu sx={{fontSize:'2rem'}} /> }
-                <Typography>
+                <Typography variant="caption" gutterBottom>
                 {t('create')}
                 </Typography>
             </Stack>

@@ -13,11 +13,15 @@
   "My Mediatheque": "Minha Mediateca",
   "Profile": "Editar perfil",
   "tagline": "Tecnologia + cultura, por justiça social",
-  "Language": "Idioma",
+  "Language": "linguagem",
   "Account": "Conta",
   "Notifications": "Notificações",
   "policyText": "Política de privacidade",
   "Admin Panel": "Painel de administração",
   "Topics": "Temas",
-  "MyReadOrWatched": "Meus livros e filmes"
+  "MyReadOrWatched": "Meus livros e filmes",
+  "Search":"Procurar"
+ 
+  
+  
 }

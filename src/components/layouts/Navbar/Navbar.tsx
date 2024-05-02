@@ -68,7 +68,7 @@ export default function NavBar() {
               {/* <SearchInput /> */}
               {/* </Box> */}
           </Box>
-          <Stack direction={'row'} alignItems={'center'} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Stack  direction={'row'}  sx={{ display: { xs: 'none', md: 'flex'}, alignContent:'center', alignItems:'center'}}> 
             <TopicsLinks/>
             <MediathequeLinks/>
             <AboutLinks/>
@@ -78,7 +78,7 @@ export default function NavBar() {
             <LangsLinks/>
             {session?.user ? <NotificationsLinks/>:<></>}
           </Stack>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }} alignItems={'center'}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }} alignItems={'center'}  >
             <IconButton
               size="large"
               aria-label="show more"

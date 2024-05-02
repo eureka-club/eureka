@@ -26,11 +26,11 @@ export const MediathequeLinks = () => {
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
         { <FaRegListAlt fontSize={'2rem'} /> }
-        <Typography>
+        <Typography variant="caption" gutterBottom>
           {t('Mediatheque')}
         </Typography>
       </Stack>
     }
-    // title={t('My Mediatheque')}
+    title={t('My Mediatheque')}
     />;
   };

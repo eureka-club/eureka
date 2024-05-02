@@ -32,9 +32,9 @@ export const LangsLinks = () => {
         <Badge badgeContent={router.locale} color="secondary">
           <Language sx={{fontSize:'2rem'}}/>
         </Badge>
-        {/* <Typography variant="caption" gutterBottom>
-          {t('About')}
-        </Typography> */}
+        {<Typography variant="caption" gutterBottom>
+          {t('Language')}
+        </Typography> }
       </Stack>
     }
     title={t('Language')}
