@@ -62,7 +62,8 @@ export default function NavBar() {
           <Box id="asd" sx={{ 
             // flexGrow: 1,
             marginLeft:'auto',
-            paddingLeft:'1rem' 
+            paddingLeft:'1rem', 
+            paddingBlockEnd:'5rem'
             }}>
             {/* <Box sx={{display:{xs:'none',sm:'inherit'}}}> */}
               {/* <SearchInput /> */}
