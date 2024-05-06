@@ -27,7 +27,7 @@ export const MediathequeLinks = () => {
       <Stack justifyContent={'center'} alignItems={'center'}>
         { <FaRegListAlt fontSize={'1.8rem'} /> }
         <Typography variant="caption" gutterBottom paddingTop={0.4}>
-          {t('Mediatheque')}
+          {t('My Mediatheque')}
         </Typography>
       </Stack>
     }
