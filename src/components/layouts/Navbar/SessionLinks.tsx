@@ -21,8 +21,8 @@ const getAvatar = (session: Session | null) => {
     if (!user?.photos.length)
       return (
         <img
-          width={23}
-          height={23}
+          width={24}
+          height={24}
           onError={avatarError}
           className={styles.navbarIconNav}
           src={user.image || '/img/default-avatar.png'}
@@ -33,8 +33,8 @@ const getAvatar = (session: Session | null) => {
     return (
       <LocalImage
         className={`rounded rounded-circle`}
-        width={23}
-        height={23}
+        width={24}
+        height={24}
         filePath={`users-photos/${user.photos[0].storedFile}`}
         alt={user.name || ''}
         style={{ border: 'solid 2px var(--color-primary)' }}

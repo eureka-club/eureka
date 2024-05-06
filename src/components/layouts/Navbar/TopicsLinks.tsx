@@ -25,7 +25,7 @@ export const TopicsLinks = () => {
 
     return <MenuAction key='TopicsLinks' items={topics()} label={
       <Stack justifyContent={'center'} alignItems={'center'} >
-        {<GiOpenBook
+        {<HiOutlineHashtag
           fontSize={'2rem'}
         /> }
         <Typography variant="caption" gutterBottom>

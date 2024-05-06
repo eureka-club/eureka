@@ -25,8 +25,8 @@ export const MediathequeLinks = () => {
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'}>
-        { <FaRegListAlt fontSize={'2rem'} /> }
-        <Typography variant="caption" gutterBottom>
+        { <FaRegListAlt fontSize={'1.8rem'} /> }
+        <Typography variant="caption" gutterBottom paddingTop={0.4}>
           {t('Mediatheque')}
         </Typography>
       </Stack>

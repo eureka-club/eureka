@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import { Button, Stack, Typography } from "@mui/material";
 import { BiPlusCircle } from "react-icons/bi";
 import { Menu } from "@mui/icons-material";
+import { IoMdAddCircleOutline } from "react-icons/io";
+
 
 const UserAllowedOperationsLinks = ()=>{
     const { t } = useTranslation('navbar');
@@ -25,7 +27,7 @@ const UserAllowedOperationsLinks = ()=>{
         title={t('actions')}
         label={
             <Stack justifyContent={'center'} alignItems={'center'}>
-                { <Menu sx={{fontSize:'2rem'}} /> }
+                { <IoMdAddCircleOutline fontSize='2.5em' /> }
                 <Typography variant="caption" gutterBottom>
                 {t('create')}
                 </Typography>
