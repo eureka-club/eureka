@@ -24,7 +24,7 @@ const UserAllowedOperationsLinks = ()=>{
     }
     return <MenuAction
         key='UserAllowedOperationsLinks' 
-        title={t('actions')}
+        //title={t('actions')}
         label={
             <Stack justifyContent={'center'} alignItems={'center'}>
                 { <IoMdAddCircleOutline fontSize='2.5em' /> }

@@ -21,6 +21,6 @@ export const AboutLinks = () => {
         </Typography>
       </Stack>
     }
-     title={t('About')}
+     //title={t('About')}
     />;
   };

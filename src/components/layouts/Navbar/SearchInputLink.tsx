@@ -18,7 +18,7 @@ export const SearchInputLink = () => {
         </Typography>
     </Stack>
   }
-  title={t('Search')}
+  //title={t('Search')}
   >
     <SearchInput/>
   </MenuAction>;

@@ -24,7 +24,7 @@ export const NotificationsLinks = () => {
         </Typography>
     </Stack>
   }
-  title={t('Notifications')}
+  //title={t('Notifications')}
   >
     {
       notificationsData?.notifications.length

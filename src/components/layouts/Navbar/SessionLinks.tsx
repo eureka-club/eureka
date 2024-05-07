@@ -85,12 +85,12 @@ export const SessionLinks = () => {
     <MenuAction key='SessionLinks' items={sessionLinksInfo || []} label={
       <Stack justifyContent={'center'} alignItems={'center'} >
         {getAvatar(session) }
-        {<Typography variant="caption" gutterBottom paddingTop={0.9}>
+        {<Typography variant="caption"  paddingTop={0.8}>
           {t('Account')}
         </Typography>}
       </Stack>
     }
-      title={t('Account')}
+      //title={t('Account')}
       renderMenuItem={
         (i) => {
           if (i.hasOwnProperty('link'))

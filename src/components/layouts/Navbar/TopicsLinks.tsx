@@ -33,6 +33,6 @@ export const TopicsLinks = () => {
         </Typography>
       </Stack>
     }
-     title={t('Topics')}
+     //title={t('Topics')}
     />;
   };

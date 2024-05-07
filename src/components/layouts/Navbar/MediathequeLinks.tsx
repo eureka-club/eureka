@@ -31,6 +31,6 @@ export const MediathequeLinks = () => {
         </Typography>
       </Stack>
     }
-    title={t('My Mediatheque')}
+    //title={t('My Mediatheque')}
     />;
   };

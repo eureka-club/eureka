@@ -37,7 +37,7 @@ export const LangsLinks = () => {
         </Typography> }
       </Stack>
     }
-    title={t('Language')}
+    //title={t('Language')}
     renderMenuItem={
       (i)=>{
         return <Button sx={{padding:0}} variant='text' size='small' onClick={()=>handleLanguageSelect(i.label)}>
