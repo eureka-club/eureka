@@ -85,9 +85,9 @@ export const SessionLinks = () => {
     <MenuAction key='SessionLinks' items={sessionLinksInfo || []} label={
       <Stack justifyContent={'center'} alignItems={'center'} >
         {getAvatar(session) }
-        {<Typography variant="caption"  paddingTop={0.8}>
+        {/* {<Typography variant="caption"  paddingTop={0.8}>
           {t('Account')}
-        </Typography>}
+        </Typography>} */}
       </Stack>
     }
       //title={t('Account')}

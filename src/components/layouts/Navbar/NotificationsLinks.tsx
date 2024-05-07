@@ -19,9 +19,9 @@ export const NotificationsLinks = () => {
       <Badge badgeContent={news} color="secondary">
         <IoNotificationsCircleOutline fontSize={'2rem'} />
       </Badge>
-      <Typography variant="caption" gutterBottom>
+      {/* <Typography variant="caption" gutterBottom>
           {t('Notifications')}
-        </Typography>
+        </Typography> */}
     </Stack>
   }
   //title={t('Notifications')}
