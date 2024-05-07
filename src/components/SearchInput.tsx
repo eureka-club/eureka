@@ -24,8 +24,14 @@ export default function SearchInput() {
 
   return (
     <Paper
-    elevation={0}
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: {xs:'350px',lg:'500px'}}}
+      elevation={0}
+      sx={{ 
+        p: '2px 4px', 
+        display: 'flex',
+        alignItems: 'center', 
+        width: {xs:'350px',lg:'500px'},
+      }}
+     className='searchInputCmp'
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}

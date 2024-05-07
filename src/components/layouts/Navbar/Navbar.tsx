@@ -59,22 +59,27 @@ export default function NavBar() {
                   </Stack>
               </a>
           </Link>
-          <Box id="asd" sx={{ 
-            // flexGrow: 1,
-            marginLeft:'auto',
-            paddingLeft:'1rem', 
-            paddingBlockEnd:'5rem'
+          <Stack sx={{ 
+            flexGrow: 1,
+            // marginLeft:'auto',
+            // paddingLeft:'1rem', 
+            // paddingBlockEnd:'5rem'
+            }} alignItems={'end'}>
+            <Box sx={{
+              display:{xs:'none',md:'inherit'},
+              '& .searchInputCmp':{
+                border:'solid 1px var(--color-primary)',
+              }
             }}>
-            {/* <Box sx={{display:{xs:'none',sm:'inherit'}}}> */}
-              {/* <SearchInput /> */}
-              {/* </Box> */}
-          </Box>
+              <SearchInput  />
+            </Box>
+          </Stack>
           <Stack  direction={'row'}  sx={{ display: { xs: 'none', md: 'flex'}, alignContent:'center', alignItems:'center'}}> 
             <TopicsLinks/>
             <MediathequeLinks/>
             <AboutLinks/>
             {session?.user ? <UserAllowedOperationsLinks/>:<></>}
-            <SearchInputLink />
+            {/* <SearchInputLink /> */}
             <SessionLinks/>
             <LangsLinks/>
             {session?.user ? <NotificationsLinks/>:<></>}
