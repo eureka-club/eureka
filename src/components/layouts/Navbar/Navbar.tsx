@@ -52,7 +52,7 @@ export default function NavBar() {
                       <Typography variant='h5' sx={{
                         fontFamily:'Calibri Light',fontWeight:500,lineHeight:'1.2rem'
                         }} color='secondary'>Eureka</Typography>
-                      <Typography variant='caption' sx={{lineHeight:'1.2rem'}} color="secondary">{t('tagline')}</Typography>
+                      {/* <Typography variant='caption' sx={{lineHeight:'1.2rem'}} color="secondary">{t('tagline')}</Typography> */}
                       {/* <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div> */}
                       {/* <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p> */}
                     </Stack>
