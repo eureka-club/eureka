@@ -48,7 +48,7 @@ const MosaicItem: FunctionComponent<Propss> = ({ user:user_,userId,...otherProps
             transition:'background 1s',
             }}}
             >
-              <Box>{user ? <UserAvatar width={42} height={42} user={user} showName={false} /> : <>2</>}</Box>
+              <Box>{user ? <UserAvatar width={42} height={42} user={user} showName={false} /> : <></>}</Box>
               <Stack>
                 <Typography variant='body2'>{user?.name || 'unknown'}</Typography>
                   {

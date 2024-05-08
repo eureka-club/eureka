@@ -335,7 +335,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
   if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
   return (
     <section className={`${className} d-flex flex-row`}>
-        {renderCreateEureka()}
+      {renderCreateEureka()}
 
         {showRating && (
           <div className="ps-1">

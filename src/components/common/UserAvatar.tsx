@@ -6,6 +6,8 @@ import slugify from 'slugify'
 import useUserSumary from '@/src/useUserSumary';
 import { UserSumary } from '@/src/types/UserSumary';
 import { Avatar } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
+import { AZURE_STORAGE_URL } from '@/src/constants';
 interface Props {
   user?:UserSumary;
   userId?: number;
@@ -64,26 +66,24 @@ const UserAvatar: FunctionComponent<Props> = ({
     e.stopPropagation()
     router.push(`/mediatheque/${getMediathequeSlug(user)}`)
   }
+  console.log('user user ', user)
   return (
     <>
       {user && (
         
         <section className={`${styles[size]} cursor-pointer ${className}`}>
             <a onClick={(e)=>onClick(e,user)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
-
-                {(!user?.photos || !user?.photos.length) ?
-                <Avatar 
-                onError={onLoadImgError}
-                alt={user.name||''} 
-                src={user.image || '/img/default-avatar.png'} />
-              //   <img
-              //   onError={onLoadImgError}
-              //   className={`${styles.cycleCreatorAvatar}`}
-              //   src={user.image || '/img/default-avatar.png'}
-              //   alt={user.name||''}
-              // /> 
-              : <LocalImageComponent className={`rounded rounded-circle`} width={width} height={height} filePath={`users-photos/${user.photos[0].storedFile}` } alt={user.name||''} />}
-                 {renderUserName()}
+              <Avatar 
+                  sx={{width,height,bgcolor:'var(--color-primary)'}} 
+                  alt={user.name!}
+                  src={
+                      user.photos.length 
+                        ? `${AZURE_STORAGE_URL}/users-photos/${user.photos[0].storedFile}`
+                        : user.image!
+                  }>
+                  <AccountCircle sx={{width,height}}/>
+              </Avatar>
+              {renderUserName()}
             </a>
         </section>
       )}

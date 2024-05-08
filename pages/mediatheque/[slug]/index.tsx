@@ -3,15 +3,13 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
-import { useState, useEffect, SyntheticEvent, useCallback, MouseEvent } from 'react';
+import { useState, useEffect, useCallback, MouseEvent } from 'react';
 import { Spinner, Card, Row, Col, Button } from 'react-bootstrap';
 import { AiOutlineEnvironment } from 'react-icons/ai';
-import LocalImageComponent from '@/src/components/LocalImage';
 import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser, { getUser } from '@/src/useUser';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
-import FilterEngine from '@/src/components/FilterEngine';
 import TagsInput from '@/src/components/forms/controls/TagsInput';
 import { useNotificationContext } from '@/src/useNotificationProvider';
 import useMyPosts, { getMyPosts } from '@/src/useMyPosts';
@@ -27,7 +25,9 @@ import dayjs from 'dayjs';
 import { PostDetail } from '@/src/types/post';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import useFilterMediatheque from '@/src/components/useFilterMediatheque';
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import RenderAvatar from './components/RenderAvatar';
+import RenderCountry from './components/RenderCountry';
 
 interface Props {
   id: number;
@@ -179,56 +179,11 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     [router, user],
   );
 
-  const renderCountry = () => {
-    if (user && user.countryOfOrigin)
-      return (
-        <em>
-          <AiOutlineEnvironment /> {`${t(`countries:${user.countryOfOrigin}`)}`}
-        </em>
-      );
-    return '';
-  };
+  
 
-  const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = '/img/default-avatar.png';
-  };
+  
 
-  const renderAvatar = () => {
-    if (user) {
-      if (!user?.photos || !user?.photos.length)
-        return (
-          <img
-            onError={avatarError}
-            className="avatar"
-            src={user.image || '/img/default-avatar.png'}
-            alt={user.name || ''}
-          />
-        );
-      return (
-        <>
-          <div className="d-flex d-md-none mb-2">
-            <LocalImageComponent
-              className="rounded rounded-circle"
-              /* className='avatar' */ width={65}
-              height={65}
-              filePath={`users-photos/${user.photos[0].storedFile}`}
-              alt={user.name || ''}
-            />
-          </div>
-          <div className="d-none d-md-flex">
-            <LocalImageComponent
-              className="rounded rounded-circle"
-              /* className='avatar' */ width={160}
-              height={160}
-              filePath={`users-photos/${user.photos[0].storedFile}`}
-              alt={user.name || ''}
-            />
-          </div>
-        </>
-      );
-    }
-    return '';
-  };
+  
 
   const isPending = () => {
     return isLoadingUser || isLoadingMutateFollowing;
@@ -275,10 +230,10 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                 <Row className="d-flex flex-column flex-md-row">
                   <Col className="d-flex flex-column flex-sm-wrap align-items-start">
                     <div className="d-flex flex-nowrap">
-                      {renderAvatar()}
+                      <RenderAvatar/>
                       <div className="ms-3 d-sm-block d-md-none">
                         <h2>{user.name}</h2>
-                        {renderCountry()}
+                        <RenderCountry userId={user.id}/>
                       </div>
                     </div>
                     <TagsInput className="d-sm-flex d-md-none d-flex flex-row" tags={user.tags || ''} readOnly label="" />
@@ -286,7 +241,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                   <Col className="col col-sm-12 col-md-8">
                     <div className="d-none d-md-block">
                       <h2>{user.name}</h2>
-                      {renderCountry()}
+                      <RenderCountry userId={user.id}/>
                     </div>
                     <div className="">
                       <p className={styles.description}>{user.aboutMe}</p>
