@@ -20,6 +20,7 @@ import UserAllowedOperationsLinks from './UserAllowedOperationsLinks';
 import { Stack, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { SearchInputLink } from './SearchInputLink';
+import { AppsLinks } from './AppsLinks';
 
 export default function NavBar() {
   const { t } = useTranslation('navbar');
@@ -80,9 +81,10 @@ export default function NavBar() {
             <AboutLinks/>
             {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
             {/* <SearchInputLink /> */}
+            <AppsLinks/>
+            {session?.user ? <NotificationsLinks/>:<></>}
             <SessionLinks/>
             {/* <LangsLinks/> */}
-            {session?.user ? <NotificationsLinks/>:<></>}
           </Stack>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }} alignItems={'center'}  >
             <IconButton

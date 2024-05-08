@@ -1,4 +1,4 @@
-import { Badge, Box, Stack,Typography} from "@mui/material";
+import { Avatar, Badge, Box, Stack,Typography} from "@mui/material";
 import MenuAction from "./MenuAction";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
 import useTranslation from "next-translate/useTranslation";
@@ -17,14 +17,16 @@ export const NotificationsLinks = () => {
   return <MenuAction key='NotificationsLinks' label={
     <Stack justifyContent={'center'} alignItems={'center'}>
       <Badge badgeContent={news} color="secondary">
-        <IoNotificationsCircleOutline fontSize={'2rem'} />
+        <Avatar sx={{width:32,height:32,bgcolor:'var(--color-primary)'}}>
+          <IoNotificationsCircleOutline />
+        </Avatar>
       </Badge>
       {/* <Typography variant="caption" gutterBottom>
           {t('Notifications')}
         </Typography> */}
     </Stack>
   }
-  //title={t('Notifications')}
+  // title={t('Notifications')}
   >
     {
       notificationsData?.notifications.length
