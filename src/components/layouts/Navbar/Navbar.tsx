@@ -126,11 +126,11 @@ export default function NavBar() {
               open={isMobileMenuOpen}
               onClose={handleMobileMenuClose}
             >
-              <TopicsLinks />
-              <MediathequeLinks />
               {/* <SessionLinks/> */}
               {/* <AboutLinks /> */}
               {/* <UserAllowedOperationsLinks/> */}
+              <MediathequeLinks />
+              <TopicsLinks/>
               <SessionLinks />
               {/* <LangsLinks/> */}
             </Menu>

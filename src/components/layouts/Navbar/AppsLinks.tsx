@@ -1,4 +1,4 @@
-import { Avatar, Button, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
+import { Avatar, Button, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
 import MenuAction from "./MenuAction";
 import useTranslation from "next-translate/useTranslation";
 import { Apps } from "@mui/icons-material";
@@ -7,8 +7,12 @@ import Link from "next/link";
 import { useQueryClient } from "react-query";
 import { setCookie } from 'nookies';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL, WEBAPP_URL } from "@/src/constants";
+import { ReactElement } from "react";
 
-export const AppsLinks = () => {
+interface Props{
+  children?:ReactElement|ReactElement[]
+}
+export const AppsLinks = ({children}:Props) => {
     const { t } = useTranslation('navbar');
     const router=useRouter();
     const queryClient=useQueryClient();
@@ -53,8 +57,9 @@ export const AppsLinks = () => {
           `}
         </style>
         <ul>
+          {children?children:<></>}
           <li>
-              {t('create')}
+            <Typography variant="button">{t('create')}</Typography>
             <ul>
               <li>
                 <Link href='/cycle/create'>{t('cycle')}</Link>
@@ -68,7 +73,7 @@ export const AppsLinks = () => {
             </ul>
           </li>
           <li>
-            {t('About')}
+            <Typography variant="button">{t('About')}</Typography>
             <ul>
               <li><Link href={'/manifest'}>{t('Manifest')}</Link></li>
               <li><Link href={'/about'}>{t('About Eureka')}</Link></li>
@@ -77,15 +82,19 @@ export const AppsLinks = () => {
             </ul>
           </li>
           <li>
-            {t('Language')}
+            <Typography variant="button">{t('Language')}</Typography>
             <ul>
-              {langsLinksInfo?.map(l=><li>
-                <Button onClick={()=>handleLanguageSelect(l.label)} sx={{padding:0}}>
-                  <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
-                    <Typography color='white' variant="caption">{l.label}</Typography>
-                  </Avatar>
-                </Button>
-              </li>)}
+              <li>
+                <Stack direction={'row'} gap={1}>
+                {langsLinksInfo?.map(l=>
+                  <IconButton sx={{width:25,minWidth:25}} onClick={()=>handleLanguageSelect(l.label)}>
+                    <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
+                      <Typography color='white' variant="caption">{l.label}</Typography>
+                    </Avatar>
+                  </IconButton>
+                )}
+                </Stack>
+              </li>
             </ul>
           </li>
         </ul>

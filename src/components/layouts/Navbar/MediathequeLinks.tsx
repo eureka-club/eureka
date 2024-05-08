@@ -26,7 +26,7 @@ export const MediathequeLinks = () => {
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'} paddingTop={1}>
         
-        <Typography variant="caption" gutterBottom sx={{fontSize:16}}>
+        <Typography variant="caption"  gutterBottom sx={{fontSize:16,textWrap:'nowrap'}}>
           {t('My Mediatheque')}
         </Typography>
       </Stack>
