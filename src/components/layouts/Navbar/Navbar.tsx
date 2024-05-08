@@ -21,14 +21,15 @@ import { Stack, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { SearchInputLink } from './SearchInputLink';
 import { AppsLinks } from './AppsLinks';
+import { Padding } from '@mui/icons-material';
 
 export default function NavBar() {
   const { t } = useTranslation('navbar');
-  const{data:session}=useSession();
-  const{SignInModal}=useSignInModal();
+  const { data: session } = useSession();
+  const { SignInModal } = useSignInModal();
 
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-  React.useState<null | HTMLElement>(null);
+    React.useState<null | HTMLElement>(null);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -43,42 +44,55 @@ export default function NavBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{backgroundColor:'white',boxShadow:'none',color:'black',borderBottom:'solid 1px var(--color-primary)'}}>
-          <Toolbar>
+      <AppBar position="fixed" sx={{ backgroundColor: 'white', boxShadow: 'none', color: 'black', borderBottom: 'solid 1px var(--color-primary)' }}>
+        <Toolbar>
           <Link href="/" replace>
-              <a>
-                  <Stack direction={'row'} gap={2}>
-                    <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
-                    <Stack sx={{display:{xs:'none',lg:'inherit'}}} alignItems={'left'} justifyContent={'center'}>
-                      <Typography variant='h5' sx={{
-                        fontFamily:'Calibri Light',fontWeight:500,lineHeight:'1.2rem'
-                        }} color='secondary'>Eureka</Typography>
-                      {/* <Typography variant='caption' sx={{lineHeight:'1.2rem'}} color="secondary">{t('tagline')}</Typography> */}
-                      {/* <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div> */}
-                      {/* <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p> */}
-                    </Stack>
-                  </Stack>
-              </a>
+            <a>
+              <Stack direction={'row'} gap={2} >
+                <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
+                <Stack sx={{ display: { xs: 'none', lg: 'inherit' } }} alignItems={'center'} justifyContent={'center'}>
+                  <Typography variant='h5' sx={{
+                    fontFamily: 'Calibri Light', fontWeight: 500, lineHeight: '1rem'
+                  }} color='secondary'>Eureka</Typography>
+                  {/* <Typography variant='caption' sx={{lineHeight:'1.2rem'}} color="secondary">{t('tagline')}</Typography> */}
+                  {/* <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div> */}
+                  {/* <p className="text-secondary my-0 ms-3 font-weight-light fs-xs">{t('tagline')}</p> */}
+
+                </Stack>
+              </Stack>
+            </a>
           </Link>
-          <Stack sx={{ 
+          <Stack sx={{
             flexGrow: 1,
             // marginLeft:'auto',
-            // paddingLeft:'1rem', 
+            paddingLeft:'4rem', 
             // paddingBlockEnd:'5rem'
-            }} alignItems={'end'}>
-            <Box sx={{
-              display:{xs:'none',md:'inherit'},
-              '& .searchInputCmp':{
-                border:'solid 1px var(--color-primary)',
-              }
+          }} >
+            <Box alignItems={'center'} justifyContent={'left'} sx={{
+              display: { xs: 'none', md: 'inherit' },
+              '& .searchInputCmp': {
+                border: 'solid 1px var(--color-primary)',
+              },paddingLeft:'2rem'
+              
+
             }}>
-              <SearchInput  />
+              <MediathequeLinks />
+              <TopicsLinks/>
+              <Box alignItems={'center'} justifyContent={'left'} sx={{
+              display: { xs: 'none', md: 'inherit' },
+              '& .searchInputCmp': {
+                border: 'solid 1px var(--color-primary)',
+              }, paddingRight:'12rem'
+              
+
+            }}>
+                </Box>
+              <SearchInput />
             </Box>
           </Stack>
-          <Stack  direction={'row'}  sx={{ display: { xs: 'none', md: 'flex'}, alignContent:'center', alignItems:'center'}}> 
-            <TopicsLinks/>
-            <MediathequeLinks/>
-            <AboutLinks/>
+          <Stack direction={'row'} sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }}>
+
+            <AboutLinks />
             {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
             {/* <SearchInputLink /> */}
             <AppsLinks/>
@@ -100,32 +114,32 @@ export default function NavBar() {
             <Menu
               anchorEl={mobileMoreAnchorEl}
               anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+                vertical: 'top',
+                horizontal: 'right',
               }}
               id={mobileMenuId}
               keepMounted
               transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={isMobileMenuOpen}
               onClose={handleMobileMenuClose}
             >
-              <TopicsLinks/>
-              <MediathequeLinks/>
-              <AboutLinks/>
+              <TopicsLinks />
+              <MediathequeLinks />
+              <AboutLinks />
               {/* <UserAllowedOperationsLinks/> */}
-              <SessionLinks/>
+              <SessionLinks />
               {/* <LangsLinks/> */}
             </Menu>
             <SearchInputLink />
-            {session?.user ? <NotificationsLinks/>:<></>}
+            {session?.user ? <NotificationsLinks /> : <></>}
           </Box>
         </Toolbar>
       </AppBar>
-      
-      <SignInModal logoImage/>
+
+      <SignInModal logoImage />
     </Box>
   );
 }

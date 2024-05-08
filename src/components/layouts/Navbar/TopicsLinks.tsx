@@ -24,10 +24,8 @@ export const TopicsLinks = () => {
       ];
 
     return <MenuAction key='TopicsLinks' items={topics()} label={
-      <Stack justifyContent={'center'} alignItems={'center'} >
-        {<HiOutlineHashtag
-          fontSize={'2rem'}
-        /> }
+      <Stack justifyContent={'center'} alignItems={'center'} paddingTop={1}>
+        
         <Typography variant="caption" gutterBottom>
           {t('Topics')}
         </Typography>
