@@ -87,7 +87,7 @@ export const AppsLinks = ({children}:Props) => {
               <li>
                 <Stack direction={'row'} gap={1}>
                 {langsLinksInfo?.map(l=>
-                  <IconButton sx={{width:25,minWidth:25}} onClick={()=>handleLanguageSelect(l.label)}>
+                  <IconButton key={l.label} sx={{width:25,minWidth:25}} onClick={()=>handleLanguageSelect(l.label)}>
                     <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
                       <Typography color='white' variant="caption">{l.label}</Typography>
                     </Avatar>
