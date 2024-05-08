@@ -6,7 +6,7 @@ import { signOut, useSession } from 'next-auth/react';
 import useSignInModal from '@/src/useSignInModal';
 import { BiUser } from 'react-icons/bi';
 import LocalImage from '../../LocalImage';
-import { Login, Logout, Person, Settings } from '@mui/icons-material';
+import { AccountCircle, Login, Logout, Person, Settings } from '@mui/icons-material';
 import MenuAction from './MenuAction';
 import { Avatar, Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
@@ -91,8 +91,11 @@ export const SessionLinks = () => {
           src={
             session?.user.photos.length 
               ? `${AZURE_STORAGE_URL}/users-photos/${session?.user.photos[0].storedFile}`
-              : session?.user.image || '/img/default-avatar.png'
-          }/>
+              : session?.user.image!
+          }>
+             {/* || '/img/default-avatar.png' */}
+            <AccountCircle/>
+          </Avatar>
         {/* {<Typography variant="caption"  paddingTop={0.8}>
           {t('Account')}
         </Typography>} */}

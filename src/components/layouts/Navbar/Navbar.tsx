@@ -62,83 +62,76 @@ export default function NavBar() {
               </Stack>
             </a>
           </Link>
-            
-          <Stack 
-            direction='row'
-            justifyContent={'end'}  
-            sx={{
-              flexGrow: 1,
-              // marginLeft:'auto',
-              paddingLeft:'4rem', 
-              // paddingBlockEnd:'5rem'
               
-            }}
-          >
-            <Stack 
-              gap={3} 
-              direction={'row'} 
-              alignItems={'center'} 
-              sx={{
-                display: { xs: 'none', md: 'inherit' },
-              }}
-            >
-              <MediathequeLinks />
-              <TopicsLinks/>
-              <Box sx={{'& .searchInputCmp': {
-                border: 'solid 1px var(--color-primary)',
-              }}}>
-                <SearchInput />
-              </Box>
-            </Stack>
-          </Stack>
-          <Stack direction={'row'} sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }}>
+              <Stack 
+                direction='row'
+                justifyContent={'end'}  
+                sx={{
+                  flexGrow: 1,
+                }}
+              >
+                <Stack 
+                  gap={3} 
+                  direction={'row'} 
+                  alignItems={'center'} 
+                  sx={{
+                    display: { xs: 'none', md: 'inherit' },
+                  }}
+                >
+                  <MediathequeLinks />
+                  <TopicsLinks/>
+                  <Box sx={{'& .searchInputCmp': {
+                    border: 'solid 1px var(--color-primary)',
+                  }}}>
+                    <SearchInput />
+                  </Box>
+                </Stack>
+              </Stack>
+              <Stack marginLeft={2} direction={'row'} sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }}>
 
-            {/* <AboutLinks /> */}
-            {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
-            {/* <SearchInputLink /> */}
-            <AppsLinks/>
-            {session?.user ? <NotificationsLinks/>:<></>}
-            <SessionLinks/>
-            {/* <LangsLinks/> */}
-          </Stack>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }} alignItems={'center'}  >
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-            <Menu
-              anchorEl={mobileMoreAnchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              id={mobileMenuId}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={isMobileMenuOpen}
-              onClose={handleMobileMenuClose}
-            >
-              {/* <SessionLinks/> */}
-              {/* <AboutLinks /> */}
-              {/* <UserAllowedOperationsLinks/> */}
-              <MediathequeLinks />
-              <TopicsLinks/>
-              <SessionLinks />
-              {/* <LangsLinks/> */}
-            </Menu>
-            <SearchInputLink />
-            <AppsLinks/>
-            {session?.user ? <NotificationsLinks /> : <></>}
-          </Box>
+                {/* <AboutLinks /> */}
+                {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
+                {/* <SearchInputLink /> */}
+                <AppsLinks/>
+                {session?.user ? <NotificationsLinks/>:<></>}
+                <SessionLinks/>
+                {/* <LangsLinks/> */}
+              </Stack>
+              <Stack direction={'row'} sx={{ display: { xs: 'flex', md: 'none' } }} justifyContent={'end'} alignItems={'center'}  >
+                {/* <IconButton
+                  size="large"
+                  aria-label="show more"
+                  aria-controls={mobileMenuId}
+                  aria-haspopup="true"
+                  onClick={handleMobileMenuOpen}
+                  color="inherit"
+                >
+                  <MoreIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={mobileMoreAnchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  id={mobileMenuId}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={isMobileMenuOpen}
+                  onClose={handleMobileMenuClose}
+                >
+                  <MediathequeLinks />
+                  <TopicsLinks/>
+                </Menu> */}
+                <SearchInputLink />
+                <AppsLinks/>
+                <SessionLinks />
+                {session?.user ? <NotificationsLinks /> : <></>}
+              </Stack>
+
         </Toolbar>
       </AppBar>
 
