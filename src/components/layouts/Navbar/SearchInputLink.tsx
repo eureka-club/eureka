@@ -13,9 +13,9 @@ export const SearchInputLink = () => {
   return <MenuAction key='SearchInputLink' label={
     <Stack justifyContent={'center'} alignItems={'center'}>
        <SearchIcon sx={{fontSize:'2rem'}}/> 
-       <Typography variant="caption" gutterBottom>
+       {/* <Typography variant="caption" gutterBottom>
           {t('Search')}
-        </Typography>
+        </Typography> */}
     </Stack>
   }
   //title={t('Search')}

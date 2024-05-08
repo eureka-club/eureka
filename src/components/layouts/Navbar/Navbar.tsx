@@ -92,7 +92,7 @@ export default function NavBar() {
           </Stack>
           <Stack direction={'row'} sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }}>
 
-            <AboutLinks />
+            {/* <AboutLinks /> */}
             {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
             {/* <SearchInputLink /> */}
             <AppsLinks/>
@@ -128,12 +128,14 @@ export default function NavBar() {
             >
               <TopicsLinks />
               <MediathequeLinks />
-              <AboutLinks />
+              {/* <SessionLinks/> */}
+              {/* <AboutLinks /> */}
               {/* <UserAllowedOperationsLinks/> */}
               <SessionLinks />
               {/* <LangsLinks/> */}
             </Menu>
             <SearchInputLink />
+            <AppsLinks/>
             {session?.user ? <NotificationsLinks /> : <></>}
           </Box>
         </Toolbar>
