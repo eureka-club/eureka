@@ -11,9 +11,10 @@ export interface MenuActionProps{
     renderMenuItem?:(item:Record<string,any>&{label:any})=>React.ReactElement
     items?:Record<string,any>&{label:any,link?:string}[];
     children?:React.ReactElement;
+    disabled?:boolean
 }
 export default function MenuAction(props: MenuActionProps) {
-    const{label,title,items,renderMenuItem,children}=props;
+    const{label,title,items,renderMenuItem,children,disabled=false}=props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,6 +29,7 @@ export default function MenuAction(props: MenuActionProps) {
     <div>
       <Tooltip title={title??''}>
         <Button
+          disabled={disabled}
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"

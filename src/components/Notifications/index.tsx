@@ -7,6 +7,8 @@ import useTranslation from "next-translate/useTranslation";
 import { BsEyeFill } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useRemoveNotification } from "@/src/useRemoveNotification";
+import { useEffect, useRef } from "react";
 
 interface Props{
     // onNotificationClick:(e:any,notificationId:number)=>void
@@ -15,9 +17,17 @@ const Notifications = ({}:Props)=>{
     const { t } = useTranslation('notification');
     const router=useRouter();
     const{data:session}=useSession();
-    
+    const{mutate}=useRemoveNotification();
+
     const notificationOnClick = (e: React.MouseEvent<Element>,  notification: NotificationSumary) => {
     e.preventDefault();
+        mutate({
+            id:notification.notification.id,
+            callback:()=>{
+                router.push(notification.notification.contextURL);
+            }
+        });
+        
     /*if (notificationId) {
        const payload = {
          notificationId,
@@ -28,7 +38,7 @@ const Notifications = ({}:Props)=>{
        }
        execEditNotification(payload);
      }*/
-    router.push(notification.notification.contextURL);
+     
   }
     
     const{data}=useNotifications(+session?.user?.id!);

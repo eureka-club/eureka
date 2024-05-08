@@ -26,6 +26,7 @@ export const NotificationsLinks = () => {
         </Typography> */}
     </Stack>
   }
+  disabled={!notificationsData?.notifications.length}
   // title={t('Notifications')}
   >
     {
