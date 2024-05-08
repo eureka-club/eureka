@@ -78,8 +78,14 @@ export default function NavBar() {
                     display: { xs: 'none', md: 'inherit' },
                   }}
                 >
-                  <MediathequeLinks />
-                  <TopicsLinks/>
+                  {
+                    session?.user
+                      ? <>
+                          <MediathequeLinks />
+                          <TopicsLinks/>
+                      </>
+                      :<></>
+                  }
                   <Box sx={{'& .searchInputCmp': {
                     border: 'solid 1px var(--color-primary)',
                   }}}>
@@ -87,7 +93,7 @@ export default function NavBar() {
                   </Box>
                 </Stack>
               </Stack>
-              <Stack marginLeft={2} direction={'row'} sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }}>
+              <Stack sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }} marginLeft={2} direction={'row'}>
 
                 {/* <AboutLinks /> */}
                 {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
@@ -97,7 +103,7 @@ export default function NavBar() {
                 <SessionLinks/>
                 {/* <LangsLinks/> */}
               </Stack>
-              <Stack direction={'row'} sx={{ display: { xs: 'flex', md: 'none' } }} justifyContent={'end'} alignItems={'center'}  >
+              <Stack sx={{ display: { xs: 'flex', md: 'none' } }} direction={'row'}  justifyContent={'end'} alignItems={'center'}  >
                 {/* <IconButton
                   size="large"
                   aria-label="show more"

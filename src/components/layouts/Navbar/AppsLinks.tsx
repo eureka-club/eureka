@@ -90,11 +90,17 @@ const MediathequeMenu = ()=>{
     return '';
     };
   return <>
-    <Typography variant="button">{t('My Mediatheque')}</Typography>
-    <ul>
-      <li><Link href={`/mediatheque/${getMediathequeSlug()}`}>{t('My Mediatheque')}</Link></li>
-      <li><Link href={`/user/${getMediathequeSlug() }/my-read-or-watched`}>{t('MyReadOrWatched')}</Link></li>
-    </ul>
+    {
+      session?.user
+        ? <>
+          <Typography variant="button">{t('My Mediatheque')}</Typography>
+          <ul>
+            <li><Link href={`/mediatheque/${getMediathequeSlug()}`}>{t('My Mediatheque')}</Link></li>
+            <li><Link href={`/user/${getMediathequeSlug() }/my-read-or-watched`}>{t('MyReadOrWatched')}</Link></li>
+          </ul>
+        </>
+        :<></>
+    }
   </>
 }
 export const TopicsMenu = () => {
