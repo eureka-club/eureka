@@ -62,33 +62,34 @@ export default function NavBar() {
               </Stack>
             </a>
           </Link>
-          <Stack sx={{
-            flexGrow: 1,
-            // marginLeft:'auto',
-            paddingLeft:'4rem', 
-            // paddingBlockEnd:'5rem'
-          }} >
-            <Box alignItems={'center'} justifyContent={'left'} sx={{
-              display: { xs: 'none', md: 'inherit' },
-              '& .searchInputCmp': {
-                border: 'solid 1px var(--color-primary)',
-              },paddingLeft:'2rem'
+            
+          <Stack 
+            direction='row'
+            justifyContent={'end'}  
+            sx={{
+              flexGrow: 1,
+              // marginLeft:'auto',
+              paddingLeft:'4rem', 
+              // paddingBlockEnd:'5rem'
               
-
-            }}>
+            }}
+          >
+            <Stack 
+              gap={3} 
+              direction={'row'} 
+              alignItems={'center'} 
+              sx={{
+                display: { xs: 'none', md: 'inherit' },
+              }}
+            >
               <MediathequeLinks />
               <TopicsLinks/>
-              <Box alignItems={'center'} justifyContent={'left'} sx={{
-              display: { xs: 'none', md: 'inherit' },
-              '& .searchInputCmp': {
+              <Box sx={{'& .searchInputCmp': {
                 border: 'solid 1px var(--color-primary)',
-              }, paddingRight:'12rem'
-              
-
-            }}>
-                </Box>
-              <SearchInput />
-            </Box>
+              }}}>
+                <SearchInput />
+              </Box>
+            </Stack>
           </Stack>
           <Stack direction={'row'} sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }}>
 
