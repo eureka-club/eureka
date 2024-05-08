@@ -24,9 +24,9 @@ export const MediathequeLinks = () => {
         {label:t('MyReadOrWatched'),link:`/user/${getMediathequeSlug() }/my-read-or-watched`},
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
-      <Stack justifyContent={'center'} alignItems={'center'}>
-        { <FaRegListAlt fontSize={'1.8rem'} /> }
-        <Typography variant="caption" gutterBottom paddingTop={0.4}>
+      <Stack justifyContent={'center'} alignItems={'center'} paddingTop={1}>
+        
+        <Typography variant="caption" gutterBottom>
           {t('My Mediatheque')}
         </Typography>
       </Stack>
