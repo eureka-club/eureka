@@ -493,7 +493,16 @@ a{
    margin-top: auto;
 }
 
- 
+.mainSection{
+  padding-top: 3rem;
+}
+
+@media screen and (min-width: 600px) {
+  .mainSection{
+    padding-top: 4rem;
+  }
+}
+
 @media screen and (max-width: 435px) {
  .fs-xs {
    display: none;
@@ -549,10 +558,10 @@ a{
     overflow: hidden;
     white-space: none;
   }
-  .mainSection {
-    margin-top: 75px;
-    min-height: 100vh;
-  }
+  // .mainSection {
+  //   margin-top: 75px;
+  //   min-height: 100vh;
+  // }
    .mainContainer {
      margin-top: 9.5em;
    }
@@ -572,10 +581,10 @@ a{
     overflow: hidden;
     white-space: none;
   }
-  .mainSection {
-    margin-top: 75px;
-    min-height: 100vh;
-  }
+  // .mainSection {
+  //   margin-top: 75px;
+  //   min-height: 100vh;
+  // }
    .mainContainer {
      margin-top: 6em;
    }
@@ -594,10 +603,10 @@ a{
     overflow: hidden;
     white-space: none;
   }
-  .mainSection {
-    margin-top: 75px;
-    min-height: 100vh
-  }
+  // .mainSection {
+  //   margin-top: 75px;
+  //   min-height: 100vh
+  // }
   
   .allPageSection{
      margin-top: 0px;

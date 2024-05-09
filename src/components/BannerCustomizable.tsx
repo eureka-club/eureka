@@ -29,7 +29,7 @@ const BannerCustomizable: FunctionComponent = ({
           style={{
             backgroundImage: "url('/img/bg-header.svg')",
             marginBottom: show ? '8em' : '2em',
-            marginTop: '4.8em',
+            // marginTop: '4.8em',
             maxHeight: show ? '18em' : '4em',
           }}
         >
