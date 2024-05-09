@@ -1,46 +1,22 @@
 import * as React from 'react';
-import styles from './Navbar.module.css';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MoreIcon from '@mui/icons-material/MoreVert';
 import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
 import useSignInModal from '@/src/useSignInModal';
 import { MediathequeLinks } from './MediathequeLinks';
 import { TopicsLinks } from './TopicsLinks';
-import { AboutLinks } from './AboutLinks';
 import SearchInput from '../../SearchInput';
-import { LangsLinks } from './LangsLinks';
 import { SessionLinks } from './SessionLinks';
 import { NotificationsLinks } from './NotificationsLinks';
-import UserAllowedOperationsLinks from './UserAllowedOperationsLinks';
 import { Stack, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { SearchInputLink } from './SearchInputLink';
 import { AppsLinks } from './AppsLinks';
-import { Padding } from '@mui/icons-material';
 
 export default function NavBar() {
-  const { t } = useTranslation('navbar');
   const { data: session } = useSession();
   const { SignInModal } = useSignInModal();
-
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
-
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-  const mobileMenuId = 'primary-search-account-menu-mobile';
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -62,7 +38,6 @@ export default function NavBar() {
               </Stack>
             </a>
           </Link>
-              
               <Stack 
                 direction='row'
                 justifyContent={'end'}  
@@ -94,53 +69,18 @@ export default function NavBar() {
                 </Stack>
               </Stack>
               <Stack sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }} marginLeft={2} direction={'row'}>
-
-                {/* <AboutLinks /> */}
-                {/* {session?.user ? <UserAllowedOperationsLinks/>:<></>} */}
-                {/* <SearchInputLink /> */}
                 <AppsLinks/>
                 {session?.user ? <NotificationsLinks/>:<></>}
                 <SessionLinks/>
-                {/* <LangsLinks/> */}
               </Stack>
               <Stack sx={{ display: { xs: 'flex', md: 'none' } }} direction={'row'}  justifyContent={'end'} alignItems={'center'}  >
-                {/* <IconButton
-                  size="large"
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-                <Menu
-                  anchorEl={mobileMoreAnchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  id={mobileMenuId}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={isMobileMenuOpen}
-                  onClose={handleMobileMenuClose}
-                >
-                  <MediathequeLinks />
-                  <TopicsLinks/>
-                </Menu> */}
                 <SearchInputLink />
                 <AppsLinks/>
                 <SessionLinks />
                 {session?.user ? <NotificationsLinks /> : <></>}
               </Stack>
-
         </Toolbar>
       </AppBar>
-
       <SignInModal logoImage />
     </Box>
   );

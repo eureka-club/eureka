@@ -14,20 +14,27 @@ import { useSession } from "next-auth/react";
 
 const CreateMenu = ()=>{
   const { t } = useTranslation('navbar');
+  const{data:session}=useSession();
 
   return <>
-  <Typography variant="button">{t('create')}</Typography>
-  <ul>
-    <li>
-      <Link href='/cycle/create'>{t('cycle')}</Link>
-    </li>
-    <li>
-      <Link href='/post/create'>{t('post')}</Link>
-    </li>
-    <li>
-      <Link href='/work/create'>{t('work')}</Link>
-    </li>
-  </ul>
+    {
+      session?.user 
+        ? <>
+            <Typography variant="button">{t('create')}</Typography>
+            <ul>
+              <li>
+                <Link href='/cycle/create'>{t('cycle')}</Link>
+              </li>
+              <li>
+                <Link href='/post/create'>{t('post')}</Link>
+              </li>
+              <li>
+                <Link href='/work/create'>{t('work')}</Link>
+              </li>
+            </ul>
+          </>
+        : <></>
+    }
   </>
 }
 const AboutMenu = ()=>{
