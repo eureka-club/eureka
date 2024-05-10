@@ -20,26 +20,27 @@ const Notifications = ({}:Props)=>{
     const{mutate}=useRemoveNotification();
 
     const notificationOnClick = (e: React.MouseEvent<Element>,  notification: NotificationSumary) => {
-    e.preventDefault();
+        e.preventDefault();
         mutate({
             id:notification.notification.id,
             callback:()=>{
-                router.push(notification.notification.contextURL);
+                // router.push(notification.notification.contextURL);
             }
         });
+        router.push(notification.notification.contextURL);
         
-    /*if (notificationId) {
-       const payload = {
-         notificationId,
-         userId,
-         data: {
-           viewed: true,
-         }
-       }
-       execEditNotification(payload);
-     }*/
+        /*if (notificationId) {
+        const payload = {
+            notificationId,
+            userId,
+            data: {
+            viewed: true,
+            }
+        }
+        execEditNotification(payload);
+        }*/
      
-  }
+    }
     
     const{data}=useNotifications(+session?.user?.id!);
     const{notifications,total}=data??{notifications:[],total:0};
