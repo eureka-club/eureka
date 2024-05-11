@@ -30,7 +30,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
               {t('Close')} <AiOutlineClose />
             </Button>
           )}
-          {show && (
+          {!show && (
             <Button
               variant="info"
               onClick={() => setShow(true)}
