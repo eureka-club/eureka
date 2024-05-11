@@ -121,7 +121,7 @@ export const TopicsMenu = () => {
         <li><Link href='/search?q=gender-feminisms'>{`${t(`topics:gender-feminisms`)}`}</Link></li>
         <li><Link href='/search?q=technology'>{`${t(`topics:technology`)}`}</Link></li>
         <li><Link href='/search?q=environment'>{`${t(`topics:environment`)}`}</Link></li>
-        <li><Link href='/search?q=racism-discrimination'>{`${t(`topics:racism-discriminatiomn`)}`}</Link></li>
+        <li><Link href='/search?q=racism-discrimination'>{`${t(`topics:racism-discrimination`)}`}</Link></li>
         <li><Link href='/search?q=wellness-sports'>{`${t('topics:wellness-sports')}`}</Link></li>
         <li><Link href='/search?q=social issues'>{`${t(`topics:social issues`)}`}</Link></li>
         <li><Link href='/search?q=politics-economics'>{`${t(`topics:politics-economics`)}`}</Link></li>
