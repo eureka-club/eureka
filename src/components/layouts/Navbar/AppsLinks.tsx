@@ -73,7 +73,7 @@ const LangsMenu = ()=>{
               <li>
                 <Stack direction={'row'} gap={1}>
                 {langsLinksInfo?.map(l=>
-                  <IconButton key={l.label} sx={{width:25,minWidth:25}} onClick={()=>handleLanguageSelect(l.label)}>
+                  <IconButton key={l.label} sx={{width:21,minWidth:21}} onClick={()=>handleLanguageSelect(l.label)}>
                     <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
                       <Typography color='white' variant="caption">{l.label}</Typography>
                     </Avatar>
@@ -121,7 +121,7 @@ export const TopicsMenu = () => {
         <li><Link href='/search?q=gender-feminisms'>{`${t(`topics:gender-feminisms`)}`}</Link></li>
         <li><Link href='/search?q=technology'>{`${t(`topics:technology`)}`}</Link></li>
         <li><Link href='/search?q=environment'>{`${t(`topics:environment`)}`}</Link></li>
-        <li><Link href='/search?q=racism-discrimination'>{`${t(`topics:racism-discriminatiomn`)}`}</Link></li>
+        <li><Link href='/search?q=racism-discrimination'>{`${t(`topics:racism-discrimination`)}`}</Link></li>
         <li><Link href='/search?q=wellness-sports'>{`${t('topics:wellness-sports')}`}</Link></li>
         <li><Link href='/search?q=social issues'>{`${t(`topics:social issues`)}`}</Link></li>
         <li><Link href='/search?q=politics-economics'>{`${t(`topics:politics-economics`)}`}</Link></li>
