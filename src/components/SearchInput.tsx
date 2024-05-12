@@ -29,7 +29,7 @@ export default function SearchInput() {
         p: '2px 4px', 
         display: 'flex',
         alignItems: 'center', 
-        width: {xs:'350px',lg:'500px'},
+        width: {xs:'300px',sm:'350px',lg:'500px'},
       }}
      className='searchInputCmp'
     >
