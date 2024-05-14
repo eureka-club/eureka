@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, IconButton, List, ListItem, ListItemButton, ListItemText, MenuItem, MenuList, Stack, Typography } from "@mui/material";
+import { Avatar, Box, IconButton, MenuItem, MenuList, Stack, Typography } from "@mui/material";
 import MenuAction from "./MenuAction";
 import useTranslation from "next-translate/useTranslation";
 import { Apps } from "@mui/icons-material";
@@ -7,10 +7,8 @@ import Link from "next/link";
 import { useQueryClient } from "react-query";
 import { setCookie } from 'nookies';
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_TTL, WEBAPP_URL } from "@/src/constants";
-import { ReactElement } from "react";
 import slugify from 'slugify';
 import { useSession } from "next-auth/react";
-
 
 const CreateMenu = ()=>{
   const { t } = useTranslation('navbar');
@@ -65,7 +63,7 @@ const LangsMenu = ()=>{
   };
   return <>
   <Typography variant="button">{t('Language')}</Typography>
-            <ul style={{listStyle:'none'}}>
+            <ul className="langsMenu">
               <li>
                 <Stack direction={'row'} gap={1}>
                 {langsLinksInfo?.map(l=>
@@ -162,6 +160,12 @@ export const AppsLinks = ({}:Props) => {
           ul li ul li a{
             display:block;
             width:100%;
+          }
+          ul.langsMenu li{
+            list-style:none;
+              &:hover{
+                background-color: transparent !important;
+              }
           }
         `}</style>
         <Box sx={{display:{sx:'inherit',md:'none'}}}>

@@ -1,7 +1,5 @@
-
 import { FunctionComponent } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import TagsInput from '@/components/forms/controls/TagsInput';
 import Prompt from '@/src/components/post/PostPrompt';
 import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
@@ -27,7 +25,7 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
           <Prompt redirect={true} showTitle={true} />
         </div>
       </section>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} paddingTop={'3rem'}>
         <Grid item xs={12} md={3}>
           <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
           {/* <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2> */}
