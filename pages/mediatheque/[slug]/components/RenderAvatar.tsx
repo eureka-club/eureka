@@ -1,10 +1,14 @@
 import { useSession } from "next-auth/react";
 import { SyntheticEvent } from "react";
 import LocalImageComponent from '@/src/components/LocalImage';
+import useUser from "@/src/useUser";
+import { useRouter } from "next/router";
 
 const RenderAvatar = () => {
-    const{data:session}=useSession();
-    const user=session?.user;
+    const router=useRouter();
+    const id = router?.query?.slug?.toString().split('-').slice(-1);
+    const{data:user}=useUser(+id!,{enabled:!!id});
+    // const user=session?.user;
 
     const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
         e.currentTarget.src = '/img/default-avatar.png';
