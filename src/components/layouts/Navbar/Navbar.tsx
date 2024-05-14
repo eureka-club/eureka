@@ -42,7 +42,8 @@ export default function NavBar() {
                 direction='row'
                 justifyContent={'end'}  
                 sx={{
-                  flexGrow: 1,
+                  paddingLeft:'3rem',
+                  // flexGrow: 1,
                 }}
               >
                 <Stack 
@@ -68,12 +69,12 @@ export default function NavBar() {
                   </Box>
                 </Stack>
               </Stack>
-              <Stack sx={{ display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }} marginLeft={2} direction={'row'}>
+              <Stack sx={{ marginLeft:'auto',display: { xs: 'none', md: 'flex' }, alignContent: 'center', alignItems: 'center' }} marginLeft={2} direction={'row'}>
                 <AppsLinks/>
                 {session?.user ? <NotificationsLinks/>:<></>}
                 <SessionLinks/>
               </Stack>
-              <Stack sx={{ display: { xs: 'flex', md: 'none' } }} direction={'row'}  justifyContent={'end'} alignItems={'center'}  >
+              <Stack sx={{ marginLeft:'auto',display: { xs: 'flex', md: 'none' } }} direction={'row'}  justifyContent={'end'} alignItems={'center'}  >
                 <SearchInputLink />
                 <AppsLinks/>
                 <SessionLinks />
