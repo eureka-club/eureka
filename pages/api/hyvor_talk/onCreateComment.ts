@@ -79,7 +79,7 @@ export default async function handler(
                 title:true,
                 languages:true,
                 creator:{select:{email:true}},
-                // participants:{select:{email:true}},
+                participants:{select:{email:true}},
               }
             });
             elementTitle=cycle?.title;
@@ -116,10 +116,10 @@ export default async function handler(
           if(post && post.creator?.email!=data.user.email)
               to=[{email:post.creator?.email!}]
           else if(cycle){
-            // const idx = cycle?.participants.findIndex(p=>p.email==data.user.email);
-            // if(idx>=0)cycle?.participants.splice(idx!,1);
-            // to=cycle.participants.map((p)=>({email:p.email!}));
-            if(cycle.creator.email!=data.user.email)to=[{email:cycle.creator.email!}]//.push({email:cycle.creator.email!});
+            const idx = cycle?.participants.findIndex(p=>p.email==data.user.email);
+            if(idx>=0)cycle?.participants.splice(idx!,1);
+            to=cycle.participants.map((p)=>({email:p.email!}));
+            if(cycle.creator.email!=data.user.email)to.push({email:cycle.creator.email!});//to=[{email:cycle.creator.email!}]//
           }
           else if(work){
             const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${elementType}-${elementId}`;
