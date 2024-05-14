@@ -494,12 +494,14 @@ a{
 }
 
 .mainSection{
-  padding-top: 3rem;
+  padding-top: 5rem;
 }
-
+.mainContainer{
+  // padding-top: 2rem;
+}
 @media screen and (min-width: 600px) {
   .mainSection{
-    padding-top: 4rem;
+    //padding-top: 4rem;
   }
 }
 
@@ -526,7 +528,7 @@ a{
      border: 0;
    }
    .mainContainer {
-     margin-top: 0.8em;
+    //  margin-top: 0.8em;
    }
    .allPageSection{
     margin: 0px;
@@ -543,7 +545,7 @@ a{
     white-space: none;
   }
   .mainContainer {
-    margin-top: 0.8em;
+    // margin-top: 0.8em;
   }
   .allPageSection{
      margin: 0px;
@@ -563,7 +565,7 @@ a{
   //   min-height: 100vh;
   // }
    .mainContainer {
-     margin-top: 9.5em;
+    //  margin-top: 9.5em;
    }
    .allPageSection{
      margin: 0px;
@@ -586,7 +588,7 @@ a{
   //   min-height: 100vh;
   // }
    .mainContainer {
-     margin-top: 6em;
+    //  margin-top: 6em;
    }
    .allPageSection{
      margin: 0px;

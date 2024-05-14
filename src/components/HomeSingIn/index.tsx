@@ -22,7 +22,7 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
 
   return (
     <>
-      <section className="my-5 w-100">
+      <section className="w-100">
         <div className="pt-4">
           <Prompt redirect={true} showTitle={true} />
         </div>

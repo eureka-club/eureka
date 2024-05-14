@@ -201,7 +201,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`}></meta>
       </Head>
       <SimpleLayout>
-        <article className="mt-4">
+        <article className="">
           <ButtonsTopActions/>
 
           {/*isLoadingSession ? (
