@@ -9,6 +9,7 @@ import useMyPosts,{getMyPosts} from '@/src/useMyPosts';
 import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
 
 interface Props{
   id:number
@@ -20,7 +21,7 @@ const MyPosts: NextPage<Props> = ({id}) => {
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:dataPosts} = useMyPosts(id);
+  const {data:dataPosts} = useMyPosts(id,ITEMS_IN_LIST_PAGES);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -78,7 +79,7 @@ export const getServerSideProps:GetServerSideProps= async (ctx)=>{
   }
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
 
-  await qc.fetchQuery(['MY-POSTS'],()=>getMyPosts(id,session,8));
+  await qc.fetchQuery([`MY-POSTS-${ITEMS_IN_LIST_PAGES}`],()=>getMyPosts(id,session,ITEMS_IN_LIST_PAGES));
   
   res = {
     props:{

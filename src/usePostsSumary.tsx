@@ -37,15 +37,16 @@ interface Options {
 }
 
 const usePostsSumary = (props?:Prisma.PostFindManyArgs, options?: Options) => {
+  const Props = !props ? {take:6} : {take:6,...props};
   const {lang}=useTranslation();
   const{data:session}=useSession();
   const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = cacheKey ? cacheKey : ['POSTS', `${JSON.stringify(props)}`];
+  let ck = cacheKey ? cacheKey : ['POSTS', `${JSON.stringify(Props)}`];
  
-  return useQuery<{posts:PostSumary[],fetched:number,total:number}>(ck, () => getPostsSumary(session?.user.id!,lang,props), {
+  return useQuery<{posts:PostSumary[],fetched:number,total:number}>(ck, () => getPostsSumary(session?.user.id!,lang,Props), {
     staleTime,
     enabled,
     // retry:3

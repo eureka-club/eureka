@@ -174,9 +174,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
   });
   
-  // const k = myCyclesWhere(session.user.id)
-  // await qc.fetchQuery(['CYCLES',JSON.stringify(k)],()=>getMyCycles(id,8,origin))
-
   return {
     props: {
       session,

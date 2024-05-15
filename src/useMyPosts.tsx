@@ -20,7 +20,7 @@ export const myPostsProps = (id: number,session:Session|null)=> {
   }
 };
 
-export const getMyPosts = async (id:number,session:Session|null,take:number)=>{
+export const getMyPosts = async (id:number,session:Session|null,take=6)=>{
   const res =await  getPostsSumary(session?.user.id!,'',{...myPostsProps(id,session),take});
   return res;
 }
@@ -31,13 +31,13 @@ interface Options {
   cacheKey?:string|string[];
 }
 
-const useMyPosts = (id:number,take=8,options?:Options) => {
+const useMyPosts = (id:number,take=6,options?:Options) => {
   const {data:session}=useSession();
   const { staleTime, enabled, cacheKey } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  let ck = ['MY-POSTS', id.toString()]
+  let ck = [`MY-POSTS-${take}`, id.toString()]
   return useQuery<{posts:PostSumary[],fetched:number,total:number}>(ck, async () => await getMyPosts(id,session,take), {
     staleTime,
     enabled,

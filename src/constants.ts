@@ -14,7 +14,8 @@ export const STORAGE_MECHANISM_LOCAL_FILES = 'local';
 export const WEBAPP_URL = process.env.NEXT_PUBLIC_WEBAPP_URL;
 export const AZURE_CDN_ENDPOINT = process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT;
 export const AZURE_STORAGE_ACCOUNT_CONTAINER_NAME = process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME;
-
+export const ITEMS_PER_CAROUSEL=6;
+export const ITEMS_IN_LIST_PAGES=100;
 export const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
 export const LOCALE_COOKIE_TTL = 60 * 60 * 24 * 90;
 export const LANGUAGES : Record<string, string> = {

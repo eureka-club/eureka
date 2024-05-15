@@ -1,13 +1,14 @@
 import { useQuery } from 'react-query';
 import { Prisma } from '@prisma/client';
-import { WEBAPP_URL } from './constants';
+import { ITEMS_PER_CAROUSEL, WEBAPP_URL } from './constants';
 import { CycleSumary } from './types/cycle';
 
 export const getCyclesSumary = async (
   lang?:string,
   props?:Prisma.CycleFindManyArgs,
 ): Promise<{cycles:CycleSumary[],fetched:number,total:number}> => {
-  const query = props?`?props=${encodeURIComponent(JSON.stringify(props))}&lang=${lang}`:''
+  const Props = !props ? {take:ITEMS_PER_CAROUSEL} : {take:6,...props};debugger;
+  const query = `?props=${encodeURIComponent(JSON.stringify(Props))}&lang=${lang}`;
   const url = `${WEBAPP_URL}/api/cycle/sumary${query}`
   const res = await fetch(url);
   if (!res.ok) return {cycles:[],fetched:0,total:-1};
