@@ -766,3 +766,8 @@ a{
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+.MuiAvatar-root.MuiAvatar-circular:has(img){
+  
+  font-size: inherit!important;
+}
