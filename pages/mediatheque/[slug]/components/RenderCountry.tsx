@@ -13,9 +13,9 @@ const RenderCountry = ({userId}:{userId:number}) => {
         enabled: !isNaN(userId),
       });
 
-      return (
+      return ( 
         <em>
-          <AiOutlineEnvironment /> {`${t(`countries:${user?.countryOfOrigin}`)}`}
+          <AiOutlineEnvironment /> {`${user?.countryOfOrigin ? t(`countries:${user?.countryOfOrigin}`): 'Unknown'}`}
         </em>
       );
   };
