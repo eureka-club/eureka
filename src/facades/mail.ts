@@ -1,9 +1,9 @@
 import path from 'path';
 import Handlebars from 'handlebars';
+import {prisma} from '@/src/lib/prisma';
 
 import readFile from './readFile';
 import axios from 'axios';
-import { url } from 'inspector';
 // const client = require('@sendgrid/client');
 
 // const Handlebars = require('handlebars');
