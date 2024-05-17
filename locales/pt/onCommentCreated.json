@@ -16,5 +16,9 @@
 
   "aboutEnd":"Abraços, Eureka",
   "urlLabel": "Ver comentário",
-  "unsubscribe":"Cancelar inscrição"
+  "unsubscribe":"Cancelar inscrição",
+
+  "subject-cycle-sumary":"Comentários de hoje no Ciclo {{title}}, que você está participando!",
+  "title-cycle-sumary":"Algumas pessoas deixaram comentários no Ciclo {{title}}! {{first3UsersNames}} e mais compartilharam seus pensamentos hoje.",
+  "about-cycle-sumary":"Que tal participar e enriquecer ainda mais a discussão? Nossa comunidade agradece!"
 }

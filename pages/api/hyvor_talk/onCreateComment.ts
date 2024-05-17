@@ -137,8 +137,7 @@ export default async function handler(
         if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
 
         locale=LOCALES[locale]??defaultLocale;
-        const tr_file = !cycle ? 'onCommentCreated.json' : 'onCommentCreatedS.json';
-        const path = join(process.cwd(),'locales',locale,tr_file);
+        const path = join(process.cwd(),'locales',locale,'onCommentCreated.json');
 
         const rf = promisify(readFile);
         const jsonStr = await rf(path);
@@ -159,11 +158,12 @@ export default async function handler(
           return val;
         }
         
-        const subject=dict(`subject-${elementType}`,{title:elementTitle});
+        const postFix=cycle?'-sumary':'';
+        const subject=dict(`subject-${elementType}${postFix}`,{title:elementTitle});
         const title=!cycle 
           ? dict(`title-${elementType}`,{title:elementTitle,name})
-          : dict(`title-${elementType}`,{title:elementTitle,first3UsersNames:to.map(t=>t.name??t.email).join(', ')});
-        const about=dict(`about-${elementType}`);
+          : dict(`title-${elementType}${postFix}`,{title:elementTitle,first3UsersNames:to.map(t=>t.name??t.email).join(', ')});
+        const about=dict(`about-${elementType}${postFix}`);
         const aboutEnd=dict(`aboutEnd`);
         const urllabel=dict('urlLabel');
         const unsubscribe="";//dict('unsubscribe');
@@ -183,7 +183,8 @@ export default async function handler(
             }
           });
           if(comentEmailSaved){
-            const cronTime = '0 1 20 * * *';
+            // const cronTime = '0 0 20 * * *';
+            const cronTime = '3 * * * * *';
             if(!(global as any).job){
               const dt = sendAt(cronTime);
               console.log(`The job would run at: ${dt.toISO()}`);
