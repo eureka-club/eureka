@@ -137,7 +137,7 @@ export default async function handler(
         if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
 
         locale=LOCALES[locale]??defaultLocale;
-        const tr_file = !cycle ? 'onCommentCreated.json' : 'onCommentCreatedSumary.json';
+        const tr_file = !cycle ? 'onCommentCreated.json' : 'onCommentCreatedS.json';
         const path = join(process.cwd(),'locales',locale,tr_file);
 
         const rf = promisify(readFile);
@@ -183,7 +183,7 @@ export default async function handler(
             }
           });
           if(comentEmailSaved){
-            const cronTime = '0 0 20 * * *';
+            const cronTime = '0 1 20 * * *';
             if(!(global as any).job){
               const dt = sendAt(cronTime);
               console.log(`The job would run at: ${dt.toISO()}`);
