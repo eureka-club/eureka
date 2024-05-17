@@ -183,7 +183,7 @@ export default async function handler(
             }
           });
           if(comentEmailSaved){
-            const cronTime = '* * 20 * * *';
+            const cronTime = '0 0 20 * * *';
             if(!(global as any).job){
               const dt = sendAt(cronTime);
               console.log(`The job would run at: ${dt.toISO()}`);
