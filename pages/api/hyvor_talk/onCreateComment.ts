@@ -1,4 +1,6 @@
-import { sendEmailOnCommentCreated } from '@/src/facades/mail';
+import { CronJob, sendAt } from 'cron';
+
+import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
 // import { compare, compareSync } from 'bcryptjs';
 // import { createHash, createHmac, timingSafeEqual } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -54,7 +56,6 @@ export default async function handler(
             data
         } = body;
          
-        
         let locale = req.cookies.NEXT_LOCALE || defaultLocale;
         
         let url = data?.page?.url??'';
@@ -70,7 +71,7 @@ export default async function handler(
 
         let elementTitle=data.page.title;
 
-        let to:{email:string}[] = [];
+        let to:{email:string,name?:string}[] = [];
         switch(elementType){
           case 'cycle':
             cycle = await prisma.cycle.findFirst({
@@ -78,8 +79,8 @@ export default async function handler(
               select:{
                 title:true,
                 languages:true,
-                creator:{select:{email:true}},
-                participants:{select:{email:true}},
+                creator:{select:{email:true,name:true}},
+                participants:{select:{email:true,name:true}},
               }
             });
             elementTitle=cycle?.title;
@@ -109,24 +110,24 @@ export default async function handler(
         }
 
         if(parent && parent.user?.email!=data.user.email){
-            to=[{email:`${parent.user?.email}`}];
+            to=[{email:`${parent.user?.email}`,name:parent.user?.name}];
             url=url?`${url}?ht-comment-id=${data.id}`:'';
         }
         else{
           if(post && post.creator?.email!=data.user.email)
-              to=[{email:post.creator?.email!}]
+              to=[{email:post.creator?.email!,name:post.creator.name!}]
           else if(cycle){
             const idx = cycle?.participants.findIndex(p=>p.email==data.user.email);
             if(idx>=0)cycle?.participants.splice(idx!,1);
-            to=cycle.participants.map((p)=>({email:p.email!}));
-            if(cycle.creator.email!=data.user.email)to.push({email:cycle.creator.email!});//to=[{email:cycle.creator.email!}]//
+            to=cycle.participants.map((p)=>({email:p.email!,name:p.name!}));
+            if(cycle.creator.email!=data.user.email)to.push({email:cycle.creator.email!,name:cycle.creator.name!});//to=[{email:cycle.creator.email!}]//
           }
           else if(work){
             const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${elementType}-${elementId}`;
             const fr = await fetch(url);
             const json = await fr.json();
-            json?.data?.data?.forEach((e:{user:{email:string}}) => {
-              if(e.user.email!=data.user.email)to.push({email:e.user.email});
+            json?.data?.data?.forEach((e:{user:{email:string,name:string}}) => {
+              if(e.user.email!=data.user.email)to.push({email:e.user.email,name:e.user.name!??e.user.email});
             });
             //to=json?.data?.data?.map((j:{user:{email:string}})=>({email:j.user.email}));
           }
@@ -136,7 +137,8 @@ export default async function handler(
         if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
 
         locale=LOCALES[locale]??defaultLocale;
-        const path = join(process.cwd(),'locales',locale,'onCommentCreated.json');
+        const tr_file = !cycle ? 'onCommentCreated.json' : 'onCommentCreatedSumary.json';
+        const path = join(process.cwd(),'locales',locale,tr_file);
 
         const rf = promisify(readFile);
         const jsonStr = await rf(path);
@@ -158,12 +160,49 @@ export default async function handler(
         }
         
         const subject=dict(`subject-${elementType}`,{title:elementTitle});
-        const title=dict(`title-${elementType}`,{title:elementTitle,name});
+        const title=!cycle 
+          ? dict(`title-${elementType}`,{title:elementTitle,name})
+          : dict(`title-${elementType}`,{title:elementTitle,first3UsersNames:to.map(t=>t.name??t.email).join(', ')});
         const about=dict(`about-${elementType}`);
         const aboutEnd=dict(`aboutEnd`);
-        const unsubscribe=dict('unsubscribe');
         const urllabel=dict('urlLabel');
-            
+        const unsubscribe="";//dict('unsubscribe');
+
+        if(cycle){
+          
+          const comentEmailSaved = await prisma.comentCreatedDaily.create({
+            data:{
+              to:to.map(t=>t.email).join(','),
+              subject,
+              etitle:title,
+              about,
+              aboutEnd,
+              eurl:url,
+              urllabel,
+              unsubscribe
+            }
+          });
+          if(comentEmailSaved){
+            const cronTime = '* * 20 * * *';
+            if(!(global as any).job){
+              const dt = sendAt(cronTime);
+              console.log(`The job would run at: ${dt.toISO()}`);
+              (global as any).job = new CronJob(
+                cronTime, // cronTime
+                async function () {
+                  await sendEmailWithComentCreatedSumary();
+                  console.log((new Date()).toISOString());
+                }, // onTick
+                null, // onComplete
+                true, // start
+                'America/Sao_Paulo' // timeZone
+              );
+            }
+            return res.status(200).json({ data:{comentEmailSaved} });
+          }
+          return res.status(200).json({ data:{comentEmailSaved} });    
+        }
+        
         const emailSend = await sendEmailOnCommentCreated({
           to,
           subject,
@@ -185,4 +224,8 @@ export default async function handler(
           return res.status(400).json({ error:e?.toString() });
       }
     }
+}
+
+const sendComentCreatedEmailDailySumarized = ()=>{
+
 }

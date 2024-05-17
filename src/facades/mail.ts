@@ -3,6 +3,7 @@ import Handlebars from 'handlebars';
 
 import readFile from './readFile';
 import axios from 'axios';
+import { url } from 'inspector';
 // const client = require('@sendgrid/client');
 
 // const Handlebars = require('handlebars');
@@ -147,6 +148,38 @@ export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
   else{
     console.error(`bad request on sendEmailOnCommentCreated`);
     return null;
+  }
+}
+
+export const sendEmailWithComentCreatedSumary = async ()=>{
+  const data = await prisma?.comentCreatedDaily.findMany({
+    distinct:['eurl'],
+    orderBy: {
+        id: 'desc',
+    }
+  });
+  if(data?.length){
+    const promises:Promise<boolean|null>[] = [];
+
+    data.forEach(d=>{
+      const {to:to_,subject,etitle,eurl,urllabel,about,aboutEnd,unsubscribe}=d;
+      const to = to_.split(",").map((t:string)=>({email:t}));
+      promises.push(sendEmailOnCommentCreated({
+        to,
+        subject,
+        specs:{
+          etitle,
+          about,
+          aboutEnd,
+          eurl,
+          urllabel,
+          unsubscribe
+        },
+      }));
+    });
+    const res = await Promise.allSettled(promises);
+    await prisma?.comentCreatedDaily.deleteMany();
+    
   }
 }
 
