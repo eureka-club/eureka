@@ -191,7 +191,6 @@ export default async function handler(
                 cronTime, // cronTime
                 async function () {
                   await sendEmailWithComentCreatedSumary();
-                  console.log((new Date()).toISOString());
                 }, // onTick
                 null, // onComplete
                 true, // start
