@@ -65,7 +65,7 @@ const LangsMenu = ()=>{
         <Typography variant="button">{t('Language')}</Typography>
         <Stack direction={'row'}>
           {langsLinksInfo?.map(l=>
-                <MenuItem>
+                <MenuItem key={l.label}>
                 <ListItemText>
                     <IconButton key={l.label} onClick={()=>handleLanguageSelect(l.label)}>
                       <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
