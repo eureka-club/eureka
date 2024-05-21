@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent} from 'react';
 import {
@@ -9,7 +8,6 @@ import {
   AiFillFacebook,
 } from 'react-icons/ai';
 import { SiTiktok } from 'react-icons/si';
-import { RiMailLine } from 'react-icons/ri';
 import styles from './Footer.module.css';
 
 
@@ -17,7 +15,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation('navbar');
 
   return (
-  <footer className=" text-center m-0" style={{ background: 'var(--eureka-grey-light'}}>
+  <footer className="text-center m-0" style={{ background: 'var(--eureka-grey-light'}}>
     <div className="container d-flex flex-column-reverse flex-xl-row justify-content-xl-between align-items-lg-center">
       <section className="mb-1 mb-xl-0">
         <div className="text-center d-flex flex-column flex-xl-row justify-content-around pt-3 text-secondary fs-6">
@@ -46,16 +44,14 @@ const Footer: FunctionComponent = () => {
             <a href="https://facebook.com/eleurekaclub" target={'_blank'} rel="noreferrer">
               <AiFillFacebook className={styles.ti} />
             </a>
-          
-            {/*<a href="mailto:hola@eureka.club">
-              <RiMailLine className={styles.ti} />
-            </a>*/}
           </section>
     </div>
 
     <div
          className="text-center p-2 fs-6" style={{ background: 'white' }}>  
-      <a className="text-secondary" href="https://www.eureka.club/">  www.eureka.club</a>
+         <Link href="https://www.eureka.club/">
+            <a className="text-secondary">  www.eureka.club</a>
+         </Link>
     <section>
       <Link href={'https://www-archive.mozilla.org/mpl/mpl-1.0'}>
             <a>MOZILLA PUBLIC LICENSE Version 1.0 (MPL-1.0)</a>
