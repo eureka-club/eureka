@@ -1,4 +1,4 @@
-import { Avatar, Box, IconButton, MenuItem, MenuList, Stack, Typography } from "@mui/material";
+import { Avatar, Box, IconButton, ListItemText, MenuItem, MenuList, Stack, Typography } from "@mui/material";
 import MenuAction from "./MenuAction";
 import useTranslation from "next-translate/useTranslation";
 import { Apps } from "@mui/icons-material";
@@ -61,22 +61,22 @@ const LangsMenu = ()=>{
       window.location.replace(`${WEBAPP_URL}/${locale}${router.asPath}`);
   }
   };
-  return <>
-  <Typography variant="button">{t('Language')}</Typography>
-            <ul className="langsMenu">
-              <li>
-                <Stack direction={'row'} gap={1}>
-                {langsLinksInfo?.map(l=>
-                  <IconButton key={l.label} sx={{width:21,minWidth:21}} onClick={()=>handleLanguageSelect(l.label)}>
-                    <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
-                      <Typography color='white' variant="caption">{l.label}</Typography>
-                    </Avatar>
-                  </IconButton>
-                )}
-                </Stack>
-              </li>
-            </ul>
-  </>
+  return <MenuList className="langsMenu">
+        <Typography variant="button">{t('Language')}</Typography>
+        <Stack direction={'row'}>
+          {langsLinksInfo?.map(l=>
+                <MenuItem>
+                <ListItemText>
+                    <IconButton key={l.label} onClick={()=>handleLanguageSelect(l.label)}>
+                      <Avatar sx={{width:25,height:25,bgcolor:'var(--color-secondary)'}}>
+                        <Typography color='white' variant="caption">{l.label}</Typography>
+                      </Avatar>
+                    </IconButton>
+                </ListItemText>
+                </MenuItem>
+          )}
+        </Stack>
+    </MenuList>
 }
 const MediathequeMenu = ()=>{
   const { t } = useTranslation('navbar');
@@ -162,6 +162,7 @@ export const AppsLinks = ({}:Props) => {
             width:100%;
           }
           ul.langsMenu li{
+            padding:.1rem;
             list-style:none;
               &:hover{
                 background-color: transparent !important;
