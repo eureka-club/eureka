@@ -20,7 +20,7 @@ import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import Spinner from '../Spinner';
 import useUser from '@/src/useUser';
-import { Alert } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import useCycle from '@/src/useCycle';
 import { Session } from '@/src/types';
 
@@ -215,9 +215,14 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                 )}
                 {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
               </div>
-              <div className='mt-3'>
+                {
+                  post?.contentText
+                    ? <Box  id="uct" sx={{paddingTop:'1rem',height:'auto',overflowX:'hidden'}} dangerouslySetInnerHTML={{ __html: post?.contentText }} />
+                    : <></>
+                }
+              {/* <div className='mt-3'>
                 {(post?.contentText != null && post?.contentText.length != 0) && <UnclampText text={post?.contentText} isHTML />}
-              </div>
+              </div> */}
             </div>
             {/*<div className='container d-none d-lg-block'>
             <CommentsList en
