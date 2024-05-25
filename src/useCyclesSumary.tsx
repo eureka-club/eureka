@@ -7,7 +7,7 @@ export const getCyclesSumary = async (
   lang?:string,
   props?:Prisma.CycleFindManyArgs,
 ): Promise<{cycles:CycleSumary[],fetched:number,total:number}> => {
-  const Props = !props ? {take:ITEMS_PER_CAROUSEL} : {take:6,...props};debugger;
+  const Props = !props ? {take:ITEMS_PER_CAROUSEL} : {take:6,...props};
   const query = `?props=${encodeURIComponent(JSON.stringify(Props))}&lang=${lang}`;
   const url = `${WEBAPP_URL}/api/cycle/sumary${query}`
   const res = await fetch(url);

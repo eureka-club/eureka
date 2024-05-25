@@ -5,7 +5,6 @@ import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, useCallback, MouseEvent } from 'react';
 import { Spinner, Card, Row, Col, Button } from 'react-bootstrap';
-import { AiOutlineEnvironment } from 'react-icons/ai';
 import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser, { getUser } from '@/src/useUser';
@@ -307,7 +306,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       </section>
                     </Col>
                     <Col xs={12} lg={10} className="mt-5 mt-lg-0">
-                      <section className="ms-0 ms-lg-5">
+                      <Stack gap={3} className="ms-0 ms-lg-5">
                         {
                           filtersChecked.post
                              ? <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
@@ -324,7 +323,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                           showBooks={filtersChecked.book} 
                           showMovies={filtersChecked.movie} 
                           user={user} goTo={goTo} t={t} id={id} />
-                      </section>
+                      </Stack>
                     </Col>
                   </section>
               </Stack>

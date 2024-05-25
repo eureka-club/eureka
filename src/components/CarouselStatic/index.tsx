@@ -1,13 +1,12 @@
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, useEffect, useMemo } from 'react';
-import { Col, Spinner, CardGroup } from 'react-bootstrap';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
 import Mosaics from './Mosaics';
 import { MosaicItem } from '@/src/types';
-import { Typography } from '@mui/material';
+import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 
 type Props = {
   title?: string | JSX.Element;
@@ -63,12 +62,47 @@ const CarouselStatic: FunctionComponent<Props> = ({
     if (onSeeAll) onSeeAll();
     setIsRedirecting(false);
   };
-
   return useMemo(
     () => (
       <>
         {dataFiltered && !!dataFiltered.length && (
-          <CardGroup className="mb-3">
+          <>
+          <Stack gap={.25}>
+            <Stack direction={'row'} alignItems={'baseline'} justifyContent={'space-between'}>
+              <Typography variant='h6' color={'secondary'}>
+                  {iconBefore ? <span className={styles.iconBefore}>{iconBefore}</span> : ''}
+                  {` `} {title}
+                  {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
+              </Typography>
+              {seeAll && !!dataFiltered.length && (
+                    <Box>
+                      {!isRedirecting ? (
+                        <span
+                          className={`cursor-pointer text-primary ${styles.seeAllButton}`}
+                          role="presentation"
+                          onClick={handlerSeeAll}
+                        >
+                          {t('common:See all')}
+                        </span>
+                      ) : (
+                        <CircularProgress />
+                      )}
+                    </Box>
+              )}
+            </Stack>
+            <Box className="carousel" justifyContent={'center'}>
+              <Mosaics
+                data={dataFiltered}
+                cacheKey={cacheKey}
+                userMosaicDetailed={userMosaicDetailed}
+                showSocialInteraction={showSocialInteraction}
+                customMosaicStyle={customMosaicStyle}
+                mosaicBoxClassName={mosaicBoxClassName}
+                size={size}
+              />
+            </Box>
+          </Stack>
+          {/* <CardGroup className="mb-3">
             <section className="d-flex flex-row  justify-content-between w-100">
               <Col xs={9}>
                 <Typography variant='h6' color={'secondary'}>
@@ -76,8 +110,6 @@ const CarouselStatic: FunctionComponent<Props> = ({
                     {` `} {title}
                     {iconAfter ? <span className={styles.iconAfter}>{iconAfter}</span> : ''}
                 </Typography>
-                {/* <h2 className="text-secondary fw-bold">
-                </h2> */}
               </Col>
               <Col xs={3} className="d-flex justify-content-end">
                 {seeAll && !!dataFiltered.length && (
@@ -91,7 +123,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                         {t('common:See all')}
                       </span>
                     ) : (
-                      <Spinner animation="grow" />
+                      <CircularProgress />
                     )}
                   </>
                 )}
@@ -108,7 +140,8 @@ const CarouselStatic: FunctionComponent<Props> = ({
                 size={size}
               />
             </div>
-          </CardGroup>
+          </CardGroup> */}
+          </>
         )}
       </>
     ),
