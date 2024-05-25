@@ -115,7 +115,6 @@ export type OnCommentCreatedProps = {
 } & Pick<MailDataRequired,'to'|'subject'>;
 export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
              
-            // let html = '';
   const {to,subject,specs}=props;
   if(to.length){
     const tc = Object.entries(specs).map(([name,content])=>({name,content}));
