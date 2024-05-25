@@ -120,7 +120,7 @@ export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
   if(to.length){
     const tc = Object.entries(specs).map(([name,content])=>({name,content}));
     const res = await sendEmailWebhook({
-      from:process.env.EMAILING_FROM!,
+      from:'notifications@eureka.club',
       to,
       subject,
       template_name:'hyvortalkoncommentcreated',

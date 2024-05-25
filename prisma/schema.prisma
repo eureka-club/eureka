@@ -536,7 +536,7 @@ model PostReaction {
 
 model ComentCreatedDaily{
   id                    Int    @id @default(autoincrement())
-  to                    String
+  to                    String  @db.VarChar(4000)
   subject               String
   etitle                String
   eurl                  String
