@@ -45,7 +45,7 @@ const ModalProvider: React.FC<Props> = ({children}) => {
     state, setState, close, show
   }}>
       {children}
-        <Modal show={state.show} onHide={()=>setState(s=>({...s,show:false}))}>
+        <Modal style={{zIndex:9999}} show={state.show} onHide={()=>setState(s=>({...s,show:false}))}>
         {state.title ? <Modal.Header closeButton>
           <Modal.Title>{state.title}</Modal.Title>
         </Modal.Header> : ''}

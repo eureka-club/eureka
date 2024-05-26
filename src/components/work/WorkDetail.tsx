@@ -1,4 +1,4 @@
-import { FunctionComponent, MouseEvent, useEffect, useState, lazy, Suspense, useMemo } from 'react';
+import { FunctionComponent, useState, lazy, Suspense, useMemo, useEffect } from 'react';
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
@@ -39,12 +39,13 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box } from '@mui/material';
+import { Box, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
 import { TagsLinks } from '../common/TagsLinks';
 import useTopics, { TopicItem } from '@/src/useTopics';
+import { TabPanel } from '../common/TabPanel';
 
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
@@ -178,59 +179,59 @@ console.log(work)
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
   };*/
 
-  const renderPosts = () => {
-    if (posts) {
-      return (
-        <>
-          <WorkDetailPost
-            workId={work.id}
-            className="mb-2"
-            cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
-          ></WorkDetailPost>
-          <Row className="mt-5">
-            {posts.map((p) => (
-              <Col
-                key={p.id}
-                xs={12}
-                sm={6}
-                lg={3}
-                xxl={2}
-                className="mb-5 d-flex justify-content-center  align-items-center"
-              >
-                <MosaicItemPost cacheKey={['POST', `${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true} />
-              </Col>
-            ))}
-          </Row>
-          <div className="mt-5" ref={ref}>
-            {hasMorePosts ? <Spinner animation="grow" /> : <></>}
-          </div>
-        </>
-      );
-    }
-    return '';
-  };
+  // const renderPosts = () => {
+  //   if (posts) {
+  //     return (
+  //       <>
+  //         <WorkDetailPost
+  //           workId={work.id}
+  //           className="mb-2"
+  //           cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
+  //         ></WorkDetailPost>
+  //         <Row className="mt-5">
+  //           {posts.map((p) => (
+  //             <Col
+  //               key={p.id}
+  //               xs={12}
+  //               sm={6}
+  //               lg={3}
+  //               xxl={2}
+  //               className="mb-5 d-flex justify-content-center  align-items-center"
+  //             >
+  //               <MosaicItemPost cacheKey={['POST', `${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true} />
+  //             </Col>
+  //           ))}
+  //         </Row>
+  //         <div className="mt-5" ref={ref}>
+  //           {hasMorePosts ? <Spinner animation="grow" /> : <></>}
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  //   return '';
+  // };
 
-  const renderCycles = () => {
-    if (cycles) {
-      return (
-        <Row className="mt-5">
-          {cycles.map((c) => (
-            <Col
-              xs={12}
-              sm={6}
-              lg={3}
-              xxl={2}
-              className="mb-5 d-flex justify-content-center  align-items-center"
-              key={c.id}
-            >
-              <CMI cycleId={c.id} cacheKey={['CYCLES', `WORK-${workId}`]} size={'md'} showSaveForLater={true} />
-            </Col>
-          ))}
-        </Row>
-      );
-    }
-    return <></>;
-  };
+  // const renderCycles = () => {
+  //   if (cycles) {
+  //     return (
+  //       <Row className="mt-5">
+  //         {cycles.map((c) => (
+  //           <Col
+  //             xs={12}
+  //             sm={6}
+  //             lg={3}
+  //             xxl={2}
+  //             className="mb-5 d-flex justify-content-center  align-items-center"
+  //             key={c.id}
+  //           >
+  //             <CMI cycleId={c.id} cacheKey={['CYCLES', `WORK-${workId}`]} size={'md'} showSaveForLater={true} />
+  //           </Col>
+  //         ))}
+  //       </Row>
+  //     );
+  //   }
+  //   return <></>;
+  // };
 
   const handlerChangeRating = (value: number) => {
     execRating({
@@ -257,6 +258,8 @@ console.log(work)
     return 0;
   };
 
+  
+
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -265,18 +268,21 @@ console.log(work)
         {
           //  (!editPostOnSmallerScreen.value)
           //   ?
-          <>
+          <Stack gap={6}>
             <Suspense fallback={<Spinner animation="grow" />}>
               {post == null ? (
-                <Row className="mb-5 d-flex flex-column flex-lg-row">
-                  <Col className="col-md-12 col-lg-4 col-xl-3   d-none d-lg-block">
+              <>
+              
+              <Grid container>
+                <Grid item md={4}>
+                  <Stack sx={{display:{xs:'none',md:'inherit'}}}>
                     <MosaicItem
-                      workId={work.id}
-                      showTrash
-                      linkToWork={false}
-                      size={'lg'}
-                      showCreateEureka={false}
-                      showSaveForLater={true}
+                        workId={work.id}
+                        showTrash
+                        linkToWork={false}
+                        size={'lg'}
+                        showCreateEureka={false}
+                        showSaveForLater={true}
                     />
                     <Box className="d-flex flex-row align-items-baseline" mt={1}>
                       <Rating
@@ -296,97 +302,185 @@ console.log(work)
                       </Button>}
                     </Box>
                     <Box mt={1}>
-                      <WorkReadOrWatched work={work} session={session} />
+                      <WorkReadOrWatched work={work} />
                     </Box>
-                    {/* <div className={classNames(styles.imgWrapper, 'mb-3')}>
-                  <LocalImageComponent filePath={work.localImages[0].storedFile} alt={work.title} />
-                </div>
-                <SocialInteraction cacheKey={['WORKS', `${work.id}`]} entity={work} showCounts showShare showTrash /> */}
-                  </Col>
-                  <Col className="col-md-12 col-lg-8 col-xl-9">
-                    <section className="mx-md-4">
-                      <h1 className="fw-bold text-secondary">{work.title}</h1>
-                      <h2 className={`${styles.author}`}>{work.author}</h2>
-                      <WorkSummary work={work as unknown as WorkSumary} />
-                      <div className="d-flex flex-wrap flex-row mt-2 mb-2">
-                        <Box sx={{ display: 'flex' }}>
-                          <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
-                          <div className="d-flex flex-nowrap ms-2">
-                            {getRatingAvg().toFixed(1)}
-                            {' - '}
-                            {getRatingQty()}
-                          </div>
-                          <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                        </Box>
-                        <TagsLinks topics={topics??[]}/>
-                        {/* {work.topics && (
-                          <TagsInput
-                            className="ms-0 ms-lg-2 d-flex flex-row"
-                            formatValue={(v: string) => t(`topics:${v}`)}
-                            tags={work.topics}
-                            readOnly
-                          />
-                        )} */}
-                        {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
-                      </div>
-                      {work.link != null && (
-                        <a
-                          href={work.link}
-                          className={classNames(styles.workLink, 'mb-5')}
-                          target="_blank"
-                          rel="noreferrer"
+                  </Stack>
+                </Grid>
+                <Grid item md={8}>
+                  <Stack>
+                    <h1 className="fw-bold text-secondary">{work.title}</h1>
+                    <h2 className={`${styles.author}`}>{work.author}</h2>
+                    <WorkSummary work={work as unknown as WorkSumary} />
+                    <div className="d-flex flex-wrap flex-row mt-2 mb-2">
+                      <Box sx={{ display: 'flex' }}>
+                        <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
+                        <div className="d-flex flex-nowrap ms-2">
+                          {getRatingAvg().toFixed(1)}
+                          {' - '}
+                          {getRatingQty()}
+                        </div>
+                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                      </Box>
+                      <TagsLinks topics={topics??[]}/>
+                      
+                      {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
+                    </div>
+                    {work.link != null && (
+                      <a
+                        href={work.link}
+                        className={classNames(styles.workLink, 'mb-5')}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {t('workLinkLabel')} <BsBoxArrowUpRight />
+                      </a>
+                    )}
+                    <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
+                      <MosaicItem
+                        className="postition-absolute start-50 translate-middle-x"
+                        work={work as unknown as WorkSumary}
+                        workId={work.id}
+                        showTrash
+                        linkToWork={false}
+                        size={'lg'}
+                        showCreateEureka={false}
+                        showSaveForLater={true}
+                      />
+                      <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
+                        <Rating
+                          qty={work.currentUserRating??0}
+                          onChange={handlerChangeRating}
+                          size="medium"
+                          iconColor="var(--bs-danger)"
+                        /> {(work.currentUserRating??0) > 0 && <Button
+                          type="button"
+                          title={t('common:clearRating')}
+                          className="text-warning p-0 ms-2"
+                          onClick={clearRating}
+                          variant="link"
+                          //disabled={loadingSocialInteraction}
                         >
-                          {t('workLinkLabel')} <BsBoxArrowUpRight />
-                        </a>
-                      )}
-                      <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
-                        <MosaicItem
-                          className="postition-absolute start-50 translate-middle-x"
-                          work={work as unknown as WorkSumary}
-                          workId={work.id}
-                          showTrash
-                          linkToWork={false}
-                          size={'lg'}
-                          showCreateEureka={false}
-                          showSaveForLater={true}
-                        />
-                        <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
-                          <Rating
-                            qty={work.currentUserRating??0}
-                            onChange={handlerChangeRating}
-                            size="medium"
-                            iconColor="var(--bs-danger)"
-                          /> {(work.currentUserRating??0) > 0 && <Button
-                            type="button"
-                            title={t('common:clearRating')}
-                            className="text-warning p-0 ms-2"
-                            onClick={clearRating}
-                            variant="link"
-                            //disabled={loadingSocialInteraction}
-                          >
-                            <FiTrash2 />
-                          </Button>}
-                        </Box>
-                        <Box className="d-flex justify-content-center" mt={1}>
-                          <WorkReadOrWatched work={work} session={session} />
-                        </Box>
-                      </div>
-                      <Box className="" mt={1}>
-                      {work.contentText != null && (
-                        <UnclampText isHTML={true} text={work.contentText} />
-                      )}
+                          <FiTrash2 />
+                        </Button>}
+                      </Box>
+                      <Box className="d-flex justify-content-center" mt={1}>
+                        <WorkReadOrWatched work={work} />
+                      </Box>
+                    </div>
+                    <Box className="" mt={1}>
+                    {work.contentText != null && (
+                      <UnclampText isHTML={true} text={work.contentText} />
+                    )}
                     </Box>
-                    {/* <HyvorComments entity='work' id={`${work.id}`}  /> */}
-                  </section>
-                  {/* <div className='container d-none d-lg-block mt-5'>
-                  <CommentsList entity={work} parent={undefined}/>
-                </div>*/}
                     <HyvorComments entity="work" id={`${work.id}`} session={session} />
-                </Col>
-                  {/* <div className='container d-sm-block d-lg-none mt-3'>
-                  <CommentsList entity={work} parent={undefined}/>
-            </div> */}
-            </Row>
+                  </Stack>
+                </Grid>
+              </Grid>
+             
+                {/* <Grid container className="mb-5 d-flex flex-column flex-lg-row">
+                    <Grid item md={12} lg={4} xl={3} sx={{display:{xs:'none'}}}>
+                      <MosaicItem
+                        workId={work.id}
+                        showTrash
+                        linkToWork={false}
+                        size={'lg'}
+                        showCreateEureka={false}
+                        showSaveForLater={true}
+                      />
+                      <Box className="d-flex flex-row align-items-baseline" mt={1}>
+                        <Rating
+                          qty={work?.currentUserRating??0}
+                          onChange={handlerChangeRating}
+                          size="medium"
+                          iconColor="var(--bs-danger)"
+                        /> { (work?.currentUserRating??0) > 0 && <Button
+                          type="button"
+                          title={t('common:clearRating')}
+                          className="text-warning p-0 ms-2"
+                          onClick={clearRating}
+                          variant="link"
+                          //disabled={loadingSocialInteraction}
+                        >
+                          <FiTrash2 />
+                        </Button>}
+                      </Box>
+                      <Box mt={1}>
+                        <WorkReadOrWatched work={work} />
+                      </Box>
+                    </Grid> */}
+                    {/* <Grid item md={12} lg={8} xl={9} >
+                      <section className="mx-md-4">
+                        <h1 className="fw-bold text-secondary">{work.title}</h1>
+                        <h2 className={`${styles.author}`}>{work.author}</h2>
+                        <WorkSummary work={work as unknown as WorkSumary} />
+                        <div className="d-flex flex-wrap flex-row mt-2 mb-2">
+                          <Box sx={{ display: 'flex' }}>
+                            <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
+                            <div className="d-flex flex-nowrap ms-2">
+                              {getRatingAvg().toFixed(1)}
+                              {' - '}
+                              {getRatingQty()}
+                            </div>
+                            <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                          </Box>
+                          <TagsLinks topics={topics??[]}/>
+                          
+                          {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
+                        </div>
+                        {work.link != null && (
+                          <a
+                            href={work.link}
+                            className={classNames(styles.workLink, 'mb-5')}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {t('workLinkLabel')} <BsBoxArrowUpRight />
+                          </a>
+                        )}
+                        <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
+                          <MosaicItem
+                            className="postition-absolute start-50 translate-middle-x"
+                            work={work as unknown as WorkSumary}
+                            workId={work.id}
+                            showTrash
+                            linkToWork={false}
+                            size={'lg'}
+                            showCreateEureka={false}
+                            showSaveForLater={true}
+                          />
+                          <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
+                            <Rating
+                              qty={work.currentUserRating??0}
+                              onChange={handlerChangeRating}
+                              size="medium"
+                              iconColor="var(--bs-danger)"
+                            /> {(work.currentUserRating??0) > 0 && <Button
+                              type="button"
+                              title={t('common:clearRating')}
+                              className="text-warning p-0 ms-2"
+                              onClick={clearRating}
+                              variant="link"
+                              //disabled={loadingSocialInteraction}
+                            >
+                              <FiTrash2 />
+                            </Button>}
+                          </Box>
+                          <Box className="d-flex justify-content-center" mt={1}>
+                            <WorkReadOrWatched work={work} />
+                          </Box>
+                        </div>
+                        <Box className="" mt={1}>
+                        {work.contentText != null && (
+                          <UnclampText isHTML={true} text={work.contentText} />
+                        )}
+                      </Box>
+                      
+                      </section>
+                    
+                      <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                    </Grid> 
+                  </Grid>*/}
+              </>
             ) : (
             <>
               {post && work && (
@@ -400,80 +494,29 @@ console.log(work)
               )}
             </>
               )}
-          </Suspense>
+            </Suspense>
 
             {post == null && (
-          <Row className="mb-5">
-            <Col>
-              {detailPagesState.selectedSubsectionWork != null && (
-                <TabContainer
-                  // defaultActiveKey={defaultActiveKey}
-                  activeKey={defaultActiveKey}
-                  onSelect={handleSubsectionChange}
-                  transition={true}
-                >
-                  <style jsx global>
-                    {`
-                          .nav-tabs .nav-item.show .nav-link,
-                          .nav-tabs .nav-link.active,
-                          .nav-tabs .nav-link:hover {
-                            cursor: pointer;
-                            background-color: var(--bs-primary);
-                            color: white !important;
-                            border: none !important;
-                            border-bottom: solid 2px var(--bs-primary) !important;
-                          }
-                          .nav-tabs {
-                            border-bottom: solid 1px var(--bs-primary) !important;
-                          }
-                        `}
-                  </style>
-                  <Row className="mb-4">
-                    <Col>
-                      <div className="">
-                        <Nav variant="tabs" className="scrollNav" fill>
-                          {/*<NavItem>
-                            <NavLink eventKey="discussion">
-                              {t('discussion')}
-                            </NavLink>
-                          </NavItem> */}
-                          <NavItem>
-                            <NavLink eventKey="posts" data-cy="posts">
-                              {t('tabHeaderPosts')} ({dataPosts?.total})
-                            </NavLink>
-                          </NavItem>
-                          <NavItem>
-                            <NavLink eventKey="cycles">
-                              {t('tabHeaderCycles')} ({cyclesCount})
-                            </NavLink>
-                          </NavItem>
-                        </Nav>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <TabContent>
-                        {/*<TabPane eventKey="discussion"> 
-                            <HyvorComments entity='work' id={`${work.id}`}  />
-                          </TabPane>*/}
-                        <TabPane eventKey="posts">
-                          {posts ? (
-                            <>
+              <>
+                  {detailPagesState.selectedSubsectionWork != null && (
+                    <TabPanel items={[
+                      {
+                        label:<Typography>{t('tabHeaderPosts')} ({dataPosts?.total})</Typography>,
+                        content: posts ? (
+                            <Stack gap={3} alignContent={'space-between'}>
+                              <p>{``}</p>
                               <WorkDetailPost
                                 workId={work.id}
-                                className="mb-2"
                                 cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
                               ></WorkDetailPost>
-                              <Row className="mt-5">
+                              <Grid container>
                                 {posts.map((p) => (
-                                  <Col
+                                  <Grid item
                                     key={p.id}
                                     xs={12}
                                     sm={6}
                                     lg={3}
-                                    xxl={2}
-                                    className="mb-5 d-flex justify-content-center  align-items-center"
+                                    xl={2}
                                   >
                                     <MosaicItemPost
                                       cacheKey={['POST', `${p.id}`]}
@@ -481,29 +524,30 @@ console.log(work)
                                       size={'md'}
                                       showSaveForLater={false}
                                     />
-
-                                  </Col>
+                                  </Grid>
                                 ))}
-                              </Row>
+                              </Grid>
                               {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
                                   {hasMorePosts ? <Spinner animation="grow" />
                                   :<></>}
                                 </div> */}
-                            </>
+                            </Stack>
                           ) : (
                             <></>
-                          )}
-                        </TabPane>
-                        <TabPane eventKey="cycles">
-                          {cycles ? (
-                            <Row className="mt-5">
+                          )
+                      },
+                      {
+                        label:<Typography>{t('tabHeaderCycles')} ({cyclesCount})</Typography>,
+                        content:cycles ? (
+                          <Stack gap={3}>
+                            <p>{` `}</p>
+                            <Grid container>
                               {cycles.map((c) => (
-                                <Col
+                                <Grid item
                                   xs={12}
                                   sm={6}
                                   lg={3}
-                                  xxl={2}
-                                  className="mb-5 d-flex justify-content-center  align-items-center"
+                                  xl={2}
                                   key={c.id}
                                 >
                                   <CMI
@@ -512,22 +556,145 @@ console.log(work)
                                     size={'md'}
                                     showSaveForLater={false}
                                   />
-                                </Col>
+                                </Grid>
                               ))}
-                            </Row>
-                          ) : (
-                            <></>
-                          )}
-                        </TabPane>
-                      </TabContent>
-                    </Col>
-                  </Row>
-                </TabContainer>
-              )}
-            </Col>
-          </Row>
-        )}
-      </>
+                            </Grid>
+                          </Stack>
+                        ) : (
+                          <></>
+                        )
+                      }
+                    ]}>
+                    </TabPanel>
+                    
+                    // <TabContainer
+                    //   // defaultActiveKey={defaultActiveKey}
+                    //   activeKey={defaultActiveKey}
+                    //   onSelect={handleSubsectionChange}
+                    //   transition={true}
+                    // >
+                    //   <style jsx global>
+                    //     {`
+                    //           .nav-tabs .nav-item.show .nav-link,
+                    //           .nav-tabs .nav-link.active,
+                    //           .nav-tabs .nav-link:hover {
+                    //             cursor: pointer;
+                    //             background-color: var(--bs-primary);
+                    //             color: white !important;
+                    //             border: none !important;
+                    //             border-bottom: solid 2px var(--bs-primary) !important;
+                    //           }
+                    //           .nav-tabs {
+                    //             border-bottom: solid 1px var(--bs-primary) !important;
+                    //           }
+                    //         `}
+                    //   </style>
+                     
+                      
+                      
+                    //   <Row className="mb-4">
+                    //     <Col>
+                    //       <div className="">
+                    //         <Nav variant="tabs" className="scrollNav" fill>
+                    //           {/*<NavItem>
+                    //             <NavLink eventKey="discussion">
+                    //               {t('discussion')}
+                    //             </NavLink>
+                    //           </NavItem> */}
+                    //           <NavItem>
+                    //             <NavLink eventKey="posts" data-cy="posts">
+                    //               {t('tabHeaderPosts')} ({dataPosts?.total})
+                    //             </NavLink>
+                    //           </NavItem>
+                    //           <NavItem>
+                    //             <NavLink eventKey="cycles">
+                    //               {t('tabHeaderCycles')} ({cyclesCount})
+                    //             </NavLink>
+                    //           </NavItem>
+                    //         </Nav>
+                    //       </div>
+                    //     </Col>
+                    //   </Row>
+                    //   <Row>
+                    //     <Col>
+                    //       <TabContent>
+                    //         {/*<TabPane eventKey="discussion"> 
+                    //             <HyvorComments entity='work' id={`${work.id}`}  />
+                    //           </TabPane>*/}
+                    //         <TabPane eventKey="posts">
+                    //           {posts ? (
+                    //             <>
+                    //               <WorkDetailPost
+                    //                 workId={work.id}
+                    //                 className="mb-2"
+                    //                 cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
+                    //               ></WorkDetailPost>
+                    //               <Row className="mt-5">
+                    //                 {posts.map((p) => (
+                    //                   <Col
+                    //                     key={p.id}
+                    //                     xs={12}
+                    //                     sm={6}
+                    //                     lg={3}
+                    //                     xxl={2}
+                    //                     className="mb-5 d-flex justify-content-center  align-items-center"
+                    //                   >
+                    //                     <MosaicItemPost
+                    //                       cacheKey={['POST', `${p.id}`]}
+                    //                       postId={p.id}
+                    //                       size={'md'}
+                    //                       showSaveForLater={false}
+                    //                     />
+
+                    //                   </Col>
+                    //                 ))}
+                    //               </Row>
+                    //               {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
+                    //                   {hasMorePosts ? <Spinner animation="grow" />
+                    //                   :<></>}
+                    //                 </div> */}
+                    //             </>
+                    //           ) : (
+                    //             <></>
+                    //           )}
+                    //         </TabPane>
+                    //         <TabPane eventKey="cycles">
+                    //           {cycles ? (
+                    //             <Row className="mt-5">
+                    //               {cycles.map((c) => (
+                    //                 <Col
+                    //                   xs={12}
+                    //                   sm={6}
+                    //                   lg={3}
+                    //                   xxl={2}
+                    //                   className="mb-5 d-flex justify-content-center  align-items-center"
+                    //                   key={c.id}
+                    //                 >
+                    //                   <CMI
+                    //                     cycleId={c.id}
+                    //                     cacheKey={['CYCLES', `WORK-${workId}`]}
+                    //                     size={'md'}
+                    //                     showSaveForLater={false}
+                    //                   />
+                    //                 </Col>
+                    //               ))}
+                    //             </Row>
+                    //           ) : (
+                    //             <></>
+                    //           )}
+                    //         </TabPane>
+                    //       </TabContent>
+                    //     </Col>
+                    //   </Row>
+                    // </TabContainer>
+                  )}
+              </>
+              // <Row>
+              //   <Col>
+              //   </Col>
+              // </Row>
+            )}
+          </Stack>
           // : <EditPostForm noModal cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
         }
     </MosaicContext.Provider>
