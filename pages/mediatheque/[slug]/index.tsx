@@ -201,7 +201,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
 
   const getWatchedCurrentYear = () => {
     if (user) {
-      if (user.readOrWatchedWorks.length)
+      if (user.readOrWatchedWorks?.length)
         return user.readOrWatchedWorks.filter(
           (x) => ['movie', 'documentary'].includes(x.work?.type??'') && x.year === dayjs().year(),
         ).length;
