@@ -5,7 +5,7 @@ import SwipeableViews from 'react-swipeable-views';
 export type TabPanelProps = {
     items:{
         label:string|ReactElement|ReactElement[];
-        content:string|ReactElement|ReactElement[];
+        content:any;
     }[]
 } & BoxProps;
 export const TabPanel = ({items,...otherProps}:TabPanelProps)=>{

@@ -9,9 +9,9 @@ const useMySaved = (id:number) => {
     favWorks:[]
   }
   const SFL={
-    favCycles:user.favCycles.map((c) => ({ ...c, type: 'cycle' })),
-    favPosts:user.favPosts.map((p) => ({ ...p, type: 'post' })),
-    favWorks:user.favWorks
+    favCycles:user.favCycles?.length ? user.favCycles?.map((c) => ({ ...c, type: 'cycle' })) : [],
+    favPosts:user.favPosts?.length ? user.favPosts?.map((p) => ({ ...p, type: 'post' })):[],
+    favWorks:user.favWorks??[]
   };
   return SFL;
 };
