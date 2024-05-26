@@ -3,18 +3,7 @@ import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 
-import {
-  Nav,
-  NavItem,
-  TabPane,
-  TabContent,
-  TabContainer,
-  Row,
-  Col,
-  NavLink,
-  Button,
-  Spinner,
-} from 'react-bootstrap';
+import Button from '@mui/material/Button'
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 // import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -39,7 +28,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -223,10 +212,10 @@ console.log(work)
 
   if (!work) return <></>;
 
-  const renderSpinnerForLoadNextCarousel = () => {
-    if (hasMorePosts) return <Spinner animation="grow" />;
-    return '';
-  };
+  // const renderSpinnerForLoadNextCarousel = () => {
+  //   if (hasMorePosts) return <Spinner animation="grow" />;
+  //   return '';
+  // };
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -333,7 +322,7 @@ console.log(work)
           //  (!editPostOnSmallerScreen.value)
           //   ?
           <Stack gap={6}>
-            <Suspense fallback={<Spinner animation="grow" />}>
+            <Suspense fallback={<CircularProgress/>}>
               {post == null ? (
               <>
               
@@ -357,9 +346,10 @@ console.log(work)
                       /> { (work?.currentUserRating??0) > 0 && <Button
                         type="button"
                         title={t('common:clearRating')}
-                        className="text-warning p-0 ms-2"
+                        color='warning'
+                        // className="text-warning p-0 ms-2"
                         onClick={clearRating}
-                        variant="link"
+                        // variant="link"
                         //disabled={loadingSocialInteraction}
                       >
                         <FiTrash2 />
@@ -418,10 +408,11 @@ console.log(work)
                           iconColor="var(--bs-danger)"
                         /> {(work.currentUserRating??0) > 0 && <Button
                           type="button"
+                          color='warning'
                           title={t('common:clearRating')}
-                          className="text-warning p-0 ms-2"
+                          // className="text-warning p-0 ms-2"
                           onClick={clearRating}
-                          variant="link"
+                          // variant="link"
                           //disabled={loadingSocialInteraction}
                         >
                           <FiTrash2 />
