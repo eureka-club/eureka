@@ -556,7 +556,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     <TabPanel items={[
                       {
                         label:<Typography>{t('tabHeaderPosts')} ({dataPosts?.total})</Typography>,
-                        content: posts?.length 
+                        content: posts 
                           ? <TabPosts workId={workId} posts={posts} cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
                           : <></>
                       },
