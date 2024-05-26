@@ -120,6 +120,12 @@ const renderImages = () => {
             <img width={250} key={idx} className="cursor-pointer mb-4" onClick={() => processSelect(img.src)} src={img.src} />
           ))}
         </section>
+       
+         <section >
+               <h6 >
+                   <em>👆{t('SelectImageContinue')}</em>.
+               </h6>
+        </section>
       </Container>
     );
   else return '';
