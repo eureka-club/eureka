@@ -557,7 +557,7 @@ console.log(work)
                     <TabPanel items={[
                       {
                         label:<Typography>{t('tabHeaderPosts')} ({dataPosts?.total})</Typography>,
-                        content: posts?.length 
+                        content: posts 
                           ? <TabPosts workId={workId} posts={posts} cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
                           : <></>
                       },
