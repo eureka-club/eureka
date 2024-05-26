@@ -66,7 +66,6 @@ const UserAvatar: FunctionComponent<Props> = ({
     e.stopPropagation()
     router.push(`/mediatheque/${getMediathequeSlug(user)}`)
   }
-  console.log('user user ', user)
   return (
     <>
       {user && (
