@@ -16,11 +16,13 @@ import ListItemText from '@mui/material/ListItemText';
 import dayjs from 'dayjs';
 import useExecReadOrWatchedWork from '@/src/hooks/mutations/useExecReadOrWatchedWork';
 import { Session } from '@/src/types';
+import { useSession } from 'next-auth/react';
+import { useModalContext } from '@/src/useModal';
+import SignInForm from '../forms/SignInForm';
 // import styles from './WorkSummary.module.css';
 
 interface Props {
   work: WorkDetail; //Work ID
-  session: Session;
 }
 
 const years = (publicationYear:Date|null)=> {
@@ -30,19 +32,22 @@ const years = (publicationYear:Date|null)=> {
 } 
 
 
-const WorkReadOrWatched: FunctionComponent<Props> = ({ work,session }) => {
+const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
   const { t } = useTranslation('common');
-
+  const{data:session}=useSession();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
-
+  const{show}=useModalContext();
     const { mutate: execReadOrWatchedWork } = useExecReadOrWatchedWork({
       workId: work.id!,
     });
 
 
     const handleClickOpen = () => {
-      setOpen(true);
+      if(session?.user)
+        setOpen(true);
+      else
+        show(<SignInForm/>);
     };
 
     const handleClose = () => {
