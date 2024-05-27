@@ -33,7 +33,7 @@
   "NoPromptText":"Tienes que escribir una descripción detallada para generar posibles imágenes.",
   "CreateEureka": "¡Crea un Momento Eureka para resumir una obra que te impactó utilizando una imagen!",
   "SelectImage":"¿No te gustó la imagen? ¡Ajusta tu prompt para crear otra!",
-  "SelectImageContinue":" Seleccione imagen para continuar",
+  "SelectImageContinue":"Seleccione imagen para continuar",
   "descriptionLabel": "Describe la imagen que quieres generar con el máximo de detalles posible",
   "descriptionHelperText": "ej: mujeres ahogándose en toneladas de datos e información, arte digital",
   "Style": "Estilo",
