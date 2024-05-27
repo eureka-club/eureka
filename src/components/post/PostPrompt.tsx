@@ -115,10 +115,16 @@ const renderImages = () => {
         <h6 className="my-4">
           <em>{t('SelectImage')}</em>.
         </h6>
-        <section className="d-flex flex-column flex-lg-row justify-content-around">
+        <section>
           {images.map((img, idx) => (
             <img width={250} key={idx} className="cursor-pointer mb-4" onClick={() => processSelect(img.src)} src={img.src} />
           ))}
+        </section>
+       
+         <section >
+               <h6 >
+                 <b><em className={styles.em}>👆 {t('SelectImageContinue')}.</em></b>  
+               </h6>
         </section>
       </Container>
     );
