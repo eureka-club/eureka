@@ -123,7 +123,7 @@ const renderImages = () => {
        
          <section >
                <h6 >
-                   <em>👆{t('SelectImageContinue')}</em>.
+                 <b><em className={styles.em}>👆 {t('SelectImageContinue')}.</em></b>  
                </h6>
         </section>
       </Container>
