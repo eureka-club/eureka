@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { Button as MaterialButton } from '@mui/material';
@@ -20,12 +20,13 @@ import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/components/forms/SignInForm';
-import { MouseEvent, useEffect } from 'react';
+import { FC, MouseEvent, useEffect } from 'react';
 import { Session } from '@/src/types';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
 import { CycleSumary } from '@/src/types/cycle';
+
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -40,53 +41,64 @@ const whereCycleWorks = (id: number) => ({ where: { cycles: { some: { id } } } }
 const whereCyclePosts = (id: number) => ({ take: 8, where: { cycles: { some: { id } } } });
 
 interface Props {
-  id: number;
-  session: Session;
   metas: { id: number; title: string; creator: string; works: string; storedFile: string };
   NEXT_PUBLIC_AZURE_CDN_ENDPOINT: string;
   NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME: string;
 }
+
+type CycleDetailComponent_Props = {
+  cycleId:number;
+  isJoinCycleLoading:boolean;
+}
+const RenderCycleDetailComponent:FC<CycleDetailComponent_Props> = ({cycleId,isJoinCycleLoading}:CycleDetailComponent_Props) => {
+  const{data:session}=useSession();
+  const { data: cycle, isLoading, isFetching, isError, error } = useCycle(cycleId, { enabled: !isNaN(cycleId) });
+  
+  if (cycle) { 
+    const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
+      <CycleDetailComponent/>
+      </div>
+    if([1,2,4].includes(cycle.access))return res;
+    if (cycle.access === 3 && !cycle.currentUserIsParticipant && cycle.creatorId!=session?.user.id) return <Alert>Not authorized</Alert>;
+    else return res;
+  }
+
+  if (/* isLoadingSession || */ isFetching || isLoading) {
+    return <Spinner animation="grow" variant="info" />;
+  }
+
+  if (isError)
+    return (
+      <Alert variant="warning">
+        <>{error}</>
+      </Alert>
+    );
+
+  return <></>;
+};
+
 const CycleDetailPage: NextPage<Props> = (props) => {
   // const [session, isLoadingSession] = useSession();
-  const session = props.session;
+  const{data:session}=useSession();
   const router = useRouter();
-  const isFetchingCycle = useIsFetching(['CYCLE', `${props.id}`]);
-  const { data: cycle, isSuccess, isLoading, isFetching, isError, error } = useCycle(+props.id, { enabled: !!session });
+  const {id}=router?.query;
+  const cycleId = id?+id?.toString():0;
+  const { data: cycle, isLoading } = useCycle(cycleId, { enabled: !isNaN(cycleId) });
+
+  const isFetchingCycle = useIsFetching(['CYCLE', `${cycleId}`]);
   const { show } = useModalContext();
 
   // const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(props.id), {
   //   enabled: !!props.id,
   //   from: 'cycle/[id]',
   // });
-  const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{enabled:!!cycle?.id!});
+  const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{ enabled: !isNaN(cycleId) });
 
   const { t } = useTranslation('common');
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = props;
 
-  const renderCycleDetailComponent = () => {
-    if (cycle) { 
-      const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
-        <CycleDetailComponent session={session} />
-        </div>
-      if([1,2,4].includes(cycle.access))return res;
-      if (cycle.access === 3 && !cycle.currentUserIsParticipant && cycle.creatorId!=session.user.id) return <Alert>Not authorized</Alert>;
-      else return res;
-    }
-
-    if (/* isLoadingSession || */ isFetching || isLoading) {
-      return <Spinner animation="grow" variant="info" />;
-    }
-
-    if (isError)
-      return (
-        <Alert variant="warning">
-          <>{error}</>
-        </Alert>
-      );
-
-    return <></>;
-  };
+  
 
   const openSignInModal = () => {
     show(<SignInForm />);
@@ -237,7 +249,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           : ''
       } */}
     </ButtonsTopActions>
-          {renderCycleDetailComponent()}
+          <RenderCycleDetailComponent cycleId={cycleId} isJoinCycleLoading={isJoinCycleLoading}/>
         </SimpleLayout>
       </CycleContext.Provider>
     );
@@ -295,10 +307,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   await queryClient.prefetchQuery(['WORKS', JSON.stringify(wcw)], () => works);
 
   participants.map((p) => {
-    queryClient.setQueryData(['USER', `${p.id}`], p);
+    queryClient.setQueryData(['USER', `${p.id}`,'SUMARY'], p);
   });
   works.map((w) => {
-    queryClient.setQueryData(['WORK', `${w.id}`], w);
+    queryClient.setQueryData(['WORK', `${w.id}`,'SUMARY'], w);
   });
 
   return {

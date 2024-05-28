@@ -14,6 +14,7 @@ export const getWork = async (id: number,language:string | undefined): Promise<W
     throw Error('Error');
 
   const w =await  res.json();
+
   return w;
 };
 interface Options {

@@ -3,7 +3,7 @@ import { CycleDetail } from './types/cycle';
 import { WEBAPP_URL } from './constants';
 
 export const getCycle = async (id: Number): Promise<CycleDetail | undefined> => {
-  if (!id) throw new Error('idRequired');
+  if (!id) return undefined;
   const url = `${WEBAPP_URL}/api/cycle/${id}`;
 
   const res = await fetch(url);
