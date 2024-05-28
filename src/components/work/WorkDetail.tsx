@@ -8,7 +8,6 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 // import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { PostDetail } from '@/src/types/post';
-import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
@@ -378,17 +377,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       
                       {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
                     </div>
-                    {work.link != null && (
-                      <a
-                        href={work.link}
-                        className={classNames(styles.workLink, 'mb-5')}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {t('workLinkLabel')} <BsBoxArrowUpRight />
-                      </a>
-                    )}
-                    <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
+                    <Stack gap={1}>
+                      {work.link != null && (
+                        <a
+                          href={work.link}
+                          className={classNames(styles.workLink)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {t('workLinkLabel')} <BsBoxArrowUpRight />
+                        </a>
+                      )}
+                      <Box>
+                        <Typography>{work.contentText}</Typography>
+                      </Box>
+                    </Stack>
+
+                    <div className="d-sm-block d-lg-none position-relative">
                       <MosaicItem
                         className="postition-absolute start-50 translate-middle-x"
                         work={work as unknown as WorkSumary}
@@ -409,10 +414,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           type="button"
                           color='warning'
                           title={t('common:clearRating')}
-                          // className="text-warning p-0 ms-2"
                           onClick={clearRating}
-                          // variant="link"
-                          //disabled={loadingSocialInteraction}
                         >
                           <FiTrash2 />
                         </Button>}
@@ -421,11 +423,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         <WorkReadOrWatched work={work} />
                       </Box>
                     </div>
-                    <Box className="" mt={1}>
-                    {work.contentText != null && (
-                      <UnclampText isHTML={true} text={work.contentText} />
-                    )}
-                    </Box>
+                    
                     <HyvorComments entity="work" id={`${work.id}`} session={session} />
                   </Stack>
                 </Grid>
