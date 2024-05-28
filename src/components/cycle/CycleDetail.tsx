@@ -49,15 +49,12 @@ const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycle
 const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
-}) => {console.log("CycleDetailComponent ")
+}) => {
   const cycleContext = useCycleContext();
   const router = useRouter();
   const{data:session}=useSession();
   
   const [tabKey, setTabKey] = useState<string>();
-
-  
-
 
   const [cycleId,setCycleId] = useState<string>('')
   useEffect(()=>{
@@ -77,7 +74,6 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
 const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
 
-
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
@@ -85,27 +81,6 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
   const{data:participants}=useCycleParticipants(cycle?.id!
     ,{enabled:!!cycle?.id!}
   );
-
-  
-
-
-  // useEffect(()=>{console.log('aca no')
-  //   if(inView && hasMorePosts){
-  //     if(posts){
-  //       const loadMore = async ()=>{
-  //         const {id} = posts.slice(-1)[0];
-  //         const o = {...cyclePostsProps,skip:1,cursor:{id}};
-  //         const {posts:pf,fetched} = await getPosts(lang,o)
-  //         setHasMorePosts(fetched);
-  //         const posts_ = [...(posts||[]),...pf];
-  //         setPosts(posts_);
-  //       }
-  //       loadMore();
-  //     }
-  //   }
-  // },[inView]);
-  
-
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -119,10 +94,6 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
   const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
     
   if(!cycle)return <></>
-
-  
-
-  
 
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
@@ -140,29 +111,18 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
       });
   };
 
-  const onParticipantsAction = async () => {
-    setTabKey('participants');
-    if (tabContainnerRef)
-      tabContainnerRef.current!.scrollIntoView({
-        behavior: 'smooth',
-      });
-  };
-
-  
+  // const onParticipantsAction = async () => {
+  //   setTabKey('participants');
+  //   if (tabContainnerRef)
+  //     tabContainnerRef.current!.scrollIntoView({
+  //       behavior: 'smooth',
+  //     });
+  // };
 
    /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
         setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
   };*/
-
-    
-  
-  
-  
-  
-
-  
-  
   
 
   const RenderRestrictTabsHeaders:FC<{cycle:CycleDetail}> = ({cycle}) => {

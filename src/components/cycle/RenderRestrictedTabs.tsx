@@ -35,6 +35,21 @@ const RenderPosts = ({cycleId}:RenderPostsProps)=>{
     const [ref, inView] = useInView({
         triggerOnce: false,
     });
+     // useEffect(()=>{console.log('aca no')
+  //   if(inView && hasMorePosts){
+  //     if(posts){
+  //       const loadMore = async ()=>{
+  //         const {id} = posts.slice(-1)[0];
+  //         const o = {...cyclePostsProps,skip:1,cursor:{id}};
+  //         const {posts:pf,fetched} = await getPosts(lang,o)
+  //         setHasMorePosts(fetched);
+  //         const posts_ = [...(posts||[]),...pf];
+  //         setPosts(posts_);
+  //       }
+  //       loadMore();
+  //     }
+  //   }
+  // },[inView]);
 
     useEffect(()=>{
         if(dataPosts && dataPosts.posts){
