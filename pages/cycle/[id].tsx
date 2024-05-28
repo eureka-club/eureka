@@ -81,7 +81,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   // const [session, isLoadingSession] = useSession();
   const{data:session}=useSession();
   const router = useRouter();
-  const {id}=router?.query;debugger;
+  const {id}=router?.query;
   const cycleId = id?+id?.toString():0;
   const { data: cycle, isLoading } = useCycle(cycleId, { enabled: !isNaN(cycleId) });
 

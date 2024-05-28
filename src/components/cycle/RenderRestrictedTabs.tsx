@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { FC, Suspense, useEffect, useState } from "react";
 import { Col, Row, TabPane } from "react-bootstrap";
 import HyvorComments from "../common/HyvorComments";
 import CycleDetailDiscussion from "./CycleDetailDiscussion";
@@ -21,7 +21,7 @@ const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycle
 
 const RenderSpinnerForLoadNextCarousel = ({hasMorePosts}:{hasMorePosts:boolean})=>{
     if(hasMorePosts) return <CircularProgress />
-            return '';
+            return <></>;
   }
 
   type RenderPostsProps={
@@ -56,7 +56,7 @@ const RenderPosts = ({cycleId}:RenderPostsProps)=>{
         </div>
       </>
     }
-    return '';
+    return <></>;
   }
 
 const RenderGuidelines = ({cycle}:{cycle:CycleDetail}) => {
@@ -105,20 +105,24 @@ const RenderGuidelines = ({cycle}:{cycle:CycleDetail}) => {
 
         return (
         <Row>
-            {gll.length && (
-            <Col xs={12} md={6}>
-                <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
-            </Col>
-            )||''}
-            {glr.length && (
-            <Col>
-                <section className="">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
-            </Col>
-            )||''}
+            {
+            gll.length 
+                ? <Col xs={12} md={6}>
+                    <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
+                </Col>
+                : <></>
+            }
+            {
+                glr.length
+                    ? <Col>
+                        <section className="">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
+                    </Col>
+                    : <></>
+            }
         </Row>
         );
     }
-    return '';
+    return <></>;
     };  
 
 const RenderParticipants = ({cycle}:{cycle:CycleDetail})=>{
@@ -131,7 +135,7 @@ const RenderParticipants = ({cycle}:{cycle:CycleDetail})=>{
                 {participants.map(p=><Grid item xs={6} sm={4} md={2} key={p.email}><MosaicItemUser user={p} /></Grid>)}
             </Grid>
         }
-        return ''
+        return <></>
       }
 
 type RenderRestrictedTabsProps={
@@ -184,9 +188,9 @@ export const RenderRestrictedTabs = ({cycle}:RenderRestrictedTabsProps) => {
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;
 
-      if (cycle.access === 3) return '';
+      if (cycle.access === 3) return <></>;
       if (cycle.access === 1) return res;
       if ([2,4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
     }
-    return '';
+    return <></>;
   };

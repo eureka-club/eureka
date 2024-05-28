@@ -49,7 +49,7 @@ const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycle
 const CycleDetailComponent: FunctionComponent<Props> = ({
   post,
   work,
-}) => {
+}) => {console.log("CycleDetailComponent ")
   const cycleContext = useCycleContext();
   const router = useRouter();
   const{data:session}=useSession();

@@ -45,7 +45,7 @@ export const  RenderCycleDetailHeader = ({cycle,onCarouselSeeAllAction}:Props) =
         || cycle.creatorId == session?.user.id;
       if(allowed)return res;  
       else if([1,2,4].includes(cycle.access))return res;
-      if (cycle.access === 3) return '';
+      if (cycle.access === 3) return <></>;
     }
-    return '';
+    return <></>;
   };

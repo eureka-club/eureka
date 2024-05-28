@@ -202,7 +202,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     }
   };
 
-  const getWatchedCurrentYear = (u:UserDetail) => {debugger;
+  const getWatchedCurrentYear = (u:UserDetail) => {
     if (u) {
       if (u.readOrWatchedWorks.length)
         return u.readOrWatchedWorks.filter(
