@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { FC, Suspense, useEffect, useState } from "react";
 import { Col, Row, TabPane } from "react-bootstrap";
 import HyvorComments from "../common/HyvorComments";
 import CycleDetailDiscussion from "./CycleDetailDiscussion";
@@ -105,16 +105,20 @@ const RenderGuidelines = ({cycle}:{cycle:CycleDetail}) => {
 
         return (
         <Row>
-            {gll.length && (
-            <Col xs={12} md={6}>
-                <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
-            </Col>
-            )||''}
-            {glr.length && (
-            <Col>
-                <section className="">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
-            </Col>
-            )||''}
+            {
+            gll.length 
+                ? <Col xs={12} md={6}>
+                    <section className="">{gll.map((g, idx) => renderLI(g, idx, 'gll'))}</section>
+                </Col>
+                : <></>
+            }
+            {
+                glr.length
+                    ? <Col>
+                        <section className="">{glr.map((g, idx) => renderLI(g, idx, 'glr'))}</section>
+                    </Col>
+                    : <></>
+            }
         </Row>
         );
     }
