@@ -1,7 +1,6 @@
 import React from 'react'
 import WorkMosaic from '@/src/components/work/MosaicItem'
 import dayjs from 'dayjs';
-import { useQueryClient } from 'react-query';
 import useTranslation from 'next-translate/useTranslation'
 import { WorkSumary } from '@/src/types/work'
 import { CycleWork } from '@/src/types/cycleWork';
@@ -16,7 +15,6 @@ interface Props{
 const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showHeader = true,size = 'md',cycleWorksDates}) => {
   const works:WorkSumary[] = cycleWorksDates.map(c=>c.work!);
   const {t} = useTranslation('cycleDetail')
-  const queryClient = useQueryClient()
   const getWorksSorted = (() => {
     const res: WorkSumary[] = [];
     cycleWorksDates
@@ -61,7 +59,6 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showH
       <div className='d-flex flex-wrap flex-column flex-lg-row justify-content-center '>      
           {getWorksSorted.map(w=>{
             if(!w)return ''
-            queryClient.setQueryData(['WORK',`${w.id}`],w)
             return <div className='p-4' key={w.id}>
               <WorkMosaic work={w} workId={w.id} size={size} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
                       </div>
