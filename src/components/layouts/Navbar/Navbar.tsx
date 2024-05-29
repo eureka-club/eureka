@@ -3,7 +3,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
-import useSignInModal from '@/src/useSignInModal';
 import { MediathequeLinks } from './MediathequeLinks';
 import { TopicsLinks } from './TopicsLinks';
 import SearchInput from '../../SearchInput';
@@ -16,7 +15,6 @@ import { AppsLinks } from './AppsLinks';
 
 export default function NavBar() {
   const { data: session } = useSession();
-  const { SignInModal } = useSignInModal();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -82,7 +80,6 @@ export default function NavBar() {
               </Stack>
         </Toolbar>
       </AppBar>
-      <SignInModal logoImage />
     </Box>
   );
 }

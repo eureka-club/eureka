@@ -3,7 +3,6 @@ import styles from './Navbar.module.css';
 
 import { Session } from "@/src/types";
 import { signOut, useSession } from 'next-auth/react';
-import useSignInModal from '@/src/useSignInModal';
 import { BiUser } from 'react-icons/bi';
 import LocalImage from '../../LocalImage';
 import { AccountCircle, Login, Logout, Person, Settings } from '@mui/icons-material';
@@ -11,6 +10,8 @@ import MenuAction from './MenuAction';
 import { Avatar, Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { AZURE_STORAGE_URL } from '@/src/constants';
+import { useModalContext } from '@/src/hooks/useModal';
+import SignInForm from '../../forms/SignInForm';
 
 
 const avatarError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -49,15 +50,14 @@ const getAvatar = (session: Session | null) => {
 export const SessionLinks = () => {
   const { t } = useTranslation('navbar');
   const { data: session } = useSession();
-  const { setOpen, SignInModal } = useSignInModal();
-
+  // const { setOpen, SignInModal } = useSignInModal();
+  const{show}=useModalContext()
 
   const handlerLogout = () => {
     signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_WEBAPP_URL}` });
   };
   const handlerLogin = () => {
-    //show(<SignInForm />);
-    setOpen(true);
+    show(<SignInForm />);
   };
 
   const sessionLinksInfo = session?.user
@@ -120,6 +120,5 @@ export const SessionLinks = () => {
         }
       }
     />
-    <SignInModal />
   </>
 };

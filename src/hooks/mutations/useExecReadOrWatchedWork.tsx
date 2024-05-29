@@ -1,5 +1,5 @@
 import {} from 'react';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';

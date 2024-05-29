@@ -15,9 +15,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import dayjs from 'dayjs';
 import useExecReadOrWatchedWork from '@/src/hooks/mutations/useExecReadOrWatchedWork';
-import { Session } from '@/src/types';
 import { useSession } from 'next-auth/react';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../forms/SignInForm';
 // import styles from './WorkSummary.module.css';
 

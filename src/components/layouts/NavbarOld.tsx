@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { setCookie } from 'nookies';
 import { FunctionComponent } from 'react';
 import LocalImageComponent from '@/src/components/LocalImage';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../forms/SignInForm';
 import { Container, Button, Nav, Navbar, Dropdown, Spinner } from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';

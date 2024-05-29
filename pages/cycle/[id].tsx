@@ -18,7 +18,7 @@ import globalModalsAtom from '@/src/atoms/globalModals';
 import { WEBAPP_URL } from '@/src/constants';
 import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/components/forms/SignInForm';
 import { FC, MouseEvent, useEffect } from 'react';
 import { Session } from '@/src/types';
