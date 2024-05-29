@@ -1,18 +1,12 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { ChangeEvent, FunctionComponent, MouseEvent, useState,useEffect } from 'react';
-
-import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
-import { SelectChangeEvent,TextField,FormControl,InputLabel, Select, MenuItem} from '@mui/material';
-
-import { GiBrain } from 'react-icons/gi';
-import { BiBookHeart } from 'react-icons/bi';
+import { FunctionComponent, MouseEvent, useState,useEffect } from 'react';
+import { Col, Row } from 'react-bootstrap';
 import { CycleDetail } from '../../types/cycle';
 import UserAvatar from '../common/UserAvatar';
 import useWorks from '@/src/useWorksDetail';
-import useUsers from '@/src/useUsers'
-import {useModalContext} from '@/src/useModal'
+import {useModalContext} from '@/src/hooks/useModal'
 import styles from './CycleDetailDiscussion.module.css';
 import toast from 'react-hot-toast';
 import CycleDetailDiscussionCreateEurekaForm from './CycleDetailDiscussionCreateEurekaForm';

@@ -35,7 +35,6 @@ import {
 } from '../../types';
 import styles from './SocialInteraction.module.css';
 // import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useModalContext } from '@/src/useModal';
 import SignInForm from '@/src/components/forms/SignInForm';
 import _ from 'lodash';
 import PostReactionsDetail from './PostReactionsDetail';
@@ -44,6 +43,7 @@ import usePostEmojiPicker from './hooks/usePostEmojiPicker';
 import PostReactionsActions from './PostReactionsActions';
 import Link from 'next/link';
 import useUserSumary from '@/src/useUserSumary';
+import { useModalContext } from '@/src/hooks/useModal';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;

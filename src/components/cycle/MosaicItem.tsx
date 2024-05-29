@@ -18,12 +18,12 @@ import useCycleSumary from '@/src/useCycleSumary'
 import Avatar from '../common/UserAvatar';
 // import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-import {useModalContext} from '@/src/useModal'
 import SignInForm from '../forms/SignInForm';
 import { CycleSumary } from '@/src/types/cycle';
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import CycleSocialInteraction from '../common/CycleSocialInteraction';
 import useUserSumary from '@/src/useUserSumary';
+import { useModalContext } from '@/src/hooks/useModal';
 // import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);

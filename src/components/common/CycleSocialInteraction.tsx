@@ -32,9 +32,9 @@ import {
 } from '../../types';
 import styles from './SocialInteraction.module.css';
 // import { useNotificationContext } from '@/src/useNotificationProvider';
-import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
 import _ from 'lodash';
+import { useModalContext } from '@/src/hooks/useModal';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;

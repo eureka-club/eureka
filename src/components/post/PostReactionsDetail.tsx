@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import usePostReactionCreateOrEdit from '@/src/hooks/mutations/usePostReactionCreateOrEdit';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 interface Props {
   post:PostSumary;
   cacheKey:string[];

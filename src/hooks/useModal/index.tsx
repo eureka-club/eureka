@@ -1,11 +1,16 @@
 import { createContext, useContext, useState } from 'react';
-import {Modal} from 'react-bootstrap'
+import { Modal } from './Modal';
+import { DialogContent, DialogTitle } from '@mui/material';
+
+export type ModalBaseProps={
+  title:string;
+  content:JSX.Element;
+}
+
 
 export type StateType = {
-    show:boolean;
-  content:JSX.Element;
-  title:string;
-}
+  show:boolean;
+} & ModalBaseProps
 export type ContextType = {
     state:StateType;
     setState:(s:StateType)=>void;
@@ -13,7 +18,7 @@ export type ContextType = {
     show: (content:JSX.Element,title?:string)=>void,
 };
 
-const initialState = {
+const initialState:StateType = {
     show: false,
     title:'',
     content: <></>
@@ -45,14 +50,10 @@ const ModalProvider: React.FC<Props> = ({children}) => {
     state, setState, close, show
   }}>
       {children}
-        <Modal style={{zIndex:9999}} show={state.show} onHide={()=>setState(s=>({...s,show:false}))}>
-        {state.title ? <Modal.Header closeButton>
-          <Modal.Title>{state.title}</Modal.Title>
-        </Modal.Header> : ''}
-            <Modal.Body>
-                {state.content}  
-            </Modal.Body>
-        </Modal> 
+      <Modal open={state.show} onClose={()=>setState(s=>({...s,show:false}))} title={state.title}>
+        <DialogTitle>{state.title}</DialogTitle>
+        <DialogContent>{state.content}</DialogContent>
+      </Modal>
     </ModalContext.Provider>
 };
 

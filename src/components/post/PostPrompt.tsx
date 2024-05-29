@@ -9,8 +9,8 @@ import { getImg } from '@/src/lib/utils';
 import { BiArrowBack } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
-import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
+import { useModalContext } from '@/src/hooks/useModal';
 interface Props {
 onImageSelect?: (file: File, text: string) => void;
 showTitle?:boolean;
