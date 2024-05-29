@@ -391,6 +391,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         </a>
                       )}
                      <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
+                     
                     </Stack>
                     
                     <div className="d-sm-block d-lg-none position-relative">
