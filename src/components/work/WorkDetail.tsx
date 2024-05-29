@@ -36,12 +36,14 @@ import useTopics, { TopicItem } from '@/src/useTopics';
 import { TabPanel } from '../common/TabPanel';
 
 
+
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
 interface Props {
   workId: number;
   post?: PostDetail;
   session: Session;
+  
 }
 interface TabPostsProps{
   workId:any;
@@ -310,7 +312,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   
-
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -357,6 +358,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <WorkReadOrWatched work={work} />
                     </Box>
                   </Stack>
+
                 </Grid>
                 <Grid item md={8}>
                   <Stack>
@@ -388,11 +390,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           {t('workLinkLabel')} <BsBoxArrowUpRight />
                         </a>
                       )}
-                      <Box>
-                        <Typography>{work.contentText}</Typography>
-                      </Box>
+                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
                     </Stack>
-
+                    
                     <div className="d-sm-block d-lg-none position-relative">
                       <MosaicItem
                         className="postition-absolute start-50 translate-middle-x"
