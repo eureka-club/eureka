@@ -382,14 +382,15 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       </Box>
                       <Box display={{xs:'none',md:'inherit'}}>
                         <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                        <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                        
                       </Box>
                     </Stack>
                   </Stack>
                   <Box display={{xs:'inherit',md:'none'}}>
                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                    <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                   
                   </Box>
+                  <HyvorComments entity="work" id={`${work.id}`} session={session} />
               {/* <Grid container sx={{display:{lg:'inherit'}}}>
                 <Grid item lg={4}>
                 </Grid>
