@@ -17,7 +17,7 @@ const WorkSummary: FunctionComponent<Props> = ({ work }) => {
   const { t } = useTranslation('common'); 
 
   return (
-    <p className={`mb-1 mb-sm-2 text-wrap ${styles.workSummary} text-dark`}>
+    <p className={`${styles.workSummary} text-dark`}>
       {[
         work.publicationYear &&
           `${
