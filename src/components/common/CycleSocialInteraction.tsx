@@ -22,7 +22,6 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Cycle } from '@prisma/client';
 import { useMosaicContext } from '@/src/useMosaicContext';
 
 import useUser from '@/src/useUser';
@@ -30,12 +29,6 @@ import { WEBAPP_URL } from '@/src/constants';
 import { CycleSumary } from '@/src/types/cycle';
 import {
   MySocialInfo,
-  isCycle,
-  isWork,
-  isPost,
-  isPostMosaicItem,
-  isWorkMosaicItem,
-  isCycleMosaicItem,
 } from '../../types';
 import styles from './SocialInteraction.module.css';
 // import { useNotificationContext } from '@/src/useNotificationProvider';
@@ -177,7 +170,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
             favInUser?.push(entity as any);
             favs.push({ id: +session.user.id });
           }
-          queryClient.setQueryData(['WORK', `${entity.id}`], { ...entity, favs });
+          queryClient.setQueryData(['CYCLE', `${entity.id}`], { ...entity, favs });
           queryClient.setQueryData(['USER', `${session.user.id}`], { ...user, [entityFavKey]: favInUser });
 
           return { prevUser, prevEntity };

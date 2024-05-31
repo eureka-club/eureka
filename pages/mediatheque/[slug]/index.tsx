@@ -27,6 +27,7 @@ import useFilterMediatheque from '@/src/components/useFilterMediatheque';
 import { Stack } from '@mui/material';
 import RenderAvatar from './components/RenderAvatar';
 import RenderCountry from './components/RenderCountry';
+import { UserDetail } from '@/src/types/user';
 
 interface Props {
   id: number;
@@ -46,6 +47,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   } = useUser(id, {
     enabled: !isNaN(id),
   });
+  console.log("user ", user)
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
 
   const { data: postsData } = useMyPosts(id); 
@@ -199,10 +201,10 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     }
   };
 
-  const getWatchedCurrentYear = () => {
-    if (user) {
-      if (user.readOrWatchedWorks?.length)
-        return user.readOrWatchedWorks.filter(
+  const getWatchedCurrentYear = (u:UserDetail) => {
+    if (u) {
+      if (u.readOrWatchedWorks.length)
+        return u.readOrWatchedWorks.filter(
           (x) => ['movie', 'documentary'].includes(x.work?.type??'') && x.year === dayjs().year(),
         ).length;
       else return 0;
@@ -302,7 +304,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'movies', dayjs().year().toString())}>
                           {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
                         </h2>
-                        <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear()})`}</h2>
+                        <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear(user)})`}</h2>
                       </section>
                     </Col>
                     <Col xs={12} lg={10} className="mt-5 mt-lg-0">
@@ -375,7 +377,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
     });
-
     const user = await getUser(id);
     await queryClient.prefetchQuery(['USER', id.toString()], () => user);
 

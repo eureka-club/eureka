@@ -126,7 +126,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   //   enabled: !!workId,
   // }
 );
-console.log(work)
   const{data:topicsAll}=useTopics();
   const topics:TopicItem[] = useMemo(()=>{
     if(work && topicsAll){
