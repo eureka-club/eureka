@@ -1,7 +1,6 @@
 import { useState, FunctionComponent, useEffect, useMemo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col} from 'react-bootstrap';
 
 import MosaicItem from '@/components/work/MosaicItem'
 
@@ -11,6 +10,8 @@ import { Prisma } from '@prisma/client';
 import { WorkSumary } from '../types/work';
 import { getWorksProps } from '../types/work';
 import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
+import { CircularProgress } from '@mui/material';
+import { MosaicsGrid } from './MosaicsGrid';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
@@ -19,7 +20,6 @@ const SearchTabworks:FunctionComponent = () => {
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
   const {FilterEngineWork,filtersType,filtersCountries} = useFilterEngineWorks()
-console.log("filtersType ",filtersType)
   const getProps = ()=>{
     const res:Prisma.WorkWhereInput = {
      ... getWorksProps(terms)
@@ -85,19 +85,14 @@ console.log("filtersType ",filtersType)
     }
   },[inView])
 
-  const renderWorks=()=>{
-    if(works)
-      return <>
-        <FilterEngineWork/>
-        <Row>
-            {works.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-              <MosaicItem work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  /></Col>)}
-        </Row>
-        {works?.length!=total && <Spinner ref={ref} animation="grow" />}
-      </>
-      return <></>
-  }
-
-  return renderWorks()
+  return  <>
+    <FilterEngineWork/>
+    <MosaicsGrid>
+        {works?.map(p=>
+          <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
+        )}
+    </MosaicsGrid>
+    {works?.length!=total && <CircularProgress ref={ref} />}
+  </>
 };
 export default SearchTabworks;

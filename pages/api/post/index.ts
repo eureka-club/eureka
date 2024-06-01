@@ -71,10 +71,9 @@ export default getApiHandler()
   })
   .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
     try {
-
-      const { q = null, props:p="",lang:l } = req.query;
-      const locale = l?.toString();
-      const language = locale ? Languages[locale!] : '';
+      const { q = null, props:p=""} = req.query;
+      // const locale = l?.toString();
+      // const language = locale ? Languages[locale!] : '';
  
       const props:Prisma.PostFindManyArgs = p ? JSON.parse(decodeURIComponent(p.toString())):{};
       let {where:w,take,cursor,skip,select} = props;
@@ -83,7 +82,7 @@ export default getApiHandler()
       delete w?.AND;
       let where:Prisma.PostWhereInput = {...w,AND:{
         ... AND && {AND},
-        ... language && {language}
+        // ... language && {language}
       }}
       if (typeof q === 'string') {
         const terms = q.split(" ");
