@@ -16,7 +16,7 @@ const PostsCreated:FC<Props> = ({posts,user,id,goTo,t,showSeeAll=true}) => {
     const {data:session} = useSession();
 
     if (user && posts && posts.length) {
-      return <div data-cy="my-posts">
+      return <div data-cy="my-posts" id="my-posts">
         <CarouselStatic
           cacheKey={['MY-POSTS',id]}
           className="mb-5"

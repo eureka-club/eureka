@@ -47,7 +47,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   } = useUser(id, {
     enabled: !isNaN(id),
   });
-  console.log("user ", user)
+  
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
 
   const { data: postsData } = useMyPosts(id); 
@@ -61,6 +61,24 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   //     setCycles(dataCycles?.cycles);
   //   }
   // }, [posts, dataCycles?.cycles]);
+
+  useEffect(()=>{
+    const fn=()=>{
+      const hash=router.asPath.split('#');
+      const id=hash.length==2
+        ? hash[1]
+        : undefined;
+      
+      if(id){
+        const el = document.querySelector(`#${id}`);
+        el?.scrollIntoView({block: "center", behavior: "smooth"});
+      }
+    }
+    const int = setTimeout(()=>{
+      fn();
+    }, 500);
+    return ()=>clearTimeout(int);
+  },[]);
 
   useEffect(() => {
     if (postsData?.posts?.length && cyclesData?.cycles?.length) {

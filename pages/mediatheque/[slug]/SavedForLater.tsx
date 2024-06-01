@@ -44,7 +44,7 @@ const SavedForLater:FC<Props> = ({user,id,goTo,t,showCycles=true,showPosts=true,
         return 1;
       });
       return (
-        <div data-cy="my-saved">
+        <div data-cy="my-saved" id="my-saved">
           <CarouselStatic
             cacheKey={['MEDIATHEQUE-SAVED',`USER-${user!.id}`]}
             onSeeAll={()=>goTo('my-saved')}

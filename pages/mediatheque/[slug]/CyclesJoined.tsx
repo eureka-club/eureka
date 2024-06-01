@@ -14,7 +14,7 @@ const CyclesJoined:FC<Props> = ({cycles,id,goTo,showSeeAll=true}) => {
   const { t } = useTranslation('mediatheque');
 
     return (cycles && cycles.length) 
-    ?<div data-cy="cycles-created-or-joined">
+    ?<div data-cy="cycles-created-or-joined" id="cycles-created-or-joined">
       <CarouselStatic
         cacheKey={['MY-CYCLES',id.toString()]}
         onSeeAll={()=>goTo('my-cycles')}
