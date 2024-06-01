@@ -1,9 +1,7 @@
 import { useQuery } from 'react-query';
 import { PostDetail } from './types/post';
 import { Prisma } from '@prisma/client';
-import useTranslation from 'next-translate/useTranslation';
 import { WEBAPP_URL } from './constants';
-// import { buildUrl } from 'build-url-ts';
 
 export const getPosts = async (
   lang?:string,

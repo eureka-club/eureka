@@ -3,7 +3,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, useState, MouseEvent } from 'react';
+import { useState, MouseEvent, FC } from 'react';
 import { QueryClient, useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
 import { Card, Button, Spinner, Badge} from 'react-bootstrap';
@@ -49,7 +49,7 @@ interface Props {
 }
 
 
-const MosaicItem: FunctionComponent<Props> = ({
+const MosaicItem: FC<Props> = ({
   cycle:cycleItem,
   showButtonLabels = false,
   detailed = true,

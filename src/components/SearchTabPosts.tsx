@@ -1,11 +1,7 @@
 import { useState, FunctionComponent, useEffect, useMemo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col, Tab} from 'react-bootstrap';
-
 import MosaicItem from '@/src/components/post/MosaicItem'
-import usePosts,{getPosts} from '@/src/usePosts'
-
 import useFilterEnginePosts from './useFilterEnginePosts';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
@@ -13,6 +9,8 @@ import { PostSumary } from '../types/post';
 import usePostsSumary, { getPostsSumary } from '../usePostsSumary';
 import { MosaicContext } from '../useMosaicContext';
 import { useSession } from 'next-auth/react';
+import { Box, CircularProgress } from '@mui/material';
+import { MosaicsGrid } from './MosaicsGrid';
 
 const take = 8;
 const SearchTabCycles:FunctionComponent = () => {
@@ -105,27 +103,18 @@ const SearchTabCycles:FunctionComponent = () => {
     }
   },[inView])
 
-  const renderPosts=()=>{
-    if(posts)
-      return       <>
-
-          <FilterEnginePosts/>
-          <Row>
-              {posts?.map(p=>
-                {
-                  return <Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-                  <MosaicContext.Provider value={{ showShare: false }}>
-                    <MosaicItem post={p} postId={p.id} className="" imageLink={true} cacheKey={['POST',p.id.toString()]} size={'md'} />
-                  </MosaicContext.Provider>
-                </Col>
-                }
-                )}
-        </Row>
-        {posts?.length!=total && <Spinner ref={ref} animation="grow" />}
-      </>
-      return <></>
-  }
-
-  return renderPosts()
+  return <>
+    <FilterEnginePosts/>
+      <MosaicsGrid>
+          {posts?.map(p=>
+            <Box key={p.id}>
+              <MosaicContext.Provider value={{ showShare: false }}>
+                <MosaicItem  post={p} postId={p.id} className="" imageLink={true} cacheKey={['POST',p.id.toString()]} size={'md'} />
+              </MosaicContext.Provider>
+            </Box>
+          )}
+    </MosaicsGrid>
+    {posts?.length!=total && <CircularProgress ref={ref} />}
+  </>
 };
 export default SearchTabCycles;
