@@ -59,7 +59,7 @@ const TabPosts:FC<TabPostsProps> = ({workId,posts,cacheKey}:TabPostsProps)=>{
       cacheKey={cacheKey}
     ></WorkDetailPost>
     <MosaicsGrid>
-      {posts.map(p=><MosaicItemPost
+      {posts.map(p=><MosaicItemPost key={p.id}
             cacheKey={['POST', `${p.id}`]}
             postId={p.id}
             size={'md'}
