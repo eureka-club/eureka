@@ -2,19 +2,20 @@ import { CycleSumary } from "@/src/types/cycle";
 import CarouselStatic from '@/src/components/CarouselStatic';
 import { FC } from "react";
 import useTranslation from "next-translate/useTranslation";
+import { Box, BoxProps } from "@mui/material";
 
-interface Props{
+interface Props extends BoxProps{
     cycles:CycleSumary[];
     goTo:(path:string)=>void;
     id:string;
     showSeeAll?:boolean
 }
 
-const CyclesJoined:FC<Props> = ({cycles,id,goTo,showSeeAll=true}) => {
+const CyclesJoined:FC<Props> = ({cycles,id,goTo,showSeeAll=true,...others}) => {
   const { t } = useTranslation('mediatheque');
 
     return (cycles && cycles.length) 
-    ?<div data-cy="cycles-created-or-joined" id="cycles-created-or-joined">
+    ?<Box data-cy="cycles-created-or-joined" id="cycles-created-or-joined" {...others}>
       <CarouselStatic
         cacheKey={['MY-CYCLES',id.toString()]}
         onSeeAll={()=>goTo('my-cycles')}
@@ -22,7 +23,7 @@ const CyclesJoined:FC<Props> = ({cycles,id,goTo,showSeeAll=true}) => {
         title={t('common:myCycles')}
         data={cycles}
       />
-    </div> 
+    </Box> 
     : <></>;
   };
 
