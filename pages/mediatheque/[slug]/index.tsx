@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
-import { useState, useEffect, useCallback, MouseEvent } from 'react';
+import { useState, useEffect, useCallback, MouseEvent, useRef, ReactElement } from 'react';
 import { Spinner, Card, Row, Col, Button } from 'react-bootstrap';
 import { User } from '@prisma/client';
 import styles from './index.module.css';
@@ -39,7 +39,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
   const {FilterMediatheque,filtersChecked}=useFilterMediatheque();
-
+  const CyclesJoinedRef=useRef(null);
+  const PostsCreatedRef=useRef(null);
   const {
     data: user,
     isLoading: isLoadingUser,
@@ -71,14 +72,20 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
       
       if(id){
         const el = document.querySelector(`#${id}`);
-        el?.scrollIntoView({block: "center", behavior: "smooth"});
+        let opt = el?.getBoundingClientRect();
+        let top = opt?.y;
+        window.scroll({top,behavior: "smooth"})
+        // el?.scrollIntoView({block: 'center', behavior: "smooth"});
       }
     }
+    fn();
     const int = setTimeout(()=>{
       fn();
     }, 500);
-    return ()=>clearTimeout(int);
-  },[]);
+    return ()=>{
+      clearTimeout(int);
+    }
+  },[CyclesJoinedRef,PostsCreatedRef]);
 
   useEffect(() => {
     if (postsData?.posts?.length && cyclesData?.cycles?.length) {
@@ -329,12 +336,12 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <Stack gap={3} className="ms-0 ms-lg-5">
                         {
                           filtersChecked.post
-                             ? <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
+                             ? <PostsCreated ref={PostsCreatedRef} showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
                              : <></>
                         }
                         {
                           filtersChecked.cycle
-                            ? <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} />
+                            ? <CyclesJoined ref={CyclesJoinedRef} showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} />
                             : <></>
                         }
                         <SavedForLater 
