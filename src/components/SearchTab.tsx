@@ -6,6 +6,7 @@ import { Tab, Tabs} from 'react-bootstrap';
 import SearchTabWorks from './SearchTabWorks';
 import SearchTabPosts from './SearchTabPosts';
 import SearchTabCycles from './SearchTabCycles';
+import { TabPanel } from './common/TabPanel';
 
 interface Props{
   hasCycles:boolean;
@@ -62,23 +63,39 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
                 </style>
                 
         {router.query.q
-          ? <Tabs  
-              defaultActiveKey={key}
-              activeKey={key}
-              onSelect={(k) => setKey(k!)}
-              className="mt-5"
-            >
+          ? <TabPanel
+            items={[
+              {
+                label:t('cycles'),
+                content:<SearchTabCycles />
+              },
+              {
+                label:t('posts'),
+                content:<SearchTabPosts />
+              },
+              {
+                label:t('works'),
+                content:<SearchTabWorks />
+              }
+            ]}
+          />
+          // ? <Tabs  
+          //     defaultActiveKey={key}
+          //     activeKey={key}
+          //     onSelect={(k) => setKey(k!)}
+          //     className="mt-5"
+          //   >
              
-              {hasCycles ? <Tab eventKey="cycles" data-cy="tab-cycles" title={t('cycles')}  className={`cursor-pointer`}>
-                    <SearchTabCycles />
-              </Tab> : <></>}
-              {hasPosts ? <Tab eventKey="posts" data-cy="tab-posts" title={t('posts')} className={`cursor-pointer`}>
-                <SearchTabPosts />
-              </Tab> : <></>}
-              {hasWorks ? <Tab eventKey="works" data-cy="tab-works" title={t('works')} className={`cursor-pointer`}>
-                <SearchTabWorks />
-              </Tab>:<></>}
-            </Tabs>
+          //     {hasCycles ? <Tab eventKey="cycles" data-cy="tab-cycles" title={t('cycles')}  className={`cursor-pointer`}>
+          //           <SearchTabCycles />
+          //     </Tab> : <></>}
+          //     {hasPosts ? <Tab eventKey="posts" data-cy="tab-posts" title={t('posts')} className={`cursor-pointer`}>
+          //       <SearchTabPosts />
+          //     </Tab> : <></>}
+          //     {hasWorks ? <Tab eventKey="works" data-cy="tab-works" title={t('works')} className={`cursor-pointer`}>
+          //       <SearchTabWorks />
+          //     </Tab>:<></>}
+          //   </Tabs>
           :<></>
         }
   </div>
