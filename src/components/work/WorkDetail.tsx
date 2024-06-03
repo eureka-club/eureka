@@ -58,7 +58,15 @@ const TabPosts:FC<TabPostsProps> = ({workId,posts,cacheKey}:TabPostsProps)=>{
       workId={workId}
       cacheKey={cacheKey}
     ></WorkDetailPost>
-    <Grid container>
+    <MosaicsGrid>
+      {posts.map(p=><MosaicItemPost key={p.id}
+            cacheKey={['POST', `${p.id}`]}
+            postId={p.id}
+            size={'md'}
+            showSaveForLater={false}
+          />)}
+    </MosaicsGrid>
+    {/* <Grid container>
       {posts.map((p) => (
         <Grid item
           key={p.id}
@@ -75,7 +83,7 @@ const TabPosts:FC<TabPostsProps> = ({workId,posts,cacheKey}:TabPostsProps)=>{
           />
         </Grid>
       ))}
-    </Grid>
+    </Grid> */}
     {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
         {hasMorePosts ? <Spinner animation="grow" />
         :<></>}
@@ -90,7 +98,16 @@ interface TabCyclesProps{
 const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
   return <Stack gap={3}>
     <p>{` `}</p>
-    <Grid container>
+     <MosaicsGrid>
+      {cycles.map((c,idx)=><CMI
+            cycleId={c.id}
+            key={`${c.id}-${idx}`}
+            cacheKey={['CYCLES', `WORK-${workId}`]}
+            size={'md'}
+            showSaveForLater={false}
+          />)}
+    </MosaicsGrid> 
+    {/* <Grid container>
       {cycles.map((c) => (
         <Grid item
           xs={12}
@@ -107,7 +124,7 @@ const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
           />
         </Grid>
       ))}
-    </Grid>
+    </Grid> */}
   </Stack>
 }
 
@@ -806,7 +823,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
           // : <EditPostForm noModal cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
         }
     </MosaicContext.Provider>
-    // </WorkContext.Provider >
+    // </WorkContext.Provider
   );
 };
 
