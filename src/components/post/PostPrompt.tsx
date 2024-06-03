@@ -9,8 +9,8 @@ import { getImg } from '@/src/lib/utils';
 import { BiArrowBack } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
-import { useModalContext } from '@/src/useModal';
 import SignInForm from '../forms/SignInForm';
+import { useModalContext } from '@/src/hooks/useModal';
 interface Props {
 onImageSelect?: (file: File, text: string) => void;
 showTitle?:boolean;
@@ -115,7 +115,7 @@ const renderImages = () => {
         <h6 className="my-4">
           <em>{t('SelectImage')}</em>.
         </h6>
-        <section className="d-flex flex-column flex-lg-row justify-content-around">
+        <section>
           {images.map((img, idx) => (
             <img width={250} key={idx} className="cursor-pointer mb-4" onClick={() => processSelect(img.src)} src={img.src} />
           ))}

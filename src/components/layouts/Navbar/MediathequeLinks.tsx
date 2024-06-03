@@ -3,7 +3,7 @@ import MenuAction from "./MenuAction";
 import useTranslation from "next-translate/useTranslation";
 import { useSession } from "next-auth/react";
 import slugify from 'slugify';
-import { FaRegListAlt } from "react-icons/fa";
+// import { FaRegListAlt } from "react-icons/fa";
 
 export const MediathequeLinks = () => {
     const { t } = useTranslation('navbar');
@@ -21,6 +21,8 @@ export const MediathequeLinks = () => {
     
     const mediathequeLinksInfo = [
         {label:t('My Mediatheque'),link:`/mediatheque/${getMediathequeSlug()}`},
+        {label:t('common:myPosts'),link:`/mediatheque/${getMediathequeSlug()}#my-posts`},
+        {label:t('common:myCycles'),link:`/mediatheque/${getMediathequeSlug()}#cycles-created-or-joined`},
         {label:t('MyReadOrWatched'),link:`/user/${getMediathequeSlug() }/my-read-or-watched`},
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={

@@ -16,6 +16,7 @@ export const ButtonsTopActions = (props:Props)=>{
         >
             <Button 
             color="primary"
+            sx={{borderRadius:'0'}}
             onClick={() => router.back()}
             >
                 <span style={{width:'0px'}}>&nbsp;</span>

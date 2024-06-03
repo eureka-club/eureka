@@ -15,6 +15,7 @@ import { Button as MaterialButton } from '@mui/material';
 import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 import { useInView } from 'react-intersection-observer';
 import useTranslation from "next-translate/useTranslation";
+import { MosaicsGrid } from "../MosaicsGrid";
 
 const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycleId}}}});
 
@@ -60,12 +61,20 @@ const RenderPosts = ({cycleId}:RenderPostsProps)=>{
 
     if(posts){
       return <>
-        <Row className='mt-2'>
-        {posts.map((p)=><Col xs={12} sm={6} lg={3} xxl={2} key={p.id} className="mb-5 d-flex justify-content-center  align-items-center">
+      <MosaicsGrid>
+        {posts.map((p:any,idx:number)=><MosaicItemPost key={`${p.id}-${idx}`}  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={false} size={'md'} />          )}
+      </MosaicsGrid>
+        {/* <Grid container gap={3}>
+        {posts.map((p)=><Grid item
+          xs={12} sm={6} lg={2} 
+          // xxl={2} 
+          key={p.id} 
+          // className="mb-5 d-flex justify-content-center  align-items-center"
+         >
           <MosaicItemPost  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={false} size={'md'} />          
-        </Col>
+        </Grid>
         )}
-        </Row>
+        </Grid> */}
         <div className="mt-5" ref={ref}>
          <RenderSpinnerForLoadNextCarousel hasMorePosts={hasMorePosts}/>
         </div>

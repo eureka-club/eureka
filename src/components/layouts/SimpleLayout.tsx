@@ -1,5 +1,4 @@
 import { FunctionComponent, HtmlHTMLAttributes} from 'react';
-import { Container} from 'react-bootstrap';
 import withTitle from '../../HOCs/withTitle';
 import NavbarMobile from '@/components/layouts/NavbarMobile';
 import Header from '@/components/layouts/Header';
@@ -8,7 +7,7 @@ import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
 import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
 import Footer from '@/components/layouts/Footer';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 type Props = {
   children: JSX.Element | JSX.Element[];

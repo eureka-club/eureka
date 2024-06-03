@@ -43,6 +43,7 @@ $font-size-base: 1rem;
   // --primary: #{theme-color("primary")};
   // --secondary: #{theme-color("secondary")};
   // --info: #{theme-color("info")};
+  scroll-padding-top: 5rem;
   
 
   //TODO review use of each case in the code 
@@ -494,7 +495,7 @@ a{
 }
 
 .mainSection{
-  padding-top: 5rem;
+  padding-top: 4rem;
 }
 .mainContainer{
   // padding-top: 2rem;

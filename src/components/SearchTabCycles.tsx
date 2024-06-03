@@ -1,7 +1,6 @@
 import { useState, FunctionComponent, useEffect, useMemo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Spinner,Row, Col} from 'react-bootstrap';
 import MosaicItem from '@/src/components/cycle/MosaicItem'
 import {getCycles} from '@/src/useCycles'
 import useFilterEngineCycles from './useFilterEngineCycles';
@@ -9,6 +8,8 @@ import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleSumary } from '../types/cycle';
 import useCyclesSumary from '../useCyclesSumary';
+import { MosaicsGrid } from './MosaicsGrid';
+import { CircularProgress } from '@mui/material';
 
 const take = 8;
 interface Props{
@@ -79,10 +80,10 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
               }
             }
             return res;
-          };
+  };
           
-          const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
-          const cacheKey = [`cycles-search-${lang}`];
+  const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
+  const cacheKey = [`cycles-search-${lang}-${JSON.stringify(props)}`];
           
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleSumary[]>([])
@@ -117,20 +118,15 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
     }
   },[inView])
 
-  const render=()=>{
-    if(cycles)
-      return <>
-          <FilterEngineCycles/>
-          <Row>
-              {cycles.map(p=><Col xs={12} sm={6} lg={3} xxl={2} className="mb-5 d-flex justify-content-center  align-items-center" key={p.id}>
-                <MosaicItem cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} /></Col>)}
-          </Row>
-          {cycles?.length!=total && <Spinner ref={ref} animation="grow" />}
-      </>
-    return <></>    
-  }
-
-  return  render();
+  return  <>
+    <FilterEngineCycles/>
+    <MosaicsGrid>
+        {cycles?.map(p=>
+          <MosaicItem key={p.id} cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} />
+        )}
+    </MosaicsGrid>
+    {cycles?.length!=total && <CircularProgress ref={ref} />}
+  </>
   
 
 };

@@ -3,20 +3,20 @@ import CarouselStatic from '@/src/components/CarouselStatic';
 import { PostDetail, PostSumary } from "@/src/types/post";
 import { UserDetail } from "@/src/types/user";
 import { useSession } from "next-auth/react";
+import { Box, BoxProps } from "@mui/material";
 
-interface Props{
+interface Props extends BoxProps{
   posts:PostSumary[];
   user:UserDetail;
   id:string;
   goTo:(path:string)=>void;
   t:(val:string)=>string;
-  showSeeAll?:boolean
+  showSeeAll?:boolean; 
 }
-const PostsCreated:FC<Props> = ({posts,user,id,goTo,t,showSeeAll=true}) => {
-    const {data:session} = useSession();
+const PostsCreated:FC<Props> = ({posts,user,id,goTo,t,showSeeAll=true,...others}) => {
 
     if (user && posts && posts.length) {
-      return <div data-cy="my-posts">
+      return <Box data-cy="my-posts" id="my-posts" {...others}>
         <CarouselStatic
           cacheKey={['MY-POSTS',id]}
           className="mb-5"
@@ -26,7 +26,7 @@ const PostsCreated:FC<Props> = ({posts,user,id,goTo,t,showSeeAll=true}) => {
           data={posts}
           mosaicBoxClassName="pb-1"
         />
-      </div>
+      </Box>
     }
     return <></>;
   };

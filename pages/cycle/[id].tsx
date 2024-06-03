@@ -15,13 +15,12 @@ import useCycle, { getCycle } from '@/src/useCycle';
 import { getPosts } from '@/src/usePosts';
 import { CycleContext } from '@/src/useCycleContext';
 import globalModalsAtom from '@/src/atoms/globalModals';
-import { WEBAPP_URL } from '@/src/constants';
+import { ITEMS_IN_LIST_PAGES, WEBAPP_URL } from '@/src/constants';
 import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
-import { useModalContext } from '@/src/useModal';
+import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/components/forms/SignInForm';
 import { FC, MouseEvent, useEffect } from 'react';
-import { Session } from '@/src/types';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
@@ -38,7 +37,7 @@ const whereCycleParticipants = (id: number) => ({
 });
 
 const whereCycleWorks = (id: number) => ({ where: { cycles: { some: { id } } } });
-const whereCyclePosts = (id: number) => ({ take: 8, where: { cycles: { some: { id } } } });
+const whereCyclePosts = (id: number) => ({ take: ITEMS_IN_LIST_PAGES, where: { cycles: { some: { id } } } });
 
 interface Props {
   metas: { id: number; title: string; creator: string; works: string; storedFile: string };

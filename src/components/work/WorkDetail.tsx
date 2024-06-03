@@ -8,7 +8,6 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 // import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { PostDetail } from '@/src/types/post';
-import UnclampText from '@/components/UnclampText';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
@@ -35,6 +34,8 @@ import { WorkSumary } from '@/src/types/work';
 import { TagsLinks } from '../common/TagsLinks';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { TabPanel } from '../common/TabPanel';
+import { MosaicsGrid } from '../MosaicsGrid';
+
 
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
@@ -43,6 +44,7 @@ interface Props {
   workId: number;
   post?: PostDetail;
   session: Session;
+  
 }
 interface TabPostsProps{
   workId:any;
@@ -311,22 +313,128 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   
-
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
       <MosaicContext.Provider value={{ showShare: true }}>
-        
-
         {
-          //  (!editPostOnSmallerScreen.value)
-          //   ?
           <Stack gap={6}>
             <Suspense fallback={<CircularProgress/>}>
               {post == null ? (
               <>
+                  <Stack gap={{xs:3}}  direction={{xs:'column',sm:'row'}}>
+                    <Stack gap={1}>
+                      <MosaicItem
+                          workId={work.id}
+                          showTrash
+                          linkToWork={false}
+                          size={'lg'}
+                          showCreateEureka={false}
+                          showSaveForLater={true}
+                      />
+                      <Box>
+                        <Rating
+                          qty={work?.currentUserRating??0}
+                          onChange={handlerChangeRating}
+                          size="medium"
+                          iconColor="var(--bs-danger)"
+                        /> { (work?.currentUserRating??0) > 0 && <Button
+                          type="button"
+                          title={t('common:clearRating')}
+                          color='warning'
+                          // className="text-warning p-0 ms-2"
+                          onClick={clearRating}
+                          // variant="link"
+                          //disabled={loadingSocialInteraction}
+                        >
+                          <FiTrash2 />
+                        </Button>}
+                        <WorkReadOrWatched work={work} />
+                      </Box>
+                    </Stack>
+                    <Stack>
+                      <h1 className="fw-bold text-secondary">{work.title}</h1>
+                      <h2 className={`${styles.author}`}>{work.author}</h2>
+                      <WorkSummary work={work as unknown as WorkSumary} />
+                      <Stack direction={{sm:'column',md:'row'}} gap={1}>
+                          <Stack direction={'row'}>
+                            <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
+                            <Typography>
+                              {getRatingAvg().toFixed(1)}
+                              {' - '}
+                              <span className="ms-1 text-gray">{getRatingQty()} {t('common:ratings')}</span>
+                            </Typography>
+                          </Stack>
+                          <Box>
+                            <TagsLinks topics={topics??[]}/>
+                            {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
+                          </Box>
+                      </Stack>
+                      <Box>
+                      {work.link != null && (
+                          <a
+                            href={work.link}
+                            className={classNames(styles.workLink)}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {t('workLinkLabel')} <BsBoxArrowUpRight />
+                          </a>
+                        )}
+                      </Box>
+                      <Box display={{xs:'none',md:'inherit'}}>
+                        <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
+                        
+                      </Box>
+                    </Stack>
+                  </Stack>
+                  <Box display={{xs:'inherit',md:'none'}}>
+                    <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
+                   
+                  </Box>
+                  <HyvorComments entity="work" id={`${work.id}`} session={session} />
+              {/* <Grid container sx={{display:{lg:'inherit'}}}>
+                <Grid item lg={4}>
+                </Grid>
+
+                 <Grid item lg={8}>
+                  <Stack>
+                    <h1 className="fw-bold text-secondary">{work.title}</h1>
+                    <h2 className={`${styles.author}`}>{work.author}</h2>
+                    <WorkSummary work={work as unknown as WorkSumary} />
+                    <div className="d-flex flex-wrap flex-row mt-2 mb-2">
+                      <Box sx={{ display: 'flex' }}>
+                        <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
+                        <div className="d-flex flex-nowrap ms-2">
+                          {getRatingAvg().toFixed(1)}
+                          {' - '}
+                          {getRatingQty()}
+                        </div>
+                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
+                      </Box>
+                      <TagsLinks topics={topics??[]}/>
+                      
+                      {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
+                    </div>
+                    <Stack gap={1}>
+                      {work.link != null && (
+                        <a
+                          href={work.link}
+                          className={classNames(styles.workLink)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {t('workLinkLabel')} <BsBoxArrowUpRight />
+                        </a>
+                      )}
+                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
+                    </Stack>
+                    <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                  </Stack>
+                </Grid> 
+              </Grid> */}
               
-              <Grid container>
-                <Grid item md={4}>
+              {/* <Grid container>
+                <Grid item lg={4}>
                   <Stack sx={{display:{xs:'none',md:'inherit'}}}>
                     <MosaicItem
                         workId={work.id}
@@ -359,7 +467,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     </Box>
                   </Stack>
                 </Grid>
-                <Grid item md={8}>
+                <Grid item lg={8}>
                   <Stack>
                     <h1 className="fw-bold text-secondary">{work.title}</h1>
                     <h2 className={`${styles.author}`}>{work.author}</h2>
@@ -378,17 +486,22 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       
                       {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
                     </div>
-                    {work.link != null && (
-                      <a
-                        href={work.link}
-                        className={classNames(styles.workLink, 'mb-5')}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {t('workLinkLabel')} <BsBoxArrowUpRight />
-                      </a>
-                    )}
-                    <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
+                    <Stack gap={1}>
+                      {work.link != null && (
+                        <a
+                          href={work.link}
+                          className={classNames(styles.workLink)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {t('workLinkLabel')} <BsBoxArrowUpRight />
+                        </a>
+                      )}
+                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
+                     
+                    </Stack>
+                    
+                    <div className="d-xs-block d-lg-none position-relative">
                       <MosaicItem
                         className="postition-absolute start-50 translate-middle-x"
                         work={work as unknown as WorkSumary}
@@ -409,10 +522,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           type="button"
                           color='warning'
                           title={t('common:clearRating')}
-                          // className="text-warning p-0 ms-2"
                           onClick={clearRating}
-                          // variant="link"
-                          //disabled={loadingSocialInteraction}
                         >
                           <FiTrash2 />
                         </Button>}
@@ -421,15 +531,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         <WorkReadOrWatched work={work} />
                       </Box>
                     </div>
-                    <Box className="" mt={1}>
-                    {work.contentText != null && (
-                      <UnclampText isHTML={true} text={work.contentText} />
-                    )}
-                    </Box>
+                    
                     <HyvorComments entity="work" id={`${work.id}`} session={session} />
                   </Stack>
                 </Grid>
-              </Grid>
+              </Grid> */}
              
                 {/* <Grid container className="mb-5 d-flex flex-column flex-lg-row">
                     <Grid item md={12} lg={4} xl={3} sx={{display:{xs:'none'}}}>

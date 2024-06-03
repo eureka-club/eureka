@@ -51,7 +51,6 @@ import './scss/custom.scss';
 import { GTM_ID } from '@/src/lib/gtag'
 
 import { NotificationProvider } from '@/src/useNotificationProvider';
-import {ModalProvider} from '@/src/useModal'
 import Script from 'next/script';
 import { Session } from '@/src/types';
 import Spinner from '@/src/components/Spinner';
@@ -59,6 +58,7 @@ import ErrorBounddary from '@/src/ErrorBounddary';
 import { ThemeProvider } from '@mui/material';
 import Head from 'next/head';
 import { FormFloating } from 'react-bootstrap';
+import { ModalProvider } from '@/src/hooks/useModal';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null

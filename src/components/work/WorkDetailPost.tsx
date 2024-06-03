@@ -5,7 +5,7 @@ import { FunctionComponent, MouseEvent, useState ,useEffect} from 'react';
 import UserAvatar from '../common/UserAvatar';
 import useWork from '@/src/useWorkDetail';
 import styles from './WorkDetailPost.module.css';
-import {useModalContext} from '@/src/useModal'
+import {useModalContext} from '@/src/hooks/useModal'
 import SignInForm from '../forms/SignInForm';
 
 
