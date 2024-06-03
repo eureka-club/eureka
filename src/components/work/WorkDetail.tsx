@@ -556,67 +556,15 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     <TabPanel items={[
                       {
                         label:<Typography>{t('tabHeaderPosts')} ({dataPosts?.total})</Typography>,
-                        content: posts ? (
-                            <Stack gap={3} alignContent={'space-between'}>
-                              <p>{``}</p>
-                              <WorkDetailPost
-                                workId={work.id}
-                                cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
-                              ></WorkDetailPost>
-                              <Grid container>
-                                {posts.map((p) => (
-                                  <Grid item
-                                    key={p.id}
-                                    xs={12}
-                                    sm={6}
-                                    lg={3}
-                                    xl={2}
-                                  >
-                                    <MosaicItemPost
-                                      cacheKey={['POST', `${p.id}`]}
-                                      postId={p.id}
-                                      size={'md'}
-                                      showSaveForLater={false}
-                                    />
-                                  </Grid>
-                                ))}
-                              </Grid>
-                              {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
-                                  {hasMorePosts ? <Spinner animation="grow" />
-                                  :<></>}
-                                </div> */}
-                            </Stack>
-                          ) : (
-                            <></>
-                          )
+                        content: posts?.length 
+                          ? <TabPosts workId={workId} posts={posts} cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
+                          : <></>
                       },
                       {
                         label:<Typography>{t('tabHeaderCycles')} ({cyclesCount})</Typography>,
-                        content:cycles ? (
-                          <Stack gap={3}>
-                            <p>{` `}</p>
-                            <Grid container>
-                              {cycles.map((c) => (
-                                <Grid item
-                                  xs={12}
-                                  sm={6}
-                                  lg={3}
-                                  xl={2}
-                                  key={c.id}
-                                >
-                                  <CMI
-                                    cycleId={c.id}
-                                    cacheKey={['CYCLES', `WORK-${workId}`]}
-                                    size={'md'}
-                                    showSaveForLater={false}
-                                  />
-                                </Grid>
-                              ))}
-                            </Grid>
-                          </Stack>
-                        ) : (
-                          <></>
-                        )
+                        content:cycles?.length 
+                          ? <TabCycles workId={workId} cycles={cycles}/>
+                          : <></>
                       }
                     ]}>
                     </TabPanel>
