@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { WEBAPP_URL } from './constants';
 
 export const getWork = async (id: number,language:string | undefined): Promise<WorkDetail|undefined> => {
-  if (!id) return undefined;
+  if (!id) return undefined;debugger;
   let url = `${WEBAPP_URL}/api/work/${id}`; // ?lang=${language}
   if(language)
     url += `?lang=${language}`;
