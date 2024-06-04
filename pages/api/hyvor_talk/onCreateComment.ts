@@ -162,7 +162,7 @@ export default async function handler(
         const subject=dict(`subject-${elementType}${postFix}`,{title:elementTitle});
         const title=!cycle 
           ? dict(`title-${elementType}`,{title:elementTitle,name})
-          : dict(`title-${elementType}${postFix}`,{title:elementTitle,first3UsersNames:to.map(t=>t.name??t.email).join(', ')});
+          : dict(`title-${elementType}${postFix}`,{title:elementTitle,first3UsersNames:to.slice(0,3).map(t=>t.name??t.email).join(', ')});
         const about=dict(`about-${elementType}${postFix}`);
         const aboutEnd=dict(`aboutEnd`);
         const urllabel=dict('urlLabel');
