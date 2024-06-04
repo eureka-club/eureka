@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from 'react';
-import { Button, Container,Carousel } from 'react-bootstrap';
+import { Container,Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import styles from './BannerCustomizable.module.css';
@@ -7,6 +7,7 @@ import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { AZURE_CDN_ENDPOINT, AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } from '../constants';
+import { Button } from '@mui/material';
 
 
 const BannerCustomizable: FunctionComponent = ({
@@ -36,7 +37,7 @@ const BannerCustomizable: FunctionComponent = ({
           <aside className="d-flex justify-content-end">
             {show && (
               <Button
-                variant="info"
+                variant='text'
                 onClick={() => setShow(false)}
                 className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
               >
@@ -45,7 +46,7 @@ const BannerCustomizable: FunctionComponent = ({
             )}
             {!show && (
               <Button
-                variant="info"
+                variant='text'
                 onClick={() => setShow(true)}
                 className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
               >
