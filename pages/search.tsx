@@ -83,7 +83,7 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
         </>
         {hasCycles || hasPosts || hasWorks ? (
           <div className="d-flex flex-column justify-content-center">
-            <SearchTab {...{ hasCycles, hasPosts, hasWorks }} />
+            <SearchTab key={router?.query.q?.toString()!} {...{ hasCycles, hasPosts, hasWorks }} />
           </div>
         ) : (
           <>

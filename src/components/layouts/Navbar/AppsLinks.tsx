@@ -19,9 +19,13 @@ const CreateMenu = ()=>{
       session?.user 
         ? <MenuList>
               <Typography variant="button">{t('create')}</Typography>
-              <MenuItem>
-                <Link href='/cycle/create'>{t('cycle')}</Link>
-              </MenuItem>
+              {
+                session.user.roles.includes('admin')
+                ? <MenuItem>
+                    <Link href='/cycle/create'>{t('cycle')}</Link>
+                  </MenuItem>
+                : <></>
+              }
               <MenuItem>
                 <Link href='/post/create'>{t('post')}</Link>
               </MenuItem>

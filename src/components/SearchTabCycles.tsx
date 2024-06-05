@@ -9,7 +9,7 @@ import { Prisma } from '@prisma/client';
 import { CycleSumary } from '../types/cycle';
 import useCyclesSumary from '../useCyclesSumary';
 import { MosaicsGrid } from './MosaicsGrid';
-import { CircularProgress } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 
 const take = 8;
 interface Props{
@@ -120,6 +120,11 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
 
   return  <>
     <FilterEngineCycles/>
+    {
+      cycles?.length==0
+        ? <Alert>{t('ResultsNotFound')}</Alert>
+        : <></>
+    }
     <MosaicsGrid>
         {cycles?.map(p=>
           <MosaicItem key={p.id} cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} />

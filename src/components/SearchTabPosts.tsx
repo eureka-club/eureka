@@ -9,7 +9,7 @@ import { PostSumary } from '../types/post';
 import usePostsSumary, { getPostsSumary } from '../usePostsSumary';
 import { MosaicContext } from '../useMosaicContext';
 import { useSession } from 'next-auth/react';
-import { Box, CircularProgress } from '@mui/material';
+import { Alert, Box, CircularProgress } from '@mui/material';
 import { MosaicsGrid } from './MosaicsGrid';
 
 const take = 8;
@@ -105,6 +105,11 @@ const SearchTabCycles:FunctionComponent = () => {
 
   return <>
     <FilterEnginePosts/>
+    {
+      posts?.length==0
+        ? <Alert>{t('common:ResultsNotFound')}</Alert>
+        : <></>
+    }
       <MosaicsGrid>
           {posts?.map(p=>
             <Box key={p.id}>
@@ -114,7 +119,11 @@ const SearchTabCycles:FunctionComponent = () => {
             </Box>
           )}
     </MosaicsGrid>
-    {posts?.length!=total && <CircularProgress ref={ref} />}
+    <Box sx={{padding:'1rem'}}>
+      {posts?.length!=total && <hr ref={ref}/>}
+      {/* {posts?.length!=total && <CircularProgress ref={ref} />} */}
+
+    </Box>
   </>
 };
 export default SearchTabCycles;

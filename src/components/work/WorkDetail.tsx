@@ -33,8 +33,8 @@ import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
 import { TagsLinks } from '../common/TagsLinks';
 import useTopics, { TopicItem } from '@/src/useTopics';
-import { TabPanel } from '../common/TabPanel';
 import { MosaicsGrid } from '../MosaicsGrid';
+import { TabPanelSwipeableViews } from '../common/TabPanelSwipeableViews';
 
 
 
@@ -676,7 +676,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
             {post == null && (
               <>
                   {detailPagesState.selectedSubsectionWork != null && (
-                    <TabPanel items={[
+                    <TabPanelSwipeableViews indexActive={0} items={[
                       {
                         label:<Typography>{t('tabHeaderPosts')} ({dataPosts?.total})</Typography>,
                         content: posts 
@@ -690,7 +690,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           : <></>
                       }
                     ]}>
-                    </TabPanel>
+                    </TabPanelSwipeableViews>
                     
                     // <TabContainer
                     //   // defaultActiveKey={defaultActiveKey}

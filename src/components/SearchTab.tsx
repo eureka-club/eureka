@@ -1,12 +1,10 @@
 import React, { useState, FunctionComponent,useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import { Tab, Tabs} from 'react-bootstrap';
-
 import SearchTabWorks from './SearchTabWorks';
 import SearchTabPosts from './SearchTabPosts';
 import SearchTabCycles from './SearchTabCycles';
-import { TabPanel } from './common/TabPanel';
+import { TabPanelSwipeableViews } from './common/TabPanelSwipeableViews';
 
 interface Props{
   hasCycles:boolean;
@@ -17,11 +15,13 @@ interface Props{
 const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const indexActive = hasCycles 
+
+  const[indexActive,setindexActive]=useState(hasCycles 
     ? 0 
     : hasPosts
       ? 1
-      : 2;
+      : 2);
+  
 
   const [key, setKey] = useState<string>('cycles');
 
@@ -30,8 +30,17 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
       hasCycles 
       ? 'cycles'
       : hasPosts ? 'posts' : 'works'
-    )
+    );
+    
   },[hasCycles,hasPosts,hasWorks]);
+
+  useEffect(()=>{
+    setindexActive(hasCycles 
+      ? 0 
+      : hasPosts
+        ? 1
+        : 2);
+  },[router.query.q])
 
   // const renderTab = (k:string)=>{
   //   switch(k){
@@ -68,7 +77,7 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
                 </style>
                 
         {router.query.q
-          ? <TabPanel
+          ? <TabPanelSwipeableViews
             indexActive={indexActive}
             items={[
               {
@@ -85,6 +94,23 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
               }
             ]}
           />
+          // ? <TabPanelBasic
+          //   items={[
+          //     {
+          //       label:t('cycles'),
+          //       content:<SearchTabCycles />
+          //     },
+          //     {
+          //       label:t('posts'),
+          //       content:<SearchTabPosts />
+          //     },
+          //     {
+          //       label:t('works'),
+          //       content:<SearchTabWorks />
+          //     },
+              
+          //   ]}
+          // />
           // ? <Tabs  
           //     defaultActiveKey={key}
           //     activeKey={key}

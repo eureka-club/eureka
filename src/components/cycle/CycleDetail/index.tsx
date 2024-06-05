@@ -36,13 +36,13 @@ import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { CycleWork } from '@/src/types/cycleWork';
 import { RenderCycleDetailHeader } from '../RenderCycleDetailHeader';
 import { RenderRestrictedTabs } from '../RenderRestrictedTabs';
-import { TabPanel } from '../../common/TabPanel';
 import HyvorComments from '../../common/HyvorComments';
 import { Stack } from '@mui/material';
 import CycleDetailDiscussion from '../CycleDetailDiscussion';
 import { RenderPosts } from './RenderPosts';
 import { RenderGuidelines } from './RenderGuideLines';
 import { RenderParticipants } from './RenderParticipants';
+import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {
@@ -254,7 +254,7 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
       </>
     }];
     if(cycle){
-      if(session){
+      if(session && cycle.participants.findIndex(p=>p.id==session.user.id)!=-1){
         //Discussion
         res.push({
           label:t('Discussion'),
@@ -313,7 +313,7 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
           <Row className="mb-5" ref={tabContainnerRef}>
             <Col>
               {detailPagesState.selectedSubsectionCycle != null && (
-                <TabPanel items={GetTabPanelItems()}/>
+                <TabPanelSwipeableViews indexActive={0} items={GetTabPanelItems()}/>
                 // <TabContainer
                 //   onSelect={handleSubsectionChange}
                 //   activeKey={tabKey || getDefaultActiveKey()}

@@ -9,15 +9,15 @@ export const MosaicsGrid = ({children}:Props)=>{
     const sx={
          display: 'grid',
          gridTemplateColumns: {
-            sm:'repeat(auto-fit, calc(188px + .8rem))',
-            xs:'repeat(auto-fit, 248px)',
+            // sm:'repeat(auto-fit, calc(188px + .8rem))',
+            xs:'repeat(auto-fit, 188px)',
          },
         //  gridTemplateRows: `repeat(auto-fit, 1fr)`,
          gridColumnGap: '.8rem',
          gridRowGap: '.8rem',
     }
       
-    return <Box id={id} sx={sx} justifyContent={'center'}>
+    return <Box id={id} sx={sx} justifyContent={'left'}>
         {
             children
         }

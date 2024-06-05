@@ -10,12 +10,12 @@ import { Prisma } from '@prisma/client';
 import { WorkSumary } from '../types/work';
 import { getWorksProps } from '../types/work';
 import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
-import { CircularProgress } from '@mui/material';
+import { Alert } from '@mui/material';
 import { MosaicsGrid } from './MosaicsGrid';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
-  const { lang } = useTranslation('common');
+  const { t,lang } = useTranslation('common');
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
 
@@ -87,12 +87,19 @@ const SearchTabworks:FunctionComponent = () => {
 
   return  <>
     <FilterEngineWork/>
+    {
+      works?.length==0
+        ? <Alert>{t('ResultsNotFound')}</Alert>
+        : <></>
+    }
     <MosaicsGrid>
         {works?.map(p=>
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
         )}
     </MosaicsGrid>
-    {works?.length!=total && <CircularProgress ref={ref} />}
+    {/* {works?.length!=total && <CircularProgress ref={ref} />} */}
+    {works?.length!=total && <hr ref={ref}/>}
+
   </>
 };
 export default SearchTabworks;
