@@ -120,11 +120,11 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
 
   return  <>
     <FilterEngineCycles/>
-    {
+    {/* {
       cycles?.length==0
         ? <Alert>{t('ResultsNotFound')}</Alert>
         : <></>
-    }
+    } */}
     <MosaicsGrid>
         {cycles?.map(p=>
           <MosaicItem key={p.id} cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} />

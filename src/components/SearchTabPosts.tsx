@@ -105,11 +105,11 @@ const SearchTabCycles:FunctionComponent = () => {
 
   return <>
     <FilterEnginePosts/>
-    {
+    {/* {
       posts?.length==0
         ? <Alert>{t('common:ResultsNotFound')}</Alert>
         : <></>
-    }
+    } */}
       <MosaicsGrid>
           {posts?.map(p=>
             <Box key={p.id}>

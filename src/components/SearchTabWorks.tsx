@@ -87,11 +87,11 @@ const SearchTabworks:FunctionComponent = () => {
 
   return  <>
     <FilterEngineWork/>
-    {
+    {/* {
       works?.length==0
         ? <Alert>{t('ResultsNotFound')}</Alert>
         : <></>
-    }
+    } */}
     <MosaicsGrid>
         {works?.map(p=>
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
