@@ -24,7 +24,7 @@ export const TabPanel = ({items,indexActive,...otherProps}:TabPanelProps)=>{
     return <Box {...otherProps}>
         <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="basic tabs example">
             {
-                labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx}/>)
+                labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
             }
         </Tabs>
         <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>

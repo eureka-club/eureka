@@ -41,6 +41,7 @@ export default function useAutocompleteRegions(){
         return (
             <Autocomplete
             //multiple
+            size='small'
             value={value}
             onChange={(e,v) => {
               setvalue(v!);
