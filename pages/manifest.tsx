@@ -39,10 +39,10 @@ const ManifestPage: NextPage<Props> = ({session}) => {
         <meta name="title" content={t('meta:manifestTitle')}></meta>
         <meta name="description" content={t('meta:manifestDescription')}></meta>
     </Head>    
-    <SimpleLayout title={t('browserTitleWelcome')}>
-        <section className="mb-5">
-          <Row>
-            <Col xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
+    <SimpleLayout  title={t('browserTitleWelcome')}>
+        <section  className="mb-5">
+          <Row style={{ gap: "5px" }}>
+            <Col style={{ paddingTop: "40px" }}  xs={12} md={4} className="pe-0 me-0 d-flex flex-column" >
               <h1 className="text-primary" style={{ fontSize: '2.5em' }}>
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}

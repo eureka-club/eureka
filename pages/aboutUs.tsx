@@ -27,7 +27,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
       <meta name="description" content={t('meta:aboutUsDescription')}></meta>
     </Head>
     <SimpleLayout title={t('browserTitle')}>
-      <div style={{ textAlign: 'center' }}>
+      <div  style={{ textAlign: 'center', paddingTop:40 }}>
         <h1 className="text-secondary fw-bold">{t('title')}</h1>
       </div>
       <br />
