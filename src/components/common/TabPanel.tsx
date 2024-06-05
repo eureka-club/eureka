@@ -3,13 +3,14 @@ import { ReactElement, useState } from "react";
 import SwipeableViews from 'react-swipeable-views';
 
 export type TabPanelProps = {
+    indexActive?:number;
     items:{
         label:string|ReactElement|ReactElement[];
         content:any;
     }[]
 } & BoxProps;
-export const TabPanel = ({items,...otherProps}:TabPanelProps)=>{
-    const [value, setValue] = useState(0);
+export const TabPanel = ({items,indexActive,...otherProps}:TabPanelProps)=>{
+    const [value, setValue] = useState(indexActive??0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);

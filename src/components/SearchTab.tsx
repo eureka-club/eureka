@@ -17,7 +17,12 @@ interface Props{
 const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  
+  const indexActive = hasCycles 
+    ? 0 
+    : hasPosts
+      ? 1
+      : 2;
+
   const [key, setKey] = useState<string>('cycles');
 
   useEffect(()=>{
@@ -64,6 +69,7 @@ const SearchTab: FunctionComponent<Props> = ({hasCycles,hasPosts,hasWorks}) => {
                 
         {router.query.q
           ? <TabPanel
+            indexActive={indexActive}
             items={[
               {
                 label:t('cycles'),
