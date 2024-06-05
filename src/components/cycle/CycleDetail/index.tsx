@@ -253,8 +253,9 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
         )}
       </>
     }];
-    if(cycle){
-      if(session && cycle.participants.findIndex(p=>p.id==session.user.id)!=-1){
+    if(cycle && session){
+      const allowed=cycle?.participants.findIndex(p=>p.id==session?.user.id)!=-1 || session?.user.id==cycle?.creatorId
+      if(session && allowed){
         //Discussion
         res.push({
           label:t('Discussion'),
