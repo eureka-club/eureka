@@ -1,27 +1,27 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
-import { useAtom } from 'jotai';
+// import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
 
-import { BsCheck } from 'react-icons/bs';
+// import { BsCheck } from 'react-icons/bs';
 import { ImCancelCircle } from 'react-icons/im';
 
 import { useMutation, useQueryClient } from 'react-query';
 
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-import globalModalsAtom from '../../atoms/globalModals';
+// import globalModalsAtom from '../../atoms/globalModals';
 // import { Session } from '../../types';
 import { CycleDetail } from '../../types/cycle';
 import { CreatePostAboutCycleClientPayload, CreatePostAboutWorkClientPayload, PostDetail } from '../../types/post';
 
-import ImageFileSelect from '../forms/controls/ImageFileSelect';
+// import ImageFileSelect from '../forms/controls/ImageFileSelect';
 import TagsInputTypeAheadMaterial from '../forms/controls/TagsInputTypeAheadMaterial';
 import TagsInputMaterial from '../forms/controls/TagsInputMaterial';
 
-import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
+// import stylesImageFileSelect from '../forms/CreatePostForm.module.css';
 import useTopics from '../../useTopics';
 
 import { useNotificationContext } from '@/src/useNotificationProvider';
@@ -117,6 +117,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
     { where: { cycles: { some: { id: cycle?.id } } } },
     {
       enabled: !!cycle?.id,
+      notLangRestrict:true
     },
   );
   const [works, setWorks] = useState(dataWorks?.works);
