@@ -22,7 +22,7 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
     const contents = items.map(i=>i.content);
 
     return <Box {...otherProps}>
-        <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs variant='scrollable' scrollButtons allowScrollButtonsMobile value={value} onChange={handleChange} aria-label="basic tabs example">
             {
                 labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
             }
