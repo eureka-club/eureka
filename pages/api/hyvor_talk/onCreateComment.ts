@@ -44,10 +44,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  return res.status(200).json({ data:'OK'});
-
-//     if(req.method?.toLowerCase()=='post'){
-//       try{
+  
+  if(req.method?.toLowerCase()=='post'){
+      return res.status(200).json({ data:'OK'});
+      try{
 //         // const bodyBuffer = await buffer(req);
 //         //const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
 //         //if(givenSignature){
@@ -226,10 +226,10 @@ export default async function handler(
 //         });
         
 //         return res.status(200).json({ data:{emailSend} });
-//       }
-//       catch(e){
-//           console.error(e);
-//           return res.status(400).json({ error:e?.toString() });
-//       }
-//     }
+      }
+      catch(e){
+          console.error(e);
+          return res.status(400).json({ error:e?.toString() });
+      }
+    }
 }
