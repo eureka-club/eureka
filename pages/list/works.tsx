@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
@@ -19,6 +19,7 @@ import LocalImageComponent from '@/src/components/LocalImage';
 import { findAll } from '@/src/facades/work';
 import useWorks, { getWorksDetail } from '@/src/useWorksDetail';
 import { WorkDetail, WorkSumary } from '@/src/types/work';
+import { Button } from '@mui/material';
 
 interface Props {
   // works: (Work & {
@@ -94,14 +95,14 @@ const ListWorksPage: NextPage<Props> = ({ session }) => {
                   overlay={
                     <Popover id="confirmDelete">
                       <Popover.Body>
-                        <Button variant="danger" onClick={() => handleDeleteClick(work)}>
+                        <Button variant="contained" color="error" onClick={() => handleDeleteClick(work)}>
                           confirm delete!!!
                         </Button>
                       </Popover.Body>
                     </Popover>
                   }
                 >
-                  <Button variant="link" className="ms-2">
+                  <Button variant="text" className="ms-2">
                     delete?
                   </Button>
                 </OverlayTrigger>
