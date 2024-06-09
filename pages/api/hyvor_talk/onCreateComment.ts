@@ -108,6 +108,8 @@ export default async function handler(
             locale=work?.language ?? locale;
           break;  
         }
+        if(!work && !post && !cycle)
+          return res.status(200).json({ data:{emailSend:false} });
 
         if(parent && parent.user?.email!=data.user.email){
             to=[{email:`${parent.user?.email}`,name:parent.user?.name}];
@@ -172,7 +174,10 @@ export default async function handler(
           
           const comentEmailSaved = await prisma.comentCreatedDaily.create({
             data:{
-              to:to.map(t=>t.email).join(','),
+              //TODO test only
+              to:[{email:'gbanoaol@gmail.com'}].map(t=>t.email).join(','),
+              //TODO test only
+              // to:to.map(t=>t.email).join(','),
               subject,
               etitle:title,
               about,
@@ -183,13 +188,17 @@ export default async function handler(
             }
           });
           if(comentEmailSaved){
-            const cronTime = '0 0 20 * * *';
+            // const cronTime = '0 0 20 * * *';
+            //TODO test only
+            const cronTime = '10 * * * * *';
+            //TODO test only
+
             if(!(global as any).job){
               const dt = sendAt(cronTime);
               console.log(`The job would run at: ${dt.toISO()}`);
               (global as any).job = new CronJob(
                 cronTime, // cronTime
-                async function () {
+                async function () {debugger;
                   await sendEmailWithComentCreatedSumary();
                 }, // onTick
                 null, // onComplete
@@ -203,7 +212,10 @@ export default async function handler(
         }
         
         const emailSend = await sendEmailOnCommentCreated({
-          to,
+            //TODO test only
+            to:[{email:'gbanoaol@gmail.com'}],
+            //TODO test only
+          // to,
           subject,
           specs:{
             etitle:title,
