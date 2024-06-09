@@ -48,8 +48,9 @@ export default async function handler(
   // if(req.method?.toLowerCase()=='post'){
   try{debugger;
     // const {data} = req.body;
-    const page = req.body.data.page;
-    return res.status(200).json({ method:req.method,page:req?.body?.data?.page });
+    const page = req?.body?.data?.page;
+    const method = req?.method;
+    return res.status(200).json({ method,page });
       //   // const bodyBuffer = await buffer(req);
       //   //const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
       //   //if(givenSignature){
