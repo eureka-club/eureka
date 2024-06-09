@@ -46,8 +46,8 @@ export default async function handler(
 ) {
   
   if(req.method?.toLowerCase()=='post'){
-      return res.status(200).json({ data:'OK'});
-      try{
+    try{
+        return res.status(200).json({ data:'OK'});
 //         // const bodyBuffer = await buffer(req);
 //         //const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
 //         //if(givenSignature){
