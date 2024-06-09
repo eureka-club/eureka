@@ -171,7 +171,6 @@ export default async function handler(
         const unsubscribe="";//dict('unsubscribe');
 
         if(cycle){
-          
           const comentEmailSaved = await prisma.comentCreatedDaily.create({
             data:{
               //TODO test only
@@ -187,26 +186,22 @@ export default async function handler(
               unsubscribe
             }
           });
-          if(comentEmailSaved){
+          if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
             // const cronTime = '0 0 20 * * *';
             //TODO test only
             const cronTime = '10 * * * * *';
             //TODO test only
-
-            if(!(global as any).job){
-              const dt = sendAt(cronTime);
-              console.log(`The job would run at: ${dt.toISO()}`);
-              (global as any).job = new CronJob(
-                cronTime, // cronTime
-                async function () {debugger;
-                  await sendEmailWithComentCreatedSumary();
-                }, // onTick
-                null, // onComplete
-                true, // start
-                'America/Sao_Paulo' // timeZone
-              );
-            }
-            return res.status(200).json({ data:{comentEmailSaved} });
+            const dt = sendAt(cronTime);
+            console.log(`The job would run at: ${dt.toISO()}`);
+            (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
+              cronTime, // cronTime
+              async function () {
+                await sendEmailWithComentCreatedSumary();
+              }, // onTick
+              null, // onComplete
+              true, // start
+              'America/Sao_Paulo' // timeZone
+            );
           }
           return res.status(200).json({ data:{comentEmailSaved} });    
         }
@@ -214,6 +209,7 @@ export default async function handler(
         const emailSend = await sendEmailOnCommentCreated({
             //TODO test only
             to:[{email:'gbanoaol@gmail.com'}],
+            // remove mujeresinsumisasupn@gmail.com from https://mandrillapp.com/settings/rejections/?subaccount= rejection deny list
             //TODO test only
           // to,
           subject,
@@ -226,17 +222,12 @@ export default async function handler(
             unsubscribe
           },
         });
-        if(emailSend)
-          return res.status(200).json({ data:{emailSend} });
-        return res.status(200).json({ data:{emailSend:false} });
+        
+        return res.status(200).json({ data:{emailSend} });
       }
       catch(e){
           console.error(e);
           return res.status(400).json({ error:e?.toString() });
       }
     }
-}
-
-const sendComentCreatedEmailDailySumarized = ()=>{
-
 }
