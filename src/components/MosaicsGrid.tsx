@@ -18,7 +18,6 @@ export const MosaicsGrid = ({children}:Props)=>{
          gridColumnGap: '.8rem',
          gridRowGap: '.8rem',
     }
-      debugger;
     return <>
         {
             children?.length 

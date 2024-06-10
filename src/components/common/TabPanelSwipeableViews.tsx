@@ -21,7 +21,18 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
     const labels = items.map(i=>i.label);
     const contents = items.map(i=>i.content);
 
-    return <Box {...otherProps}>
+    return <Box {...otherProps} className='tabPanelCtr'>
+        <style jsx global>{`
+            .tabPanelCtr{
+                & button{
+                    border-bottom:solid 1px var(--color-primary);
+                }
+                & button.Mui-selected {
+                    background:var(--color-primary);
+                    color:white;
+                }
+            }
+        `}</style>
         <Tabs variant='scrollable' scrollButtons allowScrollButtonsMobile value={value} onChange={handleChange} aria-label="basic tabs example">
             {
                 labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
