@@ -27,7 +27,7 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
                 labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
             }
         </Tabs>
-        <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
+        <SwipeableViews style={{paddingTop:'1rem'}} index={value} onChangeIndex={handleChangeIndex}>
             {
                 contents.map((c,idx)=><Box key={`tab-content-${idx}`}>{c}</Box>)
             }
