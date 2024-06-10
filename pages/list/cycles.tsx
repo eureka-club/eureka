@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
@@ -19,6 +19,8 @@ import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import LocalImageComponent from '../../src/components/LocalImage';
 import useCycles, { getCycles } from '@/src/useCycles';
 import { CycleSumary } from '@/src/types/cycle';
+import { Button } from '@mui/material';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -97,14 +99,14 @@ const ListCyclesPage: NextPage<Props> = ({ session }) => {
                   overlay={
                     <Popover id="confirmDelete">
                       <Popover.Body>
-                        <Button variant="danger" onClick={() => handleDeleteClick(cycle)}>
+                        <Button variant="contained" color="error" onClick={() => handleDeleteClick(cycle)}>
                           confirm delete!!!
                         </Button>
                       </Popover.Body>
                     </Popover>
                   }
                 >
-                  <Button variant="link" className="ms-2">
+                  <Button variant="text" className="ms-2">
                     delete?
                   </Button>
                 </OverlayTrigger>

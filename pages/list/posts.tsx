@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
@@ -14,6 +14,7 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { findAll } from '@/src/facades/post';
 import usePosts, { getPosts } from '@/src/usePosts';
+import { Button } from '@mui/material';
 
 interface Props {
   session:Session;
@@ -80,14 +81,14 @@ const ListPostsPage: NextPage<Props> = ({ session }) => {
                   overlay={
                     <Popover id="confirmDelete">
                       <Popover.Body>
-                        <Button variant="danger" onClick={() => handleDeleteClick(post)}>
+                        <Button variant="contained" color="error" onClick={() => handleDeleteClick(post)}>
                           confirm delete!!!
                         </Button>
                       </Popover.Body>
                     </Popover>
                   }
                 >
-                  <Button variant="link" className="ms-2">
+                  <Button variant="text" className="ms-2">
                     delete?
                   </Button>
                 </OverlayTrigger>
