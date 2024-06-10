@@ -283,7 +283,7 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
         });
         //Participants
         res.push({
-          label:t('Participants'),
+          label:`${t('Participants')} (${cycle.participants.length+1})`,
           content:<RenderParticipants cycle={cycle}/>
         })
       }
