@@ -35,6 +35,7 @@ import { TagsLinks } from '../common/TagsLinks';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { MosaicsGrid } from '../MosaicsGrid';
 import { TabPanelSwipeableViews } from '../common/TabPanelSwipeableViews';
+import { useIsFetching } from 'react-query';
 
 
 
@@ -50,15 +51,17 @@ interface TabPostsProps{
   workId:any;
   posts:{id:any}[];
   cacheKey:string[];
+  isLoading:boolean;
 }
-const TabPosts:FC<TabPostsProps> = ({workId,posts,cacheKey}:TabPostsProps)=>{
+const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsProps)=>{
+
   return <Stack gap={3} alignContent={'space-between'}>
     <p>{``}</p>
     <WorkDetailPost
       workId={workId}
       cacheKey={cacheKey}
     ></WorkDetailPost>
-    <MosaicsGrid>
+    <MosaicsGrid isLoading={isLoading}>
       {posts.map(p=><MosaicItemPost key={p.id}
             cacheKey={['POST', `${p.id}`]}
             postId={p.id}
@@ -180,7 +183,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   const { data: dataCycles } = useCycles('',workCyclessWhere
   // , { enabled: !!workId }
 );
-  const { data: dataPosts } = usePosts(workPostsWhere
+  const { data: dataPosts,isLoading } = usePosts(workPostsWhere
     // , { enabled: !!workId }
   ); //OJO this trigger just once -load the same data that page does
   const [posts, setPosts] = useState(dataPosts?.posts);
@@ -680,7 +683,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       {
                         label:<Typography>{t('tabHeaderPosts')} ({dataPosts?.total})</Typography>,
                         content: posts 
-                          ? <TabPosts workId={workId} posts={posts} cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
+                          ? <TabPosts  isLoading={isLoading} workId={workId} posts={posts} cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
                           : <></>
                       },
                       {

@@ -52,7 +52,7 @@ const SearchTabworks:FunctionComponent = () => {
   const [props,setProps]=useState<Prisma.WorkFindManyArgs>({take,where:{...getProps()}})
   const cacheKey = useMemo(()=>[`works-search-${JSON.stringify(props)}`],[props]);
 
-  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]}} = useWorksSumary(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,works:c}={total:0,fetched:0,works:[]},isLoading} = useWorksSumary(props,{cacheKey,enabled:!!router.query?.q});
   const [works,setWorks] = useState<WorkSumary[]>([])
   
   useEffect(()=>{
@@ -92,7 +92,7 @@ const SearchTabworks:FunctionComponent = () => {
         ? <Alert>{t('ResultsNotFound')}</Alert>
         : <></>
     } */}
-    <MosaicsGrid>
+    <MosaicsGrid isLoading={isLoading}>
         {works?.map(p=>
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
         )}
