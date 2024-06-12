@@ -70,7 +70,7 @@ const SearchTabCycles:FunctionComponent = () => {
   const [props,setProps]=useState<Prisma.PostFindManyArgs>({take,where:{...getProps()}})
   const cacheKey = useMemo(()=>[`posts-search-${JSON.stringify(props)}`],[props])
 
-  const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]}} = usePostsSumary(props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,posts:c}={total:0,fetched:0,posts:[]},isLoading} = usePostsSumary(props,{cacheKey,enabled:!!router.query?.q});
   const [posts,setPosts] = useState<PostSumary[]>([])
   
   useEffect(()=>{
@@ -110,7 +110,7 @@ const SearchTabCycles:FunctionComponent = () => {
         ? <Alert>{t('common:ResultsNotFound')}</Alert>
         : <></>
     } */}
-      <MosaicsGrid>
+      <MosaicsGrid isLoading={isLoading}>
           {posts?.map(p=>
             <Box key={p.id}>
               <MosaicContext.Provider value={{ showShare: false }}>

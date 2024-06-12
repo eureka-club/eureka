@@ -12,7 +12,7 @@ type RenderPostsProps={
     cycleId:number;
   }
 export const RenderPosts = ({cycleId}:RenderPostsProps)=>{
-    const {data:dataPosts} = usePosts(cyclePostsProps(cycleId),['CYCLE',`${cycleId}`,'POSTS']);
+    const {data:dataPosts,isLoading} = usePosts(cyclePostsProps(cycleId),['CYCLE',`${cycleId}`,'POSTS']);
     const [posts,setPosts] = useState(dataPosts?.posts)
     const hasMorePosts=dataPosts?.fetched!<dataPosts?.total!
     // const [hasMorePosts,setHasMorePosts] = useState(dataPosts?.fetched!<dataPosts?.total!);
@@ -44,7 +44,7 @@ export const RenderPosts = ({cycleId}:RenderPostsProps)=>{
 
     if(posts){
       return <>
-      <MosaicsGrid>
+      <MosaicsGrid isLoading={isLoading}>
         {posts.map((p:any,idx:number)=><MosaicItemPost key={`${p.id}-${idx}`}  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={false} size={'md'} />          )}
       </MosaicsGrid>
         {/* <Grid container gap={3}>

@@ -1,6 +1,5 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
-import { Col, Row, Spinner } from 'react-bootstrap';
 import { dehydrate, QueryClient } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
@@ -10,6 +9,8 @@ import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
+import { MosaicsGrid } from '@/src/components/MosaicsGrid';
+import { CircularProgress } from '@mui/material';
 
 interface Props{
   id:number;
@@ -21,7 +22,7 @@ const MyCycles: NextPage<Props> = ({id}) => {
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:dataCycles} = useMyCycles(id,ITEMS_IN_LIST_PAGES);
+  const {data:dataCycles,isLoading} = useMyCycles(id,ITEMS_IN_LIST_PAGES);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -42,17 +43,16 @@ const MyCycles: NextPage<Props> = ({id}) => {
       <article className='mt-4' data-cy="my-cycles">
       {
       isLoadingSession 
-        ? <Spinner animation="grow"/>
+        ? <CircularProgress/>
         : session ? (
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myCycles')}</h1>
-            <Row>
-              {dataCycles?.cycles.map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <CMI cycleId={c.id} size='md' />
-                </Col>
-              )}
-            </Row>
+          
+          <MosaicsGrid isLoading={isLoading}>
+          {
+            dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='md' />)!
+          }
+          </MosaicsGrid>
             </>
         ) : ''
       }

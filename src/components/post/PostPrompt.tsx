@@ -113,7 +113,7 @@ const renderImages = () => {
     return (
       <Container className="my-4">
         <h6 className="my-4">
-          <em>{t('SelectImage')}</em>.
+          <em>{t('SelectImage')}</em>
         </h6>
         <section>
           {images.map((img, idx) => (

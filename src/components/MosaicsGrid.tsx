@@ -1,11 +1,12 @@
-import { Alert, Box } from "@mui/material";
+import { Alert, Box, CircularProgress } from "@mui/material";
 import useTranslation from "next-translate/useTranslation";
 import { ReactElement } from "react";
 
 interface Props{
     children:ReactElement[];
+    isLoading?:boolean;
 }
-export const MosaicsGrid = ({children}:Props)=>{
+export const MosaicsGrid = ({children,isLoading}:Props)=>{
     const id='MosaicsGrid';
     const{t}=useTranslation('common');
     const sx={
@@ -18,7 +19,6 @@ export const MosaicsGrid = ({children}:Props)=>{
          gridColumnGap: '.8rem',
          gridRowGap: '.8rem',
     }
-      debugger;
     return <>
         {
             children?.length 
@@ -27,7 +27,7 @@ export const MosaicsGrid = ({children}:Props)=>{
                         children
                     } 
                 </Box>
-            :   <Alert>{t('ResultsNotFound')}</Alert> 
+            :  !isLoading ? <Alert>{t('ResultsNotFound')}</Alert>  : <CircularProgress/>
         }
     </>
     //     .div1 { grid-area: 1 / 1 / 2 / 2; }

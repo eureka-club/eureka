@@ -85,7 +85,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
   const cacheKey = [`cycles-search-${lang}-${JSON.stringify(props)}`];
           
-  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]}} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
+  const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]},isLoading} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleSumary[]>([])
 
   useEffect(()=>{
@@ -125,7 +125,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
         ? <Alert>{t('ResultsNotFound')}</Alert>
         : <></>
     } */}
-    <MosaicsGrid>
+    <MosaicsGrid isLoading={isLoading}>
         {cycles?.map(p=>
           <MosaicItem key={p.id} cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} />
         )}

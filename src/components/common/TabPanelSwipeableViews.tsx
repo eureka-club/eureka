@@ -21,18 +21,39 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
     const labels = items.map(i=>i.label);
     const contents = items.map(i=>i.content);
 
-    return <Box {...otherProps}>
-        <Tabs variant='scrollable' scrollButtons allowScrollButtonsMobile value={value} onChange={handleChange} aria-label="basic tabs example">
-            {
-                labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
-            }
-        </Tabs>
-        <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
+    return <Box {...otherProps} >
+        <style jsx global>{`
+                    .tabsPanelCtr{
+                        & button{
+                            border-bottom:solid 1px var(--color-primary);
+                        }
+                        & button.Mui-selected {
+                            background:var(--color-primary);
+                            color:white;
+                        }
+                    }
+        `}</style>
+
+        <Box sx={{display:{lg:'inherit',xs:'none',md: "inherit"}}}>
+            <Tabs variant='fullWidth' className='tabsPanelCtr' value={value} onChange={handleChange} aria-label="basic tabs example">
+                {
+                    labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
+                }
+            </Tabs>
+        </Box>
+
+        <Box sx={{display:{lg:'none',xs:'inherit',md: "none"}}}>
+            <Tabs variant='scrollable' className='tabsPanelCtr' scrollButtons allowScrollButtonsMobile value={value} onChange={handleChange} aria-label="basic tabs example">
+                {
+                    labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
+                }
+            </Tabs>
+        </Box>
+        
+        <SwipeableViews style={{paddingTop:'1rem'}} index={value} onChangeIndex={handleChangeIndex}>
             {
                 contents.map((c,idx)=><Box key={`tab-content-${idx}`}>{c}</Box>)
             }
-            {/* <Box>{value==0 ? '0' : ''}</Box>
-            <Box>{value==1 ? '1' : ''}</Box> */}
         </SwipeableViews>
     </Box>
 }

@@ -1,7 +1,6 @@
 import { GetServerSideProps,NextPage } from 'next';
 import Head from "next/head";
 import { dehydrate, QueryClient } from 'react-query';
-import { Col, Row, Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -10,6 +9,8 @@ import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
+import { MosaicsGrid } from '@/src/components/MosaicsGrid';
+import { CircularProgress } from '@mui/material';
 
 interface Props{
   id:number
@@ -21,7 +22,7 @@ const MyPosts: NextPage<Props> = ({id}) => {
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
   if(!isLoadingSession && !session)router.push('/')
-  const {data:dataPosts} = useMyPosts(id,ITEMS_IN_LIST_PAGES);
+  const {data:dataPosts,isLoading} = useMyPosts(id,ITEMS_IN_LIST_PAGES);
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -42,19 +43,19 @@ const MyPosts: NextPage<Props> = ({id}) => {
     <article className='mt-4' data-cy="my-posts">
       {
       isLoadingSession 
-        ? <Spinner animation="grow"/>
-        : session ? (
-          <>
-          <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myPosts')}</h1>
-            <Row>
-              {dataPosts?.posts.map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <PMI postId={c.id} size='md' />
-                </Col>
-              )}
-            </Row>
+        ? <CircularProgress/>
+        : session 
+          ? (
+            <>
+              <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myPosts')}</h1>
+              <MosaicsGrid isLoading={isLoading}>
+              {
+                dataPosts?.posts.map(c=><PMI key={c.id} postId={c.id} size='md' />)!
+              }
+              </MosaicsGrid>
             </>
-        ) : ''
+          ) 
+          : <></>
       }
           </article>
     </SimpleLayout>
