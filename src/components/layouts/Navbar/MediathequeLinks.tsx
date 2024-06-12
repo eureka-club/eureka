@@ -21,8 +21,8 @@ export const MediathequeLinks = () => {
     
     const mediathequeLinksInfo = [
         {label:t('My Mediatheque'),link:`/mediatheque/${getMediathequeSlug()}`},
-        {label:t('common:myPosts'),link:`/mediatheque/${getMediathequeSlug()}#my-posts`},
-        {label:t('common:myCycles'),link:`/mediatheque/${getMediathequeSlug()}#cycles-created-or-joined`},
+        {label:t('common:myPosts'),link:`/user/${getMediathequeSlug()}/my-posts`},
+        {label:t('common:MyCycles'),link:`/user/${getMediathequeSlug()}/my-cycles`},
         {label:t('MyReadOrWatched'),link:`/user/${getMediathequeSlug() }/my-read-or-watched`},
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
