@@ -34,7 +34,7 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
                     }
         `}</style>
 
-        <Box sx={{display:{lg:'inherit',xs:'none',md: "inherit"}}}>
+        <Box sx={{display:{xs:'none',sm: "inherit"}}}>
             <Tabs variant='fullWidth' className='tabsPanelCtr' value={value} onChange={handleChange} aria-label="basic tabs example">
                 {
                     labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
@@ -42,7 +42,7 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
             </Tabs>
         </Box>
 
-        <Box sx={{display:{lg:'none',xs:'inherit',md: "none"}}}>
+        <Box sx={{display:{xs:'inherit',sm: "none"}}}>
             <Tabs variant='scrollable' className='tabsPanelCtr' scrollButtons allowScrollButtonsMobile value={value} onChange={handleChange} aria-label="basic tabs example">
                 {
                     labels.map((label,idx)=><Tab label={label} key={`${label}-${idx}`} value={idx} sx={{fontSize:'1rem'}}/>)
