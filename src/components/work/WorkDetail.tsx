@@ -27,7 +27,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, CircularProgress, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -352,22 +352,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           showSaveForLater={true}
                       />
                       <Box>
-                        <Rating
-                          qty={work?.currentUserRating??0}
-                          onChange={handlerChangeRating}
-                          size="medium"
-                          iconColor="var(--bs-danger)"
-                        /> { (work?.currentUserRating??0) > 0 && <Button
-                          type="button"
-                          title={t('common:clearRating')}
-                          color='warning'
-                          // className="text-warning p-0 ms-2"
-                          onClick={clearRating}
-                          // variant="link"
-                          //disabled={loadingSocialInteraction}
-                        >
-                          <FiTrash2 />
-                        </Button>}
+                        <Stack direction={'row'} alignItems={'flex-start'} gap={1}>
+                          <Rating
+                            qty={work?.currentUserRating??0}
+                            onChange={handlerChangeRating}
+                            size="medium"
+                            iconColor="var(--bs-danger)"
+                          /> { (work?.currentUserRating??0) > 0 && <IconButton
+                            type="button"
+                            size='small'
+                            title={t('common:clearRating')}
+                            color='warning'
+                            onClick={clearRating}
+                            // disabled={loadingSocialInteraction}
+                          >
+                            <FiTrash2 />
+                          </IconButton>}
+                        </Stack>
                         <WorkReadOrWatched work={work} />
                       </Box>
                     </Stack>
