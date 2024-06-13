@@ -45,12 +45,15 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   
-  if(req.method?.toLowerCase()=='post'){
-    try{debugger;
-    // const {data} = req.body;
-    const page = req?.body?.data?.page;
-    const method = req?.method;
-    return res.status(200).json({ method,page });
+  // if(req.method?.toLowerCase()=='post'){
+    try{
+      debugger;
+      const {data} = req?.body;
+      const method = req?.method;
+      return res.status(200).json({ method,data });
+      
+      
+      // const page = req?.body?.data?.page;
       //   // const bodyBuffer = await buffer(req);
       //   //const givenSignature = (req.headers['X_SIGNATURE']??req.headers['x-signature'])?.toString()??'';
       //   //if(givenSignature){
@@ -233,5 +236,5 @@ export default async function handler(
         console.error(e);
         return res.status(400).json({ error:e?.toString() });
     }
-  }
+  // }
 }
