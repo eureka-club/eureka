@@ -13,27 +13,27 @@ import { LOCALES, WEBAPP_URL } from '@/src/constants';
 
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
-// const buffer = (req:any) => {
-//     return new Promise((resolve, reject) => {
-//       const chunks: any[] = [];
+const buffer = (req:any) => {
+    return new Promise((resolve, reject) => {
+      const chunks: any[] = [];
   
-//       req.on('data', (chunk: any) => {
-//         chunks.push(chunk);
-//       });
+      req.on('data', (chunk: any) => {
+        chunks.push(chunk);
+      });
   
-//       req.on('end', () => {
-//         resolve(Buffer.concat(chunks));
-//       });
+      req.on('end', () => {
+        resolve(Buffer.concat(chunks));
+      });
   
-//       req.on('error', reject);
-//     });
-//   };
+      req.on('error', reject);
+    });
+  };
 
-// export const config = {
-//     api: {
-//       bodyParser: false,
-//     },
-//   };
+export const config = {
+    api: {
+      bodyParser: false,
+    },
+  };
 
 type Data = {
   data?: Object;
@@ -48,7 +48,10 @@ export default async function handler(
   // if(req.method?.toLowerCase()=='post'){
     try{
       debugger;
-      const {data} = req?.body;
+      const bodyBuffer = await buffer(req);
+      const bodyJSON = bodyBuffer!.toString();
+      const body = JSON.parse(bodyJSON);
+      const {data} = body;
       const method = req?.method;
       return res.status(200).json({ method,pageId: data.page.id });
       
