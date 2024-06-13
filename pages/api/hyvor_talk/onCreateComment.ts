@@ -50,7 +50,7 @@ export default async function handler(
       debugger;
       const {data} = req?.body;
       const method = req?.method;
-      return res.status(200).json({ method,data });
+      return res.status(200).json({ method,pageId: data.page.id });
       
       
       // const page = req?.body?.data?.page;
