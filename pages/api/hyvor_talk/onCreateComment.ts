@@ -1,44 +1,44 @@
-import { CronJob, sendAt } from 'cron';
+// import { CronJob, sendAt } from 'cron';
 
-import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
+// import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
 // import { compare, compareSync } from 'bcryptjs';
 // import { createHash, createHmac, timingSafeEqual } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { defaultLocale } from 'i18n';
-import { readFile } from 'fs';
-import { join } from 'path';
-import { promisify } from 'util';
-import {prisma} from '@/src/lib/prisma';
-import { LOCALES, WEBAPP_URL } from '@/src/constants';
+// import { defaultLocale } from 'i18n';
+// import { readFile } from 'fs';
+// import { join } from 'path';
+// import { promisify } from 'util';
+// import {prisma} from '@/src/lib/prisma';
+// import { LOCALES, WEBAPP_URL } from '@/src/constants';
 
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
-const buffer = (req:any) => {
-    return new Promise((resolve, reject) => {
-      const chunks: any[] = [];
+// const buffer = (req:any) => {
+//     return new Promise((resolve, reject) => {
+//       const chunks: any[] = [];
   
-      req.on('data', (chunk: any) => {
-        chunks.push(chunk);
-      });
+//       req.on('data', (chunk: any) => {
+//         chunks.push(chunk);
+//       });
   
-      req.on('end', () => {
-        resolve(Buffer.concat(chunks));
-      });
+//       req.on('end', () => {
+//         resolve(Buffer.concat(chunks));
+//       });
   
-      req.on('error', reject);
-    });
-  };
+//       req.on('error', reject);
+//     });
+//   };
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
+// export const config = {
+//     api: {
+//       bodyParser: false,
+//     },
+//   };
 
-type Data = {
-  data?: Object;
-  error?:string;
-}
+// type Data = {
+//   data?: Object;
+//   error?:string;
+// }
 
 export default async function handler(
   req: NextApiRequest,
@@ -47,13 +47,27 @@ export default async function handler(
   
   // if(req.method?.toLowerCase()=='post'){
     try{
-      debugger;
-      const bodyBuffer = await buffer(req);
-      const bodyJSON = bodyBuffer!.toString();
-      const body = JSON.parse(bodyJSON);
-      const {data} = body;
+      // const bodyBuffer = await buffer(req);
+      // const bodyJSON = bodyBuffer!.toString();
+      // const body = JSON.parse(bodyJSON);
       const method = req?.method;
-      return res.status(200).json({ method,pageId: data.page.id });
+      const body = req?.body??undefined;
+      if(body){
+        const data = body?.data??undefined;
+        if(data){
+          const page = data?.page??undefined;
+          if(page){
+            const pageId = page?.id;
+            return res.status(200).json({ method, pageId });
+          }
+          else return res.status(200).json({ method, missing_page:true });
+
+        }
+        else
+          return res.status(200).json({ method, missing_data:true });
+      }
+      else 
+        return res.status(200).json({ method,missing_body:true });
       
       
       // const page = req?.body?.data?.page;
