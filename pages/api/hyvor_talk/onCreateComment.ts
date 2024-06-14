@@ -14,27 +14,27 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
-// const buffer = (req:any) => {
-//     return new Promise((resolve, reject) => {
-//       const chunks: any[] = [];
+const buffer = (req:any) => {
+    return new Promise((resolve, reject) => {
+      const chunks: any[] = [];
   
-//       req.on('data', (chunk: any) => {
-//         chunks.push(chunk);
-//       });
+      req.on('data', (chunk: any) => {
+        chunks.push(chunk);
+      });
   
-//       req.on('end', () => {
-//         resolve(Buffer.concat(chunks));
-//       });
+      req.on('end', () => {
+        resolve(Buffer.concat(chunks));
+      });
   
-//       req.on('error', reject);
-//     });
-//   };
+      req.on('error', reject);
+    });
+  };
 
-// export const config = {
-//     api: {
-//       bodyParser: false,
-//     },
-//   };
+export const config = {
+    api: {
+      bodyParser: false,
+    },
+  };
 
 // type Data = {
 //   data?: Object;
@@ -47,12 +47,18 @@ export default async function handler(
 ) {
   
   // if(req.method?.toLowerCase()=='post'){
-    try{
-      // const bodyBuffer = await buffer(req);
-      // const bodyJSON = bodyBuffer!.toString();
+    try{debugger;
+      const bodyBuffer = await buffer(req);
+      let bodystr = bodyBuffer!.toString();
+
+      bodystr.match(new RegExp('("body":(.|\n|\r)*)"body_html"'));
+      const v = RegExp.$1;
+      bodystr = bodystr.replace(v,'');
+      const body = JSON.parse(bodystr);
+
       // const body = JSON.parse(bodyJSON);
       const method = req?.method;
-      const body = req?.body??undefined;
+      // const body = req?.body??undefined;
       if(body){
 
         await sendMail({
