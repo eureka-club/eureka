@@ -54,10 +54,10 @@ export default async function handler(
       const method = req?.method;
       const body = req?.body??undefined;
       if(body){
-        
+
         await sendMail({
           from:process.env.EMAILING_FROM!,
-          to:[{email:process.env.DEV_EMAIL!}],
+          to:[{email:'gbanoaol@gmail.com'}],
           subject:`Body from hyvor-talk`,
           html:`<p>${JSON.stringify(body)}</p>`
         });
