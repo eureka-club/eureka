@@ -50,34 +50,40 @@ export default async function handler(
     try{
       const bodyBuffer = await buffer(req);
       let bodystr = bodyBuffer!.toString();
+      
+      await sendMail({
+        from:process.env.EMAILING_FROM!,
+        to:[{email:'gbanoaol@gmail.com'}],
+        subject:`Body from hyvor-talk`,
+        html:`<p>${JSON.stringify(bodystr)}</p>`
+      });
+
       bodystr=bodystr.replace(/(\n|\r|\s)/g,'');
       bodystr=bodystr.replace(/("body".*)("body_html".*)/,'$2');
 
-      const body = JSON.parse(bodystr);
-      const method = req?.method;
-      if(body){
-        await sendMail({
-          from:process.env.EMAILING_FROM!,
-          to:[{email:'gbanoaol@gmail.com'}],
-          subject:`Body from hyvor-talk`,
-          html:`<p>${JSON.stringify(body)}</p>`
-        });
+      // const body = JSON.parse(bodystr);
+      // const method = req?.method;
+      // if(body){
+        
 
-        const data = body?.data??undefined;
-        if(data){
-          const page = data?.page??undefined;
-          if(page){
-            const pageId = page?.id;
-            return res.status(200).json({ method, pageId, userId:data.user?.id });
-          }
-          else return res.status(200).json({ method, missing_page:true });
+      //   const data = body?.data??undefined;
+      //   if(data){
+      //     const page = data?.page??undefined;
+      //     if(page){
+      //       const pageId = page?.id;
+      //       return res.status(200).json({ method, pageId, userId:data.user?.id });
+      //     }
+      //     else return res.status(200).json({ method, missing_page:true });
 
-        }
-        else
-          return res.status(200).json({ method, missing_data:true });
-      }
-      else 
-        return res.status(200).json({ method,missing_body:true });
+      //   }
+      //   else
+      //     return res.status(200).json({ method, missing_data:true });
+      // }
+      // else 
+      //   return res.status(200).json({ method,missing_body:true });
+
+      return res.status(200).json({ bodystr });
+
       
       
       // const page = req?.body?.data?.page;
