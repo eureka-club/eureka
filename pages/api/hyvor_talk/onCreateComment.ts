@@ -14,27 +14,27 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
 
-const buffer = (req:any) => {
-    return new Promise((resolve, reject) => {
-      const chunks: any[] = [];
+// const buffer = (req:any) => {
+//     return new Promise((resolve, reject) => {
+//       const chunks: any[] = [];
   
-      req.on('data', (chunk: any) => {
-        chunks.push(chunk);
-      });
+//       req.on('data', (chunk: any) => {
+//         chunks.push(chunk);
+//       });
   
-      req.on('end', () => {
-        resolve(Buffer.concat(chunks));
-      });
+//       req.on('end', () => {
+//         resolve(Buffer.concat(chunks));
+//       });
   
-      req.on('error', reject);
-    });
-  };
+//       req.on('error', reject);
+//     });
+//   };
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
+// export const config = {
+//     api: {
+//       bodyParser: false,
+//     },
+//   };
 
 // type Data = {
 //   data?: Object;
@@ -48,18 +48,18 @@ export default async function handler(
   
   // if(req.method?.toLowerCase()=='post'){
     try{
-      const bodyBuffer = await buffer(req);
-      let bodystr = bodyBuffer!.toString();
+      // const bodyBuffer = await buffer(req);
+      // let bodystr = bodyBuffer!.toString();
       
       await sendMail({
         from:process.env.EMAILING_FROM!,
         to:[{email:'gbanoaol@gmail.com'}],
         subject:`Body from hyvor-talk`,
-        html:`<p>${JSON.stringify(bodystr)}</p>`
+        html:`<p>${JSON.stringify(req.body)}</p>`
       });
 
-      bodystr=bodystr.replace(/(\n|\r|\s)/g,'');
-      bodystr=bodystr.replace(/("body".*)("body_html".*)/,'$2');
+      // bodystr=bodystr.replace(/(\n|\r|\s)/g,'');
+      // bodystr=bodystr.replace(/("body".*)("body_html".*)/,'$2');
 
       // const body = JSON.parse(bodystr);
       // const method = req?.method;
@@ -82,7 +82,7 @@ export default async function handler(
       // else 
       //   return res.status(200).json({ method,missing_body:true });
 
-      return res.status(200).json({ bodystr });
+      return res.status(200).json({ ok:'' });
 
       
       
