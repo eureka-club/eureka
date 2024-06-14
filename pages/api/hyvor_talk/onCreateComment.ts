@@ -3,6 +3,7 @@
 // import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
 // import { compare, compareSync } from 'bcryptjs';
 // import { createHash, createHmac, timingSafeEqual } from 'crypto';
+import { sendMail } from '@/src/facades/mail';
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import { defaultLocale } from 'i18n';
 // import { readFile } from 'fs';
@@ -53,6 +54,14 @@ export default async function handler(
       const method = req?.method;
       const body = req?.body??undefined;
       if(body){
+        
+        await sendMail({
+          from:process.env.EMAILING_FROM!,
+          to:[{email:process.env.DEV_EMAIL!}],
+          subject:`Body from hyvor-talk`,
+          html:`<p>${JSON.stringify(body)}</p>`
+        });
+
         const data = body?.data??undefined;
         if(data){
           const page = data?.page??undefined;
