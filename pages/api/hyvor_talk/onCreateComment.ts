@@ -47,20 +47,15 @@ export default async function handler(
 ) {
   
   // if(req.method?.toLowerCase()=='post'){
-    try{debugger;
+    try{
       const bodyBuffer = await buffer(req);
       let bodystr = bodyBuffer!.toString();
+      bodystr=bodystr.replace(/(\n|\r|\s)/g,'');
+      bodystr=bodystr.replace(/("body".*)("body_html".*)/,'$2');
 
-      bodystr.match(new RegExp('("body":(.|\n|\r)*)"body_html"'));
-      const v = RegExp.$1;
-      bodystr = bodystr.replace(v,'');
       const body = JSON.parse(bodystr);
-
-      // const body = JSON.parse(bodyJSON);
       const method = req?.method;
-      // const body = req?.body??undefined;
       if(body){
-
         await sendMail({
           from:process.env.EMAILING_FROM!,
           to:[{email:'gbanoaol@gmail.com'}],
@@ -73,7 +68,7 @@ export default async function handler(
           const page = data?.page??undefined;
           if(page){
             const pageId = page?.id;
-            return res.status(200).json({ method, pageId });
+            return res.status(200).json({ method, pageId, userId:data.user?.id });
           }
           else return res.status(200).json({ method, missing_page:true });
 
