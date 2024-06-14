@@ -45,7 +45,7 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   
-  // if(req.method?.toLowerCase()=='post'){
+  if(req.method?.toLowerCase()=='post'){
     try{
       // const bodyBuffer = await buffer(req);
       // const bodyJSON = bodyBuffer!.toString();
@@ -253,5 +253,5 @@ export default async function handler(
         console.error(e);
         return res.status(400).json({ error:e?.toString() });
     }
-  // }
+  }
 }
