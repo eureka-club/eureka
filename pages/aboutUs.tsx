@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
-import { Container, Row, Col, Badge } from 'react-bootstrap';
+import {  Row, Col, Badge} from 'react-bootstrap';
 import Image from 'next/image';
 
 import {
@@ -13,6 +13,8 @@ import styles from './aboutUs.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
+import { Grid, Container,Chip   } from '@mui/material';
+import { ReactElement } from 'react';
 
 interface Props {
   session: Session
@@ -33,9 +35,9 @@ const AboutPage: NextPage<Props> = ({ session }) => {
       <br />
       <br />
       <div className="middle-container">
-        <Container fluid="md">
-          <Row>
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+        <Container maxWidth="lg" >
+          <Grid container>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/julie_ricard.webp`}
@@ -51,20 +53,14 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Founder, Director')}</h3>
               <h4 className={styles.positionName}>{t('Researcher and technologist')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('social justice')}
-              </Badge>
+              <Chip  label={`${t('social justice')}` } size='small'  className={`badge-secondary ${styles.interest}` }/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('intersectional feminism')}
-              </Badge>
+              <Chip label={`${t('intersectional feminism')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('disinformation')}
-              </Badge>
-            </Col>
+              <Chip label={`${t('disinformation')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+            </Grid>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/alejandro_noriega.jpeg`}
@@ -84,20 +80,15 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Co-creator from Prosperia')}</h3>
               <h4 className={styles.positionName}>{t('AI and technology expert')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('artificial intelligence')}
-              </Badge>
+              <Chip label={`${t('artificial intelligence')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('social policies')}
-              </Badge>
+              <Chip label={`${t('social policies')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('public health')}
-              </Badge>
-            </Col>
+              <Chip label={`${t('public health')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+               
+            </Grid>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
@@ -113,18 +104,13 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Software Engineer')}</h3>
               <h4 className={styles.positionName}>{t('Full-stack expert')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('environment')}
-              </Badge>
+              <Chip label={`${t('environment')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+               
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('good cinema')}
-              </Badge>
+              <Chip label={`${t('good cinema')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('music')}
-              </Badge>
-            </Col>
+              <Chip label={`${t('music')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+            </Grid>
 
             {/* <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
@@ -155,7 +141,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </Badge>
             </Col> */}
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aime_cruz.webp`}
@@ -171,19 +157,13 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Communications Officer')}</h3>
               <h4 className={styles.positionName}>{t('Graphic design and social media expert')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Communications')}
-              </Badge>
+              <Chip label={`${t('Communications')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Graphic design')}
-              </Badge>
+              <Chip label={`${t('Graphic design')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Social Media')}
-              </Badge>
-            </Col>
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Chip label={`${t('Social Media')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+            </Grid>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 alt="Partnerships and Development"
@@ -199,20 +179,13 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Partnerships and Development')}</h3>
               <h4 className={styles.positionName}>{t('Master in Literature')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Gender and feminisms')}
-              </Badge>
+              <Chip label={`${t('Gender and feminisms')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Brazilian Popular Music')}
-              </Badge>
+              <Chip label={`${t('Brazilian Popular Music')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Books')}
-              </Badge>
-            </Col>
-
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Chip label={`${t('Books')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+            </Grid>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
@@ -228,20 +201,14 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Advisor')}</h3>
               <h4 className={styles.positionName}>{t('Cinema and documentary expert')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('anthropology')}
-              </Badge>
+              <Chip label={`${t('anthropology')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('cultural heritage and memory')}
-              </Badge>
+              <Chip label={`${t('cultural heritage and memory')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('education')}
-              </Badge>
-            </Col>
+              <Chip label={`${t('education')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+            </Grid>
 
-            <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+            <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
               <Image
                 className="rounded-circle"
                 src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
@@ -257,22 +224,14 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               </h2>
               <h3 className={styles.professionName}>{t('Advisor')}</h3>
               <h4 className={styles.positionName}>{t('Narrative and public affairs expert')}</h4>
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Communication')}
-              </Badge>
+              <Chip label={`${t('Communication')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Crisis management')}
-              </Badge>
+              <Chip label={`${t('Crisis management')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
               <br />
-              <Badge pill className={`badge-secondary ${styles.interest}`}>
-                {t('Public relations')}
-              </Badge>
-            </Col>
-
-
-            <Row className='w-100 d-flex justify-content-center'>
-              <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Chip label={`${t('Public relations')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+            </Grid>
+            <Grid container className='w-100 d-flex justify-content-center'>
+              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
@@ -288,20 +247,14 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 </h2>
                 <h3 className={styles.professionName}>{t('Mastermind')}</h3>
                 <h4 className={styles.positionName}>{t('Napping expert')}</h4>
-                <Badge pill className={`badge-secondary ${styles.interest}`}>
-                  {t('birds')}
-                </Badge>
+                <Chip label={`${t('birds')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
                 <br />
-                <Badge pill className={`badge-secondary ${styles.interest}`}>
-                  {t('sleeping')}
-                </Badge>
+                <Chip label={`${t('sleeping')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
                 <br />
-                <Badge pill className={`badge-secondary ${styles.interest}`}>
-                  {t('music')}
-                </Badge>
-              </Col>
-            </Row>
-          </Row>
+                <Chip label={`${t('music')}` } size='small' className={`badge-secondary ${styles.interest}`}/>
+              </Grid>
+            </Grid>
+          </Grid>
         </Container>
         <div style={{ textAlign: 'center', marginBottom: '4em' }}>
           <div className={styles.thanks}>

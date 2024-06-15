@@ -77,10 +77,12 @@
    cursor: pointer;
 }
 .peopleCard .interest{
+  color: azure;
   
   background-color:#493788 !important;
 }
 .peopleCard a[href^="https://www.toptal"] .si,
 .peopleCard a[href^="https://www.upwork.com"] .si{
   font-size:1.2em;
+
 }
