@@ -19,7 +19,8 @@ import {
 import { MosaicContext } from '@/src/useMosaicContext';
 // import { useQueryClient } from 'react-query';
 // import { Grid, Button as MaterialButton } from '@mui/material';
-import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
+import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ 
+WEBAPP_URL} from '@/src/constants';
 import { PostDetail } from '@/src/types/post';
 import { WorkDetail } from '@/src/types/work';
 import PostDetailComponent from '../../post/PostDetail';
@@ -260,7 +261,30 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
         res.push({
           label:t('Discussion'),
           content:<>
-            <HyvorComments entity='cycle' id={`${cycle.id}`} session={session!}  />
+            <HyvorComments 
+              entity='cycle' 
+              id={`${cycle.id}`} 
+              session={session!}  
+              OnCommentCreated={async (comment)=>{
+                  const url = `${WEBAPP_URL}/api/hyvor_talk/onCommentCreated/cycle`;
+                  const fr = await fetch(url,{
+                    method:'POST',
+                    headers:{
+                      "Content-Type":"application/json",
+                    },
+                    body:JSON.stringify({
+                      cycleId:cycle?.id,
+                      url:comment.url,
+                      user:{name:session.user.name,email:session.user.email},
+                      parent_id:comment.parent_id,
+                    })
+                  });
+                  if(fr.ok){
+                    const res = await fr.json();
+                    console.log(res);
+                  }
+              }}
+            />
           </>
         });
         //posts
