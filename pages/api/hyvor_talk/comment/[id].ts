@@ -1,11 +1,12 @@
 import { NOT_FOUND, SERVER_ERROR } from "@/src/api_code";
+import { HYVOR_WEBSITE_ID } from "@/src/constants";
 import { filter } from "lodash";
 import { NextApiRequest, NextApiResponse } from "next";
 const apiKey = process.env.HYVOR_TALK_API_KEY;
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const{id}=req.query;
-    const url = `https://talk.hyvor.com/api/data/v1/comments?website_id=3377&api_key=${apiKey}&filter=(id=${id})`;
+    const url = `https://talk.hyvor.com/api/data/v1/comments?website_id=${HYVOR_WEBSITE_ID}&api_key=${apiKey}&filter=(id=${id})`;
     console.log(url)
     const fr = await fetch(url);
     if(fr.ok){

@@ -52,16 +52,15 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 
     hyvorSso = { hash, userData, loginURL: `${WEBAPP_URL}/` };
     return <Comments
-              website-id={3377}
+              website-id={+HYVOR_WEBSITE_ID!}
               page-id={`${entity}-${id}`}
               sso-user={userData}
               sso-hash={hash}
               on={{
                 'loaded': () => console.log('Comments loaded'),
-                'comment:published': async (comment) => {debugger;
+                'comment:published': async (comment) => {
                   if(OnCommentCreated)
                     await OnCommentCreated(comment as any);
-                  console.log('Comment published', comment)
                 },
             }}
           />
