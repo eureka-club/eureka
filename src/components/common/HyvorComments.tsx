@@ -1,5 +1,7 @@
 import {memo,FC} from 'react';
 import crypto from 'crypto-js';
+import type { Comment} from '@hyvor/hyvor-talk-base';
+
 import { Embed, CommentCount } from 'hyvor-talk-react';
 import { Comments } from '@hyvor/hyvor-talk-react';
 //import { useSession } from 'next-auth/react';
@@ -10,9 +12,10 @@ import { Session } from '../../types';
 interface Props {
   entity: string;
   id: string;
-  session: Session
+  session: Session;
+  OnCommentCreated?:(comment:Comment) =>Promise<void>;
 }
-const HyvorComments:FC<Props> = ({ entity,id,session })=>{
+const HyvorComments:FC<Props> = ({ entity,id,session, OnCommentCreated })=>{
   //const {data:session, status} = useSession() ;
   const isSessionLoading = status == 'loading'
   let hyvorSso = {};
@@ -53,6 +56,14 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
               page-id={`${entity}-${id}`}
               sso-user={userData}
               sso-hash={hash}
+              on={{
+                'loaded': () => console.log('Comments loaded'),
+                'comment:published': async (comment) => {debugger;
+                  if(OnCommentCreated)
+                    await OnCommentCreated(comment as any);
+                  console.log('Comment published', comment)
+                },
+            }}
           />
   }
   return <></>
