@@ -132,9 +132,9 @@ export default async function handler(
           }
         });
         if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
-          const cronTime = '0 0 20 * * *';
+          // const cronTime = '0 0 20 * * *';
           //TODO test only
-          // const cronTime = '15 * * * * *';
+          const cronTime = '15 * * * * *';
           //TODO test only
           const dt = sendAt(cronTime);
           console.log(`The job would run at: ${dt.toISO()}`);
