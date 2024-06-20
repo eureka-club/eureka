@@ -44,6 +44,7 @@ import { CycleSumary } from '@/src/types/cycle';
 import useUserSumary from '@/src/useUserSumary';
 import { useModalContext } from '@/src/hooks/useModal';
 import Spinner from '@/components/common/Spinner';
+import { Stack } from '@mui/material';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -302,19 +303,19 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
     if (entity)
       return (
         <Button
-          variant="link"
-          className={`${styles.buttonSI} p-0 text-primary`}
-          title={t('Save for later')}
-          onClick={handleFavClick}
-          disabled={loadingSocialInteraction}
-        >
-          {/* optimistFav */ entity.currentUserIsFav ? <BsBookmarkFill style={{fontSize: "1.3em",verticalAlign:"bottom"}} className={styles.active} /> : <BsBookmark style={{fontSize: "1.3em",verticalAlign:"bottom"}} />}
-          <br />
-          {showButtonLabels && (
-            <span className={classnames(...[styles.info, ...[entity.currentUserIsFav ? styles.active : '']])}>
-              {t('Save for later')}
-            </span>
-          )}
+        variant="link"
+        className={`${styles.buttonSI} p-0 text-primary`}
+        title={t('Save for later')}
+        onClick={handleFavClick}
+        disabled={loadingSocialInteraction}
+      >
+        {/* optimistFav */ entity.currentUserIsFav ? <BsBookmarkFill style={{fontSize: "1.3em",verticalAlign:"bottom"}} className={styles.active} /> : <BsBookmark style={{fontSize: "1.3em",verticalAlign:"bottom"}} />}
+        <br />
+        {showButtonLabels && (
+          <span className={classnames(...[styles.info, ...[entity.currentUserIsFav ? styles.active : '']])}>
+            {t('Save for later')}
+          </span>
+        )}
         </Button>
       );
   };
@@ -359,7 +360,8 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
   };
   if (isLoadingSession || isLoadingUser) return <Spinner  />;
   return (
-    <section className={`${className} d-flex flex-row`}>
+    <Stack direction={'row'} alignItems={'center'}>
+    {/* <section className={`${className} d-flex flex-row`}> */}
         {renderCreateEureka()}
 
         {showRating && (
@@ -396,15 +398,16 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
             )}
           </div>
         )}
+            {/* <Spinner size='small' /> */}
 
         {loadingSocialInteraction && (
           <div className="mt-1 ms-1 me-2">
             {' '}
-            <Spinner  />
+            <Spinner size='small'  />
           </div>
         )}
-      <div className="ms-auto d-flex justify-content-end">
-
+      <Stack direction={'row'} alignItems={'center'}>
+        
         {ss && (
             <OverlayTrigger trigger="focus" placement="top" overlay={popoverShares}>
               <Button
@@ -428,11 +431,19 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
                : <></>
         }
         </div> */}
-        <div className="ms-auto">
-          {showSaveForLater && <div className={`ms-1`}>{renderSaveForLater()}</div>}
-        </div>
-      </div>
-    </section>
+        {
+          showSaveForLater 
+            ? <div className={`ms-1`}>{renderSaveForLater()}</div>
+            : <></>
+        }
+        {/* <div className="ms-auto">
+        </div> */}
+      </Stack>
+      {/* <div className="ms-auto d-flex justify-content-end">
+
+      </div> */}
+    {/* </section> */}
+    </Stack>
   );
 };
 export default WorkSocialInteraction;

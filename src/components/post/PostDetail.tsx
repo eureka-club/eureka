@@ -18,7 +18,7 @@ import Avatar from '../common/UserAvatar';
 import usePost from '@/src/usePostDetail'
 import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
-import Spinner from '../Spinner';
+import Spinner from '../SpinnerSkeleton';
 import useUser from '@/src/useUser';
 import { Alert, Box } from '@mui/material';
 import useCycle from '@/src/useCycle';

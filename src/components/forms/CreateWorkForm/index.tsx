@@ -36,12 +36,10 @@ import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import styles from './index.module.css';
 import { getImg } from '@/src/lib/utils'
 import { decode } from 'base64-arraybuffer'
-import SpinnerComp from '@/src/components/Spinner';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
 import WMI from '@/src/components/work/MosaicItem';
 import { EDITION_ALREADY_EXIST, WORK_ALREADY_EXIST } from '@/src/api_code';
-import Link from 'next/link'
 import { LANGUAGES } from '@/src/constants';
 
 interface Props {
@@ -458,7 +456,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
           <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={loading}
             >
-                <SpinnerComp />
+                <Spinner />
             </Backdrop>
             {!showExistingWork && <><ModalHeader closeButton={!noModal}>
                 <ModalTitle> <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('title')}</h1></ModalTitle>

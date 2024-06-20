@@ -1,12 +1,20 @@
 import Head from "next/head"
+import { FC } from "react";
 
-const Spinner = ()=>{
+interface Props{
+  size?:'small'|'mediun'|'large';
+}
+const SpinnerSkeleton:FC<Props> = ({size})=>{
+  const s = (size??'large') == 'small' 
+    ? .5
+    : size == 'mediun'
+      ? .7
+      : 1
 return <>
     <style jsx>{`
     .sk-cube-grid {
-        width: 40px;
-        height: 40px;
-        margin: 100px auto;
+        width: calc(40px * ${s});
+        height: calc(40px * ${s});
       }
       
       .sk-cube-grid .sk-cube {
@@ -18,13 +26,7 @@ return <>
                 animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
       }
       .sk-cube-grid .sk-cube1 {
-        background-color: transparent;
-        
-        border-right:solid 6px var(--bs-secondary);
-        border-top:solid 6px var(--bs-secondary);
-        border-bottom:solid 6px var(--bs-primary);
-        border-left:solid 6px var(--bs-primary);
-
+        background-color: var(--bs-secondary);
         -webkit-animation-delay: 0.2s;
                 animation-delay: 0.2s; }
       .sk-cube-grid .sk-cube2 {
@@ -39,11 +41,7 @@ return <>
         -webkit-animation-delay: 0.1s;
                 animation-delay: 0.1s; }
       .sk-cube-grid .sk-cube5 {
-        background-color: transparent;
-        border-right:solid 6px var(--bs-secondary);
-        border-top:solid 6px var(--bs-secondary);
-        border-bottom:solid 6px var(--bs-primary);
-        border-left:solid 6px var(--bs-primary);
+        background-color: var(--bs-secondary);
 
         -webkit-animation-delay: 0.2s;
                 animation-delay: 0.2s; }
@@ -58,12 +56,7 @@ return <>
         -webkit-animation-delay: 0.1s;
                 animation-delay: 0.1s; }
       .sk-cube-grid .sk-cube9 {
-        background-color: transparent;
-        border-right:solid 6px var(--bs-secondary);
-        border-top:solid 6px var(--bs-secondary);
-        border-bottom:solid 6px var(--bs-primary);
-        border-left:solid 6px var(--bs-primary);
-
+        background-color: var(--bs-secondary);
         -webkit-animation-delay: 0.2s;
                 animation-delay: 0.2s; }
       
@@ -101,4 +94,4 @@ return <>
 </div>
 </>
 };
-export default Spinner;
+export default SpinnerSkeleton;

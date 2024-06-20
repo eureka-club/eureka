@@ -1,11 +1,12 @@
-import { CircularProgress } from "@mui/material";
+// import { CircularProgress } from "@mui/material";
 import { FC } from "react";
+import SpinnerSkeleton from "../SpinnerSkeleton";
 
 interface Props{
-    size ?:'small'|'large';
+  size?:'small'|'mediun'|'large';
 }
 const Spinner:FC<Props> = ({size})=>{
-    const s=size=='small' ? '1rem' : '2rem';
-    return <CircularProgress size={s}/>
+    // return <CircularProgress {... size ? {size:s} : {}}/>
+    return <SpinnerSkeleton size={size}/>
 }
 export default Spinner;
