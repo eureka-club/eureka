@@ -70,40 +70,42 @@ export default async function handler(
       const urllabel=dict('urlLabel',json);
       const unsubscribe="";//dict('unsubscribe');
       
-      // if(parent_id){
-      //   const subject=dict(`subject-comment`,json,{title:elementTitle});
-      //   const title=dict(`title-comment`,json,{
-      //     title:elementTitle,
-      //     name
-      //   });
-      //   const about=dict(`about-comment`,json);
-      //   const pcurl = `${WEBAPP_URL}/api/hyvor_talk/comment/${parent_id}`;
-      //   const fr=await fetch(pcurl);
-      //   if(fr.ok){
-      //     const parentComment=await fr.json();
-      //     if(parentComment){
-      //       const emailSend = await sendEmailOnCommentCreated({
-      //         //TODO test only
-      //         to:[{email:parentComment.user.email}],
-      //         // remove mujeresinsumisasupn@gmail.com from https://mandrillapp.com/settings/rejections/?subaccount= rejection deny list
-      //         // TODO test only
-      //       // to,
-      //         subject,
-      //         specs:{
-      //           etitle:title,
-      //           about,
-      //           aboutEnd,
-      //           eurl:url,
-      //           urllabel,
-      //           unsubscribe
-      //         },
-      //       });
-      //       return res.status(200).json({data:{emailSend}});
-      //     }
-      //   }
-      //   return res.status(200).json({error:NOT_FOUND});
-      // }
-      // else{
+      if(parent_id){
+        const subject=dict(`subject-comment`,json,{title:elementTitle});
+        const title=dict(`title-comment`,json,{
+          title:elementTitle,
+          name
+        });
+        const about=dict(`about-comment`,json);
+        const pcurl = `${WEBAPP_URL}/api/hyvor_talk/comment/${parent_id}`;
+        const fr=await fetch(pcurl);
+        if(fr.ok){
+          const parentComment=await fr.json();
+          if(parentComment){
+            const {comment:{user:{email}}}=parentComment;
+            to.push({email});
+            const emailSend = await sendEmailOnCommentCreated({
+              //TODO test only
+              // to:[{email:parentComment.user.email}],
+              // remove mujeresinsumisasupn@gmail.com from https://mandrillapp.com/settings/rejections/?subaccount= rejection deny list
+              // TODO test only
+              to,
+              subject,
+              specs:{
+                etitle:title,
+                about,
+                aboutEnd,
+                eurl:url,
+                urllabel,
+                unsubscribe
+              },
+            });
+            return res.status(200).json({data:{emailSend}});
+          }
+        }
+        return res.status(200).json({error:NOT_FOUND});
+      }
+      else{
         const idx = cycle?.participants.findIndex(p=>p.email==email);
         if(idx>=0)cycle?.participants.splice(idx!,1);
         to=cycle.participants.map((p)=>({email:p.email!,name:p.name!}));
@@ -149,7 +151,7 @@ export default async function handler(
           );
         }
         return res.status(200).json({ data:{comentEmailSaved} });    
-      // }
+      }
     }
     catch(e){
         console.error(e);

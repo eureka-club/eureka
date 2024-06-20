@@ -1,20 +1,24 @@
 import { NOT_FOUND, SERVER_ERROR } from "@/src/api_code";
-import { HYVOR_WEBSITE_ID } from "@/src/constants";
-import { filter } from "lodash";
 import { NextApiRequest, NextApiResponse } from "next";
-const apiKey = process.env.HYVOR_TALK_API_KEY;
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const{id}=req.query;
-    const url = `https://talk.hyvor.com/api/data/v1/comments?website_id=${HYVOR_WEBSITE_ID}&api_key=${apiKey}&filter=(id=${id})`;
-    console.log(url)
-    const fr = await fetch(url);
-    if(fr.ok){
-        const r = await fr.json();
-        if(r?.length){
-            return res.status(200).json({comment:r[0]})
+    try{
+        const url=`https://talk.hyvor.com/api/console/v1/${process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID}/comment/${id}`
+        const fr=await fetch(url,{
+            headers:{
+                'X-API-KEY':process.env.HYVOR_TALK_CONSOLE_API_KEY!
+            }
+        });
+        if(fr.ok){
+            const comment=await fr.json();
+            if(comment)
+                return res.json({comment});
+            return res.json({error:NOT_FOUND});
         }
-        return res.status(200).json({comment:null})
+        return res.json({error:fr.statusText})
     }
-    return res.status(200).json({error:SERVER_ERROR})
+    catch(e){
+        return res.json({error:SERVER_ERROR})
+    }
 }

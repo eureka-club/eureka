@@ -1,6 +1,6 @@
 import { HYVOR_WEBSITE_ID } from '@/src/constants';
 import type { NextApiRequest, NextApiResponse } from 'next'
-const apiKey = process.env.HYVOR_TALK_API_KEY;
+const apiKey = process.env.HYVOR_TALK_DATA_API_KEY;
 
 type Data = {
   data?: Object[];
