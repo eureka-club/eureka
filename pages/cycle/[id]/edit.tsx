@@ -1,7 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import { Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
@@ -11,6 +10,7 @@ import { Cycle } from '@prisma/client';
 import { Session } from '@/src/types';
 import { dehydrate, QueryClient } from 'react-query';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   notFound?: boolean;
@@ -29,7 +29,7 @@ const EditCyclePage: NextPage<Props> = ({session}) => {
 
   if(isLoading)
     return <SimpleLayout title={t('editCycle')}>
-    <Spinner animation='grow'/>
+    <Spinner />
   </SimpleLayout>
 
   if(!cycle && !isLoading)

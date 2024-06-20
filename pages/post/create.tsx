@@ -5,8 +5,9 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CreatePostForm from '@/src/components/forms/CreatePostForm';
-import { Spinner, Col } from 'react-bootstrap';
+import {  Col } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   notFound?: boolean;
@@ -52,7 +53,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
           <Col xs={12} lg={10}>
          <section className='ms-0 ms-lg-4'>  
          {(isLoadingSession) ?
-        <Spinner animation="grow" variant="info" />:<>
+       <Spinner/>:<>
       <CreatePostForm noModal params={query}/></>}
       </section> 
           </Col>  
@@ -63,7 +64,7 @@ const CreatePostPage: NextPage<Props> = ({notFound}) => {
    return  (
     <SimpleLayout title={t('title')}>
         <ButtonsTopActions/>
-        <Spinner animation="grow" variant="info" />
+        <Spinner/>
     </SimpleLayout>
   );
 

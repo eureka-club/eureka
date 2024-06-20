@@ -4,7 +4,6 @@ import Head from "next/head";
 import { MouseEvent, useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { Spinner } from 'react-bootstrap';
 import { QueryClient,dehydrate } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
@@ -17,6 +16,7 @@ import { Session } from '@/src/types';
 import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
 import { Button } from '@mui/material';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 interface Props {
   session:Session;
   postId:number;
@@ -111,7 +111,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
           }
         </ButtonsTopActions>
         <>
-          {isLoadingOrFetching() && <Spinner animation="grow" variant="info" />}
+          {isLoadingOrFetching() && <Spinner />}
           {!isLoadingOrFetching() && post && cycle && (
             <CycleContext.Provider value={{ cycle, currentUserIsParticipant }}>
               <CycleDetailComponent

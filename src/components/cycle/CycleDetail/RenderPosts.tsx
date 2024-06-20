@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import Spinner from '@/components/common/Spinner';
 import { MosaicsGrid } from "../../MosaicsGrid";
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import usePosts from "@/src/usePosts";
@@ -61,7 +61,7 @@ export const RenderPosts = ({cycleId}:RenderPostsProps)=>{
         <div className="mt-5" ref={ref}>
             {
                 hasMorePosts 
-                    ? <CircularProgress />
+                    ? <Spinner/>
                     : <></>
             }
         </div>

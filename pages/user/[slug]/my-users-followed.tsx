@@ -1,6 +1,6 @@
 // import { NextPage,GetServerSideProps } from 'next';
 // import Head from "next/head";
-// import { Col, Row, Spinner } from 'react-bootstrap';
+// import { Col, Row} from 'react-bootstrap';
 // import SimpleLayout from '@/components/layouts/SimpleLayout';
 // import { useSession, getSession } from 'next-auth/react';
 // import useTranslation from 'next-translate/useTranslation';
@@ -42,7 +42,7 @@
 //       <article className='mt-4' data-cy="my-users-followed">
 //       {
 //       isLoadingSession 
-//         ? <Spinner animation="grow"/>
+//         ? <Spinner/>
 //         : user ? (
 //           <>
 //           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myUsersFollowed')}</h1>

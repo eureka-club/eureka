@@ -16,7 +16,7 @@ import ModalFooter from 'react-bootstrap/ModalFooter';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { EditWorkClientPayload, WorkDetail } from '../../types/work';
 import { Country } from '@/src/types';
@@ -524,7 +524,7 @@ const EditWorkForm: FunctionComponent = () => {
                 <>
                   {t('titleEdit')}
                   {isLoading && (
-                    <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm" />
+                    <Spinner  />
                   )}
                 </>
               </Button>

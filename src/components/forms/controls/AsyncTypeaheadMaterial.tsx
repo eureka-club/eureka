@@ -1,12 +1,13 @@
 import { FunctionComponent, useState, useEffect, useRef, Dispatch, SetStateAction, SyntheticEvent } from 'react';
 import useTranslation from 'next-translate/useTranslation';
-import { Autocomplete, CircularProgress, AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
+import { Autocomplete,  AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
 import { TextField } from '@mui/material';
 import { SearchResult, isCycleMosaicItem, isWorkMosaicItem } from '@/src/types';
 import { CycleDetail, CycleSumary } from '@/src/types/cycle';
 import { WorkDetail } from '@/src/types/work';
 import CycleTypeaheadSearchItem from '@/src/components/cycle/TypeaheadSearchItem';
 import WorkTypeaheadSearchItem from '@/src/components/work/TypeaheadSearchItem';
+import Spinner from '@/components/common/Spinner';
 
 
 export type AsyncTypeaheadMaterialProp = {
@@ -97,7 +98,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
             InputProps={{
               ...params.InputProps,
               endAdornment: (<>
-                {isSearchLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                {isSearchLoading ? <Spinner /> : null}
                 {params.InputProps.endAdornment}</>
               )
             }}
@@ -137,7 +138,7 @@ const AsyncTypeaheadMaterial: FunctionComponent<AsyncTypeaheadMaterialProp> = (p
             InputProps={{
               ...params.InputProps,
               endAdornment: (<>
-                {isSearchLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                {isSearchLoading ? <Spinner/> : null}
                 {params.InputProps.endAdornment}</>
               )
             }}

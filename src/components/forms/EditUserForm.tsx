@@ -13,7 +13,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import LocalImageComponent from '@/src/components/LocalImage'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import { useMutation, useQueryClient } from 'react-query';
@@ -514,7 +514,7 @@ const EditUserForm: FunctionComponent = () => {
                 <>
                   {t('Edit')}
                   {isLoadingUser ? (
-                    <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
+                    <Spinner  />
                   ) : (
                     <span className={styles.placeholder} />
                   )}

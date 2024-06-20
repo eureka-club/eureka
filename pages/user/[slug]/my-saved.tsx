@@ -1,6 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from "next/head";
-import { Col, Row, Spinner,Tab,Tabs } from 'react-bootstrap';
+import { Col, Row,Tab,Tabs } from 'react-bootstrap';
 import { QueryClient, dehydrate } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
@@ -13,6 +13,7 @@ import PMI from '@/src/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem'
 import {getSession} from 'next-auth/react'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner';
 
 interface Props{
   id:number;
@@ -78,7 +79,7 @@ const MySaved: NextPage<Props> = ({id}) => {
     <article className='mt-4' data-cy="my-saved">
       {
       isLoadingSession 
-        ? <Spinner animation="grow"/>
+        ? <Spinner/>
         : session ? (
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('mySaved')}</h1>

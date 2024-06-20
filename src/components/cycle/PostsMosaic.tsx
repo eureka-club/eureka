@@ -4,6 +4,8 @@ import { CycleDetail } from '@/types/cycle';
 import { PostSumary } from '@/types/post';
 import Mosaic from '../Mosaic';
 import { WorkDetail } from '@/src/types/work';
+
+
 interface Props {
   parent?: CycleDetail | WorkDetail;
   posts: PostSumary[];
@@ -65,7 +67,7 @@ const PostsMosaic: FunctionComponent<Props> = ({ posts,parent, display, showComm
   return (
     <>
       {/* {isLoading && (
-        <Spinner animation="border" role="status">
+        <Spinner />
           <span className="sr-only">Loading...</span>
         </Spinner>
       )} */}

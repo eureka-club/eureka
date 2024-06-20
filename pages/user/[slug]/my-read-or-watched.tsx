@@ -27,6 +27,7 @@ import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner';
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -205,7 +206,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
           <ButtonsTopActions/>
 
           {/*isLoadingSession ? (
-            <Spinner animation="grow" />
+            <Spinner  />
           ) : */}
           <>
             <Row className='mt-sm-0 mb-4 d-flex flex-column flex-lg-row'>

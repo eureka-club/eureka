@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import { ChangeEvent, FormEvent, FunctionComponent, MouseEvent, RefObject, useEffect, useRef, useState } from 'react';
-import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row, Spinner,Container } from 'react-bootstrap';
+import { Button, Col, Form, ButtonGroup, ListGroup, Modal, Row,Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BiTrash, BiPlus, BiEdit } from 'react-icons/bi';
@@ -30,6 +30,7 @@ import styles from './CreateCycleForm.module.css';
 import TagsInput from './controls/TagsInput';
 import useTopics from '../../useTopics';
 import { isWeakMap } from 'util/types';
+import Spinner from '@/components/common/Spinner';
 
 interface Props {
   className?: string;
@@ -886,7 +887,7 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
               <>
                 {t('submitBtnLabel')}
                 {isCreateCycleReqLoading && (
-                  <Spinner animation="grow" variant="info" size="sm" />
+                  <Spinner  />
                 )}
                 {isCreateCycleReqError && createCycleReqError}
               </>

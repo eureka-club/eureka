@@ -2,11 +2,11 @@ import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, useEffect, useMemo } from 'react';
 import globalSearchEngineAtom from '../../atoms/searchEngine';
-
+import Spinner from '@/components/common/Spinner';
 import styles from './index.module.css';
 import Mosaics from './Mosaics';
 import { MosaicItem } from '@/src/types';
-import { Box, CircularProgress, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 type Props = {
   title?: string | JSX.Element;
@@ -85,7 +85,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                           {t('common:See all')}
                         </span>
                       ) : (
-                        <CircularProgress />
+                        <Spinner/>
                       )}
                     </Box>
               )}
@@ -123,7 +123,7 @@ const CarouselStatic: FunctionComponent<Props> = ({
                         {t('common:See all')}
                       </span>
                     ) : (
-                      <CircularProgress />
+                      <Spinner/>
                     )}
                   </>
                 )}

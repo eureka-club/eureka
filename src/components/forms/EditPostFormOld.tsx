@@ -11,7 +11,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
 import { useMutation, useQueryClient } from 'react-query';
@@ -383,7 +383,7 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
     setLanguage(language)
   };
 
-  if (isLoading || isFetching || !post) return <Spinner animation="grow" variant="info" size="sm" />;
+  if (isLoading || isFetching || !post) return <Spinner  />;
   return (
     post ? (
       <Form onSubmit={handleSubmit} ref={formRef}>
@@ -606,14 +606,14 @@ const EditPostForm: FunctionComponent<Props> = ({noModal = false,id}) => {
                 <>
                 {t('resetBtnLabel')}
                  {isDeletePostLoading && (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
+                      <Spinner />
                     )}</>
               </Button>
                 <Button disabled={isEditPostLoading} type="submit" className="btn-eureka" style={{ width: '10em' }}>
                   <>
                     {t('titleEdit')}
                     {isEditPostLoading && (
-                      <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`}/>
+                      <Spinner />
                     )}
                   </>
                 </Button>

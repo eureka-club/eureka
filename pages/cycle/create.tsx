@@ -6,8 +6,9 @@ import { useRouter } from 'next/router';
 // import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
-import { Spinner} from 'react-bootstrap';
+
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   notFound?: boolean;
@@ -31,7 +32,7 @@ if (!notFound)
       <ButtonsTopActions/>
          {
           (isLoadingSession) 
-          ? <Spinner animation="grow" variant="info" />
+          ? <Spinner />
           : <>
               <CreateCycleForm/>
             </>
@@ -41,7 +42,7 @@ if (!notFound)
   else
    return  (
     <SimpleLayout title={t('createCycle')}>
-        <Spinner animation="grow" variant="info" />
+       <Spinner />
     </SimpleLayout>
   );
 

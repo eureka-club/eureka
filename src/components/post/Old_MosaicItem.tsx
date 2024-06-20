@@ -2,7 +2,7 @@ import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Row, Col, Card, Badge,Button,Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Badge,Button } from 'react-bootstrap';
 import { FaRegCompass } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT } from '../../constants';
@@ -14,6 +14,7 @@ import Avatar from '../common/UserAvatar';
 import { BiEdit} from 'react-icons/bi';
 import usePostSumary from '@/src/usePostSumary';
 import { useSession } from 'next-auth/react';
+import Spinner from '@/components/common/Spinner';
 interface Props {
   postId: number|string;
   display?: 'v' | 'h';
@@ -125,7 +126,7 @@ const MosaicItem: FunctionComponent<Props> = ({
                   alt={post.title}
                 />
                 <div className={styles.gradient} />
-            {!canNavigate() && <Spinner className="position-absolute top-50 start-50" animation="grow" variant="info" />}
+            {!canNavigate() && <Spinner  />}
             {img}
           </div>
         );

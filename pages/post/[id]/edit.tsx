@@ -3,10 +3,11 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { Spinner, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import EditPostForm from '@/components/forms/EditPostForm'
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   session?: Session;
@@ -32,7 +33,7 @@ const EditPostPage: NextPage<Props> = ({session}) => {
       ? <>
         <EditPostForm id={+router.query.id.toString()} noModal/>
       </>
-      : <Spinner animation="grow" variant="info" />
+      : <Spinner />
     }
   </SimpleLayout>
 };

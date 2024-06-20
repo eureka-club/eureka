@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
 // import Image from 'next/image';
-import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
+import { Button, Col, Row, ButtonGroup, Form} from 'react-bootstrap';
 // import { useAtom } from 'jotai';
 import { Post } from '@prisma/client';
 
@@ -44,6 +44,7 @@ import {
 } from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
 import { WorkDetail } from '@/src/types/work';
+import Spinner from '@/components/common/Spinner';
 
 // import { devNull } from 'os';
 // import { isNullOrUndefined } from 'util';
@@ -574,7 +575,7 @@ const CycleDetailDiscussionCreateEurekaForm: FunctionComponent<Props> = ({
                 disabled={isLoading}
               >
                 <span>{t('Create')}</span>
-                {isLoading && <Spinner size="sm" animation="grow" />}
+                {isLoading && <Spinner  />}
               </Button>
             </ButtonGroup>
           </aside>

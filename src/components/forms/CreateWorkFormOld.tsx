@@ -15,7 +15,7 @@ import ModalFooter from 'react-bootstrap/ModalFooter';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import TagsInput from './controls/TagsInput';
@@ -420,7 +420,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({noModal = false})=> {
             <>
               {t('submitButtonLabel')}
               {isLoading && (
-                <Spinner animation="grow" variant="info" className={`ms-2 ${styles.loadIndicator}`} size="sm"  />
+                <Spinner   />
               ) }
             </>
           </Button>

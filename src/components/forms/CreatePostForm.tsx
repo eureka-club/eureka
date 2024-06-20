@@ -15,7 +15,7 @@ import ModalFooter from 'react-bootstrap/ModalFooter';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { Switch, TextField, FormControlLabel } from '@mui/material';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -645,7 +645,7 @@ const CreatePostForm: FunctionComponent<Props> = ({ noModal = false, params }) =
                 <>
                   {t('submitButtonLabel')}
                   {isCreatePostLoading && (
-                    <Spinner className="ms-2" animation="grow" variant="info" size="sm" />
+                    <Spinner  />
                   )}
                 </>
               </Button>

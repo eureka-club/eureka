@@ -13,7 +13,7 @@ import { useSession } from 'next-auth/react';
 
 // import Rating from '@/src/components/common/Rating';
 
-import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -44,6 +44,7 @@ import PostReactionsActions from './PostReactionsActions';
 import Link from 'next/link';
 import useUserSumary from '@/src/useUserSumary';
 import { useModalContext } from '@/src/hooks/useModal';
+import Spinner from '@/components/common/Spinner';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -327,7 +328,7 @@ const SocialInteraction: FunctionComponent<Props> = ({
       );
   };
 
-  if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
+  if (isLoadingSession || isLoadingUser) return <Spinner  />;
   return (
     <section className={`${className}`}>
       <div className="d-flex justify-content-between align-items-center">

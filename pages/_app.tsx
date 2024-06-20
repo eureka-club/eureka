@@ -9,8 +9,8 @@ import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import Backdrop from '@mui/material/Backdrop';
-
 import { createTheme } from '@mui/material/styles';
+
 
 const materialTheme = createTheme({
   typography:{
@@ -53,12 +53,13 @@ import { GTM_ID } from '@/src/lib/gtag'
 import { NotificationProvider } from '@/src/useNotificationProvider';
 import Script from 'next/script';
 import { Session } from '@/src/types';
-import Spinner from '@/src/components/Spinner';
 import ErrorBounddary from '@/src/ErrorBounddary';
 import { ThemeProvider } from '@mui/material';
 import Head from 'next/head';
 import { FormFloating } from 'react-bootstrap';
 import { ModalProvider } from '@/src/hooks/useModal';
+
+import Spinner from '@/components/common/Spinner'
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
   let session:  Session | null | undefined = null
@@ -88,8 +89,8 @@ function Loading() {
          open={loading}
         //onClick={handleClose}
       >
-        {/* <CircularProgress color="inherit" /> */}
-        <Spinner/>
+         <Spinner /> 
+       
       </Backdrop>
 }
   

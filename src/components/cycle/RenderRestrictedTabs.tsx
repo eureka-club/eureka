@@ -2,7 +2,7 @@
 // import { Col, Row, TabPane } from "react-bootstrap";
 // import HyvorComments from "../common/HyvorComments";
 // import CycleDetailDiscussion from "./CycleDetailDiscussion";
-// import { CircularProgress, Grid } from "@mui/material";
+// import { Grid } from "@mui/material";
 // import usePosts from "@/src/usePosts";
 // import { CycleDetail } from "@/src/types/cycle";
 // import { useCycleContext } from "@/src/useCycleContext";
@@ -13,12 +13,13 @@
 // import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 // import useTranslation from "next-translate/useTranslation";
 // import { MosaicsGrid } from "../MosaicsGrid";
+//import Spinner from '@/components/common/Spinner';
 
 // const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycleId}}}});
 
 
 // const RenderSpinnerForLoadNextCarousel = ({hasMorePosts}:{hasMorePosts:boolean})=>{
-//     if(hasMorePosts) return <CircularProgress />
+//     if(hasMorePosts) return <Spinner />
 //             return <></>;
 //   }
 
@@ -43,7 +44,7 @@
     
 //     if (cycle) {
 //       const res = (
-//         <Suspense fallback={<CircularProgress/>}>
+//         <Suspense fallback={<Spinner/>}>
 //           <TabPane eventKey="cycle-discussion">
 //             <HyvorComments entity='cycle' id={`${cycle.id}`} session={session!}  />
 //           </TabPane>

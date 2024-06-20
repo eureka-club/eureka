@@ -2,7 +2,6 @@
 // import dayjs from 'dayjs';
 // import isBetween from 'dayjs/plugin/isBetween';
 // import { FunctionComponent, useEffect, useState } from 'react';
-// // import Spinner from 'react-bootstrap/Spinner';
 // // import { useQuery } from 'react-query';
 
 // import { WorkDetail } from '../../types/work';
@@ -69,7 +68,7 @@
 //   return (
 //     <>
 //       {/* {isLoading && (
-//         <Spinner animation="border" role="status">
+//         <Spinner />
 //           <span className="sr-only">Loading...</span>
 //         </Spinner>
 //       )} */}

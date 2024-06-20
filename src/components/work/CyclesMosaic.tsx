@@ -1,6 +1,6 @@
 // import {WorkDetail} from '@/src/types/work'
 // import { FunctionComponent } from 'react';
-// import Spinner from 'react-bootstrap/Spinner';
+// import Spinner from '@/components/common/Spinner';
 // import { useQuery } from 'react-query';
 // import useCycles from '@/src/useCycles';
 // import { CycleDetail } from '../../types/cycle';
@@ -33,7 +33,7 @@
 //   return (
 //     <>
 //       {/* {isLoading && (
-//         <Spinner animation="grow" role="status"/>        
+//         <Spinner />        
 //       )} */}
 //       {work && cycles && <Mosaic cacheKey={['WORK',work.id.toString()]} className='d-flex justify-content-center justify-content-md-start' stack={cycles} />}
 //     </>

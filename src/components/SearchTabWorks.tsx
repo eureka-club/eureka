@@ -12,6 +12,7 @@ import { getWorksProps } from '../types/work';
 import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
 import { Alert } from '@mui/material';
 import { MosaicsGrid } from './MosaicsGrid';
+import Spinner from '@/components/common/Spinner';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
@@ -97,7 +98,7 @@ const SearchTabworks:FunctionComponent = () => {
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
         )}
     </MosaicsGrid>
-    {/* {works?.length!=total && <CircularProgress ref={ref} />} */}
+    {/* {works?.length!=total && <Spinner ref={ref} />} */}
     {works?.length!=total && <hr ref={ref}/>}
 
   </>

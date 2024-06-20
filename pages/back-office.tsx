@@ -24,7 +24,6 @@ import {
   TabContent,
   TabContainer,
   Col,
-  Spinner,
   Nav,
   NavItem,
   NavLink,
@@ -42,7 +41,7 @@ import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import { debounce } from 'lodash';
 import {
-  Box, Fab, Paper, TextField, Typography, Button, ButtonGroup, CircularProgress, Table, TableBody,
+  Box, Fab, Paper, TextField, Typography, Button, ButtonGroup, Table, TableBody,
   TableFooter, TablePagination, TableCell, TableContainer, TableHead, TableRow, Drawer, IconButton, Divider, Modal, Dialog, DialogContent, Stack, Icon
 } from '@mui/material';
 import PaginationActions from '@/src/components/common/MUITablePaginationActions';
@@ -57,6 +56,9 @@ import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 import { error } from 'node:console';
 import { IoAddCircle, IoClose, IoPencil, IoSave, IoTrash } from 'react-icons/io5';
 import { AddBackOfficesSlidersForm } from '@/src/components/AddBackOfficesSlidersForm';
+import Spinner from '@/components/common/Spinner'
+
+
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -778,7 +780,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   </Button>
                   <Button variant="contained" type="submit" size='large' startIcon={<IoSave/>}>
                     {t('Save')}
-                    {isLoadingBackOffice && <Spinner animation="grow" variant="info" size="sm" className="ms-1" />}
+                    {isLoadingBackOffice && <Spinner/> }
                   </Button>
               </Stack>
             </Form>
@@ -977,14 +979,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                               </Button>
                             </ButtonGroup>}
                               {isUpdateWorkLoading && (
-                                <CircularProgress
-                                  size={30}
-                                  sx={{
-                                    color: 'var(--eureka-green)',
-                                    marginRight: '.5rem',
-                                    //margin:'.5rem'
-                                  }}
-                                />
+                                <Spinner/>
                               )}
                             </>
 

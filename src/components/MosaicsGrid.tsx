@@ -1,6 +1,7 @@
-import { Alert, Box, CircularProgress } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 import useTranslation from "next-translate/useTranslation";
 import { ReactElement } from "react";
+import Spinner from '@/components/common/Spinner'
 
 interface Props{
     children:ReactElement[];
@@ -27,7 +28,7 @@ export const MosaicsGrid = ({children,isLoading}:Props)=>{
                         children
                     } 
                 </Box>
-            :  !isLoading ? <Alert>{t('ResultsNotFound')}</Alert>  : <CircularProgress/>
+            :  !isLoading ? <Alert>{t('ResultsNotFound')}</Alert>  : <Spinner/>
         }
     </>
     //     .div1 { grid-area: 1 / 1 / 2 / 2; }

@@ -1,6 +1,6 @@
 import { NextPage,GetServerSideProps } from 'next';
 import Head from "next/head";
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Col, Row} from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
@@ -10,7 +10,7 @@ import useUser,{getUser} from '@/src/useUser';
 import { UserDetail } from '@/src/types/user';
 import {QueryClient,dehydrate} from 'react-query'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
-
+import Spinner from '@/components/common/Spinner';
 interface Props{
   id:number
 }
@@ -42,7 +42,7 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
     <article className='mt-4' data-cy="my-books-movies">
       {
       isLoadingSession 
-        ? <Spinner animation="grow"/>
+        ? <Spinner />
         : session ? (
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myBooksMovies')}</h1>

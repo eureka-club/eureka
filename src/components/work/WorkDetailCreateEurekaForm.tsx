@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-import { Button, Col, Row, ButtonGroup, Form, Spinner } from 'react-bootstrap';
+import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
 import { Post } from '@prisma/client';
 
 import { BsCheck } from 'react-icons/bs';
@@ -29,7 +29,7 @@ import useUsers from '@/src/useUsers'
 import styles from './WorkDetailCreateEurekaForm.module.css';
 import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material';
 import Prompt from '@/src/components/post/PostPrompt';
-
+import Spinner from '@/components/common/Spinner';
 
 import useCycles from '@/src/useCycles'
 
@@ -486,7 +486,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 disabled={isLoading}
               >
                 <span>{t('Create')}</span>
-                {isLoading && <Spinner size="sm" animation="grow" />}
+                {isLoading && <Spinner  />}
               </Button>
             </ButtonGroup>
           </aside>

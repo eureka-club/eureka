@@ -6,7 +6,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useState, MouseEvent, FC } from 'react';
 import { QueryClient, useIsFetching } from 'react-query';
 import { useRouter } from 'next/router';
-import { Card, Button, Spinner, Badge} from 'react-bootstrap';
+import { Card, Button, Badge} from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 import { MdGroup } from 'react-icons/md';
@@ -24,6 +24,7 @@ import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import CycleSocialInteraction from '../common/CycleSocialInteraction';
 import useUserSumary from '@/src/useUserSumary';
 import { useModalContext } from '@/src/hooks/useModal';
+import Spinner from '@/components/common/Spinner';
 // import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
@@ -190,7 +191,7 @@ const MosaicItem: FC<Props> = ({
           onClick={onImgClick}
           role="presentation"
         >
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50"  size="sm" animation="grow" variant="info" style={{zIndex:'1'}} />}
+          {!canNavigate() && <Spinner   />}
           {imageLink ? <a href={`/cycle/${cycle?.id}`}>{img}</a> : img}
         </div>
       );
@@ -239,7 +240,7 @@ const MosaicItem: FC<Props> = ({
     return <Button 
           disabled={true}
           className={`rounded rounded-3  text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`}>
-            <Spinner size='sm' animation='grow'/>
+            <Spinner />
           </Button>
   }
 

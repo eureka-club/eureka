@@ -1,5 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import {Form, Spinner} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent, MouseEvent,useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -11,7 +11,7 @@ import toast from 'react-hot-toast'
 
 import styles from './RecoveryLoginForm.module.css';
 import Toast from "../common/Toast";
-
+import Spinner from '@/components/common/Spinner';
 
 const RecoveryLoginForm: FunctionComponent = () => {
    const { t } = useTranslation('PasswordRecovery');
@@ -74,7 +74,7 @@ const RecoveryLoginForm: FunctionComponent = () => {
                  </Form.Group>
                  <div className="d-flex justify-content-center">
                   <Button type='submit' disabled={loading} className={`btn-eureka ${styles.submitButton}`}>
-                  {t('sendText')} {loading && <Spinner animation="grow"/>}
+                  {t('sendText')} {loading && <Spinner />}
                 </Button>
                 </div>
               </Form>

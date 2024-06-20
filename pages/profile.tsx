@@ -3,11 +3,12 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {getSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { Spinner } from 'react-bootstrap';
+//import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 interface Props {
   session:Session
 }
@@ -33,7 +34,7 @@ if (session)
   else
    return  (
     <SimpleLayout title={t('createCycle')}>
-        <Spinner animation="grow" variant="info" />
+        <Spinner/>
     </SimpleLayout>
   );
 };

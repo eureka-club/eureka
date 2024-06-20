@@ -1,9 +1,9 @@
 import React, {MouseEvent, useEffect,useState} from 'react'
-import {Button, Spinner} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 import { BiTrash, BiEdit } from 'react-icons/bi';
 import {useSession} from 'next-auth/react'
 import { User } from '@prisma/client';
-
+import Spinner from '@/components/common/Spinner';
 interface Props{
     creatorId:number;
     actions:{
@@ -25,7 +25,7 @@ const ActionsBar:React.FC<Props> = ({actions,creatorId}) =>{
                 </Button>
             </aside>
     if(isLoading)
-        return <Spinner animation='grow' size='sm' />
+        return <Spinner  />
     return <></>
 }
 export default ActionsBar;

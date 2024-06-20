@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState,useEffect } from 'react';
-import { Col, Row,Spinner,Button } from 'react-bootstrap';
+import { Col, Row,Button } from 'react-bootstrap';
 import Rating from '@/src/components/common/Rating'
 import { FiTrash2 } from 'react-icons/fi';
 import { GiBrain } from 'react-icons/gi';
@@ -25,6 +25,7 @@ import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
 import { CycleSumary } from '@/src/types/cycle';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
+import Spinner from '@/components/common/Spinner';
 interface Props {
   cycleId:number;
   post?: PostDetail;
@@ -153,7 +154,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     return works;
   };
 
-  if(isLoadingCycle) return <Spinner animation='grow'/>
+  if(isLoadingCycle) return <Spinner/>
   if(!cycle)return <></>
 
   return (

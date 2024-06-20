@@ -13,7 +13,7 @@ import {
   Nav,
   NavItem,
   NavLink,
-  // Spinner,
+  
 } from 'react-bootstrap';
 // import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import { MosaicContext } from '@/src/useMosaicContext';
@@ -43,6 +43,7 @@ import { RenderPosts } from './RenderPosts';
 import { RenderGuidelines } from './RenderGuideLines';
 import { RenderParticipants } from './RenderParticipants';
 import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
+import Spinner from '@/components/common/Spinner';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {

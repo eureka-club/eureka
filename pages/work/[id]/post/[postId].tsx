@@ -1,6 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
-import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
 import useWork,{getWork} from '@/src/useWorkDetail';
@@ -14,6 +13,7 @@ import { Button } from '@mui/material';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/router';
+import Spinner from '@/components/common/Spinner'
 interface Props {
   postId:number;
   workId:number;
@@ -92,7 +92,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
     );
   };
 
-  if (!post || !work || isLoadingData()) return getLayout(<Spinner animation="grow" variant="info" />);
+  if (!post || !work || isLoadingData()) return getLayout(<Spinner />);
   return getLayout(
     <WorkDetailComponent workId={work.id!} post={post} session={session} />,
     `${post!.title} · ${work!.title}`,

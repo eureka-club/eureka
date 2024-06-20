@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession, useSession } from 'next-auth/react';
-import { Spinner, Alert, Button } from 'react-bootstrap';
+import {  Alert, Button } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { Button as MaterialButton } from '@mui/material';
 import { dehydrate, QueryClient, useIsFetching } from 'react-query';
@@ -25,6 +25,7 @@ import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
 import { CycleSumary } from '@/src/types/cycle';
+import Spinner from '@/components/common/Spinner'
 
 
 const whereCycleParticipants = (id: number) => ({
@@ -63,7 +64,7 @@ const RenderCycleDetailComponent:FC<CycleDetailComponent_Props> = ({cycleId,isJo
   }
 
   if (/* isLoadingSession || */ isFetching || isLoading) {
-    return <Spinner animation="grow" variant="info" />;
+    return <Spinner/>;
   }
 
   if (isError)
@@ -183,7 +184,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
                     onClick={requestJoinCycle}
                   >
                     <h4 className="text-white fw-bold">
-                      ¡Unirse ya! {isPending() && <Spinner size="sm" animation="grow" variant="info" />}
+                      ¡Unirse ya! {isPending() && <Spinner/>}
                     </h4>
                   </Button>
                 </div>
@@ -256,7 +257,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   return (
     <SimpleLayout banner={getBanner()} title="Loading...">
-      <Spinner animation="grow" variant="info" />
+     <Spinner/>
     </SimpleLayout>
   );
 };

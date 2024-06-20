@@ -4,7 +4,7 @@ import React, { FunctionComponent,useRef, useState } from 'react';
 import { Form,InputGroup } from 'react-bootstrap';
 
 import { AiOutlineSearch } from 'react-icons/ai';
-import { CircularProgress } from '@mui/material';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   className?: string;
@@ -82,7 +82,7 @@ const SearchInput: FunctionComponent<Props> = ({ className = '',style = {},disab
             >
                 {
           searching 
-          ? <Spinner animation="border" size="sm"/>
+          ? <Spinner />
           : <AiOutlineSearch className="text-white focus-border-color-green"/>
         }
               </Button>

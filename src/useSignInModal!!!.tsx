@@ -11,10 +11,11 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import useTranslation from 'next-translate/useTranslation';
-import { Box, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Box,  FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Image from 'next/image';
 import Link from 'next/link';
+import Spinner from '@/components/common/Spinner'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -40,7 +41,7 @@ const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>
     setLoading(false);
   }
   return <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignInHandler} className={`btn-eureka ${'styles.submitButton'} me-1`}>
-  {t('login')} {loading && <CircularProgress size={'sm'}/>}
+  {t('login')} {loading && <Spinner/>}
   </Button>
 }
 const useSignInModal = ()=>{

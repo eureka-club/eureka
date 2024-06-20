@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect, ChangeEvent, KeyboardEvent,useRef } from 'react';
-import { Form, InputGroup,Button, Badge, Spinner,Col } from 'react-bootstrap';
+import { Form, InputGroup,Button, Badge,Col } from 'react-bootstrap';
 import { TextField,FormControl, Box, Chip, Avatar, Stack} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation'; 
 import { useAtom } from 'jotai'; 
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import searchEngine from '@/src/atoms/searchEngine';
 import { BiPlus} from 'react-icons/bi';
 import Link from 'next/link';
+import Spinner from '@/components/common/Spinner';
 export type TagsInputProp = {
   tags: string;
   setTags?: (value: string) => void;
@@ -80,9 +81,9 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                 {!readOnly && (
                   !loading[v] && <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
                     X
-                  </Badge> || <Spinner size="sm" animation="grow"/>
+                  </Badge> || <Spinner />
                 )}
-                {readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}</>
+                {readOnly && (loading[v] && <Spinner />)}</>
     </Box>
   }
   return ( 
@@ -125,9 +126,9 @@ const TagsInput: FunctionComponent<TagsInputProp> = (props: TagsInputProp) => {
                 {!readOnly && (
                   !loading[v] && <Badge className="bg-warning text-withe rounded-pill ms-2" style={{ cursor: 'pointer' }} onClick={(e) => deleteTag(e,idx)} pill bg="default">
                     X
-                  </Badge> || <Spinner size="sm" animation="grow"/>
+                  </Badge> || <Spinner />
                 )}
-                {readOnly && (loading[v] && <Spinner size="sm" animation="grow"/>)}
+                {readOnly && (loading[v] && <Spinner />)}
               </Badge>{' '} */}
             </Link>
 

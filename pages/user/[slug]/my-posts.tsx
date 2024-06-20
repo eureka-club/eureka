@@ -10,7 +10,7 @@ import {useRouter} from 'next/router'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
 import { MosaicsGrid } from '@/src/components/MosaicsGrid';
-import { CircularProgress } from '@mui/material';
+import Spinner from '@/components/common/Spinner'
 
 interface Props{
   id:number
@@ -43,7 +43,7 @@ const MyPosts: NextPage<Props> = ({id}) => {
     <article className='mt-4' data-cy="my-posts">
       {
       isLoadingSession 
-        ? <CircularProgress/>
+        ? <Spinner/>
         : session 
           ? (
             <>

@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { useQueryClient } from 'react-query';
 import { FunctionComponent, useState, memo } from 'react';
-import { Button, Row, Col, Spinner } from 'react-bootstrap';
+import { Button, Row, Col} from 'react-bootstrap';
 import router from 'next/router';
 import { BsHash } from 'react-icons/bs';
 import globalSearchEngineAtom from '../atoms/searchEngine';
@@ -15,6 +15,7 @@ import styles from './Carousel.module.css';
 import { WorkSumary /* , WorkWithImages */ } from '../types/work';
 import { CycleSumary /* , CycleWithImages */ } from '../types/cycle';
 import { GetAllByResonse } from '@/src/types';
+import Spinner from '@/components/common/Spinner';
 
 type Props = {
   // page: number;
@@ -133,7 +134,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
                     <span className={`cursor-pointer text-primary ${styles.seeAllButton}`}>{t('common:See all')}</span>
                   </Button>
                 ) : (
-                  <Spinner animation="grow" />
+                  <Spinner />
                 )}
               </Col>
             </Row>

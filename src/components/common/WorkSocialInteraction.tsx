@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
 import Rating from '@/src/components/common/Rating';
 
-import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button} from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -43,6 +43,7 @@ import _ from 'lodash';
 import { CycleSumary } from '@/src/types/cycle';
 import useUserSumary from '@/src/useUserSumary';
 import { useModalContext } from '@/src/hooks/useModal';
+import Spinner from '@/components/common/Spinner';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -337,7 +338,7 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
               </span>
             </div>
           </Button>
-          {/*isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner   animation="grow" variant="info" size="sm" /></div> */}
+          {/*isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner  /></div> */}
         </>
       );
   };
@@ -356,7 +357,7 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
     }
     return '';
   };
-  if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
+  if (isLoadingSession || isLoadingUser) return <Spinner  />;
   return (
     <section className={`${className} d-flex flex-row`}>
         {renderCreateEureka()}
@@ -399,7 +400,7 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
         {loadingSocialInteraction && (
           <div className="mt-1 ms-1 me-2">
             {' '}
-            <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
+            <Spinner  />
           </div>
         )}
       <div className="ms-auto d-flex justify-content-end">

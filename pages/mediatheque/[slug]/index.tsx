@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, useCallback, MouseEvent, useRef, ReactElement } from 'react';
-import { Spinner, Card, Row, Col, Button } from 'react-bootstrap';
+import {  Card, Row, Col, Button } from 'react-bootstrap';
 import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser, { getUser } from '@/src/useUser';
@@ -28,6 +28,7 @@ import { Stack } from '@mui/material';
 import RenderAvatar from './components/RenderAvatar';
 import RenderCountry from './components/RenderCountry';
 import { UserDetail } from '@/src/types/user';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   id: number;
@@ -262,7 +263,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         disabled={isPending()}
                       >
                         {t('Follow')}
-                        {isPending() && <Spinner className="ms-2" animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner/>}
                       </Button>
                     )}
 
@@ -275,7 +276,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         style={{ width: '10em' }}
                       >
                         {t('Unfollow')}
-                        {isPending() && <Spinner className="ms-2" animation="grow" variant="info" size="sm" />}
+                        {isPending() && <Spinner/>}
                       </Button>
                     )}
                   </Col>
@@ -339,8 +340,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
             isLoadingUser={isLoadingUser}
             isFollowedByMe={isFollowedByMe}
           />
-          {isLoadingUser && <Spinner animation="grow" variant="info" />}
-          {isSuccessUser && id && !user && <Spinner animation="grow" variant="info" />}
+          {isLoadingUser && <Spinner/>}
+          {isSuccessUser && id && !user && <Spinner />}
         </aside>
       </article>
     </SimpleLayout>

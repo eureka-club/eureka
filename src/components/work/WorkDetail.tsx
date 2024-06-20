@@ -27,7 +27,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -36,7 +36,7 @@ import useTopics, { TopicItem } from '@/src/useTopics';
 import { MosaicsGrid } from '../MosaicsGrid';
 import { TabPanelSwipeableViews } from '../common/TabPanelSwipeableViews';
 import { useIsFetching } from 'react-query';
-
+import Spinner from '@/components/common/Spinner';
 
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
@@ -88,7 +88,7 @@ const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsPr
       ))}
     </Grid> */}
     {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
-        {hasMorePosts ? <Spinner animation="grow" />
+        {hasMorePosts ? <Spinner  />
         :<></>}
       </div> */}
 </Stack>
@@ -234,7 +234,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   if (!work) return <></>;
 
   // const renderSpinnerForLoadNextCarousel = () => {
-  //   if (hasMorePosts) return <Spinner animation="grow" />;
+  //   if (hasMorePosts) return <Spinner  />;
   //   return '';
   // };
 
@@ -277,7 +277,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   //           ))}
   //         </Row>
   //         <div className="mt-5" ref={ref}>
-  //           {hasMorePosts ? <Spinner animation="grow" /> : <></>}
+  //           {hasMorePosts ? <Spinner  /> : <></>}
   //         </div>
   //       </>
   //     );
@@ -338,7 +338,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       <MosaicContext.Provider value={{ showShare: true }}>
         {
           <Stack gap={6}>
-            <Suspense fallback={<CircularProgress/>}>
+            <Suspense fallback={<Spinner/>}>
               {post == null ? (
               <>
                   <Stack gap={{xs:3}}  direction={{xs:'column',sm:'row'}}>
@@ -779,7 +779,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     //                 ))}
                     //               </Row>
                     //               {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
-                    //                   {hasMorePosts ? <Spinner animation="grow" />
+                    //                   {hasMorePosts ? <Spinner  />
                     //                   :<></>}
                     //                 </div> */}
                     //             </>

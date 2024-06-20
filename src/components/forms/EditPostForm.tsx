@@ -18,7 +18,7 @@ import ModalFooter from 'react-bootstrap/ModalFooter';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { Switch, TextField, FormControlLabel, Autocomplete } from '@mui/material';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { BsFillXCircleFill } from 'react-icons/bs';
@@ -731,14 +731,14 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
                 <>
                   {t('resetBtnLabel')}
                   {isDeletePostLoading && (
-                    <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
+                    <Spinner  />
                   )}</>
               </Button>
               <Button disabled={isEditPostLoading} onClick={(e) => { handleSubmit(e) }} className="btn-eureka" style={{ width: '10em' }}>
                 <>
                   {t('titleEdit')}
                   {isEditPostLoading && (
-                    <Spinner size="sm" animation="grow" variant="secondary" className={`ms-2 ${styles.loadIndicator}`} />
+                    <Spinner  />
                   )}
                 </>
               </Button>

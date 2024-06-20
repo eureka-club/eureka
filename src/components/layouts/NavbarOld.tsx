@@ -9,7 +9,7 @@ import { FunctionComponent } from 'react';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../forms/SignInForm';
-import { Container, Button, Nav, Navbar, Dropdown, Spinner } from 'react-bootstrap';
+import { Container, Button, Nav, Navbar, Dropdown} from 'react-bootstrap';
 import { BiUser } from 'react-icons/bi';
 // import NotificationsList from '@/components/NotificationsList';
 import { RiDashboardLine } from 'react-icons/ri';
@@ -22,6 +22,7 @@ import styles from './Navbar.module.css';
 import slugify from 'slugify';
 import { useQueryClient } from 'react-query';
 import useUserSumary from '@/src/useUserSumary';
+import Spinner from '@/components/common/Spinner';
 
 const topics = [
   'gender-feminisms',
@@ -155,7 +156,7 @@ const NavBarOld: FunctionComponent = () => {
         </section>
           <section className='d-flex my-lg-1 flex-row w-100 justify-content-start' >
           {isLoadingSession ? (
-            <Spinner animation="grow" variant="info" />
+           <Spinner />
           ) : (
             <>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />

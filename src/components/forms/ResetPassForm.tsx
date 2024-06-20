@@ -1,5 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import {Form, Spinner} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { FormEvent, FunctionComponent,useState,useRef } from 'react';
 import {Alert,Button,Col,Container,Row} from 'react-bootstrap'
@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import styles from './ResetPassForm.module.css';
 import { json } from "stream/consumers";
 import { useRouter } from "next/router";
-
+import Spinner from '@/components/common/Spinner';
 interface Props{
   userId:string;
   email:string;
@@ -122,7 +122,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
                   </Form.Group>
                  <div className="d-flex justify-content-center">
                   <Button disabled={loading} onClick={handlerSubmit} className={`btn-eureka ${styles.submitButton}`}>
-                  {t('resetPassword1')} {loading && <Spinner animation="grow" />}
+                  {t('resetPassword1')} {loading && <Spinner />}
                 </Button>
                 </div>
                 {/*!validated && <Alert variant="danger">Invalid password, at least 8 characters (requires letters and number)</Alert>*/}

@@ -9,8 +9,8 @@ import { Prisma } from '@prisma/client';
 import { CycleSumary } from '../types/cycle';
 import useCyclesSumary from '../useCyclesSumary';
 import { MosaicsGrid } from './MosaicsGrid';
-import { Alert, CircularProgress } from '@mui/material';
-
+import { Alert} from '@mui/material';
+import Spinner from '@/components/common/Spinner'
 const take = 8;
 interface Props{
 }
@@ -130,7 +130,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
           <MosaicItem key={p.id} cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} />
         )}
     </MosaicsGrid>
-    {cycles?.length!=total && <CircularProgress ref={ref} />}
+    {cycles?.length!=total && <Spinner  />}
   </>
   
 

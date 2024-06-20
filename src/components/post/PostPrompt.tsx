@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, FormEvent, ChangeEvent, useState, useEffect, MouseEvent } from 'react';
-import { Container, Button, Spinner } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import LinearProgressMUI from '@/components/common/LinearProgressMUI'
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
+import Spinner from '@/components/common/Spinner';
 interface Props {
 onImageSelect?: (file: File, text: string) => void;
 showTitle?:boolean;

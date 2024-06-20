@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { Card, Badge, Spinner } from 'react-bootstrap';
+import { Card, Badge} from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { CgMediaLive } from 'react-icons/cg';
 import dayjs from 'dayjs';
@@ -14,6 +14,7 @@ import useWork from '@/src/useWorkDetail';
 import { WorkDetail, WorkSumary } from '@/src/types/work';
 import useWorkSumary from '@/src/useWorkSumary';
 import WorkSocialInteraction from '../common/WorkSocialInteraction';
+import Spinner from '@/components/common/Spinner';
 
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -153,7 +154,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           style={style}
         >
           {!canNavigate() && (
-            <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" />
+            <Spinner  />
           )}
           {imageLink ? <a href={`/${localePath}work/${id}`}>{img}</a> : img}
         </div>

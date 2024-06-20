@@ -11,7 +11,7 @@ import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
 import Row from 'react-bootstrap/Row';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { Cycle } from '@prisma/client';
@@ -419,7 +419,7 @@ const EditCycleForm: FunctionComponent<Props> = ({ className, cycle }) => {
                 <>
                   {t('Edit Cycle')}
                   {isEditCycleReqLoading && (
-                    <Spinner animation="grow" variant="info" className={styles.loadIndicator} />
+                    <Spinner />
                   )}
                 </>
               </Button>

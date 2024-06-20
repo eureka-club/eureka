@@ -1,7 +1,7 @@
 // import { Work } from '@prisma/client';
 import { flatten, zip } from 'lodash';
 import { FunctionComponent, useEffect, useState } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useQuery } from 'react-query';
 import useCycles from '@/src/useCycles'
 import usePosts from '@/src/usePosts'
@@ -87,7 +87,7 @@ const CombinedMosaic: FunctionComponent<Props> = ({ work }) => {
 
   return (
     <>
-      {/* {(isCyclesLoading) && <Spinner animation="grow" role="status" />} */}
+      {/* {(isCyclesLoading) && <Spinner />} */}
       {mosaicData.length > 0 && <Mosaic
         cacheKey={['WORK',work.id.toString()]} 
         // className='d-flex justify-content-center justify-content-md-start' 

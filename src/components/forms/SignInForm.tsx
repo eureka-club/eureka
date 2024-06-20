@@ -12,9 +12,10 @@ import toast from 'react-hot-toast'
 import styles from './SignInForm.module.css';
 import {useRouter} from 'next/router'
 import { useModalContext } from "@/src/hooks/useModal";
-import { Button,Box, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button,Box, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
 import Image from "next/image";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Spinner from '@/components/common/Spinner';
 
 interface Props {
   noModal?: boolean;
@@ -31,7 +32,7 @@ const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>
     setLoading(false);
   }
   return <Button data-cy='btn-login' disabled={loading} onClick={handleSubmitSignInHandler} className={`btn-eureka ${'styles.submitButton'} me-1`}>
-  {t('login')} {loading && <CircularProgress size={'sm'}/>}
+  {t('login')} {loading && <Spinner/>}
   </Button>
 }
 

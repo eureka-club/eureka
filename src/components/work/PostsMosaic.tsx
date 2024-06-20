@@ -3,6 +3,7 @@ import { WorkDetail } from '@/src/types/work';
 import Mosaic from '../Mosaic';
 import usePosts from '@/src/usePosts'
 import usePostsSumary from '@/src/usePostsSumary';
+import Spinner from '@/components/common/Spinner';
 
 interface Props {
   work: WorkDetail;

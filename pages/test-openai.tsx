@@ -1,8 +1,8 @@
 import { GetServerSideProps,NextPage } from 'next';
 import {getSession } from 'next-auth/react';
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
+import Spinner from '@/components/common/Spinner'
 interface Props {
 }
 
@@ -82,7 +82,7 @@ const TestOpenai: NextPage<Props> = () => {
       <button onClick={onHyvorTalkCall}>Hyvor Talk Access</button>
 
       <div>
-        {!loading ? renderImages():<Spinner animation="grow" />}
+        {!loading ? renderImages():<Spinner/>}
       </div>
     </SimpleLayout>
 };

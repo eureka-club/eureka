@@ -9,8 +9,9 @@ import { PostSumary } from '../types/post';
 import usePostsSumary, { getPostsSumary } from '../usePostsSumary';
 import { MosaicContext } from '../useMosaicContext';
 import { useSession } from 'next-auth/react';
-import { Alert, Box, CircularProgress } from '@mui/material';
+import { Alert, Box} from '@mui/material';
 import { MosaicsGrid } from './MosaicsGrid';
+import Spinner from '@/components/common/Spinner';
 
 const take = 8;
 const SearchTabCycles:FunctionComponent = () => {
@@ -121,7 +122,7 @@ const SearchTabCycles:FunctionComponent = () => {
     </MosaicsGrid>
     <Box sx={{padding:'1rem'}}>
       {posts?.length!=total && <hr ref={ref}/>}
-      {/* {posts?.length!=total && <CircularProgress ref={ref} />} */}
+      {/* {posts?.length!=total && <Spinner  />} */}
 
     </Box>
   </>

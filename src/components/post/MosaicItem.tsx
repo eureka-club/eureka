@@ -2,7 +2,7 @@ import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Card, Badge,Spinner } from 'react-bootstrap';
+import { Card, Badge} from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../constants';
 import LocalImageComponent from '../LocalImage';
@@ -19,6 +19,7 @@ import { PostSumary } from '@/src/types/post';
 import { UserSumary } from '@/src/types/UserSumary';
 import SocialInteraction from './SocialInteraction';
 import usePostSumary from '@/src/usePostSumary';
+import Spinner from '@/components/common/Spinner';
 interface Props {
   post?:PostSumary;
   postId: number|string;
@@ -176,7 +177,7 @@ const MosaicItem: FunctionComponent<Props> = ({
           onClick={onImgClick}
           role="presentation"
         >
-          {!canNavigate() && <Spinner className="position-absolute top-50 start-50" size="sm" animation="grow" variant="info" style={{zIndex:'1'}} />}
+          {!canNavigate() && <Spinner   />}
             {imageLink ? <a href={`${postLinkHref}`}>{img}</a> : img}
         </div>
         );

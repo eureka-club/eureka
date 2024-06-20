@@ -6,8 +6,8 @@ import useTranslation from 'next-translate/useTranslation';
 import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateWorkForm from '@/components/forms/CreateWorkForm';
-import { Spinner } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Spinner from '@/components/common/Spinner'
 
 interface Props {
   notFound?: boolean;
@@ -35,7 +35,7 @@ const CreateWorkPage: NextPage<Props> = ({ notFound, session }) => {
   else
    return  (
     <SimpleLayout title={t('title')}>
-        <Spinner animation="grow" variant="info" />
+       <Spinner/>
     </SimpleLayout>
   );
 
