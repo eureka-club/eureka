@@ -28,7 +28,7 @@ export const MosaicsGrid = ({children,isLoading}:Props)=>{
                         children
                     } 
                 </Box>
-            :  !isLoading ? <Alert>{t('ResultsNotFound')}</Alert>  : <Spinner/>
+            :  !isLoading ? <Alert severity="info">{t('ResultsNotFound')}</Alert>  : <Spinner/>
         }
     </>
     //     .div1 { grid-area: 1 / 1 / 2 / 2; }
