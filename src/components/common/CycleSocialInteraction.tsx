@@ -366,12 +366,12 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
           </div>
         )}
 
-        {loadingSocialInteraction && (
+        {/* {loadingSocialInteraction && (
           <div className="mt-1 ms-1 me-2">
             {' '}
             <Spinner size='small'/>
           </div>
-        )}
+        )} */}
       <div className="ms-auto d-flex justify-content-end">
 
         {ss && (

@@ -191,7 +191,7 @@ const MosaicItem: FC<Props> = ({
           onClick={onImgClick}
           role="presentation"
         >
-          {!canNavigate() && <Spinner   />}
+          {/* {!canNavigate() && <Spinner   />} */}
           {imageLink ? <a href={`/cycle/${cycle?.id}`}>{img}</a> : img}
         </div>
       );
