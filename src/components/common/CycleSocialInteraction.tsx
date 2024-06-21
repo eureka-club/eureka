@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 // import Rating from 'react-rating';
 import Rating from '@/src/components/common/Rating';
 
-import { OverlayTrigger, Popover, Button, Spinner } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
 
 import {
   FacebookIcon,
@@ -35,6 +35,7 @@ import styles from './SocialInteraction.module.css';
 import SignInForm from '../forms/SignInForm';
 import _ from 'lodash';
 import { useModalContext } from '@/src/hooks/useModal';
+import Spinner from './Spinner';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -325,7 +326,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
     }
     return '';
   };
-  if (isLoadingSession || isLoadingUser) return <Spinner animation="grow" variant="info" size="sm" />;
+  if (isLoadingSession || isLoadingUser) return <Spinner size="small" />;
   return (
     <section className={`${className} d-flex flex-row`}>
       {renderCreateEureka()}
@@ -368,7 +369,7 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
         {loadingSocialInteraction && (
           <div className="mt-1 ms-1 me-2">
             {' '}
-            <Spinner className={styles.ratingSpinner} size="sm" animation="grow" variant="info" />
+            <Spinner size='small'/>
           </div>
         )}
       <div className="ms-auto d-flex justify-content-end">

@@ -3,15 +3,11 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, MouseEvent, useEffect, useState } from 'react';
 import { GiBrain } from 'react-icons/gi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import { BiImageAdd } from 'react-icons/bi';
-// import { FaRegSmileBeam } from 'react-icons/fa';
 import classnames from 'classnames';
 import { FiShare2, FiTrash2 } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSession } from 'next-auth/react';
-// import Rating from 'react-rating';
 import Rating from '@/src/components/common/Rating';
-
 import { OverlayTrigger, Popover, Button} from 'react-bootstrap';
 
 import {
@@ -22,29 +18,25 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from 'react-share';
-import { Work } from '@prisma/client';
 import { useMosaicContext } from '@/src/useMosaicContext';
 
 import { WEBAPP_URL } from '@/src/constants';
-import { PostDetail } from '@/src/types/post';
 import { WorkSumary } from '@/src/types/work';
 import {
   MySocialInfo,
-  isWork,
-  isPost,
-  isPostMosaicItem,
   isWorkMosaicItem,
   isCycleMosaicItem,
-} from '../../types';
-import styles from './SocialInteraction.module.css';
+} from '../../../types';
+import styles from './index.module.css';
 // import { useNotificationContext } from '@/src/useNotificationProvider';
-import SignInForm from '../forms/SignInForm';
+import SignInForm from '../../forms/SignInForm';
 import _ from 'lodash';
 import { CycleSumary } from '@/src/types/cycle';
 import useUserSumary from '@/src/useUserSumary';
 import { useModalContext } from '@/src/hooks/useModal';
 import Spinner from '@/components/common/Spinner';
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
+import { RenderCreateEureka } from './RenderCreateEureka';
 interface SocialInteractionClientPayload {
   socialInteraction: 'fav' | 'rating';
   doCreate: boolean;
@@ -93,8 +85,8 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
   // const [optimistLike, setOptimistLike] = useState<boolean | null>();
   const { showShare: ss } = useMosaicContext();
 
-  const [showShare, setShowShare] = useState<boolean>(false);
-  const [isLoadingCreateEureka, setIsLoadingCreateEureka] = useState<boolean>(false);
+  // const [showShare, setShowShare] = useState<boolean>(false);
+  // const [isLoadingCreateEureka, setIsLoadingCreateEureka] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const {
     isFetching: isFetchingUser,
@@ -221,23 +213,9 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
 
   
   // execSocialInteraction({ socialInteraction: 'reaction', doCreate: mySocialInfo ? !mySocialInfo!.favoritedByMe : true });
-  const handleCreateEurekaClick = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-    if (!session) {
-      openSignInModal();
-      return null;
-    }
-    if (canNavigate()) {
-      /*setIsLoadingCreateEureka(true)
-        setTimeout(()=>{setIsLoadingCreateEureka(false)},2500)*/
-      if (isWorkMosaicItem(entity)) router.push({ pathname: `/work/${entity.id}`, query: { tabKey: 'posts' } });
-      if (isCycleMosaicItem(entity)) router.push({ pathname: `/cycle/${entity.id}`, query: { tabKey: 'eurekas' } });
-    }
-  };
+  
 
-  const canNavigate = () => {
-    return !(!entity || isLoadingSession);
-  };
+  
 
   const popoverShares = (
     <Popover id="popover-basic" style={{ width: 'zpx' }}>
@@ -320,29 +298,7 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
       );
   };
 
-  const renderCreateEureka = () => {
-    if (!entity || isLoadingSession) return '...';
-    if (showCreateEureka)
-      return (
-        <>
-          <Button
-            variant="link"
-            className={`${styles.buttonSI} p-0 text-primary`}
-            title={t('Create eureka')}
-            onClick={handleCreateEurekaClick}
-            disabled={loadingSocialInteraction}
-          >
-            <div className={`d-flex flex-row`}>
-              <BiImageAdd className={styles.active} />
-              <span className="d-flex align-items-center text-primary" style={{ fontSize: '0.8em' }}>
-                {t('Create eureka')}
-              </span>
-            </div>
-          </Button>
-          {/*isLoadingCreateEureka  && <div className='d-flex align-items-center' ><Spinner  /></div> */}
-        </>
-      );
-  };
+  
 
   const getInitialRating = () => {
     if (entity) {
@@ -360,9 +316,9 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
   };
   if (isLoadingSession || isLoadingUser) return <Spinner  />;
   return (
-    <Stack direction={'row'} alignItems={'center'}>
-    {/* <section className={`${className} d-flex flex-row`}> */}
-        {renderCreateEureka()}
+    <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+     {/* <section className={`${className} d-flex flex-row`}>  */}
+        <RenderCreateEureka work={entity} loadingSocialInteraction={loadingSocialInteraction} showCreateEureka={showCreateEureka}/>
 
         {showRating && (
           <div className="ps-1">
@@ -398,14 +354,14 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
             )}
           </div>
         )}
-            {/* <Spinner size='small' /> */}
-
-        {loadingSocialInteraction && (
-          <div className="mt-1 ms-1 me-2">
+        {
+          loadingSocialInteraction  
+          ? <Box>
             {' '}
             <Spinner size='small'  />
-          </div>
-        )}
+          </Box>
+          :<>&nbsp;</>
+        }
       <Stack direction={'row'} alignItems={'center'}>
         
         {ss && (
@@ -442,7 +398,7 @@ const WorkSocialInteraction: FunctionComponent<Props> = ({
       {/* <div className="ms-auto d-flex justify-content-end">
 
       </div> */}
-    {/* </section> */}
+    {/* </section>  */}
     </Stack>
   );
 };

@@ -81,7 +81,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const getRatingQty = () => {
     if (cycle) {
-      return cycle._count.ratings || 0;
+      return cycle._count?.ratings || 0;
     }
     return 0;
   };

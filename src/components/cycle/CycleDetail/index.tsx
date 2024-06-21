@@ -81,10 +81,9 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 );
 
 const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
-
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
-    : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
+    : cycle?.works?.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
 
   const{data:participants}=useCycleParticipants(cycle?.id!
     ,{enabled:!!cycle?.id!}

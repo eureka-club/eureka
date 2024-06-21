@@ -1,0 +1,57 @@
+.buttonSI svg {
+  font-size: 1.3em;
+}
+
+.action-like path,
+.action-like span {
+  color: #e3506d;
+}
+
+.toggle-share svg,
+.toggle-share span {
+  color: #13B4BC;
+}
+
+.icon-share svg {
+  margin-right: 12px;
+  color: #13B4BC;
+}
+
+.toggle-share,
+.toggle-share:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.rating{
+  font-size:1em;
+}
+.rating span{
+}
+.select svg{
+  color: var(--yellow);
+}
+.unselect svg{
+  color: gray;
+}
+.clearRating{
+  font-size: 1.5em;
+    margin: -.3em -.1em 0 0;
+    color: var(--eureka-green); 
+    border: none;
+    padding: 0;
+    background: none;
+}
+.ratingLabelInfo{
+  font-size: .8em;
+  color: var(--eureka-green);  
+  vertical-align: text-center;
+}
+.ratingsCount{
+  color: var(--eureka-grey);
+    font-size: .8em;
+    vertical-align: text-center;
+}
+.ratingSpinner{
+  vertical-align: inherit;
+}

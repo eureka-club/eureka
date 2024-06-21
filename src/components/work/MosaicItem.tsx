@@ -183,7 +183,7 @@ const MosaicItem: FunctionComponent<Props> = ({
       </div>
       {renderOngoinOrUpcomingDate()}
       {showSocialInteraction && work && (
-        <Card.Footer className={`${styles.footer}  d-flex justify-content-end `}>
+        <Card.Footer className={`${styles.footer}`}>
           <WorkSocialInteraction
             cacheKey={cacheKey || ['WORK', work.id.toString()]}
             showButtonLabels={showButtonLabels}
