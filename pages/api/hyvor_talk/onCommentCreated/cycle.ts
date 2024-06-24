@@ -2,13 +2,11 @@ import {prisma} from '@/src/lib/prisma';
 import { CronJob, sendAt } from 'cron';
 import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { LOCALES, WEBAPP_URL } from '@/src/constants';
+import { CRON_TIME, LOCALES, WEBAPP_URL } from '@/src/constants';
 import { defaultLocale } from 'i18n';
 import { NOT_FOUND } from '@/src/api_code';
-import { join } from 'path';
-import { readFile } from 'fs';
-import { promisify } from 'util';
-
+import { dict, getDict } from '@/src/hooks/useTranslation';
+import { Locale } from 'i18n-config';
 interface ReqProps{
   cycleId:number;
   url:string;
@@ -16,28 +14,11 @@ interface ReqProps{
   parent_id:number;
 }
 
-const dict = (k:string,json:Record<string,string>,specs?:Record<string,any>)=>{
-  let val = json[k];
-  if(specs){
-    const specsEntries = Object.entries(specs);
-    if(specsEntries.length){
-      let i = 0;
-      for(;i<specsEntries.length;i++){
-        const re=new RegExp(`{{${specsEntries[i][0]}}}`);
-        const vr = val.replace(re,specsEntries[i][1]);
-        val = vr ?? val;
-      }
-    }
-  }
-  return val;
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
   
-  debugger;
   if(req.method?.toLowerCase()=='post'){
     try{
       const{cycleId,url,user:{name,email},parent_id}=req.body as ReqProps; 
@@ -60,12 +41,8 @@ export default async function handler(
       const languages = cycle?.languages.split(",")
       locale=languages?.length ? languages[0] : locale;
       locale=LOCALES[locale]??defaultLocale;
-      const path = join(process.cwd(),'locales',locale,'onCommentCreated.json');
-
-      const rf = promisify(readFile);
-      const jsonStr = await rf(path);
-      const json = JSON.parse(jsonStr.toString());
-
+      const json=(await getDict('onCommentCreated',locale as Locale))??{};
+      
       const aboutEnd=dict(`aboutEnd`,json);
       const urllabel=dict('urlLabel',json);
       const unsubscribe="";//dict('unsubscribe');
@@ -85,10 +62,6 @@ export default async function handler(
             const {comment:{user:{email}}}=parentComment;
             to.push({email});
             const emailSend = await sendEmailOnCommentCreated({
-              //TODO test only
-              // to:[{email:parentComment.user.email}],
-              // remove mujeresinsumisasupn@gmail.com from https://mandrillapp.com/settings/rejections/?subaccount= rejection deny list
-              // TODO test only
               to,
               subject,
               specs:{
@@ -120,9 +93,6 @@ export default async function handler(
 
         const comentEmailSaved = await prisma.comentCreatedDaily.create({
           data:{
-            // //TODO test only
-            // to:[{email:'gbanoaol@gmail.com'}].map(t=>t.email).join(','),
-            // //TODO test only
             to:to.map(t=>t.email).join(','),
             subject,
             etitle:title,
@@ -134,10 +104,7 @@ export default async function handler(
           }
         });
         if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
-          // const cronTime = '0 0 20 * * *';
-          //TODO test only
-          const cronTime = '15 * * * * *';
-          //TODO test only
+          const cronTime = CRON_TIME;
           const dt = sendAt(cronTime);
           console.log(`The job would run at: ${dt.toISO()}`);
           (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
