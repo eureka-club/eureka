@@ -1,5 +1,6 @@
+import { HYVOR_WEBSITE_ID } from '@/src/constants';
 import type { NextApiRequest, NextApiResponse } from 'next'
-const apiKey = process.env.HYVOR_TALK_API_KEY;
+const apiKey = process.env.HYVOR_TALK_DATA_API_KEY;
 
 type Data = {
   data?: Object[];
@@ -12,7 +13,7 @@ export default async function handler(
 ) {
   try{
     const { id:id } = req.query;
-    let r =  await fetch(`https://talk.hyvor.com/api/v1/comments?website_id=3377&api_key=${apiKey}&sort=most_upvoted&page_identifier=${id}`)
+    let r =  await fetch(`https://talk.hyvor.com/api/v1/comments?website_id=${HYVOR_WEBSITE_ID}&api_key=${apiKey}&sort=most_upvoted&page_identifier=${id}`)
     let data = await r.json();
     return res.status(200).json({ data:data });
   }
