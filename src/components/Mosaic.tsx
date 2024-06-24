@@ -1,5 +1,5 @@
 import { FunctionComponent,useState } from 'react';
-import {Button} from 'react-bootstrap';
+//import {Button} from 'react-bootstrap';
 import { MosaicItem, isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../types';
 import MosaicItemCycle from './cycle/MosaicItem';
 import MosaicItemPost from './post/Old_MosaicItem';
@@ -7,6 +7,7 @@ import MosaicItemWork from './work/MosaicItem';
 import MosaicItemUser from './user/MosaicItem';
 import { CycleDetail } from '../types/cycle';
 import { WorkDetail } from '../types/work';
+import { Button } from '@mui/material';
 
 const renderMosaicItem = (
   item: MosaicItem,
@@ -100,7 +101,7 @@ const Mosaic: FunctionComponent<Props> = ({
     const pages = stack.length / count
     const res = []
     for(let i=0;i<pages;i++)
-      res.push(<Button key={`page-${i}`} className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="sm" onClick={()=>setPage(i)}>{i+1}</Button>)
+      res.push(<Button key={`page-${i}`} className={`rounded-circle me-1 shadow ${page===i ? 'text-white bg-secondary':''}`} size="small" onClick={()=>setPage(i)}>{i+1}</Button>)
     return <>
     {res}
     </>

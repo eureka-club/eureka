@@ -1,6 +1,6 @@
 // import { useAtom } from 'jotai';
 import { FunctionComponent, useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+//import {  Container } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 // import { useSession } from 'next-auth/react';
@@ -9,6 +9,7 @@ import { useQueryClient } from 'react-query';
 import styles from './Banner.module.css';
 // import { Session } from '../types';
 // import globalModalsAtom from '../atoms/globalModals';
+import { Button,Container } from '@mui/material';
 
 type Props = {
   content: string | JSX.Element | JSX.Element[];
@@ -55,7 +56,7 @@ const Banner: FunctionComponent<Props> = ({
         <aside className="d-flex justify-content-end">
           {show && (
             <Button
-              variant="info"
+            variant='text'
               onClick={close}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
@@ -64,7 +65,7 @@ const Banner: FunctionComponent<Props> = ({
           )}
           {!show && (
             <Button
-              variant="info"
+            variant='text'
               onClick={open}
               className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
