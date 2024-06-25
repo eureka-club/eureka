@@ -1,12 +1,12 @@
 {
   "subject-post":"Someone commented on your Eureka Moment!",
   "subject-cycle":"Someone commented on the cycle {{title}}, you're participating in!",
-  "subject-work":"The users {{first3UsersNames}} have left commented on {{title}}!",
+  "subject-work":"Someone else commented on {{title}}!",
   "subject-comment":"Someone responded to your comment on {{title}}!",
 
-  "title-post": "The users {{first3UsersNames}} have left comments on: {{title}}",
+  "title-post": "The user {{name}} left a comment on: {{title}}",
   "title-cycle":"{{name}} just left a comment on the cycle {{title}}!",
-  "title-work":"The users {{first3UsersNames}} have left comments on {{title}}!",
+  "title-work":"{{name}} just left a comment on {{title}}!",
   "title-comment":"{{name}} just responded to your comment on {{title}}!",
 
   "about-post":"Your reflections are inspiring and generating discussions. Thank you for contributing to our community!",
