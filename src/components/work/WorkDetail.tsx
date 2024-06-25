@@ -2,10 +2,7 @@ import { FunctionComponent, useState, lazy, Suspense, useMemo, useEffect, FC, Re
 import classNames from 'classnames';
 import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
-
-import Button from '@mui/material/Button'
 import { BsBoxArrowUpRight } from 'react-icons/bs';
-// import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { PostDetail } from '@/src/types/post';
 import WorkSummary from './WorkSummary';
@@ -38,6 +35,8 @@ import { TabPanelSwipeableViews } from '../common/TabPanelSwipeableViews';
 import { useIsFetching } from 'react-query';
 import Spinner from '@/components/common/Spinner';
 
+// import { useIsFetching } from 'react-query';
+import { WEBAPP_URL } from '@/src/constants';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -45,7 +44,6 @@ interface Props {
   workId: number;
   post?: PostDetail;
   session: Session;
-  
 }
 interface TabPostsProps{
   workId:any;
@@ -410,9 +408,31 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                   </Stack>
                   <Box display={{xs:'inherit',md:'none'}}>
                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                   
                   </Box>
-                  <HyvorComments entity="work" id={`${work.id}`} session={session} />
+                  <HyvorComments 
+                    entity="work" 
+                    id={`${work.id}`} 
+                    session={session} 
+                    OnCommentCreated={async (comment)=>{
+                      const url = `${WEBAPP_URL}/api/hyvor_talk/onCommentCreated/work`;
+                      const fr = await fetch(url,{
+                        method:'POST',
+                        headers:{
+                          "Content-Type":"application/json",
+                        },
+                        body:JSON.stringify({
+                          workId,
+                          url:comment.url,
+                          user:{name:session.user.name,email:session.user.email},
+                          parent_id:comment.parent_id,
+                        })
+                      });
+                      if(fr.ok){
+                        const res = await fr.json();
+                        console.log(res);
+                      }
+                    }}
+                  />
               {/* <Grid container sx={{display:{lg:'inherit'}}}>
                 <Grid item lg={4}>
                 </Grid>

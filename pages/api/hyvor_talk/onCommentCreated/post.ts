@@ -1,226 +1,127 @@
+import {prisma} from '@/src/lib/prisma';
+import { CronJob, sendAt } from 'cron';
+import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
 import type { NextApiRequest, NextApiResponse } from 'next'
-// // import { CronJob, sendAt } from 'cron';
-
-// // import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
-// // import { compare, compareSync } from 'bcryptjs';
-// // import { createHash, createHmac, timingSafeEqual } from 'crypto';
-// import { sendMail } from '@/src/facades/mail';
-// // import { defaultLocale } from 'i18n';
-// // import { readFile } from 'fs';
-// // import { join } from 'path';
-// // import { promisify } from 'util';
-// // import {prisma} from '@/src/lib/prisma';
-// // import { LOCALES, WEBAPP_URL } from '@/src/constants';
-
-// // const secretKey = process.env.HYVOR_TALK_Webhook_Secret;
-
-// // const buffer = (req:any) => {
-// //     return new Promise((resolve, reject) => {
-// //       const chunks: any[] = [];
-  
-// //       req.on('data', (chunk: any) => {
-// //         chunks.push(chunk);
-// //       });
-  
-// //       req.on('end', () => {
-// //         resolve(Buffer.concat(chunks));
-// //       });
-  
-// //       req.on('error', reject);
-// //     });
-// //   };
-
-// // export const config = {
-// //     api: {
-// //       bodyParser: false,
-// //     },
-// //   };
-
-// // type Data = {
-// //   data?: Object;
-// //   error?:string;
-// // }
+import { CRON_TIME, LOCALES, WEBAPP_URL } from '@/src/constants';
+import { defaultLocale } from 'i18n';
+import { NOT_FOUND } from '@/src/api_code';
+import { dict, getDict } from '@/src/hooks/useTranslation';
+import { Locale } from 'i18n-config';
+interface ReqProps{
+  postId:number;
+  url:string;
+  user:{name:string,email:string};
+  parent_id:number;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
   
-//   if(req.method?.toLowerCase()=='post'){
-//     try{debugger;
-//       const{cycle}=req.body; 
-           
-//       let locale = req.cookies.NEXT_LOCALE || defaultLocale;
+  if(req.method?.toLowerCase()=='post'){
+    try{
+      const{postId,url,user:{name,email},parent_id}=req.body as ReqProps; 
       
-//       let url = data?.page?.url??'';
-//       // const userId = data?.user?.sso_id??undefined;
-//       const parent = data?.parent;
-//       const name = data?.user?.name??undefined;
-//       // // const body_html = data?.body_html??'';
-//       const identifier = data?.page?.identifier??'';
-//       const [elementType,elementId] = (identifier?.split('-')??[undefined,undefined]);
-//       let cycle=null;
-//       let post=null;
-//       let work=null;
+      let locale = req.cookies.NEXT_LOCALE || defaultLocale;
+      let to:{email:string,name?:string}[] = [];
 
-//       let elementTitle=data.page.title;
+      const post = await prisma.post.findFirst({
+        where:{id:+postId},
+        select:{
+          title:true,
+          language:true,
+        }
+      });
+      if(!post)return res.status(200).json({error:NOT_FOUND});
 
-//       let to:{email:string,name?:string}[] = [];
-//       switch(elementType){
-//         case 'cycle':
-//           cycle = await prisma.cycle.findFirst({
-//             where:{id:+elementId},
-//             select:{
-//               title:true,
-//               languages:true,
-//               creator:{select:{email:true,name:true}},
-//               participants:{select:{email:true,name:true}},
-//             }
-//           });
-//           elementTitle=cycle?.title;
-//           const languages = cycle?.languages.split(",")
-//           locale=languages?.length ? languages[0] : locale;
-//         break;
-//         case 'post':
-//           post = await prisma?.post.findFirst({
-//             where:{id:+elementId},
-//             select:{
-//               title:true,
-//               language:true,
-//               creator:{select:{name:true,email:true}}
-//             }
-//           });
-//           elementTitle=post?.title;
-//           locale=post?.language ?? locale;
-//         break;  
-//         case 'work':
-//           work = await prisma.work.findFirst({
-//             where:{id:+elementId},
-//             select:{title:true,language:true}
-//           });
-//           elementTitle=work?.title;
-//           locale=work?.language ?? locale;
-//         break;  
-//       }
-//       if(!work && !post && !cycle)
-//         return res.status(200).json({ data:{emailSend:false} });
+      const elementTitle=post.title;
+      const language = post.language;
+      locale=language ? language : locale;
+      locale=LOCALES[locale]??defaultLocale;
+      const json=(await getDict('onCommentCreated',locale as Locale))??{};
+      
+      const aboutEnd=dict(`aboutEnd`,json);
+      const urllabel=dict('urlLabel',json);
+      const unsubscribe="";//dict('unsubscribe');
+      
+      if(parent_id){
+        const subject=dict(`subject-comment`,json,{title:elementTitle});
+        const title=dict(`title-comment`,json,{
+          title:elementTitle,
+          name
+        });
+        const about=dict(`about-comment`,json);
+        const pcurl = `${WEBAPP_URL}/api/hyvor_talk/comment/${parent_id}`;
+        const fr=await fetch(pcurl);
+        if(fr.ok){
+          const parentComment=await fr.json();
+          if(parentComment){
+            const {comment:{user:{email}}}=parentComment;
+            to.push({email});
+            const emailSend = await sendEmailOnCommentCreated({
+              to,
+              subject,
+              specs:{
+                etitle:title,
+                about,
+                aboutEnd,
+                eurl:url,
+                urllabel,
+                unsubscribe
+              },
+            });
+            return res.status(200).json({data:{emailSend}});
+          }
+        }
+        return res.status(200).json({error:NOT_FOUND});
+      }
+      else{
+        const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=post-${postId}`;
+        const fr = await fetch(url);
+        const {data} = await fr.json();
+        data?.forEach((e:{user:{email:string,name:string}}) => {
+          if(e.user.email!=email)to.push({email:e.user.email,name:e.user.name!??e.user.email});
+        });
+        const subject=dict(`subject-post`,json,{title:elementTitle});
+        const title=dict(`title-post`,json,{
+            title:elementTitle,
+            first3UsersNames:to.slice(0,3).map(t=>t.name??t.email).join(', ')
+        });
+        const about=dict(`about-post`,json);
 
-//       if(parent && parent.user?.email!=data.user.email){
-//           to=[{email:`${parent.user?.email}`,name:parent.user?.name}];
-//           url=url?`${url}?ht-comment-id=${data.id}`:'';
-//       }
-//       else{
-//         if(post && post.creator?.email!=data.user.email)
-//             to=[{email:post.creator?.email!,name:post.creator.name!}]
-//         else if(cycle){
-//           const idx = cycle?.participants.findIndex(p=>p.email==data.user.email);
-//           if(idx>=0)cycle?.participants.splice(idx!,1);
-//           to=cycle.participants.map((p)=>({email:p.email!,name:p.name!}));
-//           if(cycle.creator.email!=data.user.email)to.push({email:cycle.creator.email!,name:cycle.creator.name!});//to=[{email:cycle.creator.email!}]//
-//         }
-//         else if(work){
-//           const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=${elementType}-${elementId}`;
-//           const fr = await fetch(url);
-//           const json = await fr.json();
-//           json?.data?.data?.forEach((e:{user:{email:string,name:string}}) => {
-//             if(e.user.email!=data.user.email)to.push({email:e.user.email,name:e.user.name!??e.user.email});
-//           });
-//           //to=json?.data?.data?.map((j:{user:{email:string}})=>({email:j.user.email}));
-//         }
-//       }
-//       //let sense = (event??'').replace(/^\w+\.(\w+)/g,'$1');
-//       //const msg=`hyvor-talk-comment-${sense}!|!{"userName":"${name}","cycleTitle":"${title}"}`;
-//       if(!to?.length)return res.status(200).json({ data:{emailSend:false,notUsersToSend:true} });
-
-//       locale=LOCALES[locale]??defaultLocale;
-//       const path = join(process.cwd(),'locales',locale,'onCommentCreated.json');
-
-//       const rf = promisify(readFile);
-//       const jsonStr = await rf(path);
-//       const json = JSON.parse(jsonStr.toString());
-//       const dict = (k:string,specs?:Record<string,any>)=>{
-//           let val = json[k];
-//           if(specs){
-//             const specsEntries = Object.entries(specs);
-//             if(specsEntries.length){
-//               let i = 0;
-//               for(;i<specsEntries.length;i++){
-//                 const re=new RegExp(`{{${specsEntries[i][0]}}}`);
-//                 const vr = val.replace(re,specsEntries[i][1]);
-//                 val = vr ?? val;
-//               }
-//             }
-//           }
-//           return val;
-//       }
-        
-//       const postFix=cycle?'-sumary':'';
-//       const subject=dict(`subject-${elementType}${postFix}`,{title:elementTitle});
-//       const title=!cycle 
-//         ? dict(`title-${elementType}`,{title:elementTitle,name})
-//         : dict(`title-${elementType}${postFix}`,{title:elementTitle,first3UsersNames:to.slice(0,3).map(t=>t.name??t.email).join(', ')});
-//       const about=dict(`about-${elementType}${postFix}`);
-//       const aboutEnd=dict(`aboutEnd`);
-//       const urllabel=dict('urlLabel');
-//       const unsubscribe="";//dict('unsubscribe');
-//       if(cycle){
-//         const comentEmailSaved = await prisma.comentCreatedDaily.create({
-//           data:{
-//             //TODO test only
-//             to:[{email:'gbanoaol@gmail.com'}].map(t=>t.email).join(','),
-//             //TODO test only
-//             // to:to.map(t=>t.email).join(','),
-//             subject,
-//             etitle:title,
-//             about,
-//             aboutEnd,
-//             eurl:url,
-//             urllabel,
-//             unsubscribe
-//           }
-//         });
-//         if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
-//           // const cronTime = '0 0 20 * * *';
-//           //TODO test only
-//           const cronTime = '15 * * * * *';
-//           //TODO test only
-//           const dt = sendAt(cronTime);
-//           console.log(`The job would run at: ${dt.toISO()}`);
-//           (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
-//             cronTime, // cronTime
-//             async function () {
-//               await sendEmailWithComentCreatedSumary();
-//             }, // onTick
-//             null, // onComplete
-//             true, // start
-//             'America/Sao_Paulo' // timeZone
-//           );
-//         }
-//         return res.status(200).json({ data:{comentEmailSaved} });    
-//       }
-        
-//       const emailSend = await sendEmailOnCommentCreated({
-//           //TODO test only
-//           to:[{email:'gbanoaol@gmail.com'}],
-//           // remove mujeresinsumisasupn@gmail.com from https://mandrillapp.com/settings/rejections/?subaccount= rejection deny list
-//           // TODO test only
-//         // to,
-//         subject,
-//         specs:{
-//           etitle:title,
-//           about,
-//           aboutEnd,
-//           eurl:url,
-//           urllabel,
-//           unsubscribe
-//         },
-//       });
-        
-//       return res.status(200).json({ data:{emailSend} });
-//     }
-//     catch(e){
-//         console.error(e);
-//         return res.status(400).json({ error:e?.toString() });
-//     }
-//   }
+        const comentEmailSaved = await prisma.comentCreatedDaily.create({
+          data:{
+            to:to.map(t=>t.email).join(','),
+            subject,
+            etitle:title,
+            about,
+            aboutEnd,
+            eurl:url,
+            urllabel,
+            unsubscribe
+          }
+        });
+        if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
+          const cronTime = CRON_TIME;
+          const dt = sendAt(cronTime);
+          console.log(`The job would run at: ${dt.toISO()}`);
+          (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
+            cronTime, // cronTime
+            async function () {
+              await sendEmailWithComentCreatedSumary();
+            }, // onTick
+            null, // onComplete
+            true, // start
+            'America/Sao_Paulo' // timeZone
+          );
+        }
+        return res.status(200).json({ data:{comentEmailSaved} });    
+      }
+    }
+    catch(e){
+        console.error(e);
+        return res.status(400).json({ error:e?.toString() });
+    }
+  }
 }

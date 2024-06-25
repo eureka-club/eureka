@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import { DATE_FORMAT_SHORT } from '../../constants';
+import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
 import { WorkDetail } from '../../types/work';
 import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
@@ -229,7 +229,30 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
             tity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
           </div>*/}
           </Col>
-          <HyvorComments entity='post' id={`${post?.id}`} session={session} />
+          <HyvorComments 
+            entity='post' 
+            id={`${post?.id}`} 
+            session={session} 
+            OnCommentCreated={async (comment)=>{
+              const url = `${WEBAPP_URL}/api/hyvor_talk/onCommentCreated/post`;
+              const fr = await fetch(url,{
+                method:'POST',
+                headers:{
+                  "Content-Type":"application/json",
+                },
+                body:JSON.stringify({
+                  postId,
+                  url:comment.url,
+                  user:{name:session.user.name,email:session.user.email},
+                  parent_id:comment.parent_id,
+                })
+              });
+              if(fr.ok){
+                const res = await fr.json();
+                console.log(res);
+              }
+            }}
+          />
           {/*<div className='container d-sm-block d-lg-none mt-3'>
             <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
           </div>*/}

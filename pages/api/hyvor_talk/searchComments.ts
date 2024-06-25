@@ -13,9 +13,17 @@ export default async function handler(
 ) {
   try{
     const { id:id } = req.query;
-    let r =  await fetch(`https://talk.hyvor.com/api/v1/comments?website_id=${HYVOR_WEBSITE_ID}&api_key=${apiKey}&sort=most_upvoted&page_identifier=${id}`)
-    let data = await r.json();
-    return res.status(200).json({ data:data });
+    const url=`https://talk.hyvor.com/api/console/v1/${process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID}/comments?page_identifier=${id}`;
+    const fr=await fetch(url,{
+      headers:{
+          'X-API-KEY':process.env.HYVOR_TALK_CONSOLE_API_KEY!
+      }
+  });
+  if(fr.ok){
+      const data=await fr.json();
+      return res.json({data});
+  }
+  // let r =  await fetch(`https://talk.hyvor.com/api/data/v1/comments?website_id=${HYVOR_WEBSITE_ID}&api_key=${apiKey}&page_identifier=${id}`)
   }
   catch(e){
     return res.status(400).json({ error:'Server Error' });
