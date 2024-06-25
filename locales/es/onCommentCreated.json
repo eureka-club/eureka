@@ -16,9 +16,18 @@
 
   "aboutEnd":"Abrazos, Eureka",
   "urlLabel": "Ver comentario",
-  "unsubscribe":"Darse de baja",
+  "unsubscribe":"Darse de baja", 
 
   "subject-cycle-sumary":"¡Comentarios de hoy en el Ciclo {{title}} en el que estás participando!",
   "title-cycle-sumary":"¡Algunas personas han dejado comentarios en el Ciclo {{title}}! {{first3UsersNames}} y más compartieron sus pensamientos hoy.",
-  "about-cycle-sumary":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!"
+  "about-cycle-sumary":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!",
+
+  "subject-post-sumary":"",
+  "title-post-sumary":"",
+  "about-post-sumary":"",
+
+  "subject-work-sumary":"",
+  "title-work-sumary":"",
+  "about-work-sumary":""
+
 }

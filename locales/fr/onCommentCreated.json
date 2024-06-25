@@ -20,5 +20,13 @@
 
   "subject-cycle-sumary":"Commentaires d'aujourd'hui sur le Cycle {{title}} auquel tu participes !",
   "title-cycle-sumary":"Quelques personnes ont laissé des commentaires sur le Cycle {{title}}! {{first3UsersNames}} et d'autres ont partagé leurs pensées aujourd'hui.",
-  "about-cycle-sumary":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !"
+  "about-cycle-sumary":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !",
+
+  "subject-post-sumary":"",
+  "title-post-sumary":"",
+  "about-post-sumary":"",
+
+  "subject-work-sumary":"",
+  "title-work-sumary":"",
+  "about-work-sumary":""
 }
