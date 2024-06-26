@@ -20,7 +20,7 @@ export const config = {
 dayjs.extend(utc);
 export default getApiHandler()
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-    const session = await getSession({ req });
+   debugger; const session = await getSession({ req });
     if (session == null || !session.user.roles.includes('admin')) {
       res.status(401).end({ status: 'Unauthorized' });
     }
