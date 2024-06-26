@@ -19,6 +19,14 @@
   "unsubscribe":"Se désabonner",
 
   "subject-cycle-sumary":"Commentaires d'aujourd'hui sur le Cycle {{title}} auquel tu participes !",
-  "title-cycle-sumary":"Quelques personnes ont laissé des commentaires sur le Cycle {{title}}! {{first3UsersNames}} et d'autres ont partagé leurs pensées aujourd'hui.",
-  "about-cycle-sumary":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !"
+  "title-cycle-sumary":"Quelques personnes ont laissé des commentaires sur le Cycle {{title}} ! {{first3UsersNames}} et d'autres ont partagé leurs pensées aujourd'hui.",
+  "about-cycle-sumary":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !",
+
+  "subject-post-sumary":"Commentaires d'aujourd'hui sur ton Moment Eureka: {{title}} !",
+  "title-post-sumary":"Quelques personnes ont laissé des commentaires sur ton Moment Eureka {{title}} !",
+  "about-post-sumary":"Tes réflexions inspirent et gèrent des discussions. Merci de contribuer à notre communauté !",
+
+  "subject-work-sumary":"D’autres personnes ont commenté sur {{title}} !",
+  "title-work-sumary":"Quelques personnes ont laissé des commentaires sur {{title}} !",
+  "about-work-sumary":"Envie de participer ? Notre communauté l'apprécie !"
 }

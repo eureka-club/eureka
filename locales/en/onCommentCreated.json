@@ -20,5 +20,13 @@
 
   "subject-cycle-sumary":"Today's Comments on the Cycle {{title}}, you're participating in",
   "title-cycle-sumary":"A few people left comments on the Cycle {{title}}! {{first3UsersNames}} and others shared their thoughts today.",
-  "about-cycle-sumary":"How about joining and contributing to the conversation? Our community appreciates it!"
+  "about-cycle-sumary":"How about joining and contributing to the conversation? Our community appreciates it!",
+
+  "subject-post-sumary":"Today's Comments on your Eureka Moment: {{title}}!  ",
+  "title-post-sumary":"A few people left comments on your Eureka Moments {{title}}!",
+  "about-post-sumary":"Your reflections are inspiring and generating discussions. Thank you for contributing to our community!",
+
+  "subject-work-sumary":"Other people have commented on {{title}}!",
+  "title-work-sumary":"A few people left comments on {{title}}!",
+  "about-work-sumary":"Wanna weigh in? Our community appreciates it!"
 }
