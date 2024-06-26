@@ -22,11 +22,11 @@
   "title-cycle-sumary":"Algumas pessoas deixaram comentários no Ciclo {{title}}! {{first3UsersNames}} e mais compartilharam seus pensamentos hoje.",
   "about-cycle-sumary":"Que tal participar e enriquecer ainda mais a discussão? Nossa comunidade agradece!",
 
-  "subject-post-sumary":"",
-  "title-post-sumary":"",
-  "about-post-sumary":"",
+  "subject-post-sumary":"Comentários de hoje no seu Momento Eureka: {{title}}!",
+  "title-post-sumary":"Algumas pessoas deixaram comentários no seu Momento Eureka {{title}}!",
+  "about-post-sumary":"Suas reflexões estão inspirando e gerando conversas. Obrigada por contribuir com nossa comunidade!",
 
-  "subject-work-sumary":"",
-  "title-work-sumary":"",
-  "about-work-sumary":""
+  "subject-work-sumary":"Outras pessoas comentaram em {{title}}!",
+  "title-work-sumary":"Algumas pessoas deixaram comentários {{title}}!",
+  "about-work-sumary":"Quer dar a sua opinião? Nossa comunidade agradece!"
 }
