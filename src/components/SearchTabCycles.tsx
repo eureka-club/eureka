@@ -1,7 +1,6 @@
-import { useState, FunctionComponent, useEffect, useMemo } from 'react';
+import { useState, FunctionComponent, useEffect } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import MosaicItem from '@/src/components/cycle/MosaicItem'
 import {getCycles} from '@/src/useCycles'
 import useFilterEngineCycles from './useFilterEngineCycles';
 import { useInView } from 'react-intersection-observer';
@@ -9,8 +8,9 @@ import { Prisma } from '@prisma/client';
 import { CycleSumary } from '../types/cycle';
 import useCyclesSumary from '../useCyclesSumary';
 import { MosaicsGrid } from './MosaicsGrid';
-import { Alert} from '@mui/material';
-import Spinner from '@/components/common/Spinner'
+import { CircularProgress } from '@mui/material';
+import MosaicItem from './cycle/MosaicItem';
+
 const take = 8;
 interface Props{
 }
@@ -83,7 +83,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   };
           
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
-  const cacheKey = [`cycles-search-${lang}-${JSON.stringify(props)}`];
+  const cacheKey = [`cycles-search-${terms}-${lang}`];
           
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]},isLoading} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleSumary[]>([])
@@ -127,10 +127,16 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
     } */}
     <MosaicsGrid isLoading={isLoading}>
         {cycles?.map(p=>
-          <MosaicItem key={p.id} cycle={p} cycleId={p.id} className="" imageLink={true} cacheKey={['CYCLE',p.id.toString()]} size={'md'} />
+          <MosaicItem 
+            key={p.id} 
+            cycle={p} 
+            cycleId={p.id} 
+            className="" 
+            imageLink={true} 
+            cacheKey={cacheKey} size={'md'} />
         )}
     </MosaicsGrid>
-    {cycles?.length!=total && <Spinner  />}
+    {cycles?.length!=total && <CircularProgress  />}
   </>
   
 

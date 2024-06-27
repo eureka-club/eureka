@@ -129,13 +129,12 @@ const CycleSocialInteraction: FunctionComponent<Props> = ({
     isLoading: loadingSocialInteraction,
   } = useMutation(
     async ({ socialInteraction, doCreate, ratingQty }: SocialInteractionClientPayload) => {
-      const entityEndpoint = 'cycle';
       if (session) {
         let translationKey = 'userHasRating';
         if (socialInteraction == 'fav') {
           translationKey = 'userHasSaveForLater';
         }
-        const res = await fetch(`/api/${entityEndpoint}/${entity.id}/${socialInteraction}?lang=${lang}`, {
+        const res = await fetch(`/api/cycle/${entity.id}/${socialInteraction}?lang=${lang}`, {
           method: doCreate ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

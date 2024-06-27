@@ -132,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     take
   };
   const cyclesData = await getCyclesSumary(ctx.locale!,cyclesProps);
-  qc.prefetchQuery([`cycles-search-${ctx.locale}`], () => cyclesData);
+  qc.prefetchQuery([`cycles-search-${q}-${ctx.locale}`], () => cyclesData);
   const hasCycles = cyclesData.total > 0;
   const postsProps = {
     where: {
@@ -161,12 +161,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
   const postsData = await getPostsSumary(session?.user.id!,ctx.locale,{ ... postsProps, take });
-  qc.prefetchQuery([`posts-search-${q?.toString()}`], () => postsData);
+  qc.prefetchQuery([`posts-search-${q}-${ctx.locale}`], () => postsData);
   const hasPosts = postsData?.total > 0;
   
   const worksData = await getWorksSumary(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
 
-  qc.prefetchQuery([`works-search-${q?.toString()}`], () => worksData);
+  qc.prefetchQuery([`works-search-${q}-${ctx.locale}`], () => worksData);
   const hasWorks = worksData.total > 0;
 
   let metaTags = null;

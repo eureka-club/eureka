@@ -1,13 +1,13 @@
 {
-  "subject-post":"¡Alguien comentó en tu Momento Eureka!",
-  "subject-cycle":"¡Alguien comentó en el ciclo {{title}}, en el que estás participando!",
-  "subject-work":"¡Alguien más comentó en {{title}}!",
-  "subject-comment":"¡Alguien respondió a tu comentario en {{title}}!",
+  "subject-post":"Someone commented on your Eureka Moment!",
+  "subject-cycle":"Someone commented on the cycle {{title}}, you're participating in!",
+  "subject-work":"Someone else commented on {{title}}!",
+  "subject-comment":"Someone responded to your comment on {{title}}!",
 
-  "title-post": "{{name}} acaba de dejar un comentario en tu Momento Eureka: {{title}}!",
-  "title-cycle":"{{name}} acaba de dejar un comentario en el ciclo {{title}}!",
-  "title-work":"{{name}} acaba de dejar un comentario en {{title}}!",
-  "title-comment":"{{name}} acaba de responder a tu comentario en {{title}}!",
+  "title-post": "The user {{name}} left a comment on: {{title}}",
+  "title-cycle":"{{name}} just left a comment on the cycle {{title}}!",
+  "title-work":"{{name}} just left a comment on {{title}}!",
+  "title-comment":"{{name}} just responded to your comment on {{title}}!",
 
   "about-post":"Tus reflexiones están inspirando y generando conversaciones. ¡Gracias por contribuir con nuestra comunidad!",
   "about-cycle":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!",
@@ -18,7 +18,15 @@
   "urlLabel": "Ver comentario",
   "unsubscribe":"Darse de baja",
 
-  "subject-cycle-sumary":"¡Comentarios de hoy en el Ciclo {{title}} en el que estás participando!",
-  "title-cycle-sumary":"¡Algunas personas han dejado comentarios en el Ciclo {{title}}! {{first3UsersNames}} y más compartieron sus pensamientos hoy.",
-  "about-cycle-sumary":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!"
+  "subject-cycle-sumary":"Today's Comments on the Cycle {{title}}, you're participating in",
+  "title-cycle-sumary":"A few people left comments on the Cycle {{title}}! {{first3UsersNames}} and others shared their thoughts today.",
+  "about-cycle-sumary":"How about joining and contributing to the conversation? Our community appreciates it!",
+
+  "subject-post-sumary":"Today's Comments on your Eureka Moment: {{title}}!  ",
+  "title-post-sumary":"A few people left comments on your Eureka Moments {{title}}!",
+  "about-post-sumary":"Your reflections are inspiring and generating discussions. Thank you for contributing to our community!",
+
+  "subject-work-sumary":"Other people have commented on {{title}}!",
+  "title-work-sumary":"A few people left comments on {{title}}!",
+  "about-work-sumary":"Wanna weigh in? Our community appreciates it!"
 }

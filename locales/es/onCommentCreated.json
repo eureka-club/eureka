@@ -1,12 +1,12 @@
 {
   "subject-post":"¡Alguien comentó en tu Momento Eureka!",
   "subject-cycle":"¡Alguien comentó en el ciclo {{title}}, en el que estás participando!",
-  "subject-work":"¡{{first3UsersNames}} han comentado en {{title}}!",
+  "subject-work":"¡Alguien más comentó en {{title}}!",
   "subject-comment":"¡Alguien respondió a tu comentario en {{title}}!",
 
-  "title-post": "{{first3UsersNames}} han comentado en tu Momento Eureka: {{title}}!",
+  "title-post": "{{name}} acaba de dejar un comentario en tu Momento Eureka: {{title}}!",
   "title-cycle":"{{name}} acaba de dejar un comentario en el ciclo {{title}}!",
-  "title-work":"{{first3UsersNames}} acaban de dejar un comentario en {{title}}!",
+  "title-work":"{{name}} acaba de dejar un comentario en {{title}}!",
   "title-comment":"{{name}} acaba de responder a tu comentario en {{title}}!",
 
   "about-post":"Tus reflexiones están inspirando y generando conversaciones. ¡Gracias por contribuir con nuestra comunidad!",
@@ -16,9 +16,18 @@
 
   "aboutEnd":"Abrazos, Eureka",
   "urlLabel": "Ver comentario",
-  "unsubscribe":"Darse de baja",
+  "unsubscribe":"Darse de baja", 
 
   "subject-cycle-sumary":"¡Comentarios de hoy en el Ciclo {{title}} en el que estás participando!",
   "title-cycle-sumary":"¡Algunas personas han dejado comentarios en el Ciclo {{title}}! {{first3UsersNames}} y más compartieron sus pensamientos hoy.",
-  "about-cycle-sumary":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!"
+  "about-cycle-sumary":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!",
+
+  "subject-post-sumary":"¡Comentarios de hoy en tu Momento Eureka: {{title}}!",
+  "title-post-sumary":"¡Algunas personas han dejado comentarios en tu Momento Eureka {{title}}!",
+  "about-post-sumary":"Tus reflexiones están inspirando y generando conversaciones. ¡Gracias por contribuir con nuestra comunidad!",
+
+  "subject-work-sumary":"¡Más personas comentaron en {{title}}!",
+  "title-work-sumary":"¡Algunas personas han dejado comentarios en {{title}}!",
+  "about-work-sumary":"¿Quieres contribuir? ¡Nuestra comunidad lo agradece! "
+
 }
