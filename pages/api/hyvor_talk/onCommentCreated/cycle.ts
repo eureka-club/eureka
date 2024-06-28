@@ -21,7 +21,7 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{cycleId,url,user:{name,email},parent_id}=req.body as ReqProps; 
+      const{cycleId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
       
       let locale = req.cookies.NEXT_LOCALE || defaultLocale;
       let to:{email:string,name?:string}[] = [];
@@ -68,7 +68,7 @@ export default async function handler(
                 etitle,
                 about,
                 aboutEnd,
-                eurl:url,
+                eurl,
                 urllabel,
                 unsubscribe
               },
@@ -108,7 +108,7 @@ export default async function handler(
             etitle,
             about,
             aboutEnd,
-            eurl:url,
+            eurl,
             urllabel,
             unsubscribe
           }
