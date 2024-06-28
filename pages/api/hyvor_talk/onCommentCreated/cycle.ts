@@ -84,10 +84,20 @@ export default async function handler(
         to=cycle.participants.map((p)=>({email:p.email!,name:p.name!}));
         if(cycle.creator.email!=email)to.push({email:cycle.creator.email!,name:cycle.creator.name!});//to=[{email:cycle.creator.email!}]//
 
+        const url = `${WEBAPP_URL}/api/hyvor_talk/searchCommentsLast8Hours?id=cycle-${cycleId}`;
+        const fr = await fetch(url);
+        const {data} = await fr.json();
+        const commentedBy:Record<string,string>={};
+        data?.reduce((prev:Record<string,string>,curr:any) => {
+          const {user:{email,name}} = curr;
+          prev[email]=name;
+          return prev;
+        },commentedBy);
+        
         const subject=dict(`subject-cycle-sumary`,json,{title});
         const etitle=dict(`title-cycle-sumary`,json,{
             title,
-            first3UsersNames:to.slice(0,3).map(t=>t.name??t.email).join(', ')
+            first3UsersNames:Object.values(commentedBy).join(', ')
         });
         const about=dict(`about-cycle-sumary`,json);
 

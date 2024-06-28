@@ -80,7 +80,7 @@ export default async function handler(
         return res.status(200).json({error:NOT_FOUND});
       }
       else{
-        const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=post-${postId}`;
+        const url = `${WEBAPP_URL}/api/hyvor_talk/searchCommentsLast8Hours?id=post-${postId}`;
         const fr = await fetch(url);
         const {data} = await fr.json();
         const to_:Record<string,string>={};

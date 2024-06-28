@@ -77,7 +77,7 @@ export default async function handler(
         return res.status(200).json({error:NOT_FOUND});
       }
       else{
-        const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=work-${workId}`;
+        const url = `${WEBAPP_URL}/api/hyvor_talk/searchCommentsLast8Hours?id=work-${workId}`;
         const fr = await fetch(url);
         const {data} = await fr.json();
         const to_:Record<string,string>={};
@@ -94,7 +94,7 @@ export default async function handler(
             title,
         });
         const about=dict(`about-work`,json);
-debugger;
+
         const comentEmailSaved = await prisma.comentCreatedDaily.create({
           data:{
             to:Object.keys(to_).join(','),
