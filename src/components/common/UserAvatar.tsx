@@ -1,7 +1,6 @@
-import { FunctionComponent, SyntheticEvent,MouseEvent, useState, useEffect} from 'react';
+import { FunctionComponent, SyntheticEvent,MouseEvent, FC } from 'react';
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
-import LocalImageComponent from '@/src/components/LocalImage'
 import slugify from 'slugify'
 import useUserSumary from '@/src/useUserSumary';
 import { UserSumary } from '@/src/types/UserSumary';
@@ -28,6 +27,26 @@ const getMediathequeSlug = (user:UserSumary)=>{
   return ''
 }
 
+interface UserNameProps{
+  user:any;
+  showName:boolean;
+  showFullName:boolean;
+}
+const UserName:FunctionComponent<UserNameProps> = ({user,showName,showFullName}) => {
+  let res = '';
+  if (showName) {
+    if(user){
+      const truncateName = user?.name?.slice(0,9);
+      if (showFullName) {
+        res = user?.name!;
+      } else if (truncateName && truncateName!.length + 3 < user?.name?.length!) {
+        res = `${truncateName}...`;
+      } else res = `${user?.name}`;
+    }
+  }
+  return <span className='ms-2'>{res}</span>
+};
+
 const UserAvatar: FunctionComponent<Props> = ({
   user:userItem,
   userId,
@@ -46,22 +65,7 @@ const UserAvatar: FunctionComponent<Props> = ({
     enabled:!!userId && !userItem
   });
   const user = userItem??data;
-  const renderUserName = () => {
-    let res = '';
-    if (showName) {
-      if(user){
-        const truncateName = user?.name?.slice(0,9);
-      
-        if (showFullName) {
-          res = user?.name!;
-        } else if (truncateName && truncateName!.length + 3 < user?.name?.length!) {
-          res = `${truncateName}...`;
-        } else res = `${user?.name}`;
-
-      }
-    }
-    return <span className='ms-2'>{res}</span>
-  };
+  
   const onClick = (e:MouseEvent<HTMLAnchorElement>,user:UserSumary)=>{
     e.stopPropagation()
     router.push(`/mediatheque/${getMediathequeSlug(user)}`)
@@ -82,7 +86,7 @@ const UserAvatar: FunctionComponent<Props> = ({
                   }>
                   <AccountCircle sx={{width,height}}/>
               </Avatar>
-              {renderUserName()}
+              <UserName user={user} showName={showName} showFullName={showFullName}/>
             </a>
         </section>
       )}

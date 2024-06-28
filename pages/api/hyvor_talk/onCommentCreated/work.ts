@@ -35,7 +35,7 @@ export default async function handler(
       });
       if(!work)return res.status(200).json({error:NOT_FOUND});
 
-      const elementTitle=work.title;
+      const title=work.title;
       const language = work.language;
       locale=language ? language : locale;
       locale=LOCALES[locale]??defaultLocale;
@@ -46,9 +46,9 @@ export default async function handler(
       const unsubscribe="";//dict('unsubscribe');
       
       if(parent_id){
-        const subject=dict(`subject-comment`,json,{title:elementTitle});
-        const title=dict(`title-comment`,json,{
-          title:elementTitle,
+        const subject=dict(`subject-comment`,json,{title});
+        const etitle=dict(`title-comment`,json,{
+          title,
           name
         });
         const about=dict(`about-comment`,json);
@@ -63,7 +63,7 @@ export default async function handler(
               to,
               subject,
               specs:{
-                etitle:title,
+                etitle,
                 about,
                 aboutEnd,
                 eurl:url,
@@ -77,29 +77,29 @@ export default async function handler(
         return res.status(200).json({error:NOT_FOUND});
       }
       else{
-        const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=work-${workId}`;
+        const url = `${WEBAPP_URL}/api/hyvor_talk/searchCommentsLast8Hours?id=work-${workId}`;
         const fr = await fetch(url);
         const {data} = await fr.json();
-        data?.forEach((e:{user:{email:string,name:string}}) => {
-          if(e.user.email!=email)to.push({email:e.user.email,name:e.user.name!??e.user.email});
-        });
-        const   first3UsersNames=to.slice(0,3).map(t=>t.name??t.email).join(', ')
+        const to_:Record<string,string>={};
+        data?.reduce((prev:Record<string,string>,curr:any) => {
+          const {user:{email,name}} = curr;
+          prev[email]=name;
+          return prev;
+        },to_);
              
-        const subject=dict(`subject-work`,json,{
-          title:elementTitle,
-          first3UsersNames
-      });
-        const title=dict(`title-work`,json,{
-            title:elementTitle,
-            first3UsersNames
+        const subject=dict(`subject-work-sumary`,json,{
+          title,
+        });
+        const etitle=dict(`title-work-sumary`,json,{
+            title,
         });
         const about=dict(`about-work`,json);
 
         const comentEmailSaved = await prisma.comentCreatedDaily.create({
           data:{
-            to:to.map(t=>t.email).join(','),
+            to:Object.keys(to_).join(','),
             subject,
-            etitle:title,
+            etitle,
             about,
             aboutEnd,
             eurl:url,
