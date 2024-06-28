@@ -21,7 +21,7 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{postId,url,user:{name,email},parent_id}=req.body as ReqProps; 
+      const{postId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
       
       let locale = req.cookies.NEXT_LOCALE || defaultLocale;
       let to:{email:string,name?:string}[] = [];
@@ -31,14 +31,17 @@ export default async function handler(
         select:{
           title:true,
           language:true,
+          creator:{select:{email:true,name:true}}
         }
       });
       if(!post)return res.status(200).json({error:NOT_FOUND});
 
-      const elementTitle=post.title;
+      const title=post.title;
       const language = post.language;
       locale=language ? language : locale;
-      locale=LOCALES[locale]??defaultLocale;
+      locale=(language.length>2 
+        ? LOCALES[locale]
+        :language) ?? defaultLocale;
       const json=(await getDict('onCommentCreated',locale as Locale))??{};
       
       const aboutEnd=dict(`aboutEnd`,json);
@@ -46,9 +49,9 @@ export default async function handler(
       const unsubscribe="";//dict('unsubscribe');
       
       if(parent_id){
-        const subject=dict(`subject-comment`,json,{title:elementTitle});
-        const title=dict(`title-comment`,json,{
-          title:elementTitle,
+        const subject=dict(`subject-comment`,json,{title});
+        const etitle=dict(`title-comment`,json,{
+          title,
           name
         });
         const about=dict(`about-comment`,json);
@@ -63,10 +66,10 @@ export default async function handler(
               to,
               subject,
               specs:{
-                etitle:title,
+                etitle,
                 about,
                 aboutEnd,
-                eurl:url,
+                eurl,
                 urllabel,
                 unsubscribe
               },
@@ -80,24 +83,27 @@ export default async function handler(
         const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=post-${postId}`;
         const fr = await fetch(url);
         const {data} = await fr.json();
-        data?.forEach((e:{user:{email:string,name:string}}) => {
-          if(e.user.email!=email)to.push({email:e.user.email,name:e.user.name!??e.user.email});
+        const to_:Record<string,string>={};
+        data?.reduce((prev:Record<string,string>,curr:any) => {
+          const {user:{email,name}} = curr;
+          prev[email]=name;
+          return prev;
+        },to_);
+
+        const subject=dict(`subject-post-sumary`,json,{title});
+        const etitle=dict(`title-post-sumary`,json,{
+            title,
         });
-        const subject=dict(`subject-post`,json,{title:elementTitle});
-        const title=dict(`title-post`,json,{
-            title:elementTitle,
-            first3UsersNames:to.slice(0,3).map(t=>t.name??t.email).join(', ')
-        });
-        const about=dict(`about-post`,json);
+        const about=dict(`about-post-sumary`,json);
 
         const comentEmailSaved = await prisma.comentCreatedDaily.create({
           data:{
-            to:to.map(t=>t.email).join(','),
+            to:Object.keys(to_).join(','),
             subject,
-            etitle:title,
+            etitle,
             about,
             aboutEnd,
-            eurl:url,
+            eurl,
             urllabel,
             unsubscribe
           }

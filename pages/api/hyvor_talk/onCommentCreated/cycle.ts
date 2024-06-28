@@ -37,7 +37,7 @@ export default async function handler(
       });
       if(!cycle)return res.status(200).json({error:NOT_FOUND});
 
-      const elementTitle=cycle?.title;
+      const title=cycle?.title;
       const languages = cycle?.languages.split(",")
       locale=languages?.length ? languages[0] : locale;
       locale=LOCALES[locale]??defaultLocale;
@@ -48,9 +48,9 @@ export default async function handler(
       const unsubscribe="";//dict('unsubscribe');
       
       if(parent_id){
-        const subject=dict(`subject-comment`,json,{title:elementTitle});
-        const title=dict(`title-comment`,json,{
-          title:elementTitle,
+        const subject=dict(`subject-comment`,json,{title});
+        const etitle=dict(`title-comment`,json,{
+          title,
           name
         });
         const about=dict(`about-comment`,json);
@@ -65,7 +65,7 @@ export default async function handler(
               to,
               subject,
               specs:{
-                etitle:title,
+                etitle,
                 about,
                 aboutEnd,
                 eurl:url,
@@ -84,9 +84,9 @@ export default async function handler(
         to=cycle.participants.map((p)=>({email:p.email!,name:p.name!}));
         if(cycle.creator.email!=email)to.push({email:cycle.creator.email!,name:cycle.creator.name!});//to=[{email:cycle.creator.email!}]//
 
-        const subject=dict(`subject-cycle-sumary`,json,{title:elementTitle});
-        const title=dict(`title-cycle-sumary`,json,{
-            title:elementTitle,
+        const subject=dict(`subject-cycle-sumary`,json,{title});
+        const etitle=dict(`title-cycle-sumary`,json,{
+            title,
             first3UsersNames:to.slice(0,3).map(t=>t.name??t.email).join(', ')
         });
         const about=dict(`about-cycle-sumary`,json);
@@ -95,7 +95,7 @@ export default async function handler(
           data:{
             to:to.map(t=>t.email).join(','),
             subject,
-            etitle:title,
+            etitle,
             about,
             aboutEnd,
             eurl:url,

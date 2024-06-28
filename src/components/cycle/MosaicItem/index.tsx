@@ -3,29 +3,22 @@ import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import useTranslation from 'next-translate/useTranslation';
-import { useState, MouseEvent, FC } from 'react';
-import { QueryClient, useIsFetching } from 'react-query';
+import { useState,  FC } from 'react';
+import { QueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import { Card, Button, Spinner, Badge} from 'react-bootstrap';
+import { Card, Spinner, Badge} from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 import { MdGroup } from 'react-icons/md';
 import { DATE_FORMAT_SHORT, LOCALES } from '../../../constants';
 import LocalImageComponent from '../../LocalImage';
 import styles from './MosaicItem.module.css';
-import toast from 'react-hot-toast';
 import useCycleSumary from '@/src/useCycleSumary'
 import Avatar from '../../common/UserAvatar';
-// import useCycleJoinRequests,{setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
-import {useJoinUserToCycleAction,useLeaveUserFromCycleAction} from '@/src/hooks/mutations/useCycleJoinOrLeaveActions'
-import SignInForm from '../../forms/SignInForm';
 import { CycleSumary } from '@/src/types/cycle';
-import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import CycleSocialInteraction from '../../common/CycleSocialInteraction';
 import useUserSumary from '@/src/useUserSumary';
-import { useModalContext } from '@/src/hooks/useModal';
 import { JoinLeaveCycleBtn } from './JoinLeaveCycleBtn';
-// import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -69,7 +62,6 @@ const MosaicItem: FC<Props> = ({
 }) => {
   const {data:session,status} = useSession();
   const isLoadingSession = status === "loading"
-  const { data: user } = useUserSumary(session?.user.id!,{ enabled: !!session?.user.id });
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const {data:c} = useCycleSumary(cycleId
