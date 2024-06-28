@@ -1,7 +1,8 @@
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { ChangeEvent, MouseEvent, FunctionComponent, useEffect, useRef, useState } from 'react';
-import { Button, Col, Row, ButtonGroup, Form } from 'react-bootstrap';
+import {  Col, Row, ButtonGroup, Form } from 'react-bootstrap';
+import {Button, Grid} from '@mui/material'
 import { Post } from '@prisma/client';
 
 import { BsCheck } from 'react-icons/bs';
@@ -317,15 +318,15 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           />
         </Form.Group>
         {useCrop && (
-          <Row className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
-            <Col className="mb-4 d-flex justify-content-center justify-content-lg-start">
+          <Grid container className="d-flex justify-content-center flex-column flex-column-reverse flex-lg-row flex-lg-row-reverse">
+            <Grid className="mb-4 d-flex justify-content-center justify-content-lg-start">
               {<div className={styles.imageContainer}>{renderPhoto()}</div>}
-            </Col>
-            <Col xs={12} md={8} className="mt-2 mb-4">
+            </Grid>
+            <Grid xs={12} md={8} className="mt-2 mb-4">
               {!showCrop && (
                 <Button
                   data-cy="image-load"
-                  variant="primary"
+                  variant="contained"
                   className="btn-eureka w-100"
                   onClick={() => setShowCrop(true)}
                 >
@@ -333,14 +334,14 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 </Button>
               )}
               {showCrop && (
-                <Col className="d-flex">
+                <Grid className="d-flex">
                   <div className="w-100 border p-3">
                     <CropImageFileSelect onGenerateCrop={onGenerateCrop} onClose={closeCrop} cropShape="rect" />
                   </div>
-                </Col>
+                </Grid>
               )}
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         )}
       </section>
       {newEurekaImageFile && (
@@ -443,8 +444,8 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
           )}
         </ImageFileSelect>
       </Form.Group>*/}
-          <Row>
-            <Col xs={12} md={8}>
+          <Grid container>
+            <Grid xs={12} md={8}>
               <Form.Group className="mt-5 mb-4">
                 <FormControlLabel
                   control={<Switch checked={useOtherFields} onChange={handleChangeUseOtherFields} />}
@@ -470,14 +471,14 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
                 </Form.Group>
                 </>
               )}
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
 
           <aside className="d-flex justify-content-end">
             <ButtonGroup size="sm" className="pt-3">
-              <Button variant="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
+              <Button variant="contained" color="warning" className="text-white" onClick={clearCreateEurekaForm} disabled={isLoading}>
                 <ImCancelCircle />
-              </Button>
+              </Button> 
               <Button
                 data-cy="create-eureka-btn"
                 onClick={handlerSubmitCreateEureka}

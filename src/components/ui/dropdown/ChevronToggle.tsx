@@ -1,7 +1,7 @@
 import { ForwardRefRenderFunction, MouseEvent, forwardRef } from 'react';
-import { Button } from 'react-bootstrap';
+//import { Button } from 'react-bootstrap';
 import { BsChevronDown } from 'react-icons/bs';
-
+import {Button} from '@mui/material'
 interface Props {
   children: JSX.Element;
   onClick: (ev: MouseEvent) => void;
@@ -10,7 +10,8 @@ interface Props {
 const ChevronToggle: ForwardRefRenderFunction<HTMLButtonElement, Props> = ({ children, onClick }, ref) => (
   <Button
     ref={ref}
-    variant="primary"
+    variant='contained'
+    color='primary'
     onClick={(ev) => {
       ev.preventDefault();
       onClick(ev);

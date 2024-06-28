@@ -5,6 +5,7 @@ import { WorkSumary } from '@/types/work';
 import LocalImageComponent from '@/src/components/LocalImage';
 import WorkSummary from './WorkSummary';
 import styles from './TypeaheadSearchItem.module.css';
+import { Chip } from '@mui/material';
 
 interface Props {
   work: WorkSumary;
@@ -17,9 +18,8 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ work }) => {
     <section>
       <aside className="position-relative">
         <LocalImageComponent className='shadow-sm py-2 px-2 bg-body rounded' width={150} height={150} filePath={work.localImages[0].storedFile} alt={work.title} />
-        <Badge bg="orange" className={`position-absolute top-0 start-0 mt-3 ms-3 fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}>
-          {t(work.type)}
-        </Badge>
+        <Chip label= {`${t('work.type')} `} className={`position-absolute top-0 start-0 mt-3 ms-3 fw-normal fs-6 text-black px-2 rounded-pill ${styles.type}`}/>
+        
       </aside>
       <aside>
         <h3 className="fs-6 fw-bold text-wrap">{work.title}</h3>
