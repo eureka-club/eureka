@@ -89,8 +89,9 @@ export default async function handler(
         const {data} = await fr.json();
         const commentedBy:Record<string,string>={};
         data?.reduce((prev:Record<string,string>,curr:any) => {
-          const {user:{email,name}} = curr;
-          prev[email]=name;
+          const {user} = curr;
+          if(user.email!=email)
+            prev[user.email]=user.name;
           return prev;
         },commentedBy);
         
