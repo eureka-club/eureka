@@ -143,7 +143,7 @@ export default getApiHandler()
     }
   })
   .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-   debugger; const session = await getSession({req});
+    const session = await getSession({req});
     if (session == null) {
       res.statusMessage = 'unauthorized';
       return res.status(300).end();
