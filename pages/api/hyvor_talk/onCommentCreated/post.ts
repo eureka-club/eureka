@@ -96,32 +96,34 @@ export default async function handler(
             title,
         });
         const about=dict(`about-post-sumary`,json);
-
-        const comentEmailSaved = await prisma.comentCreatedDaily.create({
-          data:{
-            to:Object.keys(to_).join(','),
-            subject,
-            etitle,
-            about,
-            aboutEnd,
-            eurl,
-            urllabel,
-            unsubscribe
+        let comentEmailSaved = null;
+        if(to_?.length){
+          comentEmailSaved = await prisma.comentCreatedDaily.create({
+            data:{
+              to:Object.keys(to_).join(','),
+              subject,
+              etitle,
+              about,
+              aboutEnd,
+              eurl,
+              urllabel,
+              unsubscribe
+            }
+          });
+          if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
+            const cronTime = CRON_TIME;
+            const dt = sendAt(cronTime);
+            console.log(`The job would run at: ${dt.toISO()}`);
+            (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
+              cronTime, // cronTime
+              async function () {
+                await sendEmailWithComentCreatedSumary();
+              }, // onTick
+              null, // onComplete
+              true, // start
+              'America/Sao_Paulo' // timeZone
+            );
           }
-        });
-        if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
-          const cronTime = CRON_TIME;
-          const dt = sendAt(cronTime);
-          console.log(`The job would run at: ${dt.toISO()}`);
-          (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
-            cronTime, // cronTime
-            async function () {
-              await sendEmailWithComentCreatedSumary();
-            }, // onTick
-            null, // onComplete
-            true, // start
-            'America/Sao_Paulo' // timeZone
-          );
         }
         return res.status(200).json({ data:{comentEmailSaved} });    
       }
