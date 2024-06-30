@@ -21,7 +21,7 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{workId,url,user:{name,email},parent_id}=req.body as ReqProps; 
+      const{workId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
       
       let locale = req.cookies.NEXT_LOCALE || defaultLocale;
       let to:{email:string,name?:string}[] = [];
@@ -66,7 +66,7 @@ export default async function handler(
                 etitle,
                 about,
                 aboutEnd,
-                eurl:url,
+                eurl,
                 urllabel,
                 unsubscribe
               },
@@ -82,8 +82,9 @@ export default async function handler(
         const {data} = await fr.json();
         const to_:Record<string,string>={};
         data?.reduce((prev:Record<string,string>,curr:any) => {
-          const {user:{email,name}} = curr;
-          prev[email]=name;
+          const {user} = curr;
+          if(user.email!=email)
+            prev[user.email]=user.name;
           return prev;
         },to_);
              
@@ -102,7 +103,7 @@ export default async function handler(
             etitle,
             about,
             aboutEnd,
-            eurl:url,
+            eurl,
             urllabel,
             unsubscribe
           }

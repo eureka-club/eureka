@@ -17,7 +17,6 @@ import useCycleSumary from '@/src/useCycleSumary'
 import Avatar from '../../common/UserAvatar';
 import { CycleSumary } from '@/src/types/cycle';
 import CycleSocialInteraction from '../../common/CycleSocialInteraction';
-import useUserSumary from '@/src/useUserSumary';
 import { JoinLeaveCycleBtn } from './JoinLeaveCycleBtn';
 
 dayjs.extend(utc);
