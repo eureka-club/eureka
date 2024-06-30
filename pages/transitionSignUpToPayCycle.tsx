@@ -3,10 +3,10 @@ import { useState, useEffect, MouseEvent } from 'react';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Footer from '@/components/layouts/Footer';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import {Col,Row} from 'react-bootstrap';
+//import {Col,Row} from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { useRouter } from 'next/router';
 import { Session } from '@/src/types';
@@ -17,6 +17,7 @@ import useUsers from '@/src/useUsers';
 import toast from 'react-hot-toast';
 import useUserSumary from '@/src/useUserSumary';
 import { CycleSumary } from '@/src/types/cycle';
+import {Button, Grid} from '@mui/material';
 
 interface Props {
   session: Session
@@ -90,9 +91,9 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
     <SimpleLayout title="Welcome" showNavBar={false} showFooter={false}>
       <>
         <Box >
-          <Row className="d-flex justify-content-between">
-            <Col className='col-12'>
-              <Row className='p-4'>
+          <Grid container className="d-flex justify-content-between">
+            <Grid className='col-12'>
+              <Grid container className='p-4'>
                 <Link href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
@@ -105,7 +106,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
                     </aside>
                   </a>
                 </Link>
-              </Row>
+              </Grid>
               <Box className='d-flex flex-column justify-content-center flex-xl-row'
                 sx={{
                   backgroundImage: { sm:"url('/registro_desktop_about_bg.webp')"},
@@ -114,20 +115,20 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
                   height: { sm: '500px', md: '750px' },//lg:'500px'
                 }}
               >
-                <Col className=' d-flex col-12 col-xl-6 '>
+                <Grid className=' d-flex col-12 col-xl-6 '>
                   <Box className=' d-flex flex-column mt-5 '>
-                    <Row className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('JoinToPrivateCycleText')}</b></h1></Row>
-                    <Row className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('CompleteRegistrationText')}</b></h1></Row>
-                    <Row className='w-100  p-2'>
+                    <Grid container className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('JoinToPrivateCycleText')}</b></h1></Grid>
+                    <Grid container className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('CompleteRegistrationText')}</b></h1></Grid>
+                    <Grid container className='w-100  p-2'>
                       {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
                         {t('ClickToPay')}
                       </Button>}{loading && <LinearProgress className='mb-4' />}
-                    </Row>
+                    </Grid>
                   </Box>
-                </Col>
+                </Grid>
               </Box>
-            </Col>
-            </Row>
+            </Grid>
+            </Grid>
          
         </Box>
         <Footer />
