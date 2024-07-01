@@ -90,6 +90,7 @@ export default async function handler(
             prev[user.email]=user.name;
           return prev;
         },to_);
+        to_[post?.creator?.email!]=post.creator.name!;
         const subject=dict(`subject-post-sumary`,json,{title});
         const etitle=dict(`title-post-sumary`,json,{
             title,
