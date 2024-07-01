@@ -22,7 +22,7 @@ export default async function handler(
   if(req.method?.toLowerCase()=='post'){
     try{
       const{postId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
-      
+      const pageIdentifier=`post-${postId}`;
       let locale = req.cookies.NEXT_LOCALE || i18n.defaultLocale;
       let to:{email:string,name?:string}[] = [];
 
@@ -47,7 +47,6 @@ export default async function handler(
       const aboutEnd=dict(`aboutEnd`,json);
       const urllabel=dict('urlLabel',json);
       const unsubscribe="";//dict('unsubscribe');
-      
       if(parent_id){
         const subject=dict(`subject-comment`,json,{title});
         const etitle=dict(`title-comment`,json,{
@@ -83,6 +82,7 @@ export default async function handler(
         const url = `${WEBAPP_URL}/api/hyvor_talk/searchComments?id=post-${postId}`;
         const fr = await fetch(url);
         const {data} = await fr.json();
+        
         const to_:Record<string,string>={};
         data?.reduce((prev:Record<string,string>,curr:any) => {
           const {user} = curr;
@@ -107,7 +107,8 @@ export default async function handler(
               aboutEnd,
               eurl,
               urllabel,
-              unsubscribe
+              unsubscribe,
+              pageIdentifier
             }
           });
           if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){

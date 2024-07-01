@@ -22,7 +22,7 @@ export default async function handler(
   if(req.method?.toLowerCase()=='post'){
     try{
       const{cycleId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
-      
+      const pageIdentifier=`cycle-${cycleId}`;
       let locale = req.cookies.NEXT_LOCALE || i18.defaultLocale;
       let to:{email:string,name?:string}[] = [];
 
@@ -112,7 +112,8 @@ export default async function handler(
               aboutEnd,
               eurl,
               urllabel,
-              unsubscribe
+              unsubscribe,
+              pageIdentifier
             }
           });
           if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){

@@ -152,7 +152,7 @@ export const sendEmailOnCommentCreated = async (props:OnCommentCreatedProps)=>{
 
 export const sendEmailWithComentCreatedSumary = async ()=>{
   const data = await prisma?.comentCreatedDaily.findMany({
-    distinct:['eurl'],
+    distinct:['pageIdentifier'],
     orderBy: {
         id: 'desc',
     }
