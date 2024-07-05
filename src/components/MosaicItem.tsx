@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
+import Card, { CardProps } from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -8,11 +8,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { v4 } from 'uuid';
 
-interface Props{
+interface Props extends CardProps{
     img:string;
     size?:'small'|'medium'|'large'
 }
-export const  MosaicItem:React.FC<Props> = ({img,size:s='large'})=>{
+export const  MosaicItem:React.FC<Props> = ({img,size:s='large',...others})=>{
     let {width,height} = {width:300, height:400};
     let miid = v4();
     switch(s){
@@ -31,7 +31,7 @@ export const  MosaicItem:React.FC<Props> = ({img,size:s='large'})=>{
     }
     
   return (
-    <Card sx={{width,height}} id={miid}>
+    <Card sx={{width,height}} id={miid} {...others}>
       <CardActionArea>
         <style jsx global>{`
             #${miid} .MuiCardActionArea-root{
