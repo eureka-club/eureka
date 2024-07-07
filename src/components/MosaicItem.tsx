@@ -1,18 +1,27 @@
 import * as React from 'react';
-import Card, { CardProps } from '@mui/material/Card';
+import Card, { CardProps, CardTypeMap } from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions, IconButton } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
+import { Button, CardActionArea, CardActions, IconButton, IconButtonOwnProps, IconButtonProps } from '@mui/material';
 import { v4 } from 'uuid';
 
+
+interface MosaicItemActionsProps{
+    children?:React.ReactNode
+}
+export const  MosaicItemActions:React.FC<MosaicItemActionsProps>=({children})=>{
+    return <CardActions>
+    {children??<></>}
+    </CardActions>;
+}
 interface Props extends CardProps{
     img:string;
-    size?:'small'|'medium'|'large'
+    size?:'small'|'medium'|'large';
+    alt?:string;
+    children?:React.ReactNode;
 }
-export const  MosaicItem:React.FC<Props> = ({img,size:s='large',...others})=>{
+export const  MosaicItem:React.FC<Props> = ({img,size:s='large',alt,children,...others})=>{
     let {width,height} = {width:300, height:400};
     let miid = v4();
     switch(s){
@@ -29,26 +38,25 @@ export const  MosaicItem:React.FC<Props> = ({img,size:s='large',...others})=>{
             height = height * 1;
             break;
     }
-    
+  const footerHeight=children?'50px':'0px';
+
   return (
     <Card sx={{width,height}} id={miid} {...others}>
       <CardActionArea>
         <style jsx global>{`
             #${miid} .MuiCardActionArea-root{
                 width:${width}px!important;
-                height:calc(${height}px - 50px)!important;
-                /*background:url(${img});
-                backdrop-filter: blur(10px);*/
+                height:calc(${height}px - ${footerHeight})!important;
             }
         `}</style>
         <CardMedia
             className='mosaicItemImg'
             component="img"
             image={img}
-            alt="????"
+            alt={alt??'-'}
             sx={{
                 width,
-                height:`calc(${height}px - 50px)`,
+                height:`calc(${height}px - ${footerHeight})`,
                 objectFit:'inherit'
             }}
         />
@@ -62,14 +70,7 @@ export const  MosaicItem:React.FC<Props> = ({img,size:s='large',...others})=>{
           </Typography>
         </CardContent> */}
       </CardActionArea>
-      <CardActions>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-      </CardActions>
+      {children??<></>}
     </Card>
   );
 }
