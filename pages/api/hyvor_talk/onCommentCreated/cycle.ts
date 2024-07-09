@@ -3,7 +3,7 @@ import { CronJob, sendAt } from 'cron';
 import { sendEmailOnCommentCreated, sendEmailWithComentCreatedSumary } from '@/src/facades/mail';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { CRON_TIME, LOCALES, WEBAPP_URL } from '@/src/constants';
-import { defaultLocale } from 'i18n';
+const i18 = require('i18n');
 import { NOT_FOUND } from '@/src/api_code';
 import { dict, getDict } from '@/src/hooks/useTranslation';
 import { Locale } from 'i18n-config';
@@ -22,8 +22,8 @@ export default async function handler(
   if(req.method?.toLowerCase()=='post'){
     try{
       const{cycleId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
-      
-      let locale = req.cookies.NEXT_LOCALE || defaultLocale;
+      const pageIdentifier=`cycle-${cycleId}`;
+      let locale = req.cookies.NEXT_LOCALE || i18.defaultLocale;
       let to:{email:string,name?:string}[] = [];
 
       const cycle = await prisma.cycle.findFirst({
@@ -40,7 +40,7 @@ export default async function handler(
       const title=cycle?.title;
       const languages = cycle?.languages.split(",")
       locale=languages?.length ? languages[0] : locale;
-      locale=LOCALES[locale]??defaultLocale;
+      locale=LOCALES[locale]??i18.defaultLocale;
       const json=(await getDict('onCommentCreated',locale as Locale))??{};
       
       const aboutEnd=dict(`aboutEnd`,json);
@@ -48,6 +48,7 @@ export default async function handler(
       const unsubscribe="";//dict('unsubscribe');
       
       if(parent_id){
+
         const subject=dict(`subject-comment`,json,{title});
         const etitle=dict(`title-comment`,json,{
           title,
@@ -58,9 +59,10 @@ export default async function handler(
         const fr=await fetch(pcurl);
         if(fr.ok){
           const parentComment=await fr.json();
-          if(parentComment){
-            const {comment:{user:{email}}}=parentComment;
-            to.push({email});
+
+          if(parentComment && parentComment.comment?.user?.email!=email){
+            const {comment}=parentComment;
+            to.push({email:comment.user.email});
             const emailSend = await sendEmailOnCommentCreated({
               to,
               subject,
@@ -90,43 +92,44 @@ export default async function handler(
         const commentedBy:Record<string,string>={};
         data?.reduce((prev:Record<string,string>,curr:any) => {
           const {user} = curr;
-          if(user.email!=email)
-            prev[user.email]=user.name;
+          prev[user.email]=user.name;
           return prev;
         },commentedBy);
-        
         const subject=dict(`subject-cycle-sumary`,json,{title});
         const etitle=dict(`title-cycle-sumary`,json,{
             title,
             first3UsersNames:Object.values(commentedBy).join(', ')
         });
         const about=dict(`about-cycle-sumary`,json);
-
-        const comentEmailSaved = await prisma.comentCreatedDaily.create({
-          data:{
-            to:to.map(t=>t.email).join(','),
-            subject,
-            etitle,
-            about,
-            aboutEnd,
-            eurl,
-            urllabel,
-            unsubscribe
+        let comentEmailSaved = null;
+        if(to?.length){
+          comentEmailSaved = await prisma.comentCreatedDaily.create({
+            data:{
+              to:to.map(t=>t.email).join(','),
+              subject,
+              etitle,
+              about,
+              aboutEnd,
+              eurl,
+              urllabel,
+              unsubscribe,
+              pageIdentifier
+            }
+          });
+          if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
+            const cronTime = CRON_TIME;
+            const dt = sendAt(cronTime);
+            console.log(`The job would run at: ${dt.toISO()}`);
+            (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
+              cronTime, // cronTime
+              async function () {
+                await sendEmailWithComentCreatedSumary();
+              }, // onTick
+              null, // onComplete
+              true, // start
+              'America/Sao_Paulo' // timeZone
+            );
           }
-        });
-        if(!(global as any).sendEmailWithComentCreatedSumaryCronJob){
-          const cronTime = CRON_TIME;
-          const dt = sendAt(cronTime);
-          console.log(`The job would run at: ${dt.toISO()}`);
-          (global as any).sendEmailWithComentCreatedSumaryCronJob = new CronJob(
-            cronTime, // cronTime
-            async function () {
-              await sendEmailWithComentCreatedSumary();
-            }, // onTick
-            null, // onComplete
-            true, // start
-            'America/Sao_Paulo' // timeZone
-          );
         }
         return res.status(200).json({ data:{comentEmailSaved} });    
       }

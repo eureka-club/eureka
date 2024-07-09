@@ -545,4 +545,5 @@ model ComentCreatedDaily{
   aboutEnd              String
   unsubscribe           String
   createdAt             DateTime  @default(now()) @map(name: "created_at")
+  pageIdentifier        String  @default("")
 }

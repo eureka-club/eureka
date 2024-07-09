@@ -9,7 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  try{debugger;
+  try{
     const { id:id } = req.query;
     //&filter=(created_at=1719582249)
     const url=`https://talk.hyvor.com/api/console/v1/${process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID}/comments?page_identifier=${id}`;
@@ -17,9 +17,10 @@ export default async function handler(
       headers:{
           'X-API-KEY':process.env.HYVOR_TALK_CONSOLE_API_KEY!
       }
-  });debugger;
+  });
   if(fr.ok){
-      const data=await fr.json();
+      let data=await fr.json();
+      data = data.filter((d:any)=>d.page.identifier==id);
       return res.json({data});
   }
   // let r =  await fetch(`https://talk.hyvor.com/api/data/v1/comments?website_id=${HYVOR_WEBSITE_ID}&api_key=${apiKey}&page_identifier=${id}`)

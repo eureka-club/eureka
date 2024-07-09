@@ -1,24 +1,24 @@
 import { GetServerSideProps, NextPage } from 'next';
-import Head from "next/head";
+import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
 //import { Col, Row } from 'react-bootstrap';
 import { BsCircleFill } from 'react-icons/bs';
 import { RiAlertLine } from 'react-icons/ri';
 import { CgArrowLongRight } from 'react-icons/cg';
-import Link from 'next/link'
+import Link from 'next/link';
 
 // import Masonry from 'react-masonry-css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import styles from './manifest.module.css';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
-import { Grid, Container,Chip   } from '@mui/material';
+import { Grid, Container, Chip } from '@mui/material';
 
-interface Props{
-  session:Session
+interface Props {
+  session: Session;
 }
-const ManifestPage: NextPage<Props> = ({session}) => {
+const ManifestPage: NextPage<Props> = ({ session }) => {
   const { t } = useTranslation('manifest');
 
   const [show, setShow] = useState<Record<string, boolean>>({});
@@ -35,20 +35,23 @@ const ManifestPage: NextPage<Props> = ({session}) => {
     return show[key];
   };
 
-  return (<>
-   <Head>
+  return (
+    <>
+      <Head>
         <meta name="title" content={t('meta:manifestTitle')}></meta>
         <meta name="description" content={t('meta:manifestDescription')}></meta>
-    </Head>    
-    <SimpleLayout  title={t('browserTitleWelcome')}>
-        <section  className="mb-5">
-          <Grid container style={{ gap: "5px" }}>
-            <Grid style={{ paddingTop: "40px" }}  xs={12} md={4} className="pe-0 me-0 d-flex flex-column" >
+      </Head>
+      <SimpleLayout title={t('browserTitleWelcome')}>
+        <section className="mb-5">
+          <Grid container style={{ gap: '5px' }}>
+            <Grid style={{ paddingTop: '40px' }} xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
               <h1 className="text-primary" style={{ fontSize: '2.5em' }}>
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
               </h1>
-              <h2 style={{fontSize:'1rem'}}><em className="d-block text-gray">{t('eurekaPrinciple')}</em></h2>
+              <h2 style={{ fontSize: '1rem' }}>
+                <em className="d-block text-gray">{t('eurekaPrinciple')}</em>
+              </h2>
             </Grid>
             <Grid xs={12} md={8} className="ms-0 border-start border-info border-2">
               <p>
@@ -58,16 +61,16 @@ const ManifestPage: NextPage<Props> = ({session}) => {
           </Grid>
         </section>
         {/* <Masonry
-          breakpointCols={{
-            default: 3,
-            1199: 3,
-            768: 2,
-            576: 1,
-          }}
-          className="d-flex mt-5"
-        > */}
+breakpointCols={{
+default: 3,
+1199: 3,
+768: 2,
+576: 1,
+}}
+className="d-flex mt-5"
+> */}
         <Grid container>
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(1, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -95,7 +98,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(1, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -123,7 +126,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(1, 3) && (
               <section
                 style={{ height: '250px' }}
@@ -151,9 +154,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
         </Grid>
-        {/* row 2     */}
+        {/* row 2 */}
         <Grid container>
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(2, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -181,7 +184,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(2, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -209,7 +212,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(2, 3) && (
               <section
                 style={{ height: '250px' }}
@@ -237,9 +240,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
         </Grid>
-        {/* row 3     */}
+        {/* row 3 */}
         <Grid container>
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(3, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -267,7 +270,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(3, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -295,7 +298,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid xs={12} md={6} lg={4} padding={1}>
             {!isVisible(3, 3) && (
               <section
                 style={{ height: '250px' }}
@@ -324,7 +327,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
           </Grid>
         </Grid>
         <Grid container>
-          <Grid xs={12} md={6} className=" p-3 ms-0">
+          <Grid xs={12} md={6} padding={1}>
             {!isVisible(4, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -359,7 +362,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             )}
           </Grid>
 
-          <Grid xs={12} md={6} className=" p-3 ms-0">
+          <Grid xs={12} md={6} padding={1}>
             {!isVisible(4, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -368,9 +371,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 role="presentation"
               >
                 <aside className={`${styles.box} ${styles.bgRow4Box2}`} />
-                <h2 className="h3 text-start">
-                  {t('manifestRow4Box2Title')} 
-                </h2>
+                <h2 className="h3 text-start">{t('manifestRow4Box2Title')}</h2>
                 <h5 className="cursor-pointer fs-6">
                   {t('learnMore')} <CgArrowLongRight />
                 </h5>
@@ -397,7 +398,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
 
         <section className="mb-5">
           <Grid container>
-            <Grid xs={12} md={4} className="pe-2 me-0 d-flex align-items-center justify-content-center">
+            <Grid xs={12} md={4}>
               <RiAlertLine
                 className="text-yellow"
                 style={{ opacity: '.7', fontSize: '15em', margin: '-.3em -.5em 0 -.3em' }}
@@ -406,7 +407,7 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 {t('enforcement')}
               </h2>
             </Grid>
-            <Grid xs={12} md={8} className="ms-0 border-start border-info border-2">
+            <Grid xs={12} md={8}>
               <h2 className="h6 fw-bolder">{t('enforcementHeadLbl')}</h2>
               <ol>
                 <li>{t('manifestEnforcement1')}</li>
@@ -424,16 +425,17 @@ const ManifestPage: NextPage<Props> = ({session}) => {
             </Grid>
           </Grid>
         </section>
-       <section className="mb-5">
-         <Grid container>
-        <span>{t('AgreeText')}
-          <Link href="/policy" passHref>
-              <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
-           </Link>
-        </span>
-        </Grid>
-       </section> 
-    </SimpleLayout>
+        <section className="mb-5">
+          <Grid container alignContent={'center'}>
+            <span>
+              {t('AgreeText')}
+              <Link href="/policy" passHref>
+                <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
+              </Link>
+            </span>
+          </Grid>
+        </section>
+      </SimpleLayout>
     </>
   );
 };
@@ -444,7 +446,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       session,
     },
   };
-  
 };
 
 export default ManifestPage;

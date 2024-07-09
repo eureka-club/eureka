@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  try{debugger;
+  try{
     const { id:id } = req.query;
     // const filter = `(created_at>=${eightHoursAgo.unix()})`;
     //&filter=(created_at=1719582249)
