@@ -3,7 +3,6 @@ import {prisma} from '@/src/lib/prisma';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {NotificationSumary, NotificationSumarySpec} from '@/src/types/notification'
-import { findSumary } from './user';
 dayjs.extend(utc);
 /* export interface findProps {
   id: number;
@@ -115,6 +114,7 @@ export const updateToVieweds = async (
         },
       });
       if (!nou) throw new Error('Error updating the notifications');
+      return nou.count;
   } catch (e) {
     console.error(e);
     throw new Error('Error updating the notification');
