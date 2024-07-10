@@ -20,9 +20,11 @@ import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import Spinner from '../Spinner';
 import useUser from '@/src/useUser';
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Button } from '@mui/material';
 import useCycle from '@/src/useCycle';
 import { Session } from '@/src/types';
+import SignInForm from '../forms/SignInForm';
+import { useModalContext } from '@/src/hooks/useModal';
 
 interface Props {
   postId: number;
@@ -39,6 +41,7 @@ dayjs.extend(timezone);
 const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSaveForLater = false, session }) => {
   const { t } = useTranslation('createPostForm');
   const router = useRouter();
+  const {show} = useModalContext();
 
   //const { data: session, status } = useSession();
   const { data: cycle, isLoading:isLoadingCycle } = useCycle(+router?.query.id!
@@ -223,12 +226,23 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
               {/* <div className='mt-3'>
                 {(post?.contentText != null && post?.contentText.length != 0) && <UnclampText text={post?.contentText} isHTML />}
               </div> */}
+              <Box>
+                  {
+                  !session?.user
+                    ? <Button size='small' variant='contained' onClick={()=>{
+                      show(<SignInForm/>);
+                    }}>{t('common:comment')}</Button>
+                    : <></>
+                  }
+            </Box>
             </div>
             {/*<div className='container d-none d-lg-block'>
             <CommentsList en
             tity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
           </div>*/}
+          
           </Col>
+            
           <HyvorComments 
             entity='post' 
             id={`${post?.id}`} 

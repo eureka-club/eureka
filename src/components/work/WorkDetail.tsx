@@ -8,6 +8,7 @@ import { PostDetail } from '@/src/types/post';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
+
 //import globalModalsAtom from '@/src/atoms/globalModals';
 // import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
@@ -24,7 +25,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -34,6 +35,9 @@ import { MosaicsGrid } from '../MosaicsGrid';
 import { TabPanelSwipeableViews } from '../common/TabPanelSwipeableViews';
 // import { useIsFetching } from 'react-query';
 import { WEBAPP_URL } from '@/src/constants';
+import { useSession } from 'next-auth/react';
+import SignInForm from '../forms/SignInForm';
+import { useModalContext } from '@/src/hooks/useModal';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -128,6 +132,8 @@ const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }) => {
   const router = useRouter();
+  const {show} = useModalContext();
+
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t,lang } = useTranslation('workDetail');
@@ -397,16 +403,36 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           </a>
                         )}
                       </Box>
-                      <Box display={{xs:'none',md:'inherit'}}>
+                      
+                      <Stack display={{xs:'none',md:'inherit'}}>
                         <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                        
-                      </Box>
+                        <Box>
+                          {
+                          !session?.user
+                            ? <Button size='small' variant='contained' onClick={()=>{
+                              show(<SignInForm/>);
+                            }}>{t('common:comment')}</Button>
+                            : <></>
+                          }
+                        </Box>
+                      </Stack>
                     </Stack>
                   </Stack>
-                  <Box display={{xs:'inherit',md:'none'}}>
+                  
+                  <Stack display={{xs:'inherit',md:'none'}}>
                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                  </Box>
-                  <HyvorComments 
+                    <Box>
+                          {
+                          !session?.user
+                            ? <Button size='small' variant='contained' onClick={()=>{
+                              show(<SignInForm/>);
+                            }}>{t('common:comment')}</Button>
+                            : <></>
+                          }
+                    </Box>
+                  </Stack>
+                  
+                 <HyvorComments 
                     entity="work" 
                     id={`${work.id}`} 
                     session={session} 
