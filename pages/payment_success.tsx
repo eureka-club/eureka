@@ -36,10 +36,9 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
   return (
     <SimpleLayout title="Payment Success" showNavBar={false} showFooter={false}>
       <>
-        <Box >
-          <Grid container className="d-flex justify-content-between">
-            <Grid className='col-12'>
-              <Grid container className='p-4'>
+        <Box padding={3}>
+         
+              <Grid container >
                 <Link href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
@@ -53,28 +52,27 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
                   </a>
                 </Link>
               </Grid>
-              <Box className='d-flex flex-column flex-xl-row'
+              <Box padding={3}
                 sx={{
                   backgroundImage: { sm:"url('/registro_desktop_about_bg.webp')"},
                   backgroundRepeat: "no-repeat",
                   backgroundSize: {sm:`100% auto`},
-                  height: { sm: '500px', md: '750px' },//lg:'500px'
+                  height: { sm: '500px', md: '450px' },//lg:'500px'
                 }}
               >
-                <Grid className=' d-flex w-100 justify-content-center mt-5'>
-                  <Box className=' d-flex flex-column'>
-                    <Grid container className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('successText')}</b></h1></Grid>
-                    <Grid container className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('successExtraText')}</b></h1></Grid>
-                    <Grid container className='w-100  p-2'>
-                      <Button className={`mt-4 btn btn-eureka  w-100`} onClick={() => router.push(`/cycle/${cycleId}`)}>
-                        {t('successButtomText')}
+                <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
+                  <Box padding={3}>
+                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'}><h1 className='text-primary text-center  mb-5'><b>{t('successText')}</b></h1></Grid>
+                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'} ><h1 className='text-primary text-center   mb-5'><b>{t('successExtraText')}</b></h1></Grid>
+                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
+                      <Button variant="contained" size="large"  onClick={() => router.push(`/cycle/${cycleId}`)}>
+                        <b>{t('successButtomText')}</b>
                       </Button>
                     </Grid>
                   </Box>
                 </Grid>
               </Box>
-            </Grid>
-            </Grid>
+            
          
         </Box>
         <Footer />

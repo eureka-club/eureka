@@ -44,7 +44,7 @@ const ManifestPage: NextPage<Props> = ({ session }) => {
       <SimpleLayout title={t('browserTitleWelcome')}>
         <section className="mb-5">
           <Grid container style={{ gap: '5px' }}>
-            <Grid style={{ paddingTop: '40px' }} xs={12} md={4} className="pe-0 me-0 d-flex flex-column">
+            <Grid style={{ paddingTop: '40px' }} xs={12} md={4} >
               <h1 className="text-primary" style={{ fontSize: '2.5em' }}>
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
@@ -53,7 +53,7 @@ const ManifestPage: NextPage<Props> = ({ session }) => {
                 <em className="d-block text-gray">{t('eurekaPrinciple')}</em>
               </h2>
             </Grid>
-            <Grid xs={12} md={8} className="ms-0 border-start border-info border-2">
+            <Grid xs={12} md={8} >
               <p>
                 <span className="text-secondary fw-bold">{t('welcomeEureka')}</span> {t('manifestDesc')}
               </p>

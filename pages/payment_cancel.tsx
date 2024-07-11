@@ -34,8 +34,8 @@ const StripePaymentCancelPage: NextPage = () => {
               </a>
             </Link>
           </Grid>
-          <Box
-            className="d-flex flex-column flex-xl-row"
+          <Box padding={3}
+            
             sx={{
               backgroundImage: { sm: "url('/registro_desktop_about_bg.webp')" },
               backgroundRepeat: 'no-repeat',
@@ -45,7 +45,7 @@ const StripePaymentCancelPage: NextPage = () => {
           >
             <Grid container direction="row" justifyContent="center" alignItems="center" paddingTop={5}>
               <Stack direction="column" justifyContent="center" alignItems="center" alignContent={'center'}>
-                <Box className=" d-flex flex-column">
+                <Box >
                   <Grid>
                     <h1 className="text-primary text-center mb-5">
                       <b>{t('cancelText')}</b>
