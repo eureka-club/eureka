@@ -91,8 +91,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
     <SimpleLayout title="Welcome" showNavBar={false} showFooter={false}>
       <>
         <Box >
-          <Grid container className="d-flex justify-content-between">
-            <Grid className='col-12'>
+         
               <Grid container className='p-4'>
                 <Link href="/" replace >
                   <a className="d-flex align-items-center">
@@ -107,28 +106,27 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
                   </a>
                 </Link>
               </Grid>
-              <Box className='d-flex flex-column justify-content-center flex-xl-row'
+              <Box 
                 sx={{
                   backgroundImage: { sm:"url('/registro_desktop_about_bg.webp')"},
                   backgroundRepeat: "no-repeat",
                   backgroundSize: {sm:`100% auto`},
-                  height: { sm: '500px', md: '750px' },//lg:'500px'
+                  height: { sm: '500px', md: '450px' },//lg:'500px'
                 }}
               >
-                <Grid className=' d-flex col-12 col-xl-6 '>
-                  <Box className=' d-flex flex-column mt-5 '>
-                    <Grid container className='p-3 '><h1 className='text-primary text-center  mb-5'><b>{t('JoinToPrivateCycleText')}</b></h1></Grid>
-                    <Grid container className='p-3 '><h1 className='text-primary text-center   mb-5'><b>{t('CompleteRegistrationText')}</b></h1></Grid>
-                    <Grid container className='w-100  p-2'>
-                      {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
-                        {t('ClickToPay')}
+                <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
+                  <Box padding={6}>
+                    <Grid container  justifyContent="center" alignItems="center" alignContent={'center'}><h1 className='text-primary text-center  mb-5'><b>{t('JoinToPrivateCycleText')}</b></h1></Grid>
+                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'}><h1 className='text-primary text-center   mb-5'><b>{t('CompleteRegistrationText')}</b></h1></Grid>
+                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
+                      {!loading && <Button onClick={handleJoinCycleClick} variant="contained" size="large" >
+                       <b> {t('ClickToPay')}</b>
                       </Button>}{loading && <LinearProgress className='mb-4' />}
                     </Grid>
                   </Box>
                 </Grid>
               </Box>
-            </Grid>
-            </Grid>
+            
          
         </Box>
         <Footer />

@@ -70,7 +70,7 @@ const StripePaymentErrorPage: NextPage = () => {
                         <p className="text-left  mb-5">
                           {t('errorExtraText3')}
                           <b>
-                            <u>hola@eureka.club.</u>
+                             <Link  href="mailto:hola@eureka.club">hola@eureka.club</Link>
                           </b>
                         </p>
                       </Grid>

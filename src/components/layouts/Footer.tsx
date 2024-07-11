@@ -23,7 +23,7 @@ const Footer: FunctionComponent = () => {
             <Link href="/about"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Eureka')}</a></Link>
             <Link href="/aboutUs"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('About Us')}</a></Link>
             <Link href="/policy"><a className='text-secondary text-decoration-underline me-xl-5 mb-1 mb-xl-none' onClick={()=> window.scrollTo(0, 0)}>{t('policyText')}</a></Link>
-            <p>{t('common:contact')} <a className='text-decoration-underline text-secondary me-xl-3' href="mailto:hola@eureka.club">hola@eureka.club</a></p>
+            <p>{t('common:contact')}<Link href="mailto:hola@eureka.club"><a className='text-decoration-underline text-secondary me-xl-3' >hola@eureka.club</a></Link></p>
         </div>
 
       </section>
