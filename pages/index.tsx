@@ -12,12 +12,11 @@ import {getInterestedCycles} from '@/src/useInterestedCycles';
 import { featuredWorksWhere, getFeaturedWorks } from '@/src/useFeaturedWorks';
 import { getHyvorComments } from '@/src/useHyvorComments';
 import { getFeaturedUsers } from '@/src/useFeaturedUsers';
-import HomeSingIn from '@/src/components/HomeSingIn';
+import HomeNotSession from '@/src/components/HomeNotSession';
 import { UserSumary } from '@/src/types/UserSumary';
 import { getUserSumary } from '@/src/useUserSumary';
 import React from 'react';
 import { getNotifications } from '@/src/useNotifications';
-import { Feed } from '@/src/components/feed';
 interface Props{
   session: Session;
   language:string;
@@ -54,8 +53,7 @@ const IndexPage: NextPage<Props> = ({session}) => {
          */}
       {/*{session && session.user &&  */}
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
-          
-          <HomeSingIn/>
+         <HomeNotSession/>
       </SimpleLayout>
     </>
   );

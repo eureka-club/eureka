@@ -6,25 +6,18 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Badge, Box, BoxProps, Button, ButtonProps, Container, Grid, Paper, Stack } from '@mui/material';
 import UserAvatar from '../../common/UserAvatar';
 import { useOnCommentCreated } from '../../common/useOnCycleCommentCreated';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
-import { Height } from '@mui/icons-material';
-import { useState } from 'react';
 import Link from 'next/link';
-// import Image from 'next/image';
-// import Masonry from '@mui/lab/Masonry';
-
+import { useModalContext } from '@/src/hooks/useModal';
+import SignInForm from '../../forms/SignInForm';
 interface ExpandMoreProps extends ButtonProps {
   expand: boolean;
 }
@@ -124,10 +117,13 @@ export default function MosaicItem(props:Props) {
   }=props;
 
   const [expanded, setExpanded] = React.useState(false);
+  const{show}=useModalContext();
   const{dispatch}=useOnCommentCreated(cycleId);
   const{data:session}=useSession();
   const handleExpandClick = () => {
-    setExpanded(!expanded);
+    if(session?.user)
+      setExpanded(!expanded);
+    else show(<SignInForm/>)
   };
   const img = `https://${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${image}`; 
 

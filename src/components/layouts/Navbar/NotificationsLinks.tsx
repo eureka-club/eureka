@@ -54,24 +54,19 @@ export const NotificationsLinks = () => {
   })
 
   
-
   return <MenuAction key='NotificationsLinks' label={
     <Stack justifyContent={'center'} alignItems={'center'}>
-      <Button onClick={()=>mutate()}>
+      <a onClick={()=>mutate()}>
         <Badge badgeContent={news} color="secondary">
           <Avatar sx={{width:32,height:32,bgcolor:'var(--color-primary)'}}>
             <IoNotificationsCircleOutline />
           </Avatar>
         </Badge>
 
-      </Button>
-      {/* <Typography variant="caption" gutterBottom>
-          {t('Notifications')}
-        </Typography> */}
+      </a>
     </Stack>
   }
   disabled={!notificationsData?.notifications.length}
-  // title={t('Notifications')}
   >
     {
       notificationsData?.notifications.length
