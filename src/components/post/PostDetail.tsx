@@ -13,7 +13,7 @@ import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
-import Avatar from '../common/UserAvatar';
+import UserAvatar from '../common/UserAvatar';
 // import { useCycleContext } from '../../useCycleContext';
 import usePost from '@/src/usePostDetail'
 import HyvorComments from '@/src/components/common/HyvorComments';
@@ -77,7 +77,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
         <div className={classNames('d-flex d-lg-none flex-row justify-content-between mt-3', styles.postInfo)}>
           <div>
             <Link href={`/mediatheque/${post?.creator.id}`} passHref>
-              <Avatar width={28} height={28} userId={post?.creator.id} showFullName />
+              <UserAvatar userId={post?.creator.id!} name={post?.creator.name!} />
             </Link>
           </div>
           <div>
@@ -159,7 +159,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                   />
                   {post?.creator.name}
                 </a> */}
-                    <Avatar width={28} height={28} userId={post?.creator.id} showFullName />
+                    <UserAvatar userId={post?.creator.id!} name={post?.creator.name!} size='small' />
                   </Link>
                 </div>
                 <div>

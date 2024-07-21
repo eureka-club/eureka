@@ -14,7 +14,7 @@ import { DATE_FORMAT_SHORT, LOCALES } from '../../../constants';
 import LocalImageComponent from '../../LocalImage';
 import styles from './MosaicItem.module.css';
 import useCycleSumary from '@/src/useCycleSumary'
-import Avatar from '../../common/UserAvatar';
+import UserAvatar from '../../common/UserAvatar';
 import { CycleSumary } from '@/src/types/cycle';
 import CycleSocialInteraction from '../../common/CycleSocialInteraction';
 import { JoinLeaveCycleBtn } from './JoinLeaveCycleBtn';
@@ -122,7 +122,7 @@ const MosaicItem: FC<Props> = ({
       <LocalImageComponent className='cycle-img-card'  filePath={cycle?.localImages[0].storedFile} title={cycle?.title} alt={cycle?.title} />
       {detailed && (cycle && cycle.creator.id && cycle.startDate && cycle.endDate ) && (<div className={`d-flex flex-row justify-content-between  ${styles.date}`}>
                         <div  className={` d-flex flex-row aling-items-center fs-6`}>
-                         <Avatar className='' width={26} height={26} userId={cycle.creator.id} showName={false} size="xs" />
+                         <UserAvatar userId={cycle.creator.id} name={cycle.creator.name!} size="small" />
                          <div className='d-flex align-items-center'>
                             {dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)}
                           <span className='' style={{marginLeft:'1.5px',marginRight:'1.5px'}}>-</span>

@@ -17,26 +17,14 @@ import { UserSumary } from '@/src/types/UserSumary';
 import { getUserSumary } from '@/src/useUserSumary';
 import React from 'react';
 import { getNotifications } from '@/src/useNotifications';
-
+import { Feed } from '@/src/components/feed';
 interface Props{
   session: Session;
   language:string;
 }
-// interface PropsGeneric<T>{
-//   data:T[],
-//   render:(value:T)=>JSX.Element
-// }
 
 const IndexPage: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('common');
-
-  // const GenericList = <T,> (props: PropsGeneric<T>)=>{
-  //   return <ul>{
-  //     props.data.map((d)=><li>
-  //       {props.render(d)}
-  //     </li>)
-  //   }</ul>;
-  // }
 
   return (
     <>
@@ -62,22 +50,11 @@ const IndexPage: NextPage<Props> = ({session}) => {
        <Suspense fallback={<Spinner animation="grow" />}>
             <HomeNotSingIn/>
         </Suspense>
-
       </SimpleLayout>
          */}
       {/*{session && session.user &&  */}
       <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
-         {/* <GenericList data={[1,2,3,4]}
-           render={
-            (d)=><span>Number: {d}</span>
-          }
-         />
-
-          <GenericList data={['a','b','c']}
-           render={
-            (d)=><strong className='text-primary'>Character: {d}</strong>
-          }
-         /> */}
+          
           <HomeSingIn/>
       </SimpleLayout>
     </>

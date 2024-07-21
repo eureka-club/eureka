@@ -8,6 +8,7 @@ import FeaturedUsers from './FeaturedUsers';
 import { Grid, Typography } from '@mui/material';
 import useTopics from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
+import { Feed } from '../feed';
 interface Props {
 }
 const HomeSingIn: FunctionComponent<Props> = ({}) => {
@@ -25,10 +26,11 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
           <Prompt redirect={true} showTitle={true} />
         </div>
       </section>
+
       <Grid container spacing={1} paddingTop={'3rem'}>
         <Grid item xs={12} md={3}>
           <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
-          {/* <h2 className="text-secondary fw-bold">{t('Trending topics')}</h2> */}
+          
           <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
           <section className="mt-4">
             <FeaturedUsers />
@@ -36,6 +38,7 @@ const HomeSingIn: FunctionComponent<Props> = ({}) => {
         </Grid>
         <Grid item xs={12} md={9}>
           <section className="ms-0 ms-lg-5">
+            <Feed/>
             <FeaturedWorks />
             <FeaturedEurekas />
             <FeaturedCycles />

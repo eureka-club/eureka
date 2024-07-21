@@ -22,7 +22,7 @@ const StripePaymentErrorPage: NextPage = () => {
             <Col className='col-12'>
               <Row className='p-4'>
                 <Link href="/" replace >
-                  <a className="d-flex align-items-center">
+                  <a className="d-flex align-items-center"> 
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
                       <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />

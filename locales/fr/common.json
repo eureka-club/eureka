@@ -177,6 +177,8 @@
   "aboutBox2": "Nous accompagnons votre réflexion: ici vous pouvez résumer une œuvre qui vous a marqué en créant une image à l'aide de l'intelligence artificielle.",
   "aboutBox3": "Eureka s'adresse aux personnes qui souhaitent découvrir, apprendre et imaginer un monde différent.",
   "aboutBox4": "Nous travaillons avec des organisations de la société civile qui cherchent à faire en sorte que leur activisme touche le plus de personnes possible. Ça vous intéresse? Écrivez-nous!.",
-  "readOrWatchedLbl":"Marquer comme vu ou lu"
+  "readOrWatchedLbl":"Marquer comme vu ou lu",
+  "unknown":"Indéterminé"
+
 
 }
