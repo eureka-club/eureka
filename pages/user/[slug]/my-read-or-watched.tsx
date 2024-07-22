@@ -3,7 +3,7 @@ import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
 import Head from 'next/head';
 import {
   Alert,
-  Button,
+ 
   ButtonGroup,
   Tabs,
   Tab,
@@ -28,6 +28,7 @@ import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner';
+import {Grid,Button} from '@mui/material';
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -209,21 +210,22 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             <Spinner  />
           ) : */}
           <>
-            <Row className='mt-sm-0 mb-4 d-flex flex-column flex-lg-row'>
-              <Col className='d-flex flex-row'>
+            <Grid container direction={'row'}  >
+              <Grid item >
                 <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${user.userName}`}</h1>
+               
+              </Grid>
+              <Grid item xs={4}  >
                 {renderAvatar()}
-              </Col>
-              <Col className='d-flex flex-row justify-content-center justify-content-lg-end'>
-                <Button type='button' className='d-none d-lg-block btn-eureka btn btn-primary mt-2 mt-lg-0 px-5' style={{ width: '50%' }} onClick={() => router.push('/work/create')} size="sm">
+                </Grid>
+              <Grid item  padding={2} >
+                <Button variant="contained" onClick={() => router.push('/work/create')} size="large">
                   <span>{t('AddWork')}</span>
                                   </Button>
-                <Button type='button' className='text-center d-block d-lg-none btn-eureka btn btn-primary mt-3' style={{ width: '100%' }} onClick={() => router.push('/work/create')} size="sm">
-                  <span className='text-center'>{t('AddWork')}</span>
-                </Button>
-              </Col>
+              
+              </Grid>
 
-            </Row>
+            </Grid>
 
             <style jsx global>
               {`

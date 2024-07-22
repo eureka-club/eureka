@@ -90,9 +90,9 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
   return (
     <SimpleLayout title="Welcome" showNavBar={false} showFooter={false}>
       <>
-        <Box >
+        <Box padding={3}>
          
-              <Grid container className='p-4'>
+              <Grid container >
                 <Link href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">

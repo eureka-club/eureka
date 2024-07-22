@@ -62,6 +62,8 @@
   "AIAbout2":"Make sure the 'prompt' is consistent and makes sense. Eg: don't ask for snow-capped mountains and a tropical beach in the same image.",
   "AIAbout3":"Use clear language that is easy for the AI to understand. Avoid using ambiguous words.",
   "AIAbout4":"Be creative and explore different ideas.",
-  "AIAbout5":"Try different wordings and ideas to see what works best."
+  "AIAbout5":"Try different wordings and ideas to see what works best.",
+  "notSession":"Bad Request"
+  
 
 }

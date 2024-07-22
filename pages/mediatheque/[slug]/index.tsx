@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useQueryClient, useMutation, dehydrate, QueryClient } from 'react-query';
 import { useState, useEffect, useCallback, MouseEvent, useRef, ReactElement } from 'react';
-import {  Card, Row, Col, Button } from 'react-bootstrap';
+import {  Card, Row, Col } from 'react-bootstrap';
 import { User } from '@prisma/client';
 import styles from './index.module.css';
 import useUser, { getUser } from '@/src/useUser';
@@ -24,7 +24,7 @@ import dayjs from 'dayjs';
 import { PostDetail } from '@/src/types/post';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import useFilterMediatheque from '@/src/components/useFilterMediatheque';
-import { Stack } from '@mui/material';
+import { Stack,Button,Grid} from '@mui/material';
 import RenderAvatar from './components/RenderAvatar';
 import RenderCountry from './components/RenderCountry';
 import { UserDetail } from '@/src/types/user';
@@ -228,8 +228,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
           <section>
             <Card className="userHeader">
               <Card.Body>
-                <Row className="d-flex flex-column flex-md-row">
-                  <Col className="d-flex flex-column flex-sm-wrap align-items-start">
+                <Grid container paddingTop={3} >
+                  <Grid item >
                     <div className="d-flex flex-nowrap">
                       <RenderAvatar/>
                       <div className="ms-3 d-sm-block d-md-none">
@@ -238,8 +238,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       </div>
                     </div>
                     <TagsInput className="d-sm-flex d-md-none d-flex flex-row" tags={user.tags || ''} readOnly label="" />
-                  </Col>
-                  <Col className="col col-sm-12 col-md-8">
+                  </Grid>
+                  <Grid item xs={12}  md={8}>
                     <div className="d-none d-md-block">
                       <h2>{user.name}</h2>
                       <RenderCountry userId={user.id}/>
@@ -248,11 +248,11 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <p className={styles.description}>{user.aboutMe}</p>
                     </div>
                     <TagsInput className="d-none d-md-flex flex-row" tags={user.tags || ''} readOnly label="" />
-                  </Col>
-                  <Col className="mt-2 d-grid gap-2 d-md-flex align-items-start  justify-content-md-end d-lg-block">
+                  </Grid>
+                  <Grid item padding={2}>
                     {session && session.user!.id == user.id && (
-                      <Button className="btn-eureka" onClick={() => router.push('/profile')}>
-                        {t('editProfile')}
+                      <Button  variant="contained" className="btn-eureka" onClick={() => router.push('/profile')}>
+                       <b>{t('editProfile')}</b> 
                       </Button>
                     )}
                     {session && session.user!.id !== user.id && !isFollowedByMe && (
@@ -270,7 +270,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                     {session && session.user!.id !== user.id && isFollowedByMe && (
                       <Button
                         data-cy="follow-btn"
-                        variant="button border-primary text-primary w-100"
+                        variant="contained"
                         onClick={followHandler}
                         disabled={isPending()}
                         style={{ width: '10em' }}
@@ -279,8 +279,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         {isPending() && <Spinner/>}
                       </Button>
                     )}
-                  </Col>
-                </Row>
+                  </Grid>
+                </Grid>
               </Card.Body>
             </Card>
             {isAccessAllowed(session, user, isLoadingUser, isFollowedByMe) && (
@@ -291,7 +291,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                 </Stack>
                   {/* <FilterEngine fictionOrNotFilter={false} geographyFilter={false} /> */}
                   <section className="d-flex flex-column flex-lg-row">
-                    <Col xs={12} lg={2} className="me-2">
+                    <Grid container direction={'row'}>
+                    <Grid item xs={12} lg={2} >
                       <h2 onClick={(e) => goToReadOrWatched(e, null, null)} className="text-secondary text-center  cursor-pointer" style={{ textDecoration: "underline" }}>{`${t('readOrWatchedWorks')}`}</h2>
                       <h2 className="text-secondary text-center fs-5">{`(${getReadOrWatchedTotal()})`}</h2>
                       <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
@@ -306,9 +307,9 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                         </h2>
                         <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear(user)})`}</h2>
                       </section>
-                    </Col>
-                    <Col xs={12} lg={10} className="mt-5 mt-lg-0">
-                      <Stack gap={3} className="ms-0 ms-lg-5">
+                    </Grid>
+                    <Grid item xs={12} lg={10} >
+                      <Stack rowGap={6} className="ms-0 ms-lg-5">
                         {
                           filtersChecked.post
                              ? <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
@@ -326,7 +327,8 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                           showMovies={filtersChecked.movie} 
                           user={user} goTo={goTo} t={t} id={id} />
                       </Stack>
-                    </Col>
+                    </Grid>
+                    </Grid>
                   </section>
               </Stack>
             )}

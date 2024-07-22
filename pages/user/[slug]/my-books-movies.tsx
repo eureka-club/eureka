@@ -11,6 +11,7 @@ import { UserDetail } from '@/src/types/user';
 import {QueryClient,dehydrate} from 'react-query'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner';
+import { Grid } from '@mui/material';
 interface Props{
   id:number
 }
@@ -46,13 +47,15 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
         : session ? (
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myBooksMovies')}</h1>
-            <Row>
+            <Grid container spacing={4} direction="row" justifyContent="center" alignItems="center"
+                      alignContent={'center'}>
               {user?.ratingWorks.filter(rw=>rw.workId).reverse().map(c=>
-                <Col key={c.workId} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
+                <Grid item justifyContent="center" alignItems="center"
+                alignContent={'center'} key={c.workId} xs={12} sm={6} md={6} lg={3}>
                   <WMI workId={c.workId!}  size='md' />
-                </Col>
+                </Grid>
               )}
-            </Row>
+            </Grid>
             </>
         ) : ''
       }

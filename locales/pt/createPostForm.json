@@ -62,5 +62,6 @@
   "AIAbout2":"Certifique-se de que o 'prompt' seja coerente e faça sentido. Ex: não peça montanhas cobertas de neve e uma praia tropical na mesma imagem.",
   "AIAbout3":"Use uma linguagem clara que seja fácil para a IA entender. Evite usar palavras ambíguas.",
   "AIAbout4":"Seja criativa e explore diferentes ideias.",
-  "AIAbout5":"Experimente diferentes palavras e ideias para ver o que funciona melhor."
+  "AIAbout5":"Experimente diferentes palavras e ideias para ver o que funciona melhor.",
+  "notSession":"Pedido ruim"
 }

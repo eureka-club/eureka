@@ -10,6 +10,7 @@ import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { getSession } from 'next-auth/react';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import { Grid} from '@mui/material';
 
 interface Props{
 }
@@ -35,19 +36,20 @@ const InterestedCycles: NextPage<Props> = () => {
         <meta name="twitter:url" content={`${process.env.NEXT_PUBLIC_WEBAPP_URL}`} ></meta>  
     </Head>
     <SimpleLayout>
+    <ButtonsTopActions/>
     <article className='mt-4' data-cy="my-cycles">
-
-      <ButtonsTopActions/>
 
         <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('Featured Eurekas')}</h1>
-            <Row>
+            <Grid  container spacing={4} direction="row" justifyContent="center" alignItems="center"
+                      alignContent={'center'}>
               {dataCycles?.posts.map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
+                <Grid item justifyContent="center" alignItems="center"
+                alignContent={'center'} key={c.id}>
                   <PMI postId={c.id} />
-                </Col>
+                </Grid>
               )}
-            </Row>
+            </Grid>
             </>
 
           </article>

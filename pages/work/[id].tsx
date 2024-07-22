@@ -3,7 +3,7 @@ import Head from "next/head";
 import { getSession } from 'next-auth/react';
 import { MouseEvent, ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import {  Alert } from 'react-bootstrap';
+//import {  Alert } from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { WEBAPP_URL } from '@/src/constants';
@@ -15,7 +15,7 @@ import {getPosts} from '@/src/usePosts'
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner'
-import { Button } from '@mui/material';
+import { Button, Alert } from '@mui/material';
 interface Props{
   workId: number;
   metas:Record<string,any>;
@@ -97,7 +97,7 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
 
   if (isError)
     return (
-      <Alert variant="warning">
+      <Alert variant="filled" severity="warning">
         <>{error}</>
       </Alert>
     );
@@ -105,7 +105,7 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
   if (!isLoading  && !work)
     return (
       <SimpleLayout title={t('notFound')}>
-        <Alert variant="danger">{t('notFound')}</Alert>
+        <Alert variant="filled" severity="error">{t('notFound')}</Alert>
       </SimpleLayout>
     );
   

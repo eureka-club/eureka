@@ -62,5 +62,6 @@
   "AIAbout2":"Assurez-vous que le 'prompt' soit cohérent et logique. Ex: ne demandez pas des montagnes enneigées et une plage tropicale dans la même image.",
   "AIAbout3":"Utilisez un langage clair que l’IA puisse comprendre facilement. Évitez d'utiliser des mots ambigus.",
   "AIAbout4":"Soyez créatif et explorez différentes idées.",
-  "AIAbout5":"Essayez différentes formulations et idées pour voir ce qui fonctionne le mieux."
+  "AIAbout5":"Essayez différentes formulations et idées pour voir ce qui fonctionne le mieux.",
+  "notSession":"Mauvaise demande"
 }

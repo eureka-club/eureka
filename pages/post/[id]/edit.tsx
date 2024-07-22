@@ -3,11 +3,12 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { Alert } from 'react-bootstrap';
+//import { Alert } from 'react-bootstrap';
 import EditPostForm from '@/components/forms/EditPostForm'
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner'
+import { Alert } from '@mui/material';
 
 interface Props {
   session?: Session;
@@ -28,7 +29,7 @@ const EditPostPage: NextPage<Props> = ({session}) => {
 
   return <SimpleLayout title={t('title')}>
     <ButtonsTopActions/>
-    {!session ? <Alert>{t('notSession')}</Alert> : <></> }
+    {!session ? <Alert variant="filled" severity="warning">{t('notSession')}</Alert> : <></> }
     {router && router.query.id 
       ? <>
         <EditPostForm id={+router.query.id.toString()} noModal/>

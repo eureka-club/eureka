@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import {  Alert } from 'react-bootstrap';
+import {  Alert } from '@mui/material';
 import EditWorkForm from '@/components/forms/EditWorkForm'
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
@@ -35,7 +35,7 @@ const EditWorkPage: NextPage<Props> = ({ session, notFound }) => {
 const render = ()=>{
   
   if (!session) 
-    return <Alert>{t('notSession')}</Alert>
+    return <Alert variant="filled" severity="warning">{t('notSession')}</Alert>
   else if(router && router.query.id && !notFound){
     return <>
       <EditWorkForm/>
