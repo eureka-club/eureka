@@ -643,4 +643,5 @@
 // };
 
 // export default CreatePostForm;
-export default ()=><></>
+export default function CreatePostForm(){return <></>;}
+

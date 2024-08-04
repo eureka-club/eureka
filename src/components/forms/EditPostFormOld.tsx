@@ -629,4 +629,4 @@
 // };
 
 // export default EditPostForm;
-export default ()=><></>
+export default function EditPostForm(){return <></>;}

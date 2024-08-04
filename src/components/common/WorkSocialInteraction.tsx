@@ -435,4 +435,4 @@
 //   );
 // };
 // export default WorkSocialInteraction;
-export default ()=><></>
+export default function WorkSocialInteraction(){return <></>;}
