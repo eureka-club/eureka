@@ -15,29 +15,28 @@ const GenericMosaicItem:FC<GenericMosaicItemProps> = ({
       cacheKey,
       customMosaicStyle,
       size,
-      userMosaicDetailed
+      userMosaicDetailed,
+      ...others
     }) => {
     if (isCycleMosaicItem(item)) {
       return (
         // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleDetail }}>
-          <MosaicItemCycle detailed cacheKey={cacheKey} cycle={item} cycleId={item.id} showSocialInteraction={showSocialInteraction} showButtonLabels={false} size={size}/>
+          <MosaicItemCycle  cycleId={item.id} size={size} {...others} />
         // </CycleContext.Provider>
       );
     }
     else if (isPostMosaicItem(item) || (item && item.type == 'post')) {
       const it = item as PostSumary;
-      return <MosaicItemPost cacheKey={cacheKey} key={`post-${it.id}`} post={it} postId={it.id} size={size} />;
+      return <MosaicItemPost  key={`post-${it.id}`}  postId={it.id} size={size} {...others} />;
     }
     else if (isWorkMosaicItem(item)) {
       const item_ = item as WorkSumary;
       return (
         <MosaicItemWork
-          showSocialInteraction={showSocialInteraction}
-          showButtonLabels={false}
-          work={item_}
           workId={item_.id}
           style={customMosaicStyle}
           size={size}
+          {...others}
         />
       );
     }

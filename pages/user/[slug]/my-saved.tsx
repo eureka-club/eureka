@@ -33,18 +33,18 @@ const MySaved: NextPage<Props> = ({id}) => {
   // }
   const renderPosts = ()=>{
     return <Row className='mt-5'>
-    {sfl.favPosts.map(i=>
-      <Col key={i.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-        <PMI postId={i.id} size='md'/>
+    {sfl.favPosts.map(p=>
+      <Col key={p.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
+        <PMI postId={p.id} />
       </Col>  
     )}
     </Row>
   }
   const renderCycles = ()=>{
     return <Row className='mt-5'>
-    {sfl.favCycles.map(i=>
-      <Col key={i.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-        <CMI cycleId={i.id} size='md'/>
+    {sfl.favCycles.map(c=>
+      <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
+        <CMI cycleId={c.id} />
       </Col>
     )}
     </Row>
@@ -53,7 +53,7 @@ const MySaved: NextPage<Props> = ({id}) => {
     return <Row className='mt-5'>
     {sfl.favWorks.map(c=>
         <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-          <WMI notLangRestrict workId={c.id }  size='md'/>
+          <WMI workId={c.id } size='medium'/>
         </Col>
     )}
     </Row>

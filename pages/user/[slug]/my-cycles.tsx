@@ -50,7 +50,7 @@ const MyCycles: NextPage<Props> = ({id}) => {
           
           <MosaicsGrid isLoading={isLoading}>
           {
-            dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='md' />)!
+            dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='medium' />)!
           }
           </MosaicsGrid>
             </>

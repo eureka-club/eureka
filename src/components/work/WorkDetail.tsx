@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { useRouter } from 'next/router';
-import { PostDetail } from '@/src/types/post';
+import { PostDetail, PostSumary } from '@/src/types/post';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
@@ -16,7 +16,6 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
 import useCycles from '@/src/useCycles';
-import usePosts, { getPosts } from '@/src/usePosts';
 import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/src/components/cycle/MosaicItem';
 import MosaicItemPost from '@/src/components/post/MosaicItem';
@@ -35,9 +34,9 @@ import { MosaicsGrid } from '../MosaicsGrid';
 import { TabPanelSwipeableViews } from '../common/TabPanelSwipeableViews';
 // import { useIsFetching } from 'react-query';
 import { WEBAPP_URL } from '@/src/constants';
-import { useSession } from 'next-auth/react';
 import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
+import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -48,7 +47,7 @@ interface Props {
 }
 interface TabPostsProps{
   workId:any;
-  posts:{id:any}[];
+  posts:PostSumary[];
   cacheKey:string[];
   isLoading:boolean;
 }
@@ -61,12 +60,9 @@ const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsPr
       cacheKey={cacheKey}
     ></WorkDetailPost>
     <MosaicsGrid isLoading={isLoading}>
-      {posts.map(p=><MosaicItemPost key={p.id}
-            cacheKey={['POST', `${p.id}`]}
-            postId={p.id}
-            size={'md'}
-            showSaveForLater={false}
-          />)}
+      {
+        posts.map(p=><MosaicItemPost key={p.id} postId={p.id} size={'medium'} />
+      )}
     </MosaicsGrid>
     {/* <Grid container>
       {posts.map((p) => (
@@ -101,13 +97,8 @@ const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
   return <Stack gap={3}>
     <p>{` `}</p>
      <MosaicsGrid>
-      {cycles.map((c,idx)=><CMI
-            cycleId={c.id}
-            key={`${c.id}-${idx}`}
-            cacheKey={['CYCLES', `WORK-${workId}`]}
-            size={'md'}
-            showSaveForLater={false}
-          />)}
+      {cycles.map((c,idx)=><CMI cycleId={c.id} key={`${c.id}-${idx}`} size={'medium'}/>
+      )}
     </MosaicsGrid> 
     {/* <Grid container>
       {cycles.map((c) => (
@@ -184,7 +175,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   const { data: dataCycles } = useCycles('',workCyclessWhere
   // , { enabled: !!workId }
 );
-  const { data: dataPosts,isLoading } = usePosts(workPostsWhere
+  const { data: dataPosts,isLoading } = usePostsSumary(workPostsWhere
     // , { enabled: !!workId }
   ); //OJO this trigger just once -load the same data that page does
   const [posts, setPosts] = useState(dataPosts?.posts);
@@ -219,7 +210,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
         const loadMore = async () => {
           const { id } = posts.slice(-1)[0];
           const o = { ...workPostsWhere, skip: 1, cursor: { id } };
-          const { posts: pf, fetched } = await getPosts(lang,o);
+          const { posts: pf, fetched } = await getPostsSumary(session.user.id,lang,o);
           setHasMorePosts(fetched);
           const posts_ = [...(posts || []), ...pf];
           setPosts(posts_);
@@ -344,14 +335,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               <>
                   <Stack gap={{xs:3}}  direction={{xs:'column',sm:'row'}}>
                     <Stack gap={1}>
-                      <MosaicItem
-                          workId={work.id}
-                          showTrash
-                          linkToWork={false}
-                          size={'lg'}
-                          showCreateEureka={false}
-                          showSaveForLater={true}
-                      />
+                      <MosaicItem workId={work.id} size={'large'} />
                       <Box>
                         <Stack direction={'row'} alignItems={'flex-start'} gap={1}>
                           <Rating

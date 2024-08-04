@@ -57,15 +57,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
     if (isCycleMosaicItem(item)) {
       return (
         // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleSumary }}>
-          <MosaicItemCycle
-            cycle={item}
-            cycleId={item.id}
-            detailed
-            showShare={false}
-            showButtonLabels={false}
-            cacheKey={['CYCLE', `${item.id}`]}
-            showSocialInteraction={showSocialInteraction}
-          />
+          <MosaicItemCycle cycleId={item.id}/>
         // </CycleContext.Provider>
       );
     }
@@ -76,15 +68,7 @@ const Carousel: FunctionComponent<Props> = ({ apiResponse, topic, topicLabel, cl
       const item_ = item as WorkSumary;
       // eslint-disable-next-line react/jsx-props-no-spreading
       return (
-        <MosaicItemWork
-          showSocialInteraction
-          showShare={false}
-          showButtonLabels={false}
-          key={`work-${item_.id}`}
-          work={item_}
-          workId={item_.id}
-          cacheKey={['WORK', `${item_.id}`]}
-        />
+        <MosaicItemWork key={`work-${item_.id}`} workId={item_.id}/>
       );
     }
   

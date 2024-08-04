@@ -1,16 +1,10 @@
-import MosaicItem from "./MosaicItem";
-import { useCyclesActives } from "./hooks/useCyclesActives";
+import { useCyclesActives } from "../hooks/useCyclesActives";
 import dayjs from "dayjs";
-import { Box, Stack } from "@mui/material";
-import useTranslation from "next-translate/useTranslation";
-import { useRouter } from "next/router";
+import { Stack } from "@mui/material";
 import {  useEffect } from "react";
-import { AZURE_STORAGE_URL } from '@/src/constants';
-
+import CycleActiveMosaicItem from "./CycleActiveMosaicItem";
 
 export const Actives = ()=>{
-    const { t } = useTranslation('common');
-    const router=useRouter();
     const{data:actives}=useCyclesActives();
 
     const GetDatesRange = (a:any)=>`${dayjs(a.startDate).format('YYYY-MM-DD')} - ${dayjs(a.endDate).format('YYYY-MM-DD')}`
@@ -23,27 +17,24 @@ export const Actives = ()=>{
           }
         });
     },[]);
-    const creatorImage = (user:any)=>{
-      if(user.photos.length){
-        return `${AZURE_STORAGE_URL}/users-photos/${user.photos[0].storedFile}`;
-      }
-      return user.image!;
-    }
 
     return <Stack gap={2} sx={{padding:1}}>
         {
             actives?.map((a:any)=>
             {
-              return <MosaicItem key={`mi-${a.id}`} 
+              return <CycleActiveMosaicItem key={`mi-${a.id}`} 
               cycleId={a.id}
+              participants={a.participants}
+              usersJoined={a.usersJoined}
               title={a.creator.name??'unknown'} 
               description={a.contentText}
-              image={a.localImages[0].storedFile}
+              localImages={a.localImages}
               subheader={GetDatesRange(a)}
               creatorImage={a.creator.image}
               creatorPhoto={(a.creator?.photos??[])[0]?.storedFile}
               creatorId={a.creator.id}
               creatorName={a.creator.name}
+              access={a.access}
             />
             }
             )

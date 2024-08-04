@@ -162,19 +162,13 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
         <Col className="d-none d-xl-flex col-12 col-md-2 col-lg-3 justify-content-center justify-content-lg-start">
           <aside className="d-flex flex-column">
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <UserAvatar userId={cycle.creatorId} name={cycle.creator.name!} size='small' />
-            </div>
+            </div> */}
             <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
               <MosaicItem
                 cycleId={cycle.id}
-                showTrash
-                detailed={false}
-                showSaveForLater={true}
-                showCreateEureka={false}
-                className="mt-1"
-                cacheKey={['CYCLE', `${cycle.id}`]}
-                size={'lg'}
+                size={'large'}
               />
             </MosaicContext.Provider>
             <Box className="d-flex flex-row align-items-baseline" mt={1}>
@@ -245,11 +239,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               showSocialInteraction={false}
               // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
               onSeeAll={onCarouselSeeAllAction}
-              title={<CycleSummary cycle={cycle as unknown as CycleSumary} />}
+              title={<CycleSummary cycleId={cycle.id} />}
               data={getWorksSorted() as WorkSumary[]}
               iconBefore={<></>}
               customMosaicStyle={{ height: '16em' }}
-              size="sm"
+              size="small"
               mosaicBoxClassName="pb-5"
               // iconAfter={<BsCircleFill className={styles.infoCircle} />}
             />
@@ -268,11 +262,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 cacheKey={['CYCLE', cycle.id.toString()]}
                 showSocialInteraction={false}
                 onSeeAll={onCarouselSeeAllAction}
-                title={<CycleSummary cycle={cycle as unknown as CycleSumary} />}
+                title={<CycleSummary cycleId={cycle.id} />}
                 data={getWorksSorted() as WorkSumary[]}
                 iconBefore={<></>}
                 customMosaicStyle={{ height: '16em' }}
-                size={'sm'}
+                size={'small'}
                 mosaicBoxClassName="pb-5"
                 // iconAfter={<BsCircleFill className={styles.infoCircle} />}
               />
@@ -287,12 +281,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
                 <MosaicItem
                   cycleId={cycle.id}
-                  showTrash
-                  detailed={false}
-                  showSaveForLater={true}
-                  className="mt-2"
-                  cacheKey={['CYCLE', `${cycle.id}`]}
-                  size={'lg'}
+                  size={'large'}
                 />
               </MosaicContext.Provider>
               <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>

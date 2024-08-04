@@ -1,8 +1,6 @@
-import { Button, Spinner} from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import useCycleSumary from "@/src/useCycleSumary";
 import { useSession } from "next-auth/react";
-import styles from './MosaicItem.module.css';
 import { FC, MouseEvent } from "react"
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -12,13 +10,15 @@ import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import { useIsFetching } from 'react-query';
 import SignInForm from '../../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
+import { Button } from '@mui/material';
+import Spinner from '../../Spinner';
 
 
 interface Props{
     cycleId:number;
     size?:string;
 }
-export const JoinLeaveCycleBtn:FC<Props> = ({cycleId,size})=>{
+export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     const { t } = useTranslation('common');
     const {data:session,status} = useSession();
     const isLoadingSession = status === "loading";
@@ -27,7 +27,6 @@ export const JoinLeaveCycleBtn:FC<Props> = ({cycleId,size})=>{
     const router=useRouter();
     const {data:cycle} = useCycleSumary(cycleId);
     const {data:{price,currency}={currency:'',price:-1}} =  useCyclePrice(cycle);
-    const participants = cycle ? [...cycle?.participants!??[],cycle?.creator!] : [];
     const isFetchingCycle = useIsFetching(['CYCLE',`${cycle?.id}`])
     const {show} = useModalContext();
 
@@ -35,7 +34,7 @@ export const JoinLeaveCycleBtn:FC<Props> = ({cycleId,size})=>{
         mutate: execLeaveCycle,
         isLoading: isLeaveCycleLoading,
         // isSuccess: isLeaveCycleSuccess,
-      } = useLeaveUserFromCycleAction(user!,cycle!,participants!,(_data,error)=>{
+      } = useLeaveUserFromCycleAction(user!,cycle!,(_data,error)=>{
         if(!error) {
           toast.success(t('OK'));
           if(router.query.join)
@@ -60,7 +59,7 @@ export const JoinLeaveCycleBtn:FC<Props> = ({cycleId,size})=>{
         isLoading: isJoinCycleLoading,
         data: mutationResponse,
         // isSuccess: isJoinCycleSuccess,
-      } = useJoinUserToCycleAction(user!,cycle!,participants!,(_data,error)=>{
+      } = useJoinUserToCycleAction(user!,cycle!,(_data,error)=>{
         if(!error) {//para q no salgan dos toast al unirse a ciclo privado
           if (cycle && ![2,4].includes(cycle?.access))
             toast.success(t('OK'));
@@ -78,46 +77,56 @@ export const JoinLeaveCycleBtn:FC<Props> = ({cycleId,size})=>{
     }
 
   const isPending = ()=> isLoadingSession || isFetchingCycle>0 || isJoinCycleLoading || isLeaveCycleLoading;
-
     
-    if (cycle && !isLoadingSession ){
-
-      if(cycle.creator.id == session?.user.id)
-        return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
-         className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm'>
-          <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
-      </Button>
-
-      if(participants && participants?.findIndex(p=>p.id==session?.user.id) > -1 )         
-          return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
-          className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
-           <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
-            </Button>
-
-      if(cycle.currentUserJoinPending)
-         return  <Button 
-            disabled={true}
-            className={`rounded rounded-2 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
-            size='sm' >
-            <span className='fs-6'>{t('joinCyclePending')}</span>
-            </Button>
-
-          return  <Button 
-            disabled={isPending()}
-            onClick={handleJoinCycleClick} className={`rounded rounded-3 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
-            size='sm'>
-              <span className='fs-6'>{t('joinCycleLabel')}</span> 
-              
-              {cycle.access==4 && price!=-1
-                ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
-                : <></>
-              }
-            </Button>           
+  if (cycle && !isLoadingSession ){
+    if(!session){
+      return <Button variant='contained' onClick={handleJoinCycleClick}>
+          {t('joinCycleLabel')}
+          {
+            cycle.access==4 && price!=-1
+              ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+              : <></>
+          }
+        </Button>
     }
-    else
-    return <Button 
-          disabled={true}
-          className={`rounded rounded-3  text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`}>
-            <Spinner size='sm' animation='grow'/>
-          </Button>
+
+    if(cycle.creator.id == session?.user.id){
+      return <Button  variant='contained' color='secondary'>{t('MyCycle')}</Button>
+      //   return   <Button   variant="btn-warning border-warning bg-warning text-white fs-6 disabled"
+      //    className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm'>
+      //     <span className='fs-6'>{t('MyCycle')}</span> {/*MyCycle*/}
+      // </Button>
+    }
+
+    if(cycle?.participants.findIndex(p=>p.id==session?.user.id)>=0){
+      return <Button variant='outlined' disabled={isPending()} onClick={handleLeaveCycleClick}>{t('common:leaveCycleLabel')}</Button>     
+        // return <Button  disabled={isPending()} onClick={handleLeaveCycleClick} variant="button border-primary bg-white text-primary" 
+        // className={`rounded rounded-3  ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} size='sm' >
+        //  <span className='fs-6'>{t('common:leaveCycleLabel')}</span>
+        //   </Button>
+    }
+    
+    if(cycle?.participants.findIndex(p=>p.id==session?.user.id)<0){
+      return <Button variant='contained' onClick={handleJoinCycleClick}>
+          {t('joinCycleLabel')}
+          {
+            cycle.access==4 && price!=-1
+              ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+              : <></>
+          }
+        </Button>
+    }
+
+    if(cycle?.usersJoined.findIndex(u=>u.userId==session?.user.id&&u.pending)){
+      return <Button disabled={true}>{t('joinCyclePending')}</Button>
+      //  return  <Button 
+      //     disabled={true}
+      //     className={`rounded rounded-2 text-white ${(size =='lg') ? styles.joinButtonContainerlg :styles.joinButtonContainer }`} 
+      //     size='sm' >
+      //     <span className='fs-6'>{t('joinCyclePending')}</span>
+      //     </Button>
+    }
+                
   }
+  return <Button><Spinner/></Button>
+}

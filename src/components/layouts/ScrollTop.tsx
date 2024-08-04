@@ -25,7 +25,7 @@ export const  ScrollTop = (props: Props) => {
       }
     };
   
-    return (
+    return <Box sx={{display:{xs:'none',md:'inline-block'}}}>
       <Fade in={trigger}>
         <Box
           onClick={handleClick}
@@ -35,6 +35,6 @@ export const  ScrollTop = (props: Props) => {
           {children}
         </Box>
       </Fade>
-    );
+    </Box>
   }
   

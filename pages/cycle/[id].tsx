@@ -109,7 +109,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     isSuccess: isJoined,
-  } = useJoinUserToCycleAction((session as any)?.user, cycle as unknown as CycleSumary, participants || [], (_data, error) => {
+  } = useJoinUserToCycleAction((session as any)?.user, cycle as unknown as CycleSumary, (_data, error) => {
     if (!error) {
       if (cycle && ![2, 4].includes(cycle?.access))
         toast.success(t('OK'))

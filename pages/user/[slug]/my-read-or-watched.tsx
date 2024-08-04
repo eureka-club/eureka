@@ -316,7 +316,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                             xxl={2}
                             className="mb-5 d-flex justify-content-center  align-items-center"
                           >
-                            <WMI notLangRestrict workId={w.workId!} size="md" />
+                            <WMI workId={w.workId!}  size="medium" />
                           </Col>
                         ))
                       }
@@ -355,7 +355,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                             xxl={2}
                             className="mb-5 d-flex justify-content-center  align-items-center"
                           >
-                            <WMI notLangRestrict workId={w.workId!} size="md" />
+                            <WMI  workId={w.workId!} size="medium" />
                           </Col>
                         ))}
                       </Row>

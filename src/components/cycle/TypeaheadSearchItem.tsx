@@ -23,7 +23,7 @@ const TypeaheadSearchItem: FunctionComponent<Props> = ({ cycle }) => {
       <aside>
         <h3 className="fs-6 fw-bold text-wrap">{cycle.title}</h3>
         <h4 className="fs-6 text-dark text-decoration-underline fst-italic">{t('by')} {cycle.creator.name}</h4>
-        <CycleSummary cycle={cycle} />
+        <CycleSummary cycleId={cycle.id} />
       </aside>
     </section>
     // <div className={styles.workSearchTypeaheadItem}>

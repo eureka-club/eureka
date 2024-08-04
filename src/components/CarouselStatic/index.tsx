@@ -5,7 +5,7 @@ import globalSearchEngineAtom from '../../atoms/searchEngine';
 
 import styles from './index.module.css';
 import Mosaics from './Mosaics';
-import { MosaicItem } from '@/src/types';
+import { MosaicItem, Size } from '@/src/types';
 import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
   customMosaicStyle?: { [key: string]: string };
   className?: string;
   mosaicBoxClassName?: string;
-  size?: string;
+  size?: Size;
   cacheKey: string[];
   userMosaicDetailed?: boolean;
 };

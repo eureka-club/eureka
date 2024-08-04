@@ -17,7 +17,7 @@ const renderMosaicItem = (
 ) => {
   if (isCycleMosaicItem(item)) {
     return (
-        <MosaicItemCycle cycleId={item.id} detailed className="mb-2"/>
+        <MosaicItemCycle cycleId={item.id} />
     );
   }
   else if (isPostMosaicItem(item)) {
@@ -43,8 +43,7 @@ const renderMosaicItem = (
   else if (isWorkMosaicItem(item)) {
     return (
       // <WorkContext.Provider value={{ linkToWork: true }}>
-      <MosaicItemWork 
-      linkToWork showShare={false} showButtonLabels={showButtonLabels} workId={item.id} className="mb-2"/>
+      <MosaicItemWork workId={item.id} />
       // </WorkContext.Provider>
     );
   }

@@ -45,7 +45,12 @@ export const RenderPosts = ({cycleId}:RenderPostsProps)=>{
     if(posts){
       return <>
       <MosaicsGrid isLoading={isLoading}>
-        {posts.map((p:any,idx:number)=><MosaicItemPost key={`${p.id}-${idx}`}  cacheKey={['POST',`${p.id}`]} postId={p.id} showSaveForLater={false} size={'md'} />          )}
+        {
+        posts.map((p:any,idx:number)=><MosaicItemPost 
+          key={`${p.id}-${idx}`} 
+          postId={p.id}
+          size={'medium'} />          
+        )}
       </MosaicsGrid>
         {/* <Grid container gap={3}>
         {posts.map((p)=><Grid item

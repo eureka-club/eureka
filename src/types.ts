@@ -146,6 +146,8 @@ export const UserLanguages: Record<string, string> = {
   french: 'fr',
 };
 
+export type Size = 'small'|'medium'|'large';
+
 /**
  * 
  {

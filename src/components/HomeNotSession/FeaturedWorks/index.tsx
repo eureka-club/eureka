@@ -27,15 +27,7 @@ const FeaturedWorks = () => {
               <Carousel.Item key={work.id} className="">
                 <Row className="d-flex flex-row w-100  bg-gray-very-light rounded-3 py-4 m-0  pe-0 pe-lg-3">
                   <Col xs={12}  xl={4} className="d-flex justify-content-center">
-                    <MosaicItem
-                      work={work as unknown as WorkSumary}
-                      workId={work.id}
-                      showCreateEureka={true}
-                      showSocialInteraction={true}
-                      className="mb-4 mb-xl-0"
-                      cacheKey={['WORK', work.id.toString()]}
-                      size={'lg'}
-                    />
+                    <MosaicItem workId={work.id} size={'large'}/>
                   </Col>
                   <Col xs={12} xl={8} className="d-flex flex-column">
                     <WorkPostImages work={work} workId={work.id} workTitle={work.title} />

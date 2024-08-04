@@ -30,6 +30,7 @@ import { CycleWork } from '@/src/types/cycleWork';
 
 import useUserSumary from '@/src/useUserSumary';
 import { CycleSumary } from '@/src/types/cycle';
+import Mosaic from '../Mosaic';
 
 interface Props {
   noModal?: boolean;
@@ -372,7 +373,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!, cycle as unknown as CycleSumary, participants!, (_data, error) => {
+  } = useJoinUserToCycleAction(user!, cycle as unknown as CycleSumary, (_data, error) => {
     if (error)
       toast.error(t('Internal Server Error'));
   });
@@ -478,7 +479,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               <Col className={`col-12 col-xl-6 my-xl-5`}>
                 <Box sx={{ ml: { xl: '6em' } }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
                   <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
-                    <MosaicItem
+                    {/* <MosaicItem
                       cycleId={cycle.id}
                       showTrash
                       detailed={false}
@@ -489,7 +490,8 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       className="mt-1"
                       cacheKey={['CYCLE', `${cycle.id}`]}
                       size={'xxl'}
-                    />
+                    /> */}
+                    <MosaicItem cycleId={cycle.id} />
                   </CycleContext.Provider>
                 </Box>
               </Col>
@@ -553,7 +555,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
             >
               <Box className='d-flex flex-column justify-content-center align-items-center' sx={{ paddingX: { md: '8em', lg: '15em', xl: '25em' }, paddingY: '4em' }}>
                 <Box className="" sx={{ width: '1', paddingX: { xs: '2em', sm: '7em', lg: '2em' }, fontSize: { sx: '.6em', lg: '1.4em' }, display: 'flex', justifyContent: 'center' }}> <span className='text-primary text-center mb-3  '><b>{t('CurationText')}</b></span></Box>
-                {works && <CycleDetailWorks size={'md'} cycleWorksDates={works as CycleWork[]} showSocialInteraction={false} showHeader={false} /> || ''}
+                {works && <CycleDetailWorks size={'medium'} cycleWorksDates={works as CycleWork[]} showSocialInteraction={false} showHeader={false} /> || ''}
               </Box>
             </Box>
           </Col>

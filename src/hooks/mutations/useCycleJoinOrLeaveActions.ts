@@ -8,13 +8,14 @@ import {useNotificationContext} from '@/src/useNotificationProvider';
 import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinRequests'
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { UserSumary } from '@/src/types/UserSumary';
+import { useCycleParticipants } from '../useCycleParticipants';
 
 type ctx = {
     ss: UserDetail[] | undefined;
     ck: string[];
 } | undefined;
 
-const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {t,lang} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
@@ -31,6 +32,8 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants
             userName: user?.name,
             cycleTitle: cycle?.title,
           })}`;
+          const{data:participants}=useCycleParticipants(cycle.id);
+
           const notificationToUsers = (participants || []).map(p=>p.id);
           if(cycle?.creator.id) notificationToUsers.push(cycle?.creator.id);
           if(cycle.access==4){
@@ -116,10 +119,11 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,participants
 
 }
 
-const useLeaveUserFromCycleAction = (user:UserSumary,cycle:CycleSumary,participants:{id:number}[],onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
+const useLeaveUserFromCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCallback?:(_data:any,error:any,_variable:any,context:ctx)=>void)=>{
     const {lang} = useTranslation('common');
     const queryClient = useQueryClient();
     const {notifier} = useNotificationContext();
+    const{data:participants}=useCycleParticipants(cycle?.id);
     const whereCycleParticipants = {
         OR:[
             {cycles: { some: { id: cycle?.id } }},//creator

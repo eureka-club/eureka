@@ -89,7 +89,7 @@ export const WorkSumarySpec = {
     title:true,
     type:true,
     language:true,
-    ToCheck:true,
+    // ToCheck:true,
     author:true,
     createdAt:true,
     updatedAt:true,
@@ -97,14 +97,14 @@ export const WorkSumarySpec = {
     countryOfOrigin:true,
     length:true,
     localImages: { select: { storedFile: true } },
-    readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
+    // readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
   }
 }
 export type WorkSumary = Prisma.CycleGetPayload<typeof WorkSumarySpec> & {
-  currentUserRating?: number;
-  currentUserIsFav?:boolean;
-  ratingCount?: number;
-  ratingAVG?: number;
+  // currentUserRating?: number;
+  // currentUserIsFav?:boolean;
+  // ratingCount?: number;
+  // ratingAVG?: number;
 }
 export interface CreateWorkClientPayload {
   cover: File;

@@ -2,19 +2,21 @@ import { FunctionComponent, SyntheticEvent,MouseEvent, FC } from 'react';
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
 import slugify from 'slugify'
-import useUserSumary from '@/src/useUserSumary';
-import { UserSumary } from '@/src/types/UserSumary';
+// import useUserSumary from '@/src/useUserSumary';
+// import { UserSumary } from '@/src/types/UserSumary';
 import { Avatar, Box, BoxProps, RatingProps } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { AZURE_STORAGE_URL } from '@/src/constants';
+import { Size } from '@/src/types';
+import { LocalImage } from '@prisma/client';
 interface Props extends BoxProps {
   userId: string|number;
   name:string;
   image?:string;
-  photo?:string;
+  photos?:LocalImage[];
   // showName?: boolean;
   // showFullName?: boolean;
-  size?: RatingProps["size"];
+  size?: Size;
   // className?: string;
 }
 
@@ -48,7 +50,7 @@ const UserAvatar: FunctionComponent<Props> = ({
   name,
   userId,
   image,
-  photo,
+  photos,
   size = 'medium',
   ...others
 }) => {
@@ -68,6 +70,7 @@ const UserAvatar: FunctionComponent<Props> = ({
     e.stopPropagation()
     router.push(`/mediatheque/${getMediathequeSlug(name,userId)}`)
   }
+  const photo = photos?.length ? photos[0].storedFile : null;
   return (
     <>
       {(name&&userId) && (

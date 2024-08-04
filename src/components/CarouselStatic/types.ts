@@ -1,10 +1,11 @@
-import { MosaicItem } from '../../types';
+import { BoxProps } from '@mui/material';
+import { MosaicItem, Size } from '../../types';
 
-export interface GenericMosaicItemProps{
+export interface GenericMosaicItemProps extends BoxProps{
     item: MosaicItem;
     showSocialInteraction?: boolean;
     cacheKey:string[];
     customMosaicStyle?: { [key: string]: string };
-    size?: string;
+    size?: Size;
     userMosaicDetailed?:boolean
   }

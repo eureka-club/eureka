@@ -6,13 +6,16 @@ import { prisma } from '@/src/lib/prisma';
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { sendMail } from './mail';
 import { UserSumary, UserSumarySpec } from '../types/UserSumary';
+import { equal } from 'assert';
+import { LANGUAGES, LOCALES } from '../constants';
 
 export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
 
 const CycleSumaryWithExtrasSpec = {
   select:{
     ...CycleSumarySpec.select,
-    ratings:{select:{userId:true,qty:true}},
+    participants:{select:{id:true}},
+    // ratings:{select:{userId:true,qty:true}},
     usersJoined:{select:{userId:true,pending:true}},
   }
 }
@@ -28,12 +31,13 @@ type CycleDetailWithExtras = CycleDetail & Prisma.CycleGetPayload<typeof CycleDe
 
 function PopulateCycleSumaryWithExtras(cycles:CycleSumaryWithExtras[],session:Session|null):CycleSumary[]{
   return  cycles.map(c=>{
-    const fr = c.ratings.find(r=>r.userId==session?.user.id);
-    const currentUserRating = fr?.qty??0;
-    const ratingCount = c.ratings.length;
-    const ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
-    const currentUserJoinPending = c.usersJoined.findIndex(u=>u.userId==session?.user.id && u.pending==true) > -1;
-    return {...c,type:'cycle', currentUserRating, ratingCount, ratingAVG, currentUserJoinPending};
+    // const fr = c.ratings.find(r=>r.userId==session?.user.id);
+    // const currentUserRating = fr?.qty??0;
+    // const ratingCount = c.ratings.length;
+    // const ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
+    const joinPending = c.usersJoined.findIndex(u=>u.userId==session?.user.id && u.pending==true) > -1;
+    const joinCompleted = c.participants.findIndex(u=>u.id==session?.user.id) > -1;
+    return {...c,type:'cycle', joinPending, joinCompleted};
   });  
 }
 function PopulateCycleDetailWithExtras(cycles:CycleDetailWithExtras[],session:Session|null):CycleDetail[]{
@@ -42,8 +46,8 @@ function PopulateCycleDetailWithExtras(cycles:CycleDetailWithExtras[],session:Se
     const currentUserRating = fr?.qty??0;
     const ratingCount = c.ratings.length;
     const ratingAVG = c.ratings.reduce((p,c)=>c.qty+p,0)/ratingCount;
-    const currentUserJoinPending = c.usersJoined.findIndex(u=>u.userId==session?.user.id && u.pending==true) > -1;
-    return {...c,type:'cycle', currentUserRating, ratingCount, ratingAVG, currentUserJoinPending};
+    const joinPending = c.usersJoined.findIndex(u=>u.userId==session?.user.id && u.pending==true) > -1;
+    return {...c,type:'cycle', currentUserRating, ratingCount, ratingAVG, joinPending};
   });  
 }
 
@@ -54,15 +58,30 @@ export const find = async (id: number): Promise<CycleDetail | null> => {
   });
 };
 export const findSumary = async (id: number,session:Session|null): Promise<CycleSumary | null> => {
-  const cycle = await prisma.cycle.findUnique({
+  const res = await prisma.cycle.findUnique({
     where: { id },
     select: {
       ...CycleSumarySpec.select,
-      ratings:{select:{userId:true,qty:true}},
-      usersJoined:{select:{userId:true,pending:true}},
+      ...session && {
+        participants:{
+          select:{id:true},
+          where:{
+            id:{equals:session.user.id}
+          }
+        },
+        usersJoined:{
+          select:{userId:true,pending:true},
+          where:{
+            userId:{equals:session.user.id}
+          }
+        }
+      }
     }
   });
-  return PopulateCycleSumaryWithExtras([cycle as CycleSumaryWithExtras],session)[0];
+  if(!res)return null;
+  let cycle:CycleSumary={...res,type:'cycle'};
+  return cycle;
+  // return PopulateCycleSumaryWithExtras([cycle as CycleSumaryWithExtras],session)[0];
 };
 
 export const findAll = async (session:Session|null,props?: Prisma.CycleFindManyArgs): Promise<CycleDetail[]> => {
@@ -92,11 +111,28 @@ export const findAllSumary = async (session:Session|null,props?: Prisma.CycleFin
     orderBy: { createdAt: 'desc' },
     select: {
       ...CycleSumarySpec.select,
-      ratings:{select:{userId:true,qty:true}},
-      usersJoined:{select:{userId:true,pending:true}},
+      ...session && {
+        participants:{
+          select:{id:true},
+          where:{
+            id:{equals:session.user.id}
+          }
+        },
+        usersJoined:{
+          select:{userId:true,pending:true},
+          where:{
+            userId:{equals:session.user.id}
+          }
+        }
+      },
     }
   });
-  return PopulateCycleSumaryWithExtras(res,session); 
+  const cycles:CycleSumary[]=[];
+  res.forEach(c=>{
+    cycles.push({...c,type:'cycle'});
+  })
+  return cycles;
+  // return PopulateCycleSumaryWithExtras(res,session); 
 };
 
 export const findParticipant = async (user: User, cycle: Cycle): Promise<User | null> => {

@@ -10,8 +10,9 @@ import { Prisma } from '@prisma/client';
 import { WorkSumary } from '../types/work';
 import { getWorksProps } from '../types/work';
 import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
-import { Alert } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import { MosaicsGrid } from './MosaicsGrid';
+import Masonry from '@mui/lab/Masonry';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
@@ -92,11 +93,29 @@ const SearchTabworks:FunctionComponent = () => {
         ? <Alert>{t('ResultsNotFound')}</Alert>
         : <></>
     } */}
-    <MosaicsGrid isLoading={isLoading}>
+    {/* <MosaicsGrid isLoading={isLoading}>
         {works?.map(p=>
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
         )}
-    </MosaicsGrid>
+    </MosaicsGrid> */}
+    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+      {works?.map(p=>
+        <Box key={p.id}>
+          <MosaicItem   
+            workId={p.id} 
+            sx={{
+                'img':{
+                  width:'100%',
+                  height:'auto',
+                  border:'solid 1px lightgray',
+                  borderRadius:'4px',
+                  boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`,
+                }
+              }} 
+          />
+        </Box>
+      )}
+    </Masonry>
     {/* {works?.length!=total && <CircularProgress ref={ref} />} */}
     {works?.length!=total && <hr ref={ref}/>}
 
