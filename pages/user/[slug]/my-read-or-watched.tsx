@@ -1,15 +1,7 @@
 import { NextPage, GetServerSideProps } from 'next';
 import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
 import Head from 'next/head';
-import {
-  Alert,
- 
-  ButtonGroup,
-  Tabs,
-  Tab,
-  Col,
-  Row,
-} from 'react-bootstrap';
+import { ButtonGroup, Tabs, Tab, Col, Row, Stack } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
@@ -21,14 +13,24 @@ import { UserDetail } from '@/src/types/user';
 import { QueryClient, dehydrate } from 'react-query';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
-import toast from 'react-hot-toast'
-import useMyReadOrWatched from '@/src/useMyReadOrWatched'
-import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import toast from 'react-hot-toast';
+import useMyReadOrWatched from '@/src/useMyReadOrWatched';
+import {
+  SelectChangeEvent,
+  Button as ButtonMui,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner';
-import {Grid,Button} from '@mui/material';
+import { Grid, Button, Alert, Box } from '@mui/material';
+import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
+
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -40,7 +42,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const { t } = useTranslation('mediatheque');
   const router = useRouter();
   const query = router.query;
-  const user = useMyReadOrWatched(id)
+  const user = useMyReadOrWatched(id);
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [booksTotal, setBooksTotal] = useState<number>(0);
   const [moviesTotal, setMoviesTotal] = useState<number>(0);
@@ -48,19 +50,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const [movies, setMovies] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
 
-  let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
-  let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
-      
-  const res = Array.from(new Set([
-    ...(bs??[]).map(b=>b.year),
-    ...(ms??[]).map(m=>m.year)
-  ]))
-  .sort(
-    (a,b)=>+a>+b ? -1 : 1
+  let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type ?? '')).reverse();
+  let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type ?? '')).reverse();
+
+  const res = Array.from(new Set([...(bs ?? []).map((b) => b.year), ...(ms ?? []).map((m) => m.year)])).sort((a, b) =>
+    +a > +b ? -1 : 1,
   );
-  
-  const [years]=useState<number[]>(res);
-  
+
+  const [years] = useState<number[]>(res);
+
   useEffect(() => {
     if (query?.tabKey) {
       setTabKey(query.tabKey.toString());
@@ -72,9 +70,12 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
   useEffect(() => {
     if (user && user.readOrWatchedWorks.length) {
-      let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
-      let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
-      
+      let books = user.readOrWatchedWorks
+        .filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type ?? ''))
+        .reverse();
+      let movies = user.readOrWatchedWorks
+        .filter((rw) => ['movie', 'documentary'].includes(rw.work?.type ?? ''))
+        .reverse();
 
       if (yearFilter.length) {
         books = books.filter((b) => b.year.toString() === yearFilter);
@@ -82,16 +83,13 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       }
       if (books.length) {
         setBooks(groupBy(books, 'year'));
-      }
-      else setBooks(null);
+      } else setBooks(null);
       if (movies.length) {
         setMovies(groupBy(movies, 'year'));
-      }
-      else setMovies(null);
+      } else setMovies(null);
 
       setBooksTotal(books.length);
       setMoviesTotal(movies.length);
-      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearFilter]);
@@ -114,22 +112,24 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
     const sts = `${user.userName || id.toString()}-${id}`;
-    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
+    navigator.clipboard
+      .writeText(
+        `${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, {
+          lower: true,
+        })}/my-read-or-watched?tabKey=${tab}&year=${year}`,
+      )
       .then(() => {
-        toast.success(t('UrlCopied'))
+        toast.success(t('UrlCopied'));
       })
-      .catch(err => {
+      .catch((err) => {
         //console.error('Error al copiar al portapapeles:', err)
-      })
+      });
   };
 
   const getDefaultActiveKey = () => {
-    if (booksTotal > 0)
-      return 'books'
-    else if (moviesTotal > 0 && !books)
-      return 'movies';
-    else
-      return 'books';
+    if (booksTotal > 0) return 'books';
+    else if (moviesTotal > 0 && !books) return 'movies';
+    else return 'books';
   };
 
   const handleSubsectionChange = (key: string | null) => {
@@ -204,55 +204,54 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       </Head>
       <SimpleLayout>
         <article className="">
-          <ButtonsTopActions/>
+          <ButtonsTopActions />
 
           {/*isLoadingSession ? (
             <Spinner  />
           ) : */}
           <>
-            <Grid container direction={'row'}  >
-              <Grid item >
-                <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${user.userName}`}</h1>
-               
+            <Grid container direction={'row'} spacing={1}>
+              <Grid item>
+                <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${
+                  user.userName
+                }`}</h1>
               </Grid>
-              <Grid item xs={4}  >
+              <Grid item padding={2} paddingRight={4}>
                 {renderAvatar()}
-                </Grid>
-              <Grid item  padding={2} >
+              </Grid>
+              <Grid item padding={4}>
                 <Button variant="contained" onClick={() => router.push('/work/create')} size="large">
                   <span>{t('AddWork')}</span>
-                                  </Button>
-              
+                </Button>
               </Grid>
-
             </Grid>
 
             <style jsx global>
               {`
-                  .nav-tabs .nav-item.show .nav-link,
-                  .nav-tabs .nav-link.active,
-                  .nav-tabs .nav-link:hover {
-                    background-color: var(--bs-primary);
-                    color: white !important;
-                    border: none !important;
-                    border-bottom: solid 2px var(--bs-primary) !important;
-                  }
-                  .nav-tabs {
-                    border: none !important;
-                    border-bottom: solid 1px var(--bs-primary) !important;
-                  }
-                  .nav-link {
-                    color: var(--bs-primary);
-                  }
+                .nav-tabs .nav-item.show .nav-link,
+                .nav-tabs .nav-link.active,
+                .nav-tabs .nav-link:hover {
+                  background-color: var(--bs-primary);
+                  color: white !important;
+                  border: none !important;
+                  border-bottom: solid 2px var(--bs-primary) !important;
+                }
+                .nav-tabs {
+                  border: none !important;
+                  border-bottom: solid 1px var(--bs-primary) !important;
+                }
+                .nav-link {
+                  color: var(--bs-primary);
+                }
 
-                  .form-check {
-                    color: gray !important;
-                  }
-                  .form-check-label {
-                    margin-left: 0.2em;
-                    font-size: 1.1em;
-                  }
-                `}
+                .form-check {
+                  color: gray !important;
+                }
+                .form-check-label {
+                  margin-left: 0.2em;
+                  font-size: 1.1em;
+                }
+              `}
             </style>
 
             <FormControl className="mb-4 d-none d-lg-flex" sx={{ minWidth: 120 }} style={{ width: '20%' }}>
@@ -261,43 +260,142 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 variant="outlined"
                 labelId="select-style"
                 name="Years"
-                size='small'
+                size="small"
                 id="select-years"
                 label={t('Year')}
                 onChange={handlerComboxesChangeYear}
                 value={yearFilter}
               >
-                {years.map(x => (
-                  <MenuItem key={x} value={x}>{x}</MenuItem>
+                {years.map((x) => (
+                  <MenuItem key={x} value={x}>
+                    {x}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <section className='d-flex d-lg-none justify-content-center align-items-center'>
-            <FormControl className="mb-4 " style={{ width: '100%' }}>
-              <InputLabel id="select-years">{t('Year')}</InputLabel>
-              <Select sx={{ width: 1 }} 
-                variant="outlined"
-                labelId="select-style"
-                name="Years"
-                size='small'
-                id="select-years"
-                label={t('Year')}
-                onChange={handlerComboxesChangeYear}
-                value={yearFilter}
-              >
-                {years.map(x => (
-                  <MenuItem key={x} value={x}>{x}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <section className="d-flex d-lg-none justify-content-center align-items-center">
+              <FormControl className="mb-4 " style={{ width: '100%' }}>
+                <InputLabel id="select-years">{t('Year')}</InputLabel>
+                <Select
+                  sx={{ width: 1 }}
+                  variant="outlined"
+                  labelId="select-style"
+                  name="Years"
+                  size="small"
+                  id="select-years"
+                  label={t('Year')}
+                  onChange={handlerComboxesChangeYear}
+                  value={yearFilter}
+                >
+                  {years.map((x) => (
+                    <MenuItem key={x} value={x}>
+                      {x}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </section>
 
+            <TabPanelSwipeableViews
+              indexActive={0}
+              items={[
+                {
+                  label: (
+                    <Typography>
+                      {t('Books')} {`(${booksTotal})`}
+                    </Typography>
+                  ),
+                  content: (
+                    <Grid container direction="column">
+                      {books ? (
+                        Object.keys(books)
+                          .reverse()
+                          .map((year) => (
+                            <Grid item padding={2} key={year}>
+                              <section className="d-flex flex-row">
+                                <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                                <div className="cursor-pointer" onClick={(e) => copyURL(e, 'books', year)}>
+                                  <ContentCopyRoundedIcon
+                                    className="ms-2"
+                                    style={{
+                                      color: 'var(--eureka-purple)',
+                                    }}
+                                  />
+                                </div>
+                              </section>
+
+                              <Grid container direction={'row'} padding={2}>
+                                {books[year].map((w: any) => (
+                                  <Grid item padding={2} key={w.workId}>
+                                    <WMI notLangRestrict workId={w.workId!} size="md" />
+                                  </Grid>
+                                ))}
+                              </Grid>
+                            </Grid>
+                          ))
+                      ) : (
+                        <Alert variant="filled" severity="info">
+                          {t('ResultsNotFound')}
+                        </Alert>
+                      )}
+                    </Grid>
+                  ),
+                },
+
+                {
+                  label: (
+                    <Typography>
+                      {t('Movies')} {`(${moviesTotal})`}
+                    </Typography>
+                  ),
+                  content: (
+                    <Grid container direction="column">
+                      {movies ? (
+                        Object.keys(movies)
+                          .reverse()
+                          .map((year) => (
+                            <Grid item padding={2} key={year}>
+                              <section className="d-flex flex-row">
+                                <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                                <div className="cursor-pointer" onClick={(e) => copyURL(e, 'movies', year)}>
+                                  <ContentCopyRoundedIcon
+                                    className="ms-2"
+                                    style={{
+                                      color: 'var(--eureka-purple)',
+                                    }}
+                                  />
+                                </div>
+                              </section>
+                              <Grid container direction={'row'} padding={2}>
+                              {movies[year].map((w: any) => (
+                                <Grid
+                                item padding={2}
+                                  key={w.workId}
+                                 
+                                >
+                                  <WMI notLangRestrict workId={w.workId!} size="md" />
+                                </Grid>
+                              ))}
+                             </Grid>
+                            </Grid>
+                          ))
+                      ) : (
+                        <Alert variant="filled" severity="info">
+                          {t('ResultsNotFound')}
+                        </Alert>
+                      )}
+                    </Grid>
+                  ),
+                },
+              ]}
+            />
+            {/*
             <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
               id="uncontrolled-tab-example" className="mb-4">
-              <Tab eventKey="books" title={`${t('Books')} (${booksTotal})`}>
+              <Tab eventKey="books" title={`${t('Books') } (${booksTotal})`}>
                 {books ? (
                   Object.keys(books).reverse().map((year) => (
-                    <Row className="mt-0" key={year}>
+                    <Grid container  key={year}>
                       <section className="d-flex flex-row">
                         <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
                         <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
@@ -311,23 +409,23 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                       </section>
                       {
                         books[year].map((w: any) => (
-                          <Col
+                          <Grid item
                             key={w.workId}
                             xs={12}
                             sm={6}
                             lg={3}
-                            xxl={2}
+                            
                             className="mb-5 d-flex justify-content-center  align-items-center"
                           >
                             <WMI notLangRestrict workId={w.workId!} size="md" />
-                          </Col>
+                          </Grid>
                         ))
                       }
-                    </Row>
+                    </Grid>
                   ))
                 ) : (
-                  <Alert className="mt-4" variant="primary">
-                    <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                  <Alert variant="filled" severity="info">
+                   {t('ResultsNotFound')}
                   </Alert>
                 )}
               </Tab>
@@ -336,7 +434,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                   Object.keys(movies)
                     .reverse()
                     .map((year) => (
-                      <Row className="mt-0" key={year}>
+                      <Grid container  key={year}>
                         <section className="d-flex flex-row">
                           <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
                           <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
@@ -350,26 +448,27 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                           </div>
                         </section>
                         {movies[year].map((w: any) => (
-                          <Col
+                          <Grid item
                             key={w.workId}
                             xs={12}
                             sm={6}
                             lg={3}
-                            xxl={2}
+                           
                             className="mb-5 d-flex justify-content-center  align-items-center"
                           >
                             <WMI notLangRestrict workId={w.workId!} size="md" />
-                          </Col>
+                          </Grid>
                         ))}
-                      </Row>
+                      </Grid>
                     ))
                 ) : (
-                  <Alert className="mt-4" variant="primary">
-                    <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                  <Alert variant="filled" severity="info">
+                    {t('ResultsNotFound')}
                   </Alert>
                 )}
               </Tab>
             </Tabs>
+              */}
           </>
           {/* }*/}
         </article>
@@ -378,7 +477,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession(ctx)
+  const session = await getSession(ctx);
   let user: UserDetail | null = null;
   const qc = new QueryClient();
   let id = 0;
@@ -398,4 +497,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
 };
+
 export default MyReadOrWatched;
