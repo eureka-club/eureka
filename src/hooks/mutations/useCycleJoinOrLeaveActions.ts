@@ -19,7 +19,7 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCal
     const {t,lang} = useTranslation('common');
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
-    const{data:participants}=useCycleParticipants(cycle.id);
+    const{data:participants}=useCycleParticipants(cycle?.id);
 
     const whereCycleParticipants = {
         OR:[
