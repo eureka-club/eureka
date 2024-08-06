@@ -27,10 +27,10 @@ const WorkDetailWithExtrasSpec = {
 type WorkDetailWithExtras = WorkDetail & Prisma.WorkGetPayload<typeof WorkDetailWithExtrasSpec>;
 
 const PopulateWorkWithExtras =(w:WorkDetailWithExtras|WorkSumaryWithExtras,session:Session|null)=>{
-  w.currentUserIsFav = w.favs.findIndex(f=>f.id==session?.user.id) > -1;
-  w.currentUserRating = w.ratings.find(r=>r.userId==session?.user.id)?.qty??0;
-  w.ratingCount = w.ratings.length;
-  w.ratingAVG = w.ratings.reduce((p, c) => c.qty + p, 0) / w.ratingCount;
+  // w.currentUserIsFav = w.favs.findIndex(f=>f.id==session?.user.id) > -1;
+  // w.currentUserRating = w.ratings.find(r=>r.userId==session?.user.id)?.qty??0;
+  // w.ratingCount = w.ratings.length;
+  // w.ratingAVG = w.ratings.reduce((p, c) => c.qty + p, 0) / w.ratingCount;
 }
 const editionsToBookDetail = (book: WorkDetail, language: string): WorkDetail | null => {
   if (book.language == language) {
@@ -63,7 +63,7 @@ const editionsToBookSumary = (book: WorkSumaryWithExtras, language: string|null)
   for (; i < count; i++) {
     const e = book?.editions[i];
     if (e.language == language) {
-      book.title = e.title;
+      // book.title = e.title;
       return book;
     }
   }

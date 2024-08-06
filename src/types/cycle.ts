@@ -78,37 +78,47 @@ export const CycleSumarySpec = {
     title:true,
     languages:true,
     access:true,
-    tags:true,
+    // tags:true,
     product_id:true,
     price:true,
-    topics:true,
+    // topics:true,
     countryOfOrigin:true,
     startDate:true,
     endDate:true,
     createdAt:true,
-    updatedAt:true,
+    // updatedAt:true,
     creator: {
-      select: UserSumarySpec.select
+      select: {
+        id:true,
+        name:true,
+        photos:true,
+        image:true
+      }
     },
     localImages: {
       select: {
         storedFile: true,
       },
     },
+    participants:{
+      select:{id:true},
+    },
+    usersJoined:{
+      select:{userId:true,pending:true},
+    }
     // usersJoined: { select: { userId: true, pending: true } },
-    ratings: { select: { userId: true, qty: true } },
-    favs: { select: { id: true } },
-    participants:{select:{id: true
-      // , name: true, email: true, countryOfOrigin: true
-    }},
+    // ratings: { select: { userId: true, qty: true } },
+    // favs: { select: { id: true } },
+    // participants:{select:{id: true}},
   }
 }
 export type CycleSumary = Prisma.CycleGetPayload<typeof CycleSumarySpec> & {
-  type?: 'cycle';
-  currentUserRating?: number;
-  ratingCount?: number;
-  ratingAVG?: number;
-  currentUserJoinPending?:boolean;
+  type: string;
+  // joinPending:boolean;
+  // joinCompleted:boolean;
+  // currentUserRating?: number;
+  // ratingCount?: number;
+  // ratingAVG?: number;
 }
 // export type CycleDetail = Prisma.CycleGetPayload<{
 //   include: {

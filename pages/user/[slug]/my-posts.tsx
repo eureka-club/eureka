@@ -50,7 +50,7 @@ const MyPosts: NextPage<Props> = ({id}) => {
               <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myPosts')}</h1>
               <MosaicsGrid isLoading={isLoading}>
               {
-                dataPosts?.posts.map(c=><PMI key={c.id} postId={c.id} size='md' />)!
+                dataPosts?.posts.map(c=><PMI key={c.id} postId={c.id} size='medium' />)!
               }
               </MosaicsGrid>
             </>

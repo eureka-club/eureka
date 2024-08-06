@@ -4,10 +4,11 @@ import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { useRouter } from 'next/router';
-import { PostDetail } from '@/src/types/post';
+import { PostDetail, PostSumary } from '@/src/types/post';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
+
 //import globalModalsAtom from '@/src/atoms/globalModals';
 // import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
 import styles from './WorkDetail.module.css';
@@ -15,7 +16,6 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
 import useCycles from '@/src/useCycles';
-import usePosts, { getPosts } from '@/src/usePosts';
 import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/src/components/cycle/MosaicItem';
 import MosaicItemPost from '@/src/components/post/MosaicItem';
@@ -24,7 +24,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -37,6 +37,9 @@ import Spinner from '@/components/common/Spinner';
 
 // import { useIsFetching } from 'react-query';
 import { WEBAPP_URL } from '@/src/constants';
+import SignInForm from '../forms/SignInForm';
+import { useModalContext } from '@/src/hooks/useModal';
+import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -47,7 +50,7 @@ interface Props {
 }
 interface TabPostsProps{
   workId:any;
-  posts:{id:any}[];
+  posts:PostSumary[];
   cacheKey:string[];
   isLoading:boolean;
 }
@@ -60,12 +63,9 @@ const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsPr
       cacheKey={cacheKey}
     ></WorkDetailPost>
     <MosaicsGrid isLoading={isLoading}>
-      {posts.map(p=><MosaicItemPost key={p.id}
-            cacheKey={['POST', `${p.id}`]}
-            postId={p.id}
-            size={'md'}
-            showSaveForLater={false}
-          />)}
+      {
+        posts.map(p=><MosaicItemPost key={p.id} postId={p.id} size={'medium'} />
+      )}
     </MosaicsGrid>
     {/* <Grid container>
       {posts.map((p) => (
@@ -100,13 +100,8 @@ const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
   return <Stack gap={3}>
     <p>{` `}</p>
      <MosaicsGrid>
-      {cycles.map((c,idx)=><CMI
-            cycleId={c.id}
-            key={`${c.id}-${idx}`}
-            cacheKey={['CYCLES', `WORK-${workId}`]}
-            size={'md'}
-            showSaveForLater={false}
-          />)}
+      {cycles.map((c,idx)=><CMI cycleId={c.id} key={`${c.id}-${idx}`} size={'medium'}/>
+      )}
     </MosaicsGrid> 
     {/* <Grid container>
       {cycles.map((c) => (
@@ -131,6 +126,8 @@ const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
 
 const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }) => {
   const router = useRouter();
+  const {show} = useModalContext();
+
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
   //const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { t,lang } = useTranslation('workDetail');
@@ -181,7 +178,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   const { data: dataCycles } = useCycles('',workCyclessWhere
   // , { enabled: !!workId }
 );
-  const { data: dataPosts,isLoading } = usePosts(workPostsWhere
+  const { data: dataPosts,isLoading } = usePostsSumary(workPostsWhere
     // , { enabled: !!workId }
   ); //OJO this trigger just once -load the same data that page does
   const [posts, setPosts] = useState(dataPosts?.posts);
@@ -216,7 +213,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
         const loadMore = async () => {
           const { id } = posts.slice(-1)[0];
           const o = { ...workPostsWhere, skip: 1, cursor: { id } };
-          const { posts: pf, fetched } = await getPosts(lang,o);
+          const { posts: pf, fetched } = await getPostsSumary(session.user.id,lang,o);
           setHasMorePosts(fetched);
           const posts_ = [...(posts || []), ...pf];
           setPosts(posts_);
@@ -341,14 +338,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               <>
                   <Stack gap={{xs:3}}  direction={{xs:'column',sm:'row'}}>
                     <Stack gap={1}>
-                      <MosaicItem
-                          workId={work.id}
-                          showTrash
-                          linkToWork={false}
-                          size={'lg'}
-                          showCreateEureka={false}
-                          showSaveForLater={true}
-                      />
+                      <MosaicItem workId={work.id} size={'large'} />
                       <Box>
                         <Stack direction={'row'} alignItems={'flex-start'} gap={1}>
                           <Rating
@@ -400,16 +390,36 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           </a>
                         )}
                       </Box>
-                      <Box display={{xs:'none',md:'inherit'}}>
+                      
+                      <Stack display={{xs:'none',md:'inherit'}}>
                         <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                        
-                      </Box>
+                        <Box>
+                          {
+                          !session?.user
+                            ? <Button size='small' variant='contained' onClick={()=>{
+                              show(<SignInForm/>);
+                            }}>{t('common:comment')}</Button>
+                            : <></>
+                          }
+                        </Box>
+                      </Stack>
                     </Stack>
                   </Stack>
-                  <Box display={{xs:'inherit',md:'none'}}>
+                  
+                  <Stack display={{xs:'inherit',md:'none'}}>
                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                  </Box>
-                  <HyvorComments 
+                    <Box>
+                          {
+                          !session?.user
+                            ? <Button size='small' variant='contained' onClick={()=>{
+                              show(<SignInForm/>);
+                            }}>{t('common:comment')}</Button>
+                            : <></>
+                          }
+                    </Box>
+                  </Stack>
+                  
+                 <HyvorComments 
                     entity="work" 
                     id={`${work.id}`} 
                     session={session} 

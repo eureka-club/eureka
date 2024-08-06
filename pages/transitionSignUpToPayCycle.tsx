@@ -82,7 +82,7 @@ const TransitionSignUpToPayCyclePage: NextPage<Props> = ({ session }) => {
     isLoading: isJoinCycleLoading,
     data: mutationResponse,
     // isSuccess: isJoinCycleSuccess,
-  } = useJoinUserToCycleAction(user!, cycle as unknown as CycleSumary, participants!, (_data, error) => {
+  } = useJoinUserToCycleAction(user!, cycle as unknown as CycleSumary, (_data, error) => {
     if (error)
       toast.error(t('Internal Server Error'));
   });

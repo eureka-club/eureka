@@ -722,10 +722,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                     </Col>
                     <Col className='d-flex  justify-content-center align-items-center'>
                         <WMI workId={workId!}
-                            size={'lg'}
-                            showCreateEureka={false}
-                            showSaveForLater={true}
-                            showSocialInteraction
+                            size={'large'}
                         />
                     </Col>
                     <Col className='d-flex  justify-content-center align-items-center'>

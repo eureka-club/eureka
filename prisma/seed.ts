@@ -512,8 +512,8 @@ async function main() {
       prismaLocal.$queryRaw(Prisma.sql`
       SET IDENTITY_INSERT dbo.terms ON;
       INSERT INTO dbo.terms(id,parent_id,creator_id,label,code,content_text,
-        weight,taxonomy_code,created_at,updated_at) 
-      VALUES(${c.id},${c.parentId},${c.creatorId},${c.label},${c.code},${c.description},${c.weight},${c.taxonomyCode},${c.createdAt},${c.updatedAt});
+        weight,taxonomy_code,emoji,created_at,updated_at) 
+      VALUES(${c.id},${c.parentId},${c.creatorId},${c.label},${c.code},${c.description},${c.weight},${c.taxonomyCode},${c.emoji},${c.createdAt},${c.updatedAt});
       SET IDENTITY_INSERT dbo.terms OFF;
     `));   
   });

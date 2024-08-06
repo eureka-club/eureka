@@ -6,7 +6,7 @@ import SimpleLayout from '@/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useInterestCycles, { getInterestedCycles } from '@/src/useInterestedCycles';
-import CMI from '@/src/components/cycle/MosaicItem';
+import MosaicItem from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { getSession } from 'next-auth/react';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
@@ -18,7 +18,7 @@ const InterestedCycles: NextPage<Props> = () => {
   const { t } = useTranslation('common');
   const router = useRouter()
   const {data:dataCycles} = useInterestCycles()
-
+console.log("dataCycles ",dataCycles)
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -44,7 +44,7 @@ const InterestedCycles: NextPage<Props> = () => {
               {dataCycles?.cycles.map(c=>
                 <Grid item justifyContent="center" alignItems="center"
                 alignContent={'center'}  key={c.id} >
-                  <CMI cycleId={c.id} />
+                  <MosaicItem cycleId={c.id} />
                 </Grid>
               )}
             </Grid>

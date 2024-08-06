@@ -121,7 +121,7 @@ const CycleDetailDiscussion: FunctionComponent<Props> = ({ cycle, className, cac
           <Row className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             {session && session.user && (
               <Col xs={12} md={1} className="d-flex justify-content-center mb-2 mt-3">
-                <UserAvatar width={28} height={28} userId={session.user.id} showName={false} />
+                <UserAvatar userId={session.user.id} name={session.user.name!} />
               </Col>
             )}
             <Col xs={12} md={11}>

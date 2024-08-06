@@ -52,7 +52,7 @@ const MyBooksMovies: NextPage<Props> = ({id}) => {
               {user?.ratingWorks.filter(rw=>rw.workId).reverse().map(c=>
                 <Grid item justifyContent="center" alignItems="center"
                 alignContent={'center'} key={c.workId} xs={12} sm={6} md={6} lg={3}>
-                  <WMI workId={c.workId!}  size='md' />
+                  <WMI workId={c.workId!}  size='medium' />
                 </Grid>
               )}
             </Grid>

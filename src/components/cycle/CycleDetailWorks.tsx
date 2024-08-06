@@ -4,15 +4,16 @@ import dayjs from 'dayjs';
 import useTranslation from 'next-translate/useTranslation'
 import { WorkSumary } from '@/src/types/work'
 import { CycleWork } from '@/src/types/cycleWork';
+import { Size } from '@/src/types';
 
 interface Props{
   showSocialInteraction?:boolean,
   showHeader?: boolean,
-  size?: string | undefined,
+  size?: Size,
   cycleWorksDates:CycleWork[];
 }
 
-const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showHeader = true,size = 'md',cycleWorksDates}) => {
+const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showHeader = true,size = 'medium',cycleWorksDates}) => {
   const works:WorkSumary[] = cycleWorksDates.map(c=>c.work!);
   const {t} = useTranslation('cycleDetail')
   const getWorksSorted = (() => {
@@ -60,7 +61,7 @@ const CycleDetailWorks: React.FC<Props> = ({ showSocialInteraction = true, showH
           {getWorksSorted.map(w=>{
             if(!w)return ''
             return <div className='p-4' key={w.id}>
-              <WorkMosaic work={w} workId={w.id} size={size} showSocialInteraction={showSocialInteraction} showSaveForLater={false} />
+              <WorkMosaic workId={w.id} size={size} />
                       </div>
           })}
         </div>

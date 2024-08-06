@@ -6,7 +6,7 @@ import SimpleLayout from '@/components/layouts/SimpleLayout';
 import useTranslation from 'next-translate/useTranslation';
 import {getbackOfficeData} from '@/src/useBackOffice'
 import useFeaturedEurekas,{ getFeaturedEurekas } from '@/src/useFeaturedEurekas';
-import PMI from '@/src/components/post/MosaicItem';
+import MosaicItem from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { getSession } from 'next-auth/react';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
@@ -46,7 +46,7 @@ const InterestedCycles: NextPage<Props> = () => {
               {dataCycles?.posts.map(c=>
                 <Grid item justifyContent="center" alignItems="center"
                 alignContent={'center'} key={c.id}>
-                  <PMI postId={c.id} />
+                  <MosaicItem postId={c.id} />
                 </Grid>
               )}
             </Grid>

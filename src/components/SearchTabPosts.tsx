@@ -7,11 +7,9 @@ import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { PostSumary } from '../types/post';
 import usePostsSumary, { getPostsSumary } from '../usePostsSumary';
-import { MosaicContext } from '../useMosaicContext';
 import { useSession } from 'next-auth/react';
-import { Alert, Box} from '@mui/material';
-import { MosaicsGrid } from './MosaicsGrid';
-import Spinner from '@/components/common/Spinner';
+import { Box } from '@mui/material';
+import Masonry from '@mui/lab/Masonry';
 
 const take = 8;
 const SearchTabCycles:FunctionComponent = () => {
@@ -111,7 +109,7 @@ const SearchTabCycles:FunctionComponent = () => {
         ? <Alert>{t('common:ResultsNotFound')}</Alert>
         : <></>
     } */}
-      <MosaicsGrid isLoading={isLoading}>
+      {/* <MosaicsGrid isLoading={isLoading}>
           {posts?.map(p=>
             <Box key={p.id}>
               <MosaicContext.Provider value={{ showShare: false }}>
@@ -119,7 +117,23 @@ const SearchTabCycles:FunctionComponent = () => {
               </MosaicContext.Provider>
             </Box>
           )}
-    </MosaicsGrid>
+          
+    </MosaicsGrid> */}
+    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+      {posts?.map(p=>
+              <Box key={p.id}>
+                  <MosaicItem postId={p.id} sx={{
+                    'img':{
+                      width:'100%',
+                      height:'auto',
+                      border:'solid 1px lightgray',
+                      borderRadius:'4px',
+                      boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`,
+                    }
+                  }} />
+              </Box>
+      )}
+    </Masonry>
     <Box sx={{padding:'1rem'}}>
       {posts?.length!=total && <hr ref={ref}/>}
       {/* {posts?.length!=total && <Spinner  />} */}

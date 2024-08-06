@@ -52,7 +52,7 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
         
         <SwipeableViews style={{paddingTop:'1rem'}} index={value} onChangeIndex={handleChangeIndex}>
             {
-                contents.map((c,idx)=><Box key={`tab-content-${idx}`}>{c}</Box>)
+                contents.map((c,idx)=><Box key={`tab-content-${idx}`} style={{overflow:'hidden'}}>{c}</Box>)
             }
         </SwipeableViews>
     </Box>

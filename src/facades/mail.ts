@@ -159,7 +159,6 @@ export const sendEmailWithComentCreatedSumary = async ()=>{
   });
   if(data?.length){
     const promises:Promise<boolean|null>[] = [];
-
     data.forEach(d=>{
       const {to:to_,subject,etitle,eurl,urllabel,about,aboutEnd,unsubscribe}=d;
       const to = to_.split(",").map((t:string)=>({email:t}));
@@ -176,9 +175,8 @@ export const sendEmailWithComentCreatedSumary = async ()=>{
         },
       }));
     });
-    const res = await Promise.allSettled(promises);
     await prisma?.comentCreatedDaily.deleteMany();
-    
+    const res = await Promise.allSettled(promises);
   }
 }
 

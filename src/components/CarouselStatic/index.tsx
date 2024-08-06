@@ -5,8 +5,8 @@ import globalSearchEngineAtom from '../../atoms/searchEngine';
 import Spinner from '@/components/common/Spinner';
 import styles from './index.module.css';
 import Mosaics from './Mosaics';
-import { MosaicItem } from '@/src/types';
-import { Box, Stack, Typography } from '@mui/material';
+import { MosaicItem, Size } from '@/src/types';
+import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 
 type Props = {
   title?: string | JSX.Element;
@@ -19,7 +19,7 @@ type Props = {
   customMosaicStyle?: { [key: string]: string };
   className?: string;
   mosaicBoxClassName?: string;
-  size?: string;
+  size?: Size;
   cacheKey: string[];
   userMosaicDetailed?: boolean;
 };

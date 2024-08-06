@@ -36,6 +36,7 @@ const MosaicItem: FunctionComponent<Propss> = ({ user:user_,userId,...otherProps
   return  <Link href={`/mediatheque/${getMediathequeSlug(user)}`}>
             <Stack 
             direction={'row'} {...otherProps}
+            gap={1}
             sx={{
               cursor:'pointer',
               padding:'.2rem',
@@ -48,7 +49,7 @@ const MosaicItem: FunctionComponent<Propss> = ({ user:user_,userId,...otherProps
             transition:'background 1s',
             }}}
             >
-              <Box>{user ? <UserAvatar width={42} height={42} user={user} showName={false} /> : <></>}</Box>
+              <Box>{user ? <UserAvatar size='small' name={user.name!} image={user.image!} photos={user.photos} userId={user.id!} /> : <></>}</Box>
               <Stack>
                 <Typography variant='body2'>{user?.name || 'unknown'}</Typography>
                   {

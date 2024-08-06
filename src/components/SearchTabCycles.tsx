@@ -10,6 +10,7 @@ import useCyclesSumary from '../useCyclesSumary';
 import { MosaicsGrid } from './MosaicsGrid';
 import { CircularProgress } from '@mui/material';
 import MosaicItem from './cycle/MosaicItem';
+import Masonry from '@mui/lab/Masonry';
 
 const take = 8;
 interface Props{
@@ -19,7 +20,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   const router = useRouter();
   const terms = router?.query.q?.toString()!.split(" ") || [];
   const {FilterEngineCycles,filtersType,filtersCountries} = useFilterEngineCycles()
-  
+  console.log(filtersType,filtersCountries);
   const getProps = ()=>{
     const res:Prisma.CycleWhereInput = {
       OR:[
@@ -72,19 +73,27 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
             if(filtersCountries && filtersCountries.length){
               res.AND = {
                 ...res.AND ? res.AND : {},
-                creator:{
-                  countryOfOrigin:{
-                    in:filtersCountries
-                  }
-                }
+                OR:[
+                  {
+                    creator:{
+                      countryOfOrigin:{
+                        in:filtersCountries
+                      }
+                    }
+                  },
+                  {
+                    countryOfOrigin:{
+                      in:filtersCountries
+                    }
+                  }  
+                ]
               }
             }
             return res;
   };
           
   const [props,setProps]=useState<Prisma.CycleFindManyArgs>({take,where:{...getProps()}})
-  const cacheKey = [`cycles-search-${terms}-${lang}`];
-          
+  const cacheKey = [`cycles-search-${terms}-${lang}-${JSON.stringify(props)}`];
   const {data:{total,fetched,cycles:c}={total:0,fetched:0,cycles:[]},isLoading} = useCyclesSumary(lang,props,{cacheKey,enabled:!!router.query?.q});
   const [cycles,setCycles] = useState<CycleSumary[]>([])
 
@@ -125,17 +134,16 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
         ? <Alert>{t('ResultsNotFound')}</Alert>
         : <></>
     } */}
-    <MosaicsGrid isLoading={isLoading}>
-        {cycles?.map(p=>
-          <MosaicItem 
-            key={p.id} 
-            cycle={p} 
-            cycleId={p.id} 
-            className="" 
-            imageLink={true} 
-            cacheKey={cacheKey} size={'md'} />
+    {/* <MosaicsGrid isLoading={isLoading}>
+        {cycles?.map(c=>
+          <MosaicItem key={c.id} cycleId={c.id} size={'medium'} />
         )}
-    </MosaicsGrid>
+    </MosaicsGrid> */}
+    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+      {cycles?.map(c=>
+          <MosaicItem key={c.id} cycleId={c.id} size={'medium'} />
+      )}
+    </Masonry>
     {cycles?.length!=total && <CircularProgress  />}
   </>
   

@@ -9,7 +9,7 @@ import SocialInteraction from './SocialInteraction';
 import LocalImageComponent from '../LocalImage';
 import styles from './MosaicItemDetail.module.css';
 import { Session } from '../../types';
-import Avatar from '../common/UserAvatar';
+import UserAvatar from '../common/UserAvatar';
 import { CycleDetail } from '@/src/types/cycle';
 import { WorkDetail } from '@/src/types/work';
 import {useAtom} from 'jotai'
@@ -149,7 +149,7 @@ const MosaicItemDetail: FunctionComponent<Props> = ({
           {post && showdetail && (
           <div className={`${styles.postDetail}`}>
                <div  className={`d-flex flex-row fs-6 `}>
-                <Avatar width={27} height={27} userId={post.creator.id} showFullName={false} size= {(!size) ? "xs" :"sm" } />
+                <UserAvatar userId={post.creator.id} name={post.creator.name!} size= {(!size) ? "small" :"medium" } />
                 <span className={` ms-1 me-1 d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>-</span>
                 <span className={`d-flex align-items-center ${(!size) ?  styles.detailText : ""}`}>{dayjs(post.createdAt).format(DATE_FORMAT_SHORT)}</span>
                 </div>

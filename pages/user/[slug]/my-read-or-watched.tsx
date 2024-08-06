@@ -306,12 +306,12 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     </Typography>
                   ),
                   content: (
-                    <Grid container direction="column">
+                    <Grid container direction='column' >
                       {books ? (
                         Object.keys(books)
                           .reverse()
                           .map((year) => (
-                            <Grid item padding={2} key={year}>
+                            <Grid item padding={2}  key={year}>
                               <section className="d-flex flex-row">
                                 <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
                                 <div className="cursor-pointer" onClick={(e) => copyURL(e, 'books', year)}>
@@ -321,17 +321,24 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                                       color: 'var(--eureka-purple)',
                                     }}
                                   />
+                                   
                                 </div>
                               </section>
 
-                              <Grid container direction={'row'} padding={2}>
-                                {books[year].map((w: any) => (
-                                  <Grid item padding={2} key={w.workId}>
-                                    <WMI notLangRestrict workId={w.workId!} size="md" />
-                                  </Grid>
-                                ))}
-                              </Grid>
+                              <Grid container direction={'row'}  padding={2}>
+                            {books[year].map((w: any) => (
+                                    <Grid item padding={2}    key={w.workId}
+                                  
+                                     >
+                                      <WMI workId={w.workId!} size='medium'/>
+                                    </Grid>
+                                  ))}
+                          
+                          </Grid>
+                               
+                              
                             </Grid>
+                            
                           ))
                       ) : (
                         <Alert variant="filled" severity="info">
@@ -349,12 +356,12 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     </Typography>
                   ),
                   content: (
-                    <Grid container direction="column">
+                    <Grid>
                       {movies ? (
                         Object.keys(movies)
                           .reverse()
                           .map((year) => (
-                            <Grid item padding={2} key={year}>
+                            <Grid container key={year}>
                               <section className="d-flex flex-row">
                                 <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
                                 <div className="cursor-pointer" onClick={(e) => copyURL(e, 'movies', year)}>
@@ -366,17 +373,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                                   />
                                 </div>
                               </section>
-                              <Grid container direction={'row'} padding={2}>
                               {movies[year].map((w: any) => (
                                 <Grid
-                                item padding={2}
+                                  item
                                   key={w.workId}
-                                 
+                                  
                                 >
-                                  <WMI notLangRestrict workId={w.workId!} size="md" />
+                                  <WMI workId={w.workId!} size='medium' />
                                 </Grid>
                               ))}
-                             </Grid>
                             </Grid>
                           ))
                       ) : (

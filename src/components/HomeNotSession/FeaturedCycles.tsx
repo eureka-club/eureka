@@ -8,9 +8,9 @@ interface Props {
 }
 
 const FeaturedCycles:FC<Props> = ({}) => {
-    const router = useRouter()
+    const router = useRouter();
     const { t,lang } = useTranslation('common');
-    const {data} = useInterestedCycles()
+    const {data} = useInterestedCycles();
 
     return (data?.cycles && data?.cycles.length) 
     ? <div>      

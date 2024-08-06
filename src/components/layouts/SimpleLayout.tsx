@@ -7,7 +7,9 @@ import HeaderMobile from '@/components/layouts/HeaderMobile';
 import BannerCustomizable from '@/src/components/BannerCustomizable';
 import BannerCustomizableMobile from '@/src/components/BannerCustomizableMobile';
 import Footer from '@/components/layouts/Footer';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Fab } from '@mui/material';
+import { ScrollTop } from './ScrollTop';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
@@ -27,20 +29,15 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
     if (banner) return <>{banner}</>;
     return ``;
   };
-  const Ctr = ({children,...args}:{children:JSX.Element | JSX.Element[]}&HtmlHTMLAttributes<HTMLDivElement>)=>{
-    if(!fullWidth)return <Container {...args}>{children}</Container>;
-    return <Box {...args}>{children}</Box>;
-  }
+  // const Ctr = ({children,...args}:{children:JSX.Element | JSX.Element[]}&HtmlHTMLAttributes<HTMLDivElement>)=>{
+  //   if(!fullWidth)return <Container {...args}>{children}</Container>;
+  //   return <Box {...args}>{children}</Box>;
+  // }
   return (
     <>
-      <section>
+      <section id="back-to-top-anchor">
         {showNavBar && <>
-          {/* <div className="d-none d-lg-block"> */}
             <Navbar />
-          {/* </div> */}
-          {/* <div className="d-lg-none">
-            <NavbarMobile />
-          </div> */}
         </>
         }
       </section>
@@ -66,6 +63,11 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
             : <Box className='mainContainer'>{children}</Box> 
         }
       </Box>
+      <ScrollTop>
+        <Fab color='primary' size="small" aria-label="scroll back to top">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
       {showFooter && (<Footer/>)}
     </>    
   );

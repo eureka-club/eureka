@@ -44,7 +44,7 @@ import { RenderPosts } from './RenderPosts';
 import { RenderGuidelines } from './RenderGuideLines';
 import { RenderParticipants } from './RenderParticipants';
 import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
-import Spinner from '@/components/common/Spinner';
+import { useOnCommentCreated } from '../../common/useOnCycleCommentCreated';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {
@@ -82,6 +82,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 );
 
 const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
+const{dispatch}=useOnCommentCreated(cycleId);
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works?.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
@@ -265,25 +266,7 @@ const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}
               entity='cycle' 
               id={`${cycle.id}`} 
               session={session!}  
-              OnCommentCreated={async (comment)=>{
-                  const url = `${WEBAPP_URL}/api/hyvor_talk/onCommentCreated/cycle`;
-                  const fr = await fetch(url,{
-                    method:'POST',
-                    headers:{
-                      "Content-Type":"application/json",
-                    },
-                    body:JSON.stringify({
-                      cycleId:cycle?.id,
-                      url:comment.url,
-                      user:{name:session.user.name,email:session.user.email},
-                      parent_id:comment.parent_id,
-                    })
-                  });
-                  if(fr.ok){
-                    const res = await fr.json();
-                    console.log(res);
-                  }
-              }}
+              OnCommentCreated={(comment)=>dispatch(comment)}
             />
           </>
         });

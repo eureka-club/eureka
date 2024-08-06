@@ -938,7 +938,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                   <TextField label="Search books by title" fullWidth onChange={OnFilterWorksChanged} />
                   {allWorks?.map((w, idx) => <Box m={1} key={`aw-${w.id}`} sx={{ display: "flex" }}>
                     <Box sx={{ width: '40%' }}>
-                      <MosaicItem work={w as unknown as WorkSumary} workId={w.id} size='sm' linkToWork={false} showCreateEureka={false} />
+                      <MosaicItem workId={w.id} />
                     </Box>
                     <Paper
                       sx={{ width: '60%' }}
