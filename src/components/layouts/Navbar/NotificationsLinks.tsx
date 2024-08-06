@@ -1,7 +1,6 @@
-import { Avatar, Badge, Box, Button, Stack, Typography} from "@mui/material";
+import { Avatar, Badge, Box, Stack} from "@mui/material";
 import MenuAction from "./MenuAction";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
-// import useTranslation from "next-translate/useTranslation";
 import Notifications from "../../Notifications";
 import useNotifications from "@/src/useNotifications";
 import { useSession } from "next-auth/react";
@@ -10,10 +9,8 @@ import { QueryClient, useMutation } from "react-query";
 import { useEffect, useState } from "react";
 
 export const NotificationsLinks = () => {
-  // const { t } = useTranslation('navbar');
   const qc = new QueryClient();
   const{data:session}=useSession();
-  // if(!session?.user)return <></>;
   
   const{data:notificationsData}=useNotifications(session?.user?.id!);
   const [news,setnews]=useState(0);
@@ -54,27 +51,32 @@ export const NotificationsLinks = () => {
   })
 
   
-  return <MenuAction key='NotificationsLinks' label={
-    <Stack justifyContent={'center'} alignItems={'center'}>
-      <a onClick={()=>mutate()}>
-        <Badge badgeContent={news} color="secondary">
-          <Avatar sx={{width:32,height:32,bgcolor:'var(--color-primary)'}}>
-            <IoNotificationsCircleOutline />
-          </Avatar>
-        </Badge>
-
-      </a>
-    </Stack>
-  }
-  disabled={!notificationsData?.notifications.length}
-  >
-    {
-      notificationsData?.notifications.length
-        ? <Box sx={{width:'350px'}}>
-        <Notifications/>
-      </Box>
-      :<></>
+  return <>
+    <style jsx global>{`
+      .MuiPaper-elevation:has(ul.MuiMenu-list #hasNotNotifications){
+        display:none;
+      }
+    `}</style>
+    <MenuAction key='NotificationsLinks' label={
+      <Stack justifyContent={'center'} alignItems={'center'}>
+        <a onClick={()=>mutate()}>
+          <Badge badgeContent={news} color="secondary">
+            <Avatar  sx={{width:32,height:32,bgcolor:'var(--color-primary)'}}>
+              <IoNotificationsCircleOutline />
+            </Avatar>
+          </Badge>
+        </a>
+      </Stack>
     }
-    
-  </MenuAction>;
+    disabled={!notificationsData?.notifications.length}
+    >
+        {
+          notificationsData?.notifications.length
+            ? <Box sx={{width:'350px'}}>
+            <Notifications/>
+          </Box>
+          :<i id="hasNotNotifications"></i>
+        }
+    </MenuAction>
+  </>
 };

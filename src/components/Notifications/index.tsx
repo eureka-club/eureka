@@ -1,14 +1,12 @@
 import useNotifications from "@/src/useNotifications";
 import { useSession } from "next-auth/react"
 import MosaicItem from "../notification/MosaicItem";
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { NotificationSumary } from "@/src/types/notification";
 import useTranslation from "next-translate/useTranslation";
-import { BsEyeFill } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRemoveNotification } from "@/src/useRemoveNotification";
-import { useEffect, useRef } from "react";
 
 interface Props{
     // onNotificationClick:(e:any,notificationId:number)=>void
