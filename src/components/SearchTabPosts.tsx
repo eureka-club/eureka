@@ -122,15 +122,14 @@ const SearchTabCycles:FunctionComponent = () => {
     <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
       {posts?.map(p=>
               <Box key={p.id}>
-                  <MosaicItem postId={p.id} sx={{
-                    'img':{
-                      width:'100%',
-                      height:'auto',
-                      border:'solid 1px lightgray',
-                      borderRadius:'4px',
-                      boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`,
-                    }
-                  }} />
+                  <MosaicItem postId={p.id} 
+                    sx={{
+                      'img':{
+                        width:'100%',
+                        height:'auto',
+                      }
+                    }} 
+                  />
               </Box>
       )}
     </Masonry>

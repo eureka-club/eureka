@@ -23,10 +23,12 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
-import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, Stack, Box } from '@mui/material';
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Masonry from '@mui/lab/Masonry';
+import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -121,6 +123,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       })
   };
 
+
+  const getDefaultActiveIndex = () => {
+    if (booksTotal > 0)
+      return 0
+    else if (moviesTotal > 0 && !books)
+      return 1;
+    else
+      return 0;
+  };
   const getDefaultActiveKey = () => {
     if (booksTotal > 0)
       return 'books'
@@ -203,10 +214,6 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       <SimpleLayout>
         <article className="">
           <ButtonsTopActions/>
-
-          {/*isLoadingSession ? (
-            <Spinner animation="grow" />
-          ) : */}
           <>
             <Row className='mt-sm-0 mb-4 d-flex flex-column flex-lg-row'>
               <Col className='d-flex flex-row'>
@@ -221,35 +228,18 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                   <span className='text-center'>{t('AddWork')}</span>
                 </Button>
               </Col>
-
             </Row>
 
             <style jsx global>
               {`
-                  .nav-tabs .nav-item.show .nav-link,
-                  .nav-tabs .nav-link.active,
-                  .nav-tabs .nav-link:hover {
-                    background-color: var(--bs-primary);
-                    color: white !important;
-                    border: none !important;
-                    border-bottom: solid 2px var(--bs-primary) !important;
-                  }
-                  .nav-tabs {
-                    border: none !important;
-                    border-bottom: solid 1px var(--bs-primary) !important;
-                  }
-                  .nav-link {
-                    color: var(--bs-primary);
-                  }
-
-                  .form-check {
-                    color: gray !important;
-                  }
-                  .form-check-label {
-                    margin-left: 0.2em;
-                    font-size: 1.1em;
-                  }
-                `}
+                .form-check {
+                  color: gray !important;
+                }
+                .form-check-label {
+                  margin-left: 0.2em;
+                  font-size: 1.1em;
+                }
+              `}
             </style>
 
             <FormControl className="mb-4 d-none d-lg-flex" sx={{ minWidth: 120 }} style={{ width: '20%' }}>
@@ -288,87 +278,99 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
               </Select>
             </FormControl>
             </section>
-
-            <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
-              id="uncontrolled-tab-example" className="mb-4">
-              <Tab eventKey="books" title={`${t('Books')} (${booksTotal})`}>
+            
+            <TabPanelSwipeableViews
+              indexActive={getDefaultActiveIndex()}
+              items={[
+              {
+                label:t('Books'),
+                content:<>
                 {books ? (
-                  Object.keys(books).reverse().map((year) => (
-                    <Row className="mt-0" key={year}>
-                      <section className="d-flex flex-row">
-                        <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                        <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
-                          <ContentCopyRoundedIcon
-                            className="ms-2"
-                            style={{
-                              color: 'var(--eureka-purple)',
-                            }}
-                          />
-                        </div>
-                      </section>
-                      {
-                        books[year].map((w: any) => (
-                          <Col
-                            key={w.workId}
-                            xs={12}
-                            sm={6}
-                            lg={3}
-                            xxl={2}
-                            className="mb-5 d-flex justify-content-center  align-items-center"
-                          >
-                            <WMI workId={w.workId!}  size="medium" />
-                          </Col>
-                        ))
-                      }
-                    </Row>
-                  ))
-                ) : (
-                  <Alert className="mt-4" variant="primary">
-                    <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-                  </Alert>
-                )}
-              </Tab>
-              <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
-                {movies ? (
-                  Object.keys(movies)
-                    .reverse()
-                    .map((year) => (
-                      <Row className="mt-0" key={year}>
-                        <section className="d-flex flex-row">
-                          <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                          <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
-
-                            <ContentCopyRoundedIcon
-                              className="ms-2"
-                              style={{
-                                color: 'var(--eureka-purple)',
-                              }}
-                            />
-                          </div>
-                        </section>
-                        {movies[year].map((w: any) => (
-                          <Col
-                            key={w.workId}
-                            xs={12}
-                            sm={6}
-                            lg={3}
-                            xxl={2}
-                            className="mb-5 d-flex justify-content-center  align-items-center"
-                          >
-                            <WMI  workId={w.workId!} size="medium" />
-                          </Col>
-                        ))}
-                      </Row>
+              Object.keys(books).reverse().map((year) => (
+                <Stack key={year}>
+                  <section className="d-flex flex-row">
+                    <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                    <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
+                      <ContentCopyRoundedIcon
+                        className="ms-2"
+                        style={{
+                          color: 'var(--eureka-purple)',
+                        }}
+                      />
+                    </div>
+                  </section>
+                  <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+                  {
+                    books[year].map((w: any) => (
+                      <Box key={w.id}>
+                      <WMI workId={w.workId!} 
+                        sx={{
+                          'img':{
+                            width:'100%',
+                            height:'auto',
+                          }
+                        }} 
+                      />
+                  </Box>
                     ))
-                ) : (
-                  <Alert className="mt-4" variant="primary">
-                    <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-                  </Alert>
-                )}
-              </Tab>
-            </Tabs>
+                  }
+                  </Masonry>
+                </Stack>
+              ))
+            ) : (
+              <Alert className="mt-4" variant="primary">
+                <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+              </Alert>
+            )}
+                </>
+              },
+              {
+                label:t('Movies'),
+                content:<>
+                  {movies ? (
+                    Object.keys(movies)
+                      .reverse()
+                      .map((year) => (
+                        <Stack key={year}>
+                          <section className="d-flex flex-row">
+                            <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
+
+                              <ContentCopyRoundedIcon
+                                className="ms-2"
+                                style={{
+                                  color: 'var(--eureka-purple)',
+                                }}
+                              />
+                            </div>
+                          </section>
+                          <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+                          {movies[year].map((w: any) => (
+                            <Box key={w.workId}>
+                              <WMI  
+                                 workId={w.workId!} 
+                                sx={{
+                                  'img':{
+                                    width:'100%',
+                                    height:'auto',
+                                  }
+                                }}  
+                              />
+                            </Box>
+                          ))}
+                          </Masonry>
+                        </Stack>
+                      ))
+                  ) : (
+                    <Alert className="mt-4" variant="primary">
+                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                    </Alert>
+                  )}
+                </>
+              }
+              ]}
+            />
           </>
-          {/* }*/}
         </article>
       </SimpleLayout>
     </>
