@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import Prompt from '@/src/components/post/PostPrompt';
-import FeaturedCycles from './FeaturedCycles';
+// import FeaturedCycles from './FeaturedCycles';
 import FeaturedEurekas from './FeaturedEurekas';
 import FeaturedWorks from '@/src/components/HomeNotSession/FeaturedWorks';
 import FeaturedUsers from './FeaturedUsers';
@@ -47,7 +47,7 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
               <FeedNotSession/>
               <FeaturedWorks />
               <FeaturedEurekas />
-              <FeaturedCycles />
+              {/* <FeaturedCycles /> */}
           </Stack>
           {/* </section> */}
         </Grid>

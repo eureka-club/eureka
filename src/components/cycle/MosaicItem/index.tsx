@@ -237,25 +237,26 @@ const TruncateTextRender=({truncated,original}:{truncated:string,original:string
 const TruncateText:FC<TruncateTextProps>=({countCharacters,text})=>{
   if(!text)return <></>;
   if(text.length<=countCharacters){
-    return <Typography><TruncateTextRender original={text} truncated={text}/></Typography>;
+    return <TruncateTextRender original={text} truncated={text}/>;
   }
   else{
-    return <Typography>
-      <TruncateTextRender original={text} truncated={text.slice(0,countCharacters-3)}/>
-    </Typography>
+    return <TruncateTextRender original={text} truncated={text.slice(0,countCharacters-3)}/>
+    
   }
 }
 const CardHeaderTitle = ({creatorName}:{creatorName:string})=>{
-  return <>
+  return <Typography>
     <TruncateText countCharacters={22} text={creatorName}/>
-  </>
+  </Typography>
 }
 interface CardTitleProps extends BoxProps{
   title:string;
 }
 const CardTitle:FC<CardTitleProps> = ({title,...others})=>{
   return <Box {...others}>
-    <TruncateText countCharacters={25} text={title}/>
+    <Typography variant='subtitle2' textAlign={'center'}>
+      <TruncateText countCharacters={100} text={title}/>
+    </Typography>
   </Box>
 }
 
@@ -306,7 +307,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
               {/* <Typography>
                 {cycle?.title}
               </Typography> */}
-                <CardTitle title={cycle?.title!} sx={{paddingBottom:2}}/>
+              <CardTitle title={cycle?.title!} sx={{paddingBottom:2}}/>
               <Stack>
                 {
                   <JoinLeaveCycleBtn cycleId={+cycleId} />
