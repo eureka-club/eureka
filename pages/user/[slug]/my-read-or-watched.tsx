@@ -1,7 +1,7 @@
 import { NextPage, GetServerSideProps } from 'next';
 import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
 import Head from 'next/head';
-import { ButtonGroup, Tabs, Tab, Col, Row } from 'react-bootstrap';
+//import { ButtonGroup, Tabs, Tab, Col, Row } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
@@ -14,33 +14,19 @@ import { QueryClient, dehydrate } from 'react-query';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast';
-//import useMyReadOrWatched from '@/src/useMyReadOrWatched';
-/*import {
-  SelectChangeEvent,
-  Button as ButtonMui,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-} from '@mui/material';
-*/
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner';
-//import { Grid, Button, Alert, Box } from '@mui/material';
-//import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
 
-//import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
 import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, Stack, Box, Alert,Typography,Grid, Button, } from '@mui/material';
-//import dayjs from 'dayjs';
-//import LocalImageComponent from '@/src/components/LocalImage';
-//import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+
+
+
 import Masonry from '@mui/lab/Masonry';
 import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
-//import styles from './my-read-or-watched.module.css';
+import styles from './my-read-or-watched.module.css';
 
 interface Props {
   id: number;
