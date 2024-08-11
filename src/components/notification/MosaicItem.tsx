@@ -32,7 +32,7 @@ const MosaicItem: FunctionComponent<Props> = ({ notification }) => {
     return dayjs().to(notification.notification.createdAt);//TODO integration with i18n
   }
 return <Stack direction={'row'} gap={.5}>
-          <UserAvatar name={notification.notification.fromUser.name!} userId={notification.notification.fromUser.id} />
+          <UserAvatar size='small' name={notification.notification.fromUser.name!} userId={notification.notification.fromUser.id} />
           <Stack direction={'column'} gap={.25}>
             <Stack direction={'row'} alignItems={'center'} gap={.5}>
               <aside>
@@ -48,21 +48,6 @@ return <Stack direction={'row'} gap={.5}>
             <Typography>{dateInfo()}</Typography>
           </Stack>
       </Stack>
-  // return (
-  //   <section className={`${className} cursor-pointer d-flex justify-content-between p-1 mb-3`} onClick={notificationOnClick}>
-  //     {notification && <>
-  //     <aside>
-  //       <p>{formatMessage(notification.notification.message)}</p>
-  //       <em className="text-muted">
-  //         {dateInfo()}
-  //       </em>  
-  //     </aside>
-  //       <aside className="">
-  //         <BsFillCircleFill className="text-primary" />
-  //       </aside>
-  //     </>}
-  //   </section>
-  // );
 };
 
 export default MosaicItem;

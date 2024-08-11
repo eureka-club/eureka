@@ -22,24 +22,11 @@ import { LocalImage } from '@prisma/client';
 
 interface Props extends CardProps {
   cycleId:number;
-  participants:{id:number}[];
-  usersJoined:{userId:number,pending:boolean}[];
-  title:string;
   description:string;
-  subheader?:string;
-//   alt?:string;
-  creatorImage?:string;
-  creatorName:string;
-  creatorId:string|number;
-  creatorPhoto?:string;
-  localImages:LocalImage[];
-  access:number;
 }
 export default function CycleActiveMosaicItem(props:Props) {
   const{
-    cycleId,description,localImages,participants,usersJoined,
-    creatorName,creatorId,title,subheader,
-    creatorImage,creatorPhoto,access
+    cycleId,description
   }=props;
 
   const [expanded, setExpanded] = React.useState(false);
@@ -53,7 +40,7 @@ export default function CycleActiveMosaicItem(props:Props) {
   };
 
 
-  return <Card sx={{width:{xs:'auto'}}}>
+  return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       {/* <CardHeader
                     avatar={
                     <>

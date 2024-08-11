@@ -1,11 +1,7 @@
 import {memo,FC} from 'react';
 import crypto from 'crypto-js';
 import type { Comment} from '@hyvor/hyvor-talk-base';
-
-import { Embed, CommentCount } from 'hyvor-talk-react';
 import { Comments } from '@hyvor/hyvor-talk-react';
-//import { useSession } from 'next-auth/react';
-
 import { HYVOR_SSO_KEY, HYVOR_WEBSITE_ID, WEBAPP_URL } from '@/src/constants';
 import { Session } from '../../types';
 

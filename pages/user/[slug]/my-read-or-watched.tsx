@@ -1,7 +1,7 @@
 import { NextPage, GetServerSideProps } from 'next';
 import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
 import Head from 'next/head';
-import { ButtonGroup, Tabs, Tab, Col, Row, Stack } from 'react-bootstrap';
+import { ButtonGroup, Tabs, Tab, Col, Row } from 'react-bootstrap';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
@@ -14,8 +14,8 @@ import { QueryClient, dehydrate } from 'react-query';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast';
-import useMyReadOrWatched from '@/src/useMyReadOrWatched';
-import {
+//import useMyReadOrWatched from '@/src/useMyReadOrWatched';
+/*import {
   SelectChangeEvent,
   Button as ButtonMui,
   FormControl,
@@ -24,13 +24,22 @@ import {
   MenuItem,
   Typography,
 } from '@mui/material';
+*/
 import dayjs from 'dayjs';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner';
-import { Grid, Button, Alert, Box } from '@mui/material';
-import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
+//import { Grid, Button, Alert, Box } from '@mui/material';
+//import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
 
+//import toast from 'react-hot-toast'
+import useMyReadOrWatched from '@/src/useMyReadOrWatched'
+import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, Stack, Box, Alert,Typography,Grid, Button, } from '@mui/material';
+//import dayjs from 'dayjs';
+//import LocalImageComponent from '@/src/components/LocalImage';
+//import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Masonry from '@mui/lab/Masonry';
+import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
 //import styles from './my-read-or-watched.module.css';
 
 interface Props {
@@ -126,6 +135,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       });
   };
 
+
+  const getDefaultActiveIndex = () => {
+    if (booksTotal > 0)
+      return 0
+    else if (moviesTotal > 0 && !books)
+      return 1;
+    else
+      return 0;
+  };
   const getDefaultActiveKey = () => {
     if (booksTotal > 0) return 'books';
     else if (moviesTotal > 0 && !books) return 'movies';
@@ -204,11 +222,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       </Head>
       <SimpleLayout>
         <article className="">
-          <ButtonsTopActions />
-
-          {/*isLoadingSession ? (
-            <Spinner  />
-          ) : */}
+          <ButtonsTopActions/>
           <>
             <Grid container direction={'row'} spacing={1}>
               <Grid item>
@@ -228,22 +242,6 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
             <style jsx global>
               {`
-                .nav-tabs .nav-item.show .nav-link,
-                .nav-tabs .nav-link.active,
-                .nav-tabs .nav-link:hover {
-                  background-color: var(--bs-primary);
-                  color: white !important;
-                  border: none !important;
-                  border-bottom: solid 2px var(--bs-primary) !important;
-                }
-                .nav-tabs {
-                  border: none !important;
-                  border-bottom: solid 1px var(--bs-primary) !important;
-                }
-                .nav-link {
-                  color: var(--bs-primary);
-                }
-
                 .form-check {
                   color: gray !important;
                 }
@@ -295,187 +293,97 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 </Select>
               </FormControl>
             </section>
-
+            
             <TabPanelSwipeableViews
-              indexActive={0}
+              indexActive={getDefaultActiveIndex()}
               items={[
-                {
-                  label: (
-                    <Typography>
-                      {t('Books')} {`(${booksTotal})`}
-                    </Typography>
-                  ),
-                  content: (
-                    <Grid container direction='column' >
-                      {books ? (
-                        Object.keys(books)
-                          .reverse()
-                          .map((year) => (
-                            <Grid item padding={2}  key={year}>
-                              <section className="d-flex flex-row">
-                                <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                                <div className="cursor-pointer" onClick={(e) => copyURL(e, 'books', year)}>
-                                  <ContentCopyRoundedIcon
-                                    className="ms-2"
-                                    style={{
-                                      color: 'var(--eureka-purple)',
-                                    }}
-                                  />
-                                   
-                                </div>
-                              </section>
+              {
+                label:t('Books'),
+                content:<>
+                {books ? (
+              Object.keys(books).reverse().map((year) => (
+                <Stack key={year}>
+                  <section className="d-flex flex-row">
+                    <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                    <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
+                      <ContentCopyRoundedIcon
+                        className="ms-2"
+                        style={{
+                          color: 'var(--eureka-purple)',
+                        }}
+                      />
+                    </div>
+                  </section>
+                  <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+                  {
+                    books[year].map((w: any) => (
+                      <Box key={w.id}>
+                      <WMI workId={w.workId!} 
+                        sx={{
+                          'img':{
+                            width:'100%',
+                            height:'auto',
+                          }
+                        }} 
+                      />
+                  </Box>
+                    ))
+                  }
+                  </Masonry>
+                </Stack>
+              ))
+            ) : (
+              <Alert variant="filled" severity="info">{t('ResultsNotFound')}</Alert>
+            )}
+                </>
+              },
+              {
+                label:t('Movies'),
+                content:<>
+                  {movies ? (
+                    Object.keys(movies)
+                      .reverse()
+                      .map((year) => (
+                        <Stack key={year}>
+                          <section className="d-flex flex-row">
+                            <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
 
-                              <Grid container direction={'row'}  padding={2}>
-                            {books[year].map((w: any) => (
-                                    <Grid item padding={2}    key={w.workId}
-                                  
-                                     >
-                                      <WMI workId={w.workId!} size='medium'/>
-                                    </Grid>
-                                  ))}
-                          
-                          </Grid>
-                               
-                              
-                            </Grid>
-                            
-                          ))
-                      ) : (
-                        <Alert variant="filled" severity="info">
-                          {t('ResultsNotFound')}
-                        </Alert>
-                      )}
-                    </Grid>
-                  ),
-                },
-
-                {
-                  label: (
-                    <Typography>
-                      {t('Movies')} {`(${moviesTotal})`}
-                    </Typography>
-                  ),
-                  content: (
-                    <Grid>
-                      {movies ? (
-                        Object.keys(movies)
-                          .reverse()
-                          .map((year) => (
-                            <Grid container key={year}>
-                              <section className="d-flex flex-row">
-                                <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                                <div className="cursor-pointer" onClick={(e) => copyURL(e, 'movies', year)}>
-                                  <ContentCopyRoundedIcon
-                                    className="ms-2"
-                                    style={{
-                                      color: 'var(--eureka-purple)',
-                                    }}
-                                  />
-                                </div>
-                              </section>
-                              {movies[year].map((w: any) => (
-                                <Grid
-                                  item
-                                  key={w.workId}
-                                  
-                                >
-                                  <WMI workId={w.workId!} size='medium' />
-                                </Grid>
-                              ))}
-                            </Grid>
-                          ))
-                      ) : (
-                        <Alert variant="filled" severity="info">
-                          {t('ResultsNotFound')}
-                        </Alert>
-                      )}
-                    </Grid>
-                  ),
-                },
+                              <ContentCopyRoundedIcon
+                                className="ms-2"
+                                style={{
+                                  color: 'var(--eureka-purple)',
+                                }}
+                              />
+                            </div>
+                          </section>
+                          <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+                          {movies[year].map((w: any) => (
+                            <Box key={w.workId}>
+                              <WMI  
+                                 workId={w.workId!} 
+                                sx={{
+                                  'img':{
+                                    width:'100%',
+                                    height:'auto',
+                                  }
+                                }}  
+                              />
+                            </Box>
+                          ))}
+                          </Masonry>
+                        </Stack>
+                      ))
+                  ) : (
+                    
+                      <Alert variant="filled" severity="info">{t('ResultsNotFound')}</Alert>
+                   
+                  )}
+                </>
+              }
               ]}
             />
-            {/*
-            <Tabs activeKey={tabKey || getDefaultActiveKey()} onSelect={handleSubsectionChange}
-              id="uncontrolled-tab-example" className="mb-4">
-              <Tab eventKey="books" title={`${t('Books') } (${booksTotal})`}>
-                {books ? (
-                  Object.keys(books).reverse().map((year) => (
-                    <Grid container  key={year}>
-                      <section className="d-flex flex-row">
-                        <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                        <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
-                          <ContentCopyRoundedIcon
-                            className="ms-2"
-                            style={{
-                              color: 'var(--eureka-purple)',
-                            }}
-                          />
-                        </div>
-                      </section>
-                      {
-                        books[year].map((w: any) => (
-                          <Grid item
-                            key={w.workId}
-                            xs={12}
-                            sm={6}
-                            lg={3}
-                            
-                            className="mb-5 d-flex justify-content-center  align-items-center"
-                          >
-                            <WMI notLangRestrict workId={w.workId!} size="md" />
-                          </Grid>
-                        ))
-                      }
-                    </Grid>
-                  ))
-                ) : (
-                  <Alert variant="filled" severity="info">
-                   {t('ResultsNotFound')}
-                  </Alert>
-                )}
-              </Tab>
-              <Tab eventKey="movies" title={`${t('Movies')} (${moviesTotal})`}>
-                {movies ? (
-                  Object.keys(movies)
-                    .reverse()
-                    .map((year) => (
-                      <Grid container  key={year}>
-                        <section className="d-flex flex-row">
-                          <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                          <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
-
-                            <ContentCopyRoundedIcon
-                              className="ms-2"
-                              style={{
-                                color: 'var(--eureka-purple)',
-                              }}
-                            />
-                          </div>
-                        </section>
-                        {movies[year].map((w: any) => (
-                          <Grid item
-                            key={w.workId}
-                            xs={12}
-                            sm={6}
-                            lg={3}
-                           
-                            className="mb-5 d-flex justify-content-center  align-items-center"
-                          >
-                            <WMI notLangRestrict workId={w.workId!} size="md" />
-                          </Grid>
-                        ))}
-                      </Grid>
-                    ))
-                ) : (
-                  <Alert variant="filled" severity="info">
-                    {t('ResultsNotFound')}
-                  </Alert>
-                )}
-              </Tab>
-            </Tabs>
-              */}
           </>
-          {/* }*/}
         </article>
       </SimpleLayout>
     </>

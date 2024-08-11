@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
-import useTranslation from "next-translate/useTranslation";
 import { Actives } from "./cycle/Actives";
+// import useTranslation from "next-translate/useTranslation";
 
 export const FeedNotSession = ()=>{
-    const { t } = useTranslation('common');
+    // const { t } = useTranslation('common');
 
-    return <Box sx={{padding:1}}>
+    return <Box>
       <Actives/>
     </Box>
 }

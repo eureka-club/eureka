@@ -11,6 +11,8 @@ import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
 import { MosaicsGrid } from '@/src/components/MosaicsGrid';
 import Spinner from '@/components/common/Spinner'
+import { CircularProgress, Stack } from '@mui/material';
+import CarouselStatic from '@/src/components/CarouselStatic';
 
 interface Props{
   id:number;
@@ -48,11 +50,16 @@ const MyCycles: NextPage<Props> = ({id}) => {
           <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('myCycles')}</h1>
           
-          <MosaicsGrid isLoading={isLoading}>
+          {/* <MosaicsGrid isLoading={isLoading}>
           {
             dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='medium' />)!
           }
-          </MosaicsGrid>
+          </MosaicsGrid> */}
+            <Stack direction={'row'} spacing={2} overflow={'scroll'} padding={.5}>
+              {
+                dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='medium' />)!
+              }
+            </Stack>
             </>
         ) : ''
       }
