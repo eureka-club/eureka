@@ -18,7 +18,6 @@ import { Sumary } from '../common/Sumary';
 
 interface Props extends CardProps {
   postId:number;
-  // description:string;
 }
 export default function PostOnCycleActivesCard(props:Props) {
   const{
@@ -44,7 +43,7 @@ export default function PostOnCycleActivesCard(props:Props) {
                 <UserAvatar name={post?.creator.name!} userId={post?.creator.id!} image={post?.creator.image!} photos={post?.creator.photos!}/>
             </>
           }
-          title={post?.title}
+          title={`${post?.title} on cycle: ${post?.cycles[0].title}`}
           subheader={`${t('by')}: ${post?.creator.name!}`}
       />
       <CardContent>
