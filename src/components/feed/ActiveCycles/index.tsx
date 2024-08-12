@@ -1,9 +1,9 @@
-import { useCyclesActives } from "../hooks/useCyclesActives";
+import { useCyclesActives } from "./hooks/useCyclesActives";
 import { Stack } from "@mui/material";
 import {  useEffect } from "react";
-import CycleActiveMosaicItem from "./CycleActiveMosaicItem";
+import CycleActiveCard from "./CycleActiveCard";
 
-export const Actives = ()=>{
+export const ActiveCycles = ()=>{
     const{data:actives}=useCyclesActives();
   
     useEffect(()=>{
@@ -21,7 +21,7 @@ export const Actives = ()=>{
         {
             actives?.map((a:any)=>
             {
-              return <CycleActiveMosaicItem key={`mi-${a.id}`} 
+              return <CycleActiveCard key={`mi-${a.id}`} 
               cycleId={a.id}
               description={a.contentText}
             />

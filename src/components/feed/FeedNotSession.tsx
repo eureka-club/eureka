@@ -1,11 +1,13 @@
-import { Box } from "@mui/material";
-import { Actives } from "./cycle/Actives";
+import { Box, Stack } from "@mui/material";
+import { ActiveCycles } from "./ActiveCycles";
+import { PostsOnCyclesActive } from "./PostsOnActiveCycles";
 // import useTranslation from "next-translate/useTranslation";
 
 export const FeedNotSession = ()=>{
     // const { t } = useTranslation('common');
 
-    return <Box>
-      <Actives/>
-    </Box>
+    return <Stack gap={2}>
+      <ActiveCycles/>
+      <PostsOnCyclesActive/>
+    </Stack>
 }

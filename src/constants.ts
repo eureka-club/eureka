@@ -35,3 +35,9 @@ export const LOCALES : Record<string, string> = {
     'french':'fr' ,
     'portuguese':'pt' 
 }
+export enum CycleAcces {
+    public=1,
+    private=2,
+    protected=3,
+    payment=4
+}
