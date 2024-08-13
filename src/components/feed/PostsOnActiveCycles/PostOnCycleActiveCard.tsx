@@ -47,11 +47,11 @@ export default function PostOnCycleActivesCard(props:Props) {
           subheader={`${t('by')}: ${post?.creator.name!}`}
       />
       <CardContent>
-        <Stack direction={'row'} gap={2}>
+        <Stack direction={{xs:'column',sm:'row'}} gap={2}>
             <MosaicItem postId={postId} sx={{
-                            'img':{
-                              maxWidth:'250px'
-                            }
+              'img':{
+                maxWidth:'250px'
+              }
             }}/>
             <Box>
               <Sumary description={post?.contentText??''}/>

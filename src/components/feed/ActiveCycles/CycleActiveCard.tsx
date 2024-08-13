@@ -54,7 +54,7 @@ export default function CycleActiveCard(props:Props) {
                     subheader={subheader}
                 /> */}
       <CardContent>
-        <Stack direction={'row'} gap={2}>
+        <Stack direction={{xs:'column',sm:'row'}} gap={2}>
           <MosaicItem cycleId={cycleId}/>
           <Sumary description={description} />
         </Stack>
