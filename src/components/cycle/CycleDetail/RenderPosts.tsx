@@ -1,10 +1,9 @@
 import Spinner from '@/components/common/Spinner';
-import { MosaicsGrid } from "../../MosaicsGrid";
 import MosaicItemPost from '@/src/components/post/MosaicItem'
 import usePosts from "@/src/usePosts";
+import { Stack } from '@mui/material';
 import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
-
 
 const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycleId}}}});
 
@@ -44,14 +43,55 @@ export const RenderPosts = ({cycleId}:RenderPostsProps)=>{
 
     if(posts){
       return <>
-      <MosaicsGrid isLoading={isLoading}>
+        <Stack direction={'row'} gap={1} flexWrap={'wrap'} >
         {
-        posts.map((p:any,idx:number)=><MosaicItemPost 
+          posts.map((p:any,idx:number)=><MosaicItemPost 
           key={`${p.id}-${idx}`} 
           postId={p.id}
-          size={'medium'} />          
-        )}
-      </MosaicsGrid>
+          sx={{
+            'img':{
+              xs:{
+                width:'100%'
+              },
+              sm:{
+                width:'100%',
+                // width:'248px',
+                height:'248px'
+              }
+            }
+          }} />          
+        )??<></>}
+        {
+          posts.map((p:any,idx:number)=><MosaicItemPost 
+          key={`${p.id}-${idx}`} 
+          postId={p.id}
+          sx={{
+            'img':{
+              width:'248px'
+            }
+          }} />          
+        )??<></>}
+        {
+          posts.map((p:any,idx:number)=><MosaicItemPost 
+          key={`${p.id}-${idx}`} 
+          postId={p.id}
+          sx={{
+            'img':{
+              width:'248px'
+            }
+          }} />          
+        )??<></>}
+        {
+          posts.map((p:any,idx:number)=><MosaicItemPost 
+          key={`${p.id}-${idx}`} 
+          postId={p.id}
+          sx={{
+            'img':{
+              width:'248px'
+            }
+          }} />          
+        )??<></>}
+      </Stack>
         {/* <Grid container gap={3}>
         {posts.map((p)=><Grid item
           xs={12} sm={6} lg={2} 

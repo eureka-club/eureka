@@ -268,9 +268,8 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
     parentName = 'work';
     parentId = post?.works[0].id;
   }
-
   const href = parentId 
-    ? `${lang}/${parentName}/${parentId}/post/${postId}`
+    ? `/${lang}/${parentName}/${parentId}/post/${postId}`
     : '#';
 
   return <Box

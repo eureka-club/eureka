@@ -88,7 +88,7 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
         <>
           <Button
             style={{
-              width: '280px',
+              // width: '280px',
               background: 'var(--eureka-green)',
               fontFamily: 'Open Sans, sans-serif',
               textTransform: 'none',

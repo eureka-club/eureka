@@ -43,7 +43,7 @@ export const postsOnActiveCycles = async (sessionId?:number|null, props?: Prisma
         } 
         : {
             cycles:{
-                every:{
+                some:{
                     access:CycleAcces.public
                 }
             }

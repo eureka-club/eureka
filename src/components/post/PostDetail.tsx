@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { CommentBankOutlined } from '@mui/icons-material';
+
 import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,7 +11,7 @@ import { Row, Col, Badge } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
 import { WorkDetail } from '../../types/work';
-import MosaicItem from './MosaicItemDetail';
+// import MosaicItem from './MosaicItemDetail';
 import { MosaicContext } from '../../useMosaicContext';
 import UnclampText from '../UnclampText';
 import styles from './PostDetail.module.css';
@@ -20,11 +22,13 @@ import HyvorComments from '@/src/components/common/HyvorComments';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import Spinner from '../SpinnerSkeleton';
 import useUser from '@/src/useUser';
-import { Alert, Box, Button } from '@mui/material';
+import { Alert, Box, Button, Stack } from '@mui/material';
 import useCycle from '@/src/useCycle';
 import { Session } from '@/src/types';
 import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
+import MosaicItem from './MosaicItem';
+import { Sumary } from '../common/Sumary';
 
 interface Props {
   postId: number;
@@ -137,28 +141,18 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
           )}
           {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
         </div>
-        <Row className="mb-5 d-flex flex-column flex-lg-row">
-          <Col className='col-lg-4 col-xl-5'>
-            <div className='mb-2 d-none d-lg-block'>
-              <MosaicItem cacheKey={cacheKey} className='' postId={post?.id!} showdetail={false} linkToPost={false} showSaveForLater={true} />
-            </div>
-            <div className='container d-sm-block d-lg-none mb-2 mt-2 position-relative'>
-              <MosaicItem cacheKey={cacheKey} className='postition-absolute start-50 translate-middle-x' postId={post?.id!} showdetail={false} linkToPost={false} showSaveForLater={true} />
-            </div>
-          </Col>
-          <Col className='col-lg-8 col-xl-7'>
-            <div className="px-4">
+        <Stack direction={{xs:'column',sm:'row'}}>
+          <MosaicItem postId={post?.id!} sx={{
+                        'img':{
+                          xs:{maxWidth:'100%'},
+                          sm:{maxWidth:'250px',height:'auto'},
+                        }
+                      }}
+          />
+          <Box paddingLeft={3}>
               <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>
                 <div>
                   <Link href={`/mediatheque/${post?.creator.id}`} passHref>
-                    {/* <a>
-                  <img
-                    src={post?.creator.image || '/img/default-avatar.png'}
-                    alt="creator avatar"
-                    className={styles.creatorAvatar}
-                  />
-                  {post?.creator.name}
-                </a> */}
                     <UserAvatar userId={post?.creator.id!} name={post?.creator.name!} size='small' />
                   </Link>
                 </div>
@@ -166,7 +160,6 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                   <small className={styles.postDate}>
                     {
                       dayjs(post?.createdAt).tz(dayjs.tz.guess()).format(DATE_FORMAT_SHORT)
-                      // dayjs(post?.createdAt).format(DATE_FORMAT_SHORT)
                     }
                   </small>
                 </div>
@@ -218,31 +211,26 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                 )}
                 {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
               </div>
-                {
+                {/* {
                   post?.contentText
                     ? <Box  id="uct" sx={{paddingTop:'1rem',height:'auto',overflowX:'hidden'}} dangerouslySetInnerHTML={{ __html: post?.contentText }} />
                     : <></>
-                }
-              {/* <div className='mt-3'>
-                {(post?.contentText != null && post?.contentText.length != 0) && <UnclampText text={post?.contentText} isHTML />}
-              </div> */}
+                } */}
+                <Sumary description={post?.contentText??''}/>
               <Box>
                   {
-                  !session?.user
-                    ? <Button size='small' variant='contained' onClick={()=>{
-                      show(<SignInForm/>);
-                    }}>{t('common:comment')}</Button>
-                    : <></>
+                    !session
+                      ? <Button onClick={()=>{
+                        show(<SignInForm/>);
+                      }}>
+                          <CommentBankOutlined /> Escreva um comentario
+                        </Button>
+                      : <></>
                   }
             </Box>
-            </div>
-            {/*<div className='container d-none d-lg-block'>
-            <CommentsList en
-            tity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
-          </div>*/}
-          
-          </Col>
-            
+          </Box>
+        </Stack>
+        
           <HyvorComments 
             entity='post' 
             id={`${post?.id}`} 
@@ -267,13 +255,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
               }
             }}
           />
-          {/*<div className='container d-sm-block d-lg-none mt-3'>
-            <CommentsList entity={post} parent={cycle! || work!} cacheKey={['POST', `${post?.id}`]} />
-          </div>*/}
-        </Row>
       </MosaicContext.Provider>
-
-      {/* )) || <Alert variant="warning">Not found</Alert>} */}
     </article>
   );
 };

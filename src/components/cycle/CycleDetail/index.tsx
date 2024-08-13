@@ -45,6 +45,7 @@ import { RenderGuidelines } from './RenderGuideLines';
 import { RenderParticipants } from './RenderParticipants';
 import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
+import { Box, Stack } from '@mui/material';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {
@@ -224,11 +225,11 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
             />
           </div>
         )}
-        <div ref={cycleWorksRef}>
+        {/* <div ref={cycleWorksRef}>
           <MosaicContext.Provider value={{ showShare: true }}>                     
             {works && <CycleDetailWorks cycleWorksDates={works! as unknown as CycleWork[]} /> || ''}
           </MosaicContext.Provider>
-        </div>
+        </div> */}
         {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
           <Row className="mt-5 mb-5">
             <Col className='col-12'>
@@ -318,95 +319,18 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
         )}
         {
         cycle && post == null && (
-          <Row className="mb-5" ref={tabContainnerRef}>
-            <Col>
-              {detailPagesState.selectedSubsectionCycle != null && (
+          // <Row className="mb-5" ref={tabContainnerRef}>
+          //   <Col>
+          //     {detailPagesState.selectedSubsectionCycle != null && (
+          //       <TabPanelSwipeableViews indexActive={0} items={GetTabPanelItems()}/>
+          //     )}
+          //   </Col>
+          // </Row>
+          <Box paddingTop={3}>
+            {detailPagesState.selectedSubsectionCycle != null && (
                 <TabPanelSwipeableViews indexActive={0} items={GetTabPanelItems()}/>
-                // <TabContainer
-                //   onSelect={handleSubsectionChange}
-                //   activeKey={tabKey || getDefaultActiveKey()}
-                //   transition={false}
-                // >
-                //   <style jsx global>
-                //     {`
-                //       .nav-tabs .nav-item.show .nav-link,
-                //       .nav-tabs .nav-link.active,
-                //       .nav-tabs .nav-link:hover {
-                //         background-color: var(--bs-primary);
-                //         color: white !important;
-                //         border: none !important;
-                //         border-bottom: solid 2px var(--bs-primary) !important;
-                //       }
-                //       .nav-tabs {
-                //         border: none !important;
-                //       }
-                //     `}
-                //   </style>
-                //   <Row className="mb-4">
-                //     <Col>
-                //       <Nav variant="tabs" className='scrollNav' fill>
-                //         <NavItem className={`border-primary border-bottom cursor-pointer ${styles.tabBtn}`}>
-                //           <NavLink eventKey="cycle-about">
-                //             <span className="mb-3">
-                //               {t('About')}
-                //             </span>
-                //           </NavLink>
-                //         </NavItem>
-                //         <RenderRestrictTabsHeaders cycle={cycle}/>
-                //       </Nav>
-                //     </Col>
-                //   </Row>
-                //   <Row>
-                //     <Col>
-                //       <TabContent>
-                //         <TabPane eventKey="cycle-about">
-                //               <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('WhyJoin')}</h3>
-                //           {cycle.contentText != null && (
-                //             <div className="">
-                //               <div
-                //                 className={styles.dangerouslySetInnerHTML}
-                //                 dangerouslySetInnerHTML={{ __html: cycle.contentText }}
-                //               />
-                //             </div>
-                //           )}
-                //           <div ref={cycleWorksRef}>
-                //             <MosaicContext.Provider value={{ showShare: true }}>                     
-                //               {works && <CycleDetailWorks cycleWorksDates={works! as unknown as CycleWork[]} /> || ''}
-                //             </MosaicContext.Provider>
-                //           </div>
-                //           {cycle.complementaryMaterials && cycle.complementaryMaterials.length > 0 && (
-                //             <Row className="mt-5 mb-5">
-                //               <Col className='col-12'>
-                //                 <h4 className="h5 mt-5 mb-3 fw-bold text-gray-dark">{t('complementaryMaterialsTitle')}</h4>
-                //                 <ul className={styles.complementaryMaterials}>
-                //                   {cycle.complementaryMaterials.map((cm) => (
-                //                     <li key={cm.id}>
-                //                       <a
-                //                         href={cm.link || `${ASSETS_BASE_URL}/${cm.storedFile}`}
-                //                         target="_blank"
-                //                         rel="noreferrer"
-                //                       >
-                //                         <h5>{cm.title}</h5>
-                //                         <p>
-                //                           {cm.author} ({dayjs(cm.publicationDate).format(DATE_FORMAT_SHORT_MONTH_YEAR)})
-                //                         </p>
-                //                       </a>
-                //                     </li>
-                //                   ))}
-                //                 </ul>
-                //               </Col>
-                //               <Col />
-                //             </Row>
-                //           )}
-                //         </TabPane>
-                //         <RenderRestrictedTabs cycle={cycle}/>
-                //       </TabContent>
-                //     </Col>
-                //   </Row>
-                // </TabContainer>
               )}
-            </Col>
-          </Row>
+          </Box>
         )
         }
       </> 
