@@ -12,7 +12,7 @@ import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../../forms/SignInForm';
 import { CommentBankOutlined } from '@mui/icons-material';
 import useTranslation from 'next-translate/useTranslation';
-import { useOnCommentCreated } from '../../common/useOnCycleCommentCreated';
+import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 import { Sumary } from '../common/Sumary';
 import { StyledBadge } from '@/src/components/common/StyledBadge';
 import MosaicItem from '@/src/components/cycle/MosaicItem';
@@ -31,7 +31,7 @@ export default function CycleActiveCard(props:Props) {
 
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
-  const{dispatch}=useOnCommentCreated(cycleId);
+  const{dispatch}=useOnCycleCommentCreated(cycleId);
   const{data:session}=useSession();
   const handleExpandClick = () => {
     if(session?.user)
