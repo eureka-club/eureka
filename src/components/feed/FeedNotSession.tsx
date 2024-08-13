@@ -7,7 +7,7 @@ export const FeedNotSession = ()=>{
     // const { t } = useTranslation('common');
 
     return <Stack gap={2}>
-      <ActiveCycles/>
+      {/* <ActiveCycles/> */}
       <PostsOnCyclesActive/>
     </Stack>
 }

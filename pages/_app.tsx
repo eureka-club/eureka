@@ -41,6 +41,12 @@ const materialTheme = createTheme({
       dark: '#3596ca',
       contrastText: '#fff',
     },
+    error:{
+      light: '#E2516D',
+      main: '#E2516D',
+      dark: '#E2516D',
+      contrastText: '#fff',
+    }
   },
 });
 
