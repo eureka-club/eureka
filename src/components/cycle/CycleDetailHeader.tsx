@@ -14,17 +14,19 @@ import { WorkDetail, WorkSumary } from '../../types/work';
 import CycleSummary from './CycleSummary';
 import styles from './CycleDetailHeader.module.css';
 import MosaicItem from './MosaicItem';
+import WorkMosaicItem from '@/src/components/work/MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
 import UserAvatar from '../common/UserAvatar';
 import { MosaicContext } from '../../useMosaicContext';
 import useCycle from '@/src/useCycle'
 import CarouselStatic from '../CarouselStatic';
-import { Box } from '@mui/material';
+import { Alert, Box, Stack } from '@mui/material';
 import { CycleWork } from '@/src/types/cycleWork';
 import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
 import { CycleSumary } from '@/src/types/cycle';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
+import Masonry from '@mui/lab/Masonry';
 interface Props {
   cycleId:number;
   post?: PostDetail;
@@ -154,24 +156,167 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   };
 
   if(isLoadingCycle) return <Spinner animation='grow'/>
-  if(!cycle)return <></>
+  if(!cycle)return <Alert color='warning'>{t('common:Not found')}</Alert>;
 
   return (
-    cycle && (
-      <section className="d-flex flex-column-reverse flex-xl-row mb-1 mb-lg-5">
-        {/* xs={{ span: 12, order: 2 }} md={{ span: 7, order: 1 }} lg={{ span: 8 }}*/}
-        <Col className="d-none d-xl-flex col-12 col-md-2 col-lg-3 justify-content-center justify-content-lg-start">
+    
+    <Box>
+      
+      <Stack direction={{xs:'column',sm:'row'}} gap={2}>
+        <Stack flex={1}>
+          <MosaicItem cycleId={cycle.id} sx={{
+                          'img':{
+                            xs:{maxWidth:'100%'},
+                            sm:{maxWidth:'250px',height:'auto'},
+                          }
+                        }}/>
+          <Box className="d-flex flex-row align-items-baseline" mt={1}>
+            <Rating
+              qty={qtyByUser}
+              onChange={handlerChangeRating}
+              size="medium"
+              iconColor="var(--bs-danger)"
+            />{qtyByUser > 0 && <Button
+              type="button"
+              title={t('common:clearRating')}
+              className="text-warning p-0 ms-2"
+              onClick={clearRating}
+              variant="link"
+            >
+              <FiTrash2 />
+            </Button>}
+          </Box>
+        </Stack>
+        <Stack flex={3}>
+          <h1 className="d-none d-xl-block mb-1 fw-bold text-secondary">{cycle.title}</h1>
+          <div className="d-flex flex-row justify-content-start">
+            <Rating
+              readonly
+              qty={qty}
+              onChange={handlerChangeRating}
+              stop={5}
+              size="small"
+            />{' '}
+            <div className="d-flex flex-nowrap ms-2">
+              {getRatingAvg().toFixed(1)}
+              {' - '}
+              {getRatingQty()}
+            </div>
+            <span className="ms-1 text-gray">{t('common:ratings')}</span>
+            {cycle.topics && (
+              <section className=" d-flex flex-nowrap ms-2">
+                <TagsLinks topics={topics??[]}/>
+                <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
+              </section>
+            )}
+          </div>
+          <Stack gap={1}>
+            <h2 className="mt-4 mb-1 text-dark" style={{ fontSize: '1.4rem' }}>
+              {t('Content calendar')} ({works && works.length})
+            </h2>
+            <CycleSummary cycleId={cycle.id} />
+            <Stack direction={'row'} gap={1}  flexWrap={'wrap'}>
+                {
+                  getWorksSorted()?.map(w=><WorkMosaicItem key={`work-${w?.id!}`} workId={w?.id!} sx={{
+                    'img':{
+                      xs:{maxHeight:'248px'},
+                      sm:{maxHeight:'248px',width:'auto'},
+                    }
+                  }}/>)??<></>
+                }
+            </Stack>
+            
+            {/* <CarouselStatic
+              cacheKey={['CYCLE', cycle.id.toString()]}
+              showSocialInteraction={false}
+              // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
+              onSeeAll={onCarouselSeeAllAction}
+              title={<CycleSummary cycleId={cycle.id} />}
+              data={getWorksSorted() as WorkSumary[]}
+              iconBefore={<></>}
+              customMosaicStyle={{ height: '16em' }}
+              size="small"
+              mosaicBoxClassName="pb-5"
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            /> */}
+          </Stack>
+        </Stack>
+      </Stack>
+      
+      {/* <Col className="mt-3 ms-lg-3 mt-lg-0 col-12 col-md-10 col-lg-9 d-none d-xl-flex flex-column justify-content-center justify-content-lg-start">
+        <h1 className="d-none d-xl-block mb-1 fw-bold text-secondary">{cycle.title}</h1>
+        <div className="d-flex flex-row justify-content-start">
+          <Rating
+            readonly
+            qty={qty}
+            onChange={handlerChangeRating}
+            stop={5}
+            size="small"
+          />{' '}
+          <div className="d-flex flex-nowrap ms-2">
+            {getRatingAvg().toFixed(1)}
+            {' - '}
+            {getRatingQty()}
+          </div>
+          <span className="ms-1 text-gray">{t('common:ratings')}</span>
+          {cycle.topics && (
+            <section className=" d-flex flex-nowrap ms-2">
+              <TagsLinks topics={topics??[]}/>
+              <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
+            </section>
+          )}
+        </div>
+        <div className="">
+          <h2 className="mt-4 mb-1 text-dark" style={{ fontSize: '1.4rem' }}>
+            {t('Content calendar')} ({works && works.length})
+          </h2>
+
+          <CarouselStatic
+            cacheKey={['CYCLE', cycle.id.toString()]}
+            showSocialInteraction={false}
+            // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
+            onSeeAll={onCarouselSeeAllAction}
+            title={<CycleSummary cycleId={cycle.id} />}
+            data={getWorksSorted() as WorkSumary[]}
+            iconBefore={<></>}
+            customMosaicStyle={{ height: '16em' }}
+            size="small"
+            mosaicBoxClassName="pb-5"
+            // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+          />
+        </div>
+      </Col> */}
+      {/* {show && (
+        <Col className="mt-3 col-12  d-flex flex-column justify-content-center d-xl-none">
+          <div className="">
+            <h4 className="mt-3 mb-1 text-dark">
+              {t('Content calendar')} ({works && works.length})
+            </h4>
+            <CarouselStatic
+              cacheKey={['CYCLE', cycle.id.toString()]}
+              showSocialInteraction={false}
+              onSeeAll={onCarouselSeeAllAction}
+              title={<CycleSummary cycleId={cycle.id} />}
+              data={getWorksSorted() as WorkSumary[]}
+              iconBefore={<></>}
+              customMosaicStyle={{ height: '16em' }}
+              size={'small'}
+              mosaicBoxClassName="pb-5"
+              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
+            />
+          </div>
+        </Col>
+      )} */}
+      {/* {show && (
+        <Col className="col-12 d-flex justify-content-center d-xl-none">
           <aside className="d-flex flex-column">
-            {/* <div className="mt-3">
-              <UserAvatar userId={cycle.creatorId} name={cycle.creator.name!} size='small' />
-            </div> */}
             <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
               <MosaicItem
                 cycleId={cycle.id}
                 size={'large'}
               />
             </MosaicContext.Provider>
-            <Box className="d-flex flex-row align-items-baseline" mt={1}>
+            <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
               <Rating
                 qty={qtyByUser}
                 onChange={handlerChangeRating}
@@ -189,190 +334,66 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             </Box>
           </aside>
         </Col>
-        <Col className="mt-3 ms-lg-3 mt-lg-0 col-12 col-md-10 col-lg-9 d-none d-xl-flex flex-column justify-content-center justify-content-lg-start">
-          <h1 className="d-none d-xl-block mb-1 fw-bold text-secondary">{cycle.title}</h1>
-          <div className="d-flex flex-row justify-content-start">
-            {/* @ts-ignore*/}
-            {/* <Rating
-            readonly
-            initialRating={getRatingAvg()}
-            // onChange={handlerChangeRating}
-            className={`d-flex flex-nowrap ${styles.rating}`}
-            stop={5}
-            emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-            fullSymbol={getFullSymbol()}
-          /> */}
-            <Rating
-              readonly
-              qty={qty}
-              onChange={handlerChangeRating}
-              stop={5}
-              size="small"
-            />{' '}
-            <div className="d-flex flex-nowrap ms-2">
-              {getRatingAvg().toFixed(1)}
-              {' - '}
-              {getRatingQty()}
-            </div>
-            <span className="ms-1 text-gray">{t('common:ratings')}</span>
-            {cycle.topics && (
-              <section className=" d-flex flex-nowrap ms-2">
-                <TagsLinks topics={topics??[]}/>
-                {/* <TagsInput
-                  avatarValue={getTopicEmoji(topicItem)}
-                  formatValue={(v: string) => t(`topics:${v}`)}
-                  className="d-flex flex-row"
-                  tags={cycle.topics}
-                  readOnly
-                /> */}
-                <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
-              </section>
-            )}
-          </div>
-          <div className="">
-            <h2 className="mt-4 mb-1 text-dark" style={{ fontSize: '1.4rem' }}>
-              {t('Content calendar')} ({works && works.length})
-            </h2>
-
-            <CarouselStatic
-              cacheKey={['CYCLE', cycle.id.toString()]}
-              showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
-              onSeeAll={onCarouselSeeAllAction}
-              title={<CycleSummary cycleId={cycle.id} />}
-              data={getWorksSorted() as WorkSumary[]}
-              iconBefore={<></>}
-              customMosaicStyle={{ height: '16em' }}
-              size="small"
-              mosaicBoxClassName="pb-5"
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            />
-          </div>
-          {/* </CycleContext.Provider> */}
-        </Col>
-        {/*xs={{ span: 12, order: 1 }} md={{ span: 5, order: 2 }} lg={{ span: 4 }}*/}
-
-        {show && (
-          <Col className="mt-3 col-12  d-flex flex-column justify-content-center d-xl-none">
-            <div className="">
-              <h4 className="mt-3 mb-1 text-dark">
-                {t('Content calendar')} ({works && works.length})
-              </h4>
-              <CarouselStatic
-                cacheKey={['CYCLE', cycle.id.toString()]}
-                showSocialInteraction={false}
-                onSeeAll={onCarouselSeeAllAction}
-                title={<CycleSummary cycleId={cycle.id} />}
-                data={getWorksSorted() as WorkSumary[]}
-                iconBefore={<></>}
-                customMosaicStyle={{ height: '16em' }}
-                size={'small'}
-                mosaicBoxClassName="pb-5"
-                // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-              />
-            </div>
-            {/* </CycleContext.Provider> */}
-          </Col>
-        )}
-
-        {show && (
-          <Col className="col-12 d-flex justify-content-center d-xl-none">
-            <aside className="d-flex flex-column">
-              <MosaicContext.Provider value={{ showShare: true, cacheKey: ['CYCLE', `${cycle.id}`] }}>
-                <MosaicItem
-                  cycleId={cycle.id}
-                  size={'large'}
-                />
-              </MosaicContext.Provider>
-              <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
-                <Rating
-                  qty={qtyByUser}
-                  onChange={handlerChangeRating}
-                  size="medium"
-                  iconColor="var(--bs-danger)"
-                />{qtyByUser > 0 && <Button
-                  type="button"
-                  title={t('common:clearRating')}
-                  className="text-warning p-0 ms-2"
-                  onClick={clearRating}
-                  variant="link"
-                >
-                  <FiTrash2 />
-                </Button>}
-              </Box>
-            </aside>
-          </Col>
-        )}
-        <Col className="col-12 d-flex justify-content-between align-items-baseline d-xl-none">
-          <Row>
-            <UserAvatar userId={cycle.creatorId} name={cycle.creator.name!} />
-          </Row>
-          <Row>
-            {show && (
-              <span
-                className={`cursor-pointer text-primary me-1 mb-2 ${styles.closeButton}`}
-                role="presentation"
-                onClick={() => setShow(false)}
-              >
-                {' '}
-                {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} />{' '}
-              </span>
-            )}
-            {!show && (
-              <span
-                className={`cursor-pointer text-primary me-1 mb-2 ${styles.closeButton}`}
-                role="presentation"
-                onClick={() => setShow(true)}
-              >
-                {' '}
-                {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} />{' '}
-              </span>
-            )}
-          </Row>
-        </Col>
-        <Col className="col-12 d-xl-none">
-          <h1 className=" mb-1 fw-bold text-secondary">{cycle.title}</h1>
-          {cycle.topics && (
-            <aside className="d-flex flex-wrap d-lg-inline-block mb-4">
-              <TagsInput
-                formatValue={(v: string) => t(`topics:${v}`)}
-                className="d-flex flex-wrap d-lg-inline-block"
-                tags={cycle.topics}
-                readOnly
-              />
-              <TagsInput className="ms-1 d-flex flex-wrap d-lg-inline-block" tags={cycle.tags!} readOnly label="" />
-              <div className="mt-2 d-flex flex-row justify-content-start">
-                {/* @ts-ignore*/}
-                {/* <Rating
-                      readonly
-                      initialRating={getRatingAvg()}
-                      // onChange={handlerChangeRating}
-                      className={styles.rating}
-                      stop={5}
-                      emptySymbol={<GiBrain style={{ color: 'var(--eureka-grey)' }} />}
-                      fullSymbol={getFullSymbol()}
-                    /> */}
-                <Rating
-                  readonly
-                  qty={qty}
-                  onChange={(val) => {
-                    setQty(val||0);
-                  }}
-                  stop={5}
-                  size="small"
-                />{' '}
-                <div className="ms-2">
-                  {getRatingAvg()!.toFixed(1)}
-                  {' - '}
-                  {getRatingQty()}
-                </div>
-                <span className="ms-1 text-gray">{t('common:ratings')}</span>
-              </div>
-            </aside>
+      )} */}
+      {/* <Col className="col-12 d-flex justify-content-between align-items-baseline d-xl-none">
+        <Row>
+          <UserAvatar userId={cycle.creatorId} name={cycle.creator.name!} />
+        </Row>
+        <Row>
+          {show && (
+            <span
+              className={`cursor-pointer text-primary me-1 mb-2 ${styles.closeButton}`}
+              role="presentation"
+              onClick={() => setShow(false)}
+            >
+              {' '}
+              {t('Close')} <BsX style={{ color: 'var(--eureka-green)' }} />{' '}
+            </span>
           )}
-        </Col>
-      </section>
-    )
+          {!show && (
+            <span
+              className={`cursor-pointer text-primary me-1 mb-2 ${styles.closeButton}`}
+              role="presentation"
+              onClick={() => setShow(true)}
+            >
+              {' '}
+              {t('Details')} <BsChevronUp style={{ color: 'var(--eureka-green)' }} />{' '}
+            </span>
+          )}
+        </Row>
+      </Col> */}
+      {/* <Col className="col-12 d-xl-none">
+        <h1 className=" mb-1 fw-bold text-secondary">{cycle.title}</h1>
+        {cycle.topics && (
+          <aside className="d-flex flex-wrap d-lg-inline-block mb-4">
+            <TagsInput
+              formatValue={(v: string) => t(`topics:${v}`)}
+              className="d-flex flex-wrap d-lg-inline-block"
+              tags={cycle.topics}
+              readOnly
+            />
+            <TagsInput className="ms-1 d-flex flex-wrap d-lg-inline-block" tags={cycle.tags!} readOnly label="" />
+            <div className="mt-2 d-flex flex-row justify-content-start">
+              <Rating
+                readonly
+                qty={qty}
+                onChange={(val) => {
+                  setQty(val||0);
+                }}
+                stop={5}
+                size="small"
+              />{' '}
+              <div className="ms-2">
+                {getRatingAvg()!.toFixed(1)}
+                {' - '}
+                {getRatingQty()}
+              </div>
+              <span className="ms-1 text-gray">{t('common:ratings')}</span>
+            </div>
+          </aside>
+        )}
+      </Col> */}
+    </Box>
   );
 };
 

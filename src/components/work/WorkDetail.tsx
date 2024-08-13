@@ -8,6 +8,7 @@ import { PostDetail, PostSumary } from '@/src/types/post';
 import WorkSummary from './WorkSummary';
 import WorkReadOrWatched from './WorkReadOrWatched';
 import detailPagesAtom from '@/src/atoms/detailPages';
+import { CommentBankOutlined } from '@mui/icons-material';
 
 //import globalModalsAtom from '@/src/atoms/globalModals';
 // import editOnSmallerScreens from '../../atoms/editOnSmallerScreens';
@@ -37,6 +38,7 @@ import { WEBAPP_URL } from '@/src/constants';
 import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
 import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
+import { Sumary } from '../common/Sumary';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -64,29 +66,7 @@ const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsPr
         posts.map(p=><MosaicItemPost key={p.id} postId={p.id} size={'medium'} />
       )}
     </MosaicsGrid>
-    {/* <Grid container>
-      {posts.map((p) => (
-        <Grid item
-          key={p.id}
-          xs={12}
-          sm={6}
-          lg={3}
-          xl={2}
-        >
-          <MosaicItemPost
-            cacheKey={['POST', `${p.id}`]}
-            postId={p.id}
-            size={'md'}
-            showSaveForLater={false}
-          />
-        </Grid>
-      ))}
-    </Grid> */}
-    {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
-        {hasMorePosts ? <Spinner animation="grow" />
-        :<></>}
-      </div> */}
-</Stack>
+  </Stack>
 }
 
 interface TabCyclesProps{
@@ -333,9 +313,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
             <Suspense fallback={<CircularProgress/>}>
               {post == null ? (
               <>
-                  <Stack gap={{xs:3}}  direction={{xs:'column',sm:'row'}}>
+                  <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
                     <Stack gap={1}>
-                      <MosaicItem workId={work.id} size={'large'} />
+                      <MosaicItem workId={work.id} sx={{
+                        'img':{
+                          xs:{maxWidth:'100%'},
+                          sm:{maxWidth:'250px',height:'auto'},
+                        }
+                      }} />
                       <Box>
                         <Stack direction={'row'} alignItems={'flex-start'} gap={1}>
                           <Rating
@@ -388,22 +373,24 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         )}
                       </Box>
                       
-                      <Stack display={{xs:'none',md:'inherit'}}>
-                        <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
+                      {/* <Stack display={{xs:'none',md:'inherit'}}> */}
+                      <Sumary description={work?.contentText??''}/>
                         <Box>
-                          {
-                          !session?.user
-                            ? <Button size='small' variant='contained' onClick={()=>{
-                              show(<SignInForm/>);
-                            }}>{t('common:comment')}</Button>
-                            : <></>
-                          }
-                        </Box>
+                            {
+                              !session
+                                ? <Button onClick={()=>{
+                                  show(<SignInForm/>);
+                                }}>
+                                    <CommentBankOutlined /> Escreva um comentario
+                                  </Button>
+                                : <></>
+                            }
+                      </Box>
                       </Stack>
-                    </Stack>
+                    {/* </Stack> */}
                   </Stack>
                   
-                  <Stack display={{xs:'inherit',md:'none'}}>
+                  {/* <Stack display={{xs:'inherit',md:'none'}}>
                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
                     <Box>
                           {
@@ -414,7 +401,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             : <></>
                           }
                     </Box>
-                  </Stack>
+                  </Stack> */}
                   
                  <HyvorComments 
                     entity="work" 

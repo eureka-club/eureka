@@ -273,7 +273,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
 
   return <Box style={{cursor:'pointer'}} {...others}>
         <Link href={`/${lang}/cycle/${cycleId}`} >
-          <Card sx={{width:{xs:'250px'}}}>
+          <Card sx={{minWidth:{xs:'100%',sm:'248px'},maxWidth:{sm:'250px'}}}>
             <style jsx global>{`
               .MuiCardHeader-root{
                 padding:.3rem
@@ -301,7 +301,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
             <CardMedia
               component={'img'}
               image={img}
-              height={200}
+              // height={200}
             />
             <CardContent>
               {/* <Typography>
