@@ -44,7 +44,7 @@ import { RenderPosts } from './RenderPosts';
 import { RenderGuidelines } from './RenderGuideLines';
 import { RenderParticipants } from './RenderParticipants';
 import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
-import { useOnCommentCreated } from '../../common/useOnCycleCommentCreated';
+import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {
@@ -82,7 +82,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 );
 
 const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
-const{dispatch}=useOnCommentCreated(cycleId);
+const{dispatch}=useOnCycleCommentCreated(cycleId);
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
     : cycle?.works?.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))

@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { Session } from '../types';
 import { UserSumarySpec } from './UserSumary';
+import { storeUpload } from '../facades/fileUpload';
 
 // export interface PostWithImages extends Post {
 //   localImages: LocalImage[];
@@ -39,6 +40,16 @@ export type PostDetail = Prisma.PostGetPayload<typeof PostDetailSpec> & {
  export type PostSumary = Prisma.PostGetPayload<typeof PostSumarySpec>&{
   type?: 'post';
   currentUserIsFav?:boolean;
+ }
+ 
+ export const PostOnActiveCycleSpec = {
+  select:{
+    id:true,
+    localImages:{select:{storedFile:true}}
+  }
+ }
+ export type PostOnActiveCycle = Prisma.PostGetPayload<typeof PostOnActiveCycleSpec>&{
+  type:'post'
  }
 
 // export type PostDetail = Prisma.PostGetPayload<{
