@@ -45,7 +45,7 @@ import usePostSumary from "@/src/usePostSumary";
 //   className?: string;
 // }
 
-import { Box, BoxProps, Card, CardMedia, Chip } from "@mui/material"
+import { Box, BoxProps, Card, CardMedia, Chip, Paper } from "@mui/material"
 import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -284,21 +284,25 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
         position:'relative',
       }}
     >
-      <Chip 
-        label={
-          <span>
-              {t(post?.type || 'post')}
-              {
-                post?.language
-                  ?<em>
-                    {` (${LOCALES[post?.language].toUpperCase()})`}
-                  </em>
-                  :<></>
-              }
-            </span>
-        } 
-        color="secondary" sx={{position:'absolute',top:'8px',left:'8px'}}
-      />
+      
+        <Chip 
+        
+          label={
+            <span>
+                {t(post?.type || 'post')}
+                {
+                  post?.language
+                    ?<em>
+                      {` (${LOCALES[post?.language].toUpperCase()})`}
+                    </em>
+                    :<></>
+                }
+              </span>
+          } 
+          color="error" sx={{position:'absolute',top:'8px',left:'8px',boxShadow: '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)'}
+          }
+        />
+      
       <Link href={href}>
         <img 
           className="post-mosaic-img"
