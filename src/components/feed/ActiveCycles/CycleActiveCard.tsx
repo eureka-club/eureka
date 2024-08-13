@@ -13,7 +13,7 @@ import SignInForm from '../../forms/SignInForm';
 import { CommentBankOutlined } from '@mui/icons-material';
 import useTranslation from 'next-translate/useTranslation';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
-import { Sumary } from '../common/Sumary';
+import { Sumary } from '../../common/Sumary';
 import { StyledBadge } from '@/src/components/common/StyledBadge';
 import MosaicItem from '@/src/components/cycle/MosaicItem';
 import { LocalImage } from '@prisma/client';
@@ -54,7 +54,7 @@ export default function CycleActiveCard(props:Props) {
                     subheader={subheader}
                 /> */}
       <CardContent>
-        <Stack direction={'row'} gap={2}>
+        <Stack direction={{xs:'column',sm:'row'}} gap={2}>
           <MosaicItem cycleId={cycleId}/>
           <Sumary description={description} />
         </Stack>
