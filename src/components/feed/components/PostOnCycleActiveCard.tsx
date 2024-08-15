@@ -19,11 +19,11 @@ import { useOnPostCommentCreated } from '../../common/useOnPostCommentCreated';
 interface Props extends CardProps {
   postId:number;
 }
-export default function PostOnCycleActivesCard(props:Props) {
+export default function PostOnCycleActiveCard(props:Props) {
   const{
     postId
   }=props;
-  const{t}=useTranslation('common');
+  const{t,lang}=useTranslation('common');
   const{data:post}=usePostSumary(postId);
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
@@ -43,7 +43,7 @@ export default function PostOnCycleActivesCard(props:Props) {
             </>
           }
           title={`${post?.title} ${t('feed:on cycle')}: ${post?.cycles[0].title}`}
-          subheader={`${t('by')}: ${post?.creator.name!}`}
+          subheader={`${t('by')}: ${post?.creator.name!} ${t('feed:on')}: ${(new Date(post?.createdAt!)).toLocaleDateString(lang)}`}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>

@@ -2,7 +2,7 @@ import { Form } from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import { FileUpload, Languages, Session } from '@/src/types';
+import { ActionType, FileUpload, Languages, Session } from '@/src/types';
 import getApiHandler from '@/src/lib/getApiHandler';
 import { storeUpload } from '@/src/facades/fileUpload';
 import { createFromServerFields, findAll } from '@/src/facades/post';
@@ -36,9 +36,36 @@ export default getApiHandler()
         }
 
         const image: FileUpload = files.image[0];
-
+        const cycleId = +fields.selectedCycleId;
+        
         const uploadData = await storeUpload(image);
         const post = await createFromServerFields(fields, uploadData, session.user.id);
+
+        if(cycleId){
+          const today = new Date();
+
+          const cycleActive=await prisma.cycle.findFirst({
+            where:{
+              id:cycleId,
+              startDate:{
+                lte:today
+              },
+              endDate:{
+                gte:today
+              }
+            },
+            select:{id:true}
+          });
+          if(cycleActive)
+            await prisma.action.create({
+              data:{
+                cycleId,
+                postId:+post.id,
+                type:ActionType.PostCreatedOnCycleActive,
+                userId:session.user.id,
+              }
+            });
+        }
         
         const notificationToUsers = fields.notificationToUsers 
           ? fields.notificationToUsers[0].split(',').filter((i:string)=>i!='').map((i:string) => +i)

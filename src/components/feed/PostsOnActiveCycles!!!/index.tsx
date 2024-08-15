@@ -1,7 +1,7 @@
 import { usePostsOnActiveCycles } from "./hooks/usePostsOnActiveCycles";
 import { Alert, Card, Stack } from "@mui/material";
 import useTranslation from "next-translate/useTranslation";
-import PostOnCycleActivesCard from "./PostOnCycleActiveCard";
+import PostOnCycleActivesCard from "../components/PostOnCycleActiveCard";
 import Spinner from "@/components/Spinner";
 
 export const PostsOnCyclesActive = ()=>{
