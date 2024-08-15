@@ -55,6 +55,8 @@ model User {
   reactions          PostReaction[]
   editions           Edition[]
   language           String?
+  actions            Action[]
+
   @@map(name: "users")
 }
 
@@ -175,6 +177,8 @@ model Cycle {
   works           Work[]
   cycleWorksDates CycleWork[]
   usersJoined     CycleUserJoin[]
+  actions         Action[]
+
 
   tags String?
 
@@ -338,6 +342,7 @@ model Post {
   comments Comment[]
 
   reactions      PostReaction[]
+  actions      Action[]
 
   @@index([creatorId], name: "posts_creator_id_index")
   @@map(name: "posts")
@@ -547,3 +552,27 @@ model ComentCreatedDaily{
   createdAt             DateTime  @default(now()) @map(name: "created_at")
   pageIdentifier        String  @default("")
 }
+
+//Feed
+
+model Action {
+  id                    Int    @id @default(autoincrement())
+
+  post     Post?    @relation(fields: [postId], references: [id])
+  postId   Int?
+
+  cycle     Cycle?    @relation(fields: [cycleId], references: [id])
+  cycleId   Int?
+
+  commentURL  String?
+  
+  type     Int // ActionType
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  createdAt    DateTime  @default(now()) @map(name: "created_at")
+
+}
+
+

@@ -63,36 +63,6 @@ export const RenderPosts = ({cycleId}:RenderPostsProps)=>{
             }
           }} />          
         )??<></>}
-        {
-          posts.map((p:any,idx:number)=><MosaicItemPost 
-          key={`${p.id}-${idx}`} 
-          postId={p.id}
-          sx={{
-            'img':{
-              width:'248px'
-            }
-          }} />          
-        )??<></>}
-        {
-          posts.map((p:any,idx:number)=><MosaicItemPost 
-          key={`${p.id}-${idx}`} 
-          postId={p.id}
-          sx={{
-            'img':{
-              width:'248px'
-            }
-          }} />          
-        )??<></>}
-        {
-          posts.map((p:any,idx:number)=><MosaicItemPost 
-          key={`${p.id}-${idx}`} 
-          postId={p.id}
-          sx={{
-            'img':{
-              width:'248px'
-            }
-          }} />          
-        )??<></>}
       </Stack>
         {/* <Grid container gap={3}>
         {posts.map((p)=><Grid item

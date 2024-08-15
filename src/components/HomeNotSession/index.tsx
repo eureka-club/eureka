@@ -8,7 +8,7 @@ import FeaturedUsers from './FeaturedUsers';
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import useTopics from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
-import { FeedNotSession } from '../feed/FeedNotSession';
+import { Feed } from '../feed';
 interface Props {
 }
 const HomeNotSession: FunctionComponent<Props> = ({}) => {
@@ -44,7 +44,7 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
         <Grid item xs={12} md={9}>
           {/* <section className="ms-0 ms-lg-5"> */}
           <Stack gap={3}>
-              <FeedNotSession/>
+              <Feed/>
               <FeaturedWorks />
               <FeaturedEurekas />
               {/* <FeaturedCycles /> */}

@@ -7,10 +7,12 @@ const i18 = require('i18n');
 import { NOT_FOUND } from '@/src/api_code';
 import { dict, getDict } from '@/src/hooks/useTranslation';
 import { Locale } from 'i18n-config';
+import { ActionType } from '@/src/types';
+import { getSession } from 'next-auth/react';
 interface ReqProps{
   cycleId:number;
   url:string;
-  user:{name:string,email:string};
+  user:{id:number,name:string,email:string};
   parent_id:number;
 }
 
@@ -21,11 +23,11 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{cycleId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
+      const{cycleId,url:eurl,user:{id,name,email},parent_id}=req.body as ReqProps; 
       const pageIdentifier=`cycle-${cycleId}`;
       let locale = req.cookies.NEXT_LOCALE || i18.defaultLocale;
       let to:{email:string,name?:string}[] = [];
-
+      const session= await getSession();
       const cycle = await prisma.cycle.findFirst({
         where:{id:+cycleId},
         select:{
@@ -36,7 +38,14 @@ export default async function handler(
         }
       });
       if(!cycle)return res.status(200).json({error:NOT_FOUND});
-
+      await prisma.action.create({
+        data:{
+          cycleId:+cycleId,
+          type:ActionType.CommentCreatedOnCycleActive,
+          userId:id,
+          commentURL:eurl
+        }
+      });
       const title=cycle?.title;
       const languages = cycle?.languages.split(",")
       locale=languages?.length ? languages[0] : locale;
