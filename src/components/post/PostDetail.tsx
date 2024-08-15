@@ -146,6 +146,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                         'img':{
                           xs:{maxWidth:'100%'},
                           sm:{maxWidth:'250px',height:'auto'},
+                          lg:{maxWidth:'450px',height:'auto'},
                         }
                       }}
           />
