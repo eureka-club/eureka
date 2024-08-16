@@ -3,7 +3,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { Box, Button, Stack} from '@mui/material';
+import { Box, Button, Stack, Typography} from '@mui/material';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
@@ -15,10 +15,11 @@ import UserAvatar from '../../common/UserAvatar';
 import usePostSumary from '@/src/usePostSumary';
 import { Sumary } from '../../common/Sumary';
 import { useOnPostCommentCreated } from '../../common/useOnPostCommentCreated';
+
 interface Props extends CardProps {
   postId:number;
 }
-export default function PostOnCycleActiveCard(props:Props) {
+export default function PostOnWorkCard(props:Props) {
   const{
     postId
   }=props;
@@ -33,7 +34,6 @@ export default function PostOnCycleActiveCard(props:Props) {
       setExpanded(!expanded);
     else show(<SignInForm/>)
   };
-  if(post){debugger;}
 
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
@@ -42,7 +42,7 @@ export default function PostOnCycleActiveCard(props:Props) {
                 <UserAvatar name={post?.creator.name!} userId={post?.creator.id!} image={post?.creator.image!} photos={post?.creator.photos!}/>
             </>
           }
-          title={`${post?.title} ${t('feed:on cycle')}: ${post?.cycles[0].title}`}
+          title={`${post?.title} ${t('feed:on work')}: ${post?.works[0].title}`}
           subheader={`${t('by')}: ${post?.creator.name!} ${t('feed:on')}: ${(new Date(post?.createdAt!)).toLocaleDateString(lang)}`}
       />
       <CardContent>
@@ -52,9 +52,10 @@ export default function PostOnCycleActiveCard(props:Props) {
                 maxWidth:'250px'
               }
             }}/>
-            <Box>
+            <Stack gap={2}>
+              <Typography>{post?.title}</Typography>
               <Sumary description={post?.contentText??''}/>
-            </Box>
+            </Stack>
         </Stack>
                     {
                         session 

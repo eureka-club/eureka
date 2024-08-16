@@ -37,6 +37,7 @@ export default getApiHandler()
 
         const image: FileUpload = files.image[0];
         const cycleId = +fields.selectedCycleId;
+        const workId = +fields.selectedWorkId;
         
         const uploadData = await storeUpload(image);
         const post = await createFromServerFields(fields, uploadData, session.user.id);
@@ -65,6 +66,16 @@ export default getApiHandler()
                 userId:session.user.id,
               }
             });
+        }
+        else if(workId){
+          await prisma.action.create({
+            data:{
+              workId,
+              postId:+post.id,
+              type:ActionType.PostCreatedOnWork,
+              userId:session.user.id,
+            }
+          });
         }
         
         const notificationToUsers = fields.notificationToUsers 

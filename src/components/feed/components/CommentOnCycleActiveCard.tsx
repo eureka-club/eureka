@@ -3,71 +3,75 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { Box, Button, Stack} from '@mui/material';
+import { Button, Stack} from '@mui/material';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../../forms/SignInForm';
 import { CommentBankOutlined } from '@mui/icons-material';
 import useTranslation from 'next-translate/useTranslation';
-import MosaicItem from '@/src/components/post/MosaicItem';
+import MosaicItem from '@/src/components/cycle/MosaicItem';
 import UserAvatar from '../../common/UserAvatar';
-import usePostSumary from '@/src/usePostSumary';
-import { Sumary } from '../../common/Sumary';
-import { useOnPostCommentCreated } from '../../common/useOnPostCommentCreated';
+import useCycleSumary from '@/src/useCycleSumary';
+import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
+import useUserSumary from '@/src/useUserSumary';
 interface Props extends CardProps {
-  postId:number;
+  cycleId:number;
+  userId:number;
+  commentURL:string;
+  createdAt:Date;
 }
-export default function PostOnCycleActiveCard(props:Props) {
+export default function CommentOnCycleActiveCard(props:Props) {
   const{
-    postId
+    cycleId,
+    userId,
+    commentURL,
+    createdAt
   }=props;
   const{t,lang}=useTranslation('common');
-  const{data:post}=usePostSumary(postId);
+  const{data:cycle}=useCycleSumary(cycleId);
+  const{data:user}=useUserSumary(userId);
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
-  const{dispatch}=useOnPostCommentCreated(postId);
+  const{dispatch}=useOnCycleCommentCreated(cycleId);
   const{data:session}=useSession();
   const handleExpandClick = () => {
     if(session?.user)
       setExpanded(!expanded);
     else show(<SignInForm/>)
   };
-  if(post){debugger;}
 
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
           avatar={
             <>
-                <UserAvatar name={post?.creator.name!} userId={post?.creator.id!} image={post?.creator.image!} photos={post?.creator.photos!}/>
+                <UserAvatar name={user?.name!} userId={userId} image={user?.image!} photos={user?.photos!}/>
             </>
           }
-          title={`${post?.title} ${t('feed:on cycle')}: ${post?.cycles[0].title}`}
-          subheader={`${t('by')}: ${post?.creator.name!} ${t('feed:on')}: ${(new Date(post?.createdAt!)).toLocaleDateString(lang)}`}
+          title={`Comment created ${t('feed:on cycle')}: ${cycle?.title}`}
+          subheader={`${t('by')}: ${user?.name!} ${t('feed:on')}: ${(new Date(createdAt!)).toLocaleDateString(lang)}`}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
-            <MosaicItem postId={postId} sx={{
+            <MosaicItem cycleId={cycleId} sx={{
               'img':{
                 maxWidth:'250px'
               }
             }}/>
-            <Box>
-              <Sumary description={post?.contentText??''}/>
-            </Box>
+            {
+                session 
+                ? <CardContent>
+                    <HyvorComments 
+                      entity='cycle' 
+                      id={`${cycleId}`} 
+                      session={session!}  
+                      OnCommentCreated={(comment)=>dispatch(comment)}
+                    />
+                    </CardContent>
+                : <></>
+            }
         </Stack>
-                    {
-                        session 
-                        ? <CardContent>
-                            <HyvorComments 
-                                entity='post' 
-                                id={`${postId}`} 
-                                session={session!}  
-                                OnCommentCreated={(comment)=>dispatch(comment)}
-                            />
-                            </CardContent>
-                        : <></>
-                    }
+                    
       </CardContent>
       
       <CardActions sx={{justifyContent:"end"}}>

@@ -228,7 +228,9 @@ model Work {
   ToCheck       Boolean? @default(false)
   language      String @default("spanish")
 
-  editions Edition[]
+  editions      Edition[]
+  actions       Action[]
+
 
   @@index([title], name: "works_title_index")
   @@index([author], name: "works_author_index")
@@ -563,6 +565,9 @@ model Action {
 
   cycle     Cycle?    @relation(fields: [cycleId], references: [id])
   cycleId   Int?
+
+  work     Work?    @relation(fields: [workId], references: [id])
+  workId   Int?
 
   commentURL  String?
   
