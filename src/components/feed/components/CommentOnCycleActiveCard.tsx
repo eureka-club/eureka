@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Card, { CardProps } from '@mui/material/Card';
-import CardHeader, { CardHeaderProps } from '@mui/material/CardHeader';
-import CardContent, { CardContentProps } from '@mui/material/CardContent';
-import CardActions, { CardActionsProps } from '@mui/material/CardActions';
-import { Badge, Box, BoxProps, Button, Grid, Paper, Stack} from '@mui/material';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import { Button, Stack} from '@mui/material';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
@@ -12,11 +12,9 @@ import { CommentBankOutlined } from '@mui/icons-material';
 import useTranslation from 'next-translate/useTranslation';
 import MosaicItem from '@/src/components/cycle/MosaicItem';
 import UserAvatar from '../../common/UserAvatar';
-import { Sumary } from '../../common/Sumary';
 import useCycleSumary from '@/src/useCycleSumary';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 import useUserSumary from '@/src/useUserSumary';
-
 interface Props extends CardProps {
   cycleId:number;
   userId:number;

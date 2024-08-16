@@ -7,6 +7,7 @@ import PostOnCycleActiveCard from "./components/PostOnCycleActiveCard";
 import Spinner from "../Spinner";
 import useTranslation from "next-translate/useTranslation";
 import CommentOnCycleActiveCard from "./components/CommentOnCycleActiveCard";
+import PostOnWorkCard from "./components/PostOnWorkCard";
 // import useTranslation from "next-translate/useTranslation";
 
 export const Feed = ()=>{
@@ -23,7 +24,9 @@ export const Feed = ()=>{
           case ActionType.PostCreatedOnCycleActive:
             return <PostOnCycleActiveCard postId={a.postId!}/>;
           case ActionType.CommentCreatedOnCycleActive:
-            return <CommentOnCycleActiveCard userId={a.userId} cycleId={a.cycleId!} commentURL={a.commentURL!} createdAt={a.createdAt}/>
+            return <CommentOnCycleActiveCard userId={a.userId} cycleId={a.cycleId!} commentURL={a.commentURL!} createdAt={a.createdAt}/>;
+          case ActionType.PostCreatedOnWork:
+            return <PostOnWorkCard postId={a.postId!}/>
         }
       })}
     </Stack>

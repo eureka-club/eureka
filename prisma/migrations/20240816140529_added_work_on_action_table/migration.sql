@@ -1,0 +1,22 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[Action] ADD [workId] INT;
+
+-- AddForeignKey
+ALTER TABLE [dbo].[Action] ADD CONSTRAINT [Action_workId_fkey] FOREIGN KEY ([workId]) REFERENCES [dbo].[works]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

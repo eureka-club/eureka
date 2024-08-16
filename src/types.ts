@@ -151,6 +151,7 @@ export type Size = 'small'|'medium'|'large';
 export enum ActionType {
   CommentCreatedOnCycleActive=2,
   PostCreatedOnCycleActive=3,
+  PostCreatedOnWork=4,
 }
 /**
  * 
