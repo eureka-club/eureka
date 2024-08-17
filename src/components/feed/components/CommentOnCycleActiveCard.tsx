@@ -3,7 +3,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { Button, Stack} from '@mui/material';
+import { Button, Stack, Typography} from '@mui/material';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
@@ -15,10 +15,14 @@ import UserAvatar from '../../common/UserAvatar';
 import useCycleSumary from '@/src/useCycleSumary';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 import useUserSumary from '@/src/useUserSumary';
+import { Sumary } from '../../common/Sumary';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 interface Props extends CardProps {
   cycleId:number;
   userId:number;
   commentURL:string;
+  commentText:string;
   createdAt:Date;
 }
 export default function CommentOnCycleActiveCard(props:Props) {
@@ -26,9 +30,11 @@ export default function CommentOnCycleActiveCard(props:Props) {
     cycleId,
     userId,
     commentURL,
+    commentText,
     createdAt
   }=props;
-  const{t,lang}=useTranslation('common');
+  const{t,lang}=useTranslation('feed');
+  const router=useRouter();
   const{data:cycle}=useCycleSumary(cycleId);
   const{data:user}=useUserSumary(userId);
   const [expanded, setExpanded] = React.useState(false);
@@ -37,7 +43,8 @@ export default function CommentOnCycleActiveCard(props:Props) {
   const{data:session}=useSession();
   const handleExpandClick = () => {
     if(session?.user)
-      setExpanded(!expanded);
+      router.push(commentURL);
+      // setExpanded(!expanded);
     else show(<SignInForm/>)
   };
 
@@ -48,8 +55,14 @@ export default function CommentOnCycleActiveCard(props:Props) {
                 <UserAvatar name={user?.name!} userId={userId} image={user?.image!} photos={user?.photos!}/>
             </>
           }
-          title={`Comment created ${t('feed:on cycle')}: ${cycle?.title}`}
-          subheader={`${t('by')}: ${user?.name!} ${t('feed:on')}: ${(new Date(createdAt!)).toLocaleDateString(lang)}`}
+          title={
+            <Typography>
+              <strong>{user?.name!} </strong>
+              {t('commentOnCycleActiveTitle')}
+              <strong> {cycle?.title}</strong>
+            </Typography>
+          }
+          subheader={(new Date(createdAt!)).toLocaleDateString(lang)}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
@@ -58,7 +71,14 @@ export default function CommentOnCycleActiveCard(props:Props) {
                 maxWidth:'250px'
               }
             }}/>
-            {
+            <Stack alignItems={'baseline'} gap={2}>
+              <Sumary description={commentText}/>
+              <Button onClick={handleExpandClick}>
+                  <CommentBankOutlined /> {t('replyCommentLbl')}
+                </Button>
+              {/* <Link href={commentURL}>Write a comment</Link> */}
+            </Stack>
+            {/* {
                 session 
                 ? <CardContent>
                     <HyvorComments 
@@ -69,12 +89,12 @@ export default function CommentOnCycleActiveCard(props:Props) {
                     />
                     </CardContent>
                 : <></>
-            }
+            } */}
         </Stack>
                     
       </CardContent>
       
-      <CardActions sx={{justifyContent:"end"}}>
+      {/* <CardActions sx={{justifyContent:"end"}}>
           {
             !session
               ? <Button onClick={handleExpandClick}>
@@ -82,6 +102,6 @@ export default function CommentOnCycleActiveCard(props:Props) {
                 </Button>
               : <></>
           }
-      </CardActions>
+      </CardActions> */}
     </Card>;
 }

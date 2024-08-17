@@ -3,7 +3,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { Box, Button, Stack} from '@mui/material';
+import { Box, Button, Stack, Typography} from '@mui/material';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
@@ -22,7 +22,7 @@ export default function PostOnCycleActiveCard(props:Props) {
   const{
     postId
   }=props;
-  const{t,lang}=useTranslation('common');
+  const{t,lang}=useTranslation('feed');
   const{data:post}=usePostSumary(postId);
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
@@ -33,17 +33,22 @@ export default function PostOnCycleActiveCard(props:Props) {
       setExpanded(!expanded);
     else show(<SignInForm/>)
   };
-  if(post){debugger;}
 
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
           avatar={
             <>
-                <UserAvatar name={post?.creator.name!} userId={post?.creator.id!} image={post?.creator.image!} photos={post?.creator.photos!}/>
+              <UserAvatar name={post?.creator.name!} userId={post?.creator.id!} image={post?.creator.image!} photos={post?.creator.photos!}/>
             </>
           }
-          title={`${post?.title} ${t('feed:on cycle')}: ${post?.cycles[0].title}`}
-          subheader={`${t('by')}: ${post?.creator.name!} ${t('feed:on')}: ${(new Date(post?.createdAt!)).toLocaleDateString(lang)}`}
+          title={
+            <Typography>
+              <strong>{post?.creator.name} </strong>
+              {t('postOnCycleActiveTitle')}
+              <strong> {post?.cycles[0].title} </strong>
+            </Typography>
+          }
+          subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
@@ -56,18 +61,18 @@ export default function PostOnCycleActiveCard(props:Props) {
               <Sumary description={post?.contentText??''}/>
             </Box>
         </Stack>
-                    {
-                        session 
-                        ? <CardContent>
-                            <HyvorComments 
-                                entity='post' 
-                                id={`${postId}`} 
-                                session={session!}  
-                                OnCommentCreated={(comment)=>dispatch(comment)}
-                            />
-                            </CardContent>
-                        : <></>
-                    }
+        {
+            session 
+            ? <CardContent>
+                <HyvorComments 
+                    entity='post' 
+                    id={`${postId}`} 
+                    session={session!}  
+                    OnCommentCreated={(comment)=>dispatch(comment)}
+                />
+                </CardContent>
+            : <></>
+        }
       </CardContent>
       
       <CardActions sx={{justifyContent:"end"}}>

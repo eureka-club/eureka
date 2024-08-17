@@ -570,6 +570,7 @@ model Action {
   workId   Int?
 
   commentURL  String?
+  commentText String?
   
   type     Int // ActionType
 

@@ -1,5 +1,7 @@
 {
-    "on cycle":"em ciclo",
-    "on work":"no trabalho",
-    "on":"em"
+    "postOnWorkTitle":"criou uma Eureka sobre:",
+    "commentOnCycleActiveTitle":"criou um comentário sobre:",
+    "postOnCycleActiveTitle":"criou uma Eureka sobre:",
+    "replyCommentLbl":"Responder",
+    "createCommentLbl":"Escreva um comentario"
 }

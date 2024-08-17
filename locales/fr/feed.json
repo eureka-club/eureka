@@ -1,5 +1,7 @@
 {
-    "on cycle":"en cycle",
-    "on work":"au travail",
-    "on":"le"
+    "postOnWorkTitle":"a créé un eurêka à propos de :",
+    "commentOnCycleActiveTitle":"a créé un commentaire à propos de :",
+    "postOnCycleActiveTitle":"a créé un eurêka à propos de :",
+    "replyCommentLbl":"Répondre",
+    "createCommentLbl":"Écrivez un commentaire"
 }

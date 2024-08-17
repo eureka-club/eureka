@@ -75,7 +75,7 @@ const Mosaic: FunctionComponent<Props> = ({
   parent,
   enabledPagination = true,
 }) => {
-  const count = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10)
+  const count = +(process.env.NEXT_PUBLIC_TAKE||10)
   const [page,setPage] =useState<number>(0)
   
   const renderMosaic = () => {

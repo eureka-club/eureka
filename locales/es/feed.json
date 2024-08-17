@@ -1,5 +1,7 @@
 {
-    "on cycle":"en ciclo",
-    "on work":"en la obra",
-    "on":"en"
+    "postOnWorkTitle":"ha creado una Eureka sobre:",
+    "commentOnCycleActiveTitle":"ha creado un comentario sobre:",
+    "postOnCycleActiveTitle":"ha creado una Eureka sobre:",
+    "replyCommentLbl":"Responder",
+    "createCommentLbl":"Escriba un comentario"
 }
