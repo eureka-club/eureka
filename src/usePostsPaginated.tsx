@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { PostDetail } from './types/post';
 
 
-export const POST_COUNT = +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
+export const POST_COUNT = +(process.env.NEXT_PUBLIC_TAKE || 10);
 
 export const getRecords = async (cycleId:number,page: number): Promise<{posts:PostDetail[],hasNextPage:boolean}|undefined> => {
   if (!cycleId) return undefined;

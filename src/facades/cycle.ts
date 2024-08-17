@@ -9,7 +9,7 @@ import { UserSumary, UserSumarySpec } from '../types/UserSumary';
 import { equal } from 'assert';
 import { LANGUAGES, LOCALES } from '../constants';
 
-export const NEXT_PUBLIC_MOSAIC_ITEMS_COUNT = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_MOSAIC_ITEMS_COUNT || 10);
+export const NEXT_PUBLIC_TAKE = +(process.env.NEXT_PUBLIC_NEXT_PUBLIC_TAKE || 10);
 
 const CycleSumaryWithExtrasSpec = {
   select:{

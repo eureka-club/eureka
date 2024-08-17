@@ -21,7 +21,7 @@ export default getApiHandler()
         res.status(400).end()
       const id = id_ ? id_.toString():undefined;  
       let page = parseInt(p.toString())-1;
-      const take = page >-1 ? +(process.env.NEXT_PUBLIC_MOSAIC_ITEMS_COUNT||10):undefined
+      const take = page >-1 ? +(process.env.NEXT_PUBLIC_TAKE||10):undefined
       const skip = page >-1 ? page * take!:undefined;
       let where = w ? JSON.parse(w.toString()) : undefined;
       
