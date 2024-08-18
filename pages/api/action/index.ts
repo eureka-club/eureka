@@ -10,9 +10,10 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
   // const session = await getSession({ req });
 
   try{
-    const{skip:skip_,take:take_}=req.query;
+    const{skip:skip_,total:total_}=req.query;
     const skip = skip_ ? +skip_! : undefined;
-    const take = take_ ? +take_! : +process.env.NEXT_PUBLIC_TAKE!;
+    const take = +process.env.NEXT_PUBLIC_TAKE!;
+    let total=+total_!??0;
 
     const today = new Date();
     const daysToMilliseconds = ()=>{
@@ -38,9 +39,20 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         }
       }
     });
-    const total = await prisma.action.count();
     
-    return res.json({actions,total});
+    if(!total)
+      total = await prisma.action.count({
+        where:{
+          createdAt:{
+            lte:today,
+            gte:till
+          }
+        }
+      });
+    
+    let nextSkip = (skip??0)+take < total ? (skip??0) + take: undefined;
+
+    return res.json({actions,nextSkip,total});
   }
   catch(e){
     return res.json({error:SERVER_ERROR});
