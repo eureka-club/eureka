@@ -12,6 +12,7 @@ import { getSession } from 'next-auth/react';
 interface ReqProps{
   cycleId:number;
   url:string;
+  commentText:string;
   user:{id:number,name:string,email:string};
   parent_id:number;
 }
@@ -23,7 +24,7 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{cycleId,url:eurl,user:{id,name,email},parent_id}=req.body as ReqProps; 
+      const{cycleId,url:eurl,commentText,user:{id,name,email},parent_id}=req.body as ReqProps; 
       const pageIdentifier=`cycle-${cycleId}`;
       let locale = req.cookies.NEXT_LOCALE || i18.defaultLocale;
       let to:{email:string,name?:string}[] = [];
@@ -43,7 +44,8 @@ export default async function handler(
           cycleId:+cycleId,
           type:ActionType.CommentCreatedOnCycleActive,
           userId:id,
-          commentURL:eurl
+          commentURL:eurl,
+          commentText
         }
       });
       const title=cycle?.title;
