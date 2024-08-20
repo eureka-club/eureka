@@ -8,10 +8,12 @@ const i18 = require('i18n');
 import { NOT_FOUND } from '@/src/api_code';
 import { dict, getDict } from '@/src/hooks/useTranslation';
 import { Locale } from 'i18n-config';
+import { ActionType } from '@/src/types';
 interface ReqProps{
   workId:number;
   url:string;
-  user:{name:string,email:string};
+  commentText:string;
+  user:{id:number,name:string,email:string};
   parent_id:number;
 }
 
@@ -22,7 +24,7 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{workId,url:eurl,user:{name,email},parent_id}=req.body as ReqProps; 
+      const{workId,url:eurl,commentText,user:{id,name,email},parent_id}=req.body as ReqProps; 
       const pageIdentifier=`work-${workId}`;
       let locale = req.cookies.NEXT_LOCALE || i18.defaultLocale;
       let to:{email:string,name?:string}[] = [];
@@ -35,6 +37,16 @@ export default async function handler(
         }
       });
       if(!work)return res.status(200).json({error:NOT_FOUND});
+
+      await prisma.action.create({
+        data:{
+          workId:+workId,
+          type:ActionType.CommentCreatedOnWork,
+          userId:id,
+          commentURL:eurl,
+          commentText
+        }
+      });
 
       const title=work.title;
       const language = work.language;

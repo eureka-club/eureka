@@ -37,11 +37,11 @@ import { useIsFetching } from 'react-query';
 import Spinner from '@/components/common/Spinner';
 
 // import { useIsFetching } from 'react-query';
-import { WEBAPP_URL } from '@/src/constants';
 import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
 import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 import { Sumary } from '../common/Sumary';
+import { useOnWorkCommentCreated } from '../common/useOnWorkCommentCreated';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -123,6 +123,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   //   enabled: !!workId,
   // }
 );
+  const{dispatch}=useOnWorkCommentCreated(workId);
+
   const{data:topicsAll}=useTopics();
   const topics:TopicItem[] = useMemo(()=>{
     if(work && topicsAll){
@@ -410,25 +412,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     entity="work" 
                     id={`${work.id}`} 
                     session={session} 
-                    OnCommentCreated={async (comment)=>{
-                      const url = `${WEBAPP_URL}/api/hyvor_talk/onCommentCreated/work`;
-                      const fr = await fetch(url,{
-                        method:'POST',
-                        headers:{
-                          "Content-Type":"application/json",
-                        },
-                        body:JSON.stringify({
-                          workId,
-                          url:comment.url,
-                          user:{name:session.user.name,email:session.user.email},
-                          parent_id:comment.parent_id,
-                        })
-                      });
-                      if(fr.ok){
-                        const res = await fr.json();
-                        console.log(res);
-                      }
-                    }}
+                    OnCommentCreated={dispatch}
                   />
               {/* <Grid container sx={{display:{lg:'inherit'}}}>
                 <Grid item lg={4}>

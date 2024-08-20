@@ -8,22 +8,22 @@ import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../../forms/SignInForm';
 import { CommentBankOutlined } from '@mui/icons-material';
 import useTranslation from 'next-translate/useTranslation';
-import MosaicItem from '@/src/components/cycle/MosaicItem';
+import MosaicItem from '@/src/components/work/MosaicItem';
 import UserAvatar from '../../common/UserAvatar';
-import useCycleSumary from '@/src/useCycleSumary';
 import useUserSumary from '@/src/useUserSumary';
 import { Sumary } from '../../common/Sumary';
 import { useRouter } from 'next/router';
+import useWorkSumary from '@/src/useWorkSumary';
 interface Props extends CardProps {
-  cycleId:number;
+  workId:number;
   userId:number;
   commentURL:string;
   commentText:string;
   createdAt:Date;
 }
-export default function CommentOnCycleActiveCard(props:Props) {
+export default function CommentOnWorkCard(props:Props) {
   const{
-    cycleId,
+    workId,
     userId,
     commentURL,
     commentText,
@@ -31,7 +31,7 @@ export default function CommentOnCycleActiveCard(props:Props) {
   }=props;
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
-  const{data:cycle}=useCycleSumary(cycleId);
+  const{data:work}=useWorkSumary(workId);
   const{data:user}=useUserSumary(userId);
   const{show}=useModalContext();
   const{data:session}=useSession();
@@ -51,15 +51,15 @@ export default function CommentOnCycleActiveCard(props:Props) {
           title={
             <Typography>
               <strong>{user?.name!} </strong>
-              {t('commentOnCycleActiveTitle')}
-              <strong> {cycle?.title}</strong>
+              {t('commentOnWorkTitle')}
+              <strong> {work?.title}</strong>
             </Typography>
           }
           subheader={(new Date(createdAt!)).toLocaleDateString(lang)}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
-            <MosaicItem cycleId={cycleId} sx={{
+            <MosaicItem workId={workId} sx={{
               'img':{
                 maxWidth:'250px'
               }
@@ -68,7 +68,7 @@ export default function CommentOnCycleActiveCard(props:Props) {
               <Sumary description={commentText}/>
               <Button onClick={handleExpandClick}>
                   <CommentBankOutlined /> {t('replyCommentLbl')}
-                </Button>
+              </Button>
             </Stack>
         </Stack>
       </CardContent>
