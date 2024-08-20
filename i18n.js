@@ -4,7 +4,7 @@ module.exports = {
   locales: ['es', 'en', 'fr', 'pt'],
   defaultLocale: 'pt',
   pages: {
-    '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated'],
+    '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated','hyvortalk'],
     '/': ['countries','feed'],
     '/auth/emailVerify': ['common', 'emailVerify'],
     '/post/create': ['countries'],

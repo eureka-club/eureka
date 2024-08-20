@@ -70,6 +70,7 @@ export default function PostOnWorkCard(props:Props) {
                                 id={`${postId}`} 
                                 session={session!}  
                                 OnCommentCreated={(comment)=>dispatch(comment)}
+                                
                             />
                             </CardContent>
                         : <></>
