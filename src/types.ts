@@ -152,6 +152,7 @@ export enum ActionType {
   CommentCreatedOnCycleActive=2,
   PostCreatedOnCycleActive=3,
   PostCreatedOnWork=4,
+  CommentCreatedOnWork=5,
 }
 /**
  * 

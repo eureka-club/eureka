@@ -7,6 +7,7 @@ import CommentOnCycleActiveCard from "./CommentOnCycleActiveCard";
 import PostOnWorkCard from "./PostOnWorkCard";
 import { ActionType } from "@/src/types";
 import { useInfiniteQuery } from "react-query";
+import CommentOnWorkCard from "./CommentOnWorkCard";
 
 export const FeedWithInfiniteScroll = ()=>{
     const[page,setpage]=useState(-1);
@@ -41,7 +42,9 @@ export const FeedWithInfiniteScroll = ()=>{
             case ActionType.CommentCreatedOnCycleActive:
               return <CommentOnCycleActiveCard key={`${a.type}-${a.cycleId!}`} userId={a.userId} cycleId={a.cycleId!} commentURL={a.commentURL!} commentText={a.commentText!} createdAt={a.createdAt}/>;
             case ActionType.PostCreatedOnWork:
-              return <PostOnWorkCard key={`${a.type}-${a.postId!}`} postId={a.postId!}/>
+              return <PostOnWorkCard key={`${a.type}-${a.postId!}`} postId={a.postId!}/>;
+            case ActionType.CommentCreatedOnWork:
+              return <CommentOnWorkCard key={`${a.type}-${a.workId}`} userId={a.userId} workId={a.workId!} commentURL={a.commentURL!} commentText={a.commentText!} createdAt={a.createdAt}/>
           }
         }))}
         {
