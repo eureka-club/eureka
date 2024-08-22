@@ -142,13 +142,13 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
           {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
         </div>
         <Stack direction={{xs:'column',sm:'row'}}>
-          <MosaicItem postId={post?.id!} sx={{
-                        'img':{
-                          xs:{maxWidth:'100%'},
-                          sm:{maxWidth:'250px',height:'auto'},
-                          lg:{maxWidth:'450px',height:'auto'},
-                        }
-                      }}
+         <MosaicItem postId={post?.id!} sx={(theme)=>({
+              'img':{
+                [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
+                [theme.breakpoints.only('sm')]:{width:'350px',height:'auto'},
+                [theme.breakpoints.up('md')]:{width:'450px',height:'auto'},
+              }
+            })}
           />
           <Box paddingLeft={3}>
               <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>

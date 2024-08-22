@@ -9,9 +9,9 @@ import PMI from '@/src/components/post/MosaicItem';
 import {useRouter} from 'next/router'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
-import { MosaicsGrid } from '@/src/components/MosaicsGrid';
-import Spinner from '@/components/common/Spinner'
-import { CircularProgress, Stack } from '@mui/material';
+import { Box } from '@mui/material';
+import Masonry from '@mui/lab/Masonry';
+import Spinner from '@/src/components/Spinner';
 
 interface Props{
   id:number
@@ -54,11 +54,21 @@ const MyPosts: NextPage<Props> = ({id}) => {
                 dataPosts?.posts.map(c=><PMI key={c.id} postId={c.id} size='medium' />)!
               }
               </MosaicsGrid> */}
-              <Stack direction={'row'} spacing={2} overflow={'scroll'} padding={.5}>
+                <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
                 {
-                  dataPosts?.posts.map(c=><PMI key={c.id} postId={c.id} size='medium' />)!
+                  dataPosts?.posts.map(c=><Box key={c.id}>
+                        <PMI  postId={c.id} sx={{
+                        'img':{
+                          width:'100%',
+                          height:'auto',
+                        }
+                      }} />
+                    </Box>
+                )!
                 }
-              </Stack>
+              </Masonry>
+              {/* <Stack direction={'row'} spacing={2} overflow={'scroll'} padding={.5}>
+              </Stack> */}
             </>
           ) 
           : <></>
