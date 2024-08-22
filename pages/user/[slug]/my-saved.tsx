@@ -1,6 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from "next/head";
-import { Col, Row, Spinner,Tab,Tabs } from 'react-bootstrap';
+import { Spinner,Tab,Tabs } from 'react-bootstrap';
 import { QueryClient, dehydrate } from 'react-query';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { useSession } from 'next-auth/react';
@@ -13,9 +13,52 @@ import PMI from '@/src/components/post/MosaicItem'
 import WMI from '@/components/work/MosaicItem'
 import {getSession} from 'next-auth/react'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Masonry from '@mui/lab/Masonry';
+import { Box } from '@mui/material';
 
 interface Props{
   id:number;
+}
+
+const RenderPosts = ({favPosts}:{favPosts:{id:number}[]})=>{
+  return  <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+  {
+  favPosts.map(p=>
+    <Box key={p.id}>
+      <PMI postId={p.id} sx={{
+        'img':{
+          width:'100%',
+          height:'auto',
+        }
+      }} />
+    </Box>
+  )??<></>}
+  </Masonry>
+}
+
+const RenderCycles = ({favCycles}:{favCycles:{id:number}[]})=>{
+  return <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+  {
+    favCycles?.map(c=><Box key={c.id}>
+      <CMI  cycleId={c.id} />
+    </Box>)!
+  }
+</Masonry>
+}
+
+const RenderWorks = ({favWorks}:{favWorks:{id:number}[]})=>{
+  return  <Masonry columns={{xs:1,sm:3,md:3,lg:5}} spacing={1}>
+  {favWorks.map(c=>
+      <Box key={c.id}>
+        <WMI workId={c.id } sx={{
+                          'img':{
+                            width:'100%',
+                            height:'auto',
+                          }
+                        }} />
+      </Box>
+  )}
+  </Masonry>
 }
 
 const MySaved: NextPage<Props> = ({id}) => {
@@ -31,33 +74,9 @@ const MySaved: NextPage<Props> = ({id}) => {
   //   if(isPostMosaicItem(i))return <PMI postId={i.id}/>
   //   if(isWorkMosaicItem(i))return <WMI workId={i.id}/>
   // }
-  const renderPosts = ()=>{
-    return <Row className='mt-5'>
-    {sfl.favPosts.map(p=>
-      <Col key={p.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-        <PMI postId={p.id} />
-      </Col>  
-    )}
-    </Row>
-  }
-  const renderCycles = ()=>{
-    return <Row className='mt-5'>
-    {sfl.favCycles.map(c=>
-      <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-        <CMI cycleId={c.id} />
-      </Col>
-    )}
-    </Row>
-  }
-  const renderWorks = ()=>{
-    return <Row className='mt-5'>
-    {sfl.favWorks.map(c=>
-        <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-          <WMI workId={c.id } size='medium'/>
-        </Col>
-    )}
-    </Row>
-  }
+  
+  
+  
   return <>
     <Head>
         <meta property="og:title" content='Eureka'/>
@@ -109,13 +128,13 @@ const MySaved: NextPage<Props> = ({id}) => {
       className="mb-3"
     >
       {sfl.favPosts.length ? <Tab eventKey="posts" title={t('posts')}>
-        {renderPosts()}
+        <RenderPosts favPosts={sfl.favPosts}/>
       </Tab> : ''}
       {sfl.favCycles.length ? <Tab eventKey="cycles" title={t('cycles')}>
-        {renderCycles()}
+        <RenderCycles favCycles={sfl.favCycles}/>
       </Tab> : ''}
       {sfl.favWorks.length ? <Tab eventKey="works" title={t('works')}>
-        {renderWorks()}
+        <RenderWorks favWorks={sfl.favWorks}/>
       </Tab>:''}
     </Tabs>
             {/* <Row>

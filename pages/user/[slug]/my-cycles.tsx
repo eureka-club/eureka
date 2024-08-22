@@ -9,9 +9,8 @@ import CMI from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { ITEMS_IN_LIST_PAGES } from '@/src/constants';
-import { MosaicsGrid } from '@/src/components/MosaicsGrid';
-import { CircularProgress, Stack } from '@mui/material';
-import CarouselStatic from '@/src/components/CarouselStatic';
+import { Box, CircularProgress} from '@mui/material';
+import Masonry from '@mui/lab/Masonry';
 
 interface Props{
   id:number;
@@ -54,11 +53,15 @@ const MyCycles: NextPage<Props> = ({id}) => {
             dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='medium' />)!
           }
           </MosaicsGrid> */}
-            <Stack direction={'row'} spacing={2} overflow={'scroll'} padding={.5}>
+            <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
               {
-                dataCycles?.cycles.map(c=><CMI key={c.id} cycleId={c.id} size='medium' />)!
+                dataCycles?.cycles.map(c=><Box key={c.id}>
+                  <CMI  cycleId={c.id} />
+                </Box>)!
               }
-            </Stack>
+          </Masonry>
+            {/* <Stack direction={'row'} spacing={2} overflow={'scroll'} padding={.5}>
+            </Stack> */}
             </>
         ) : ''
       }

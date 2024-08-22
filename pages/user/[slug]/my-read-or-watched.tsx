@@ -4,9 +4,6 @@ import Head from 'next/head';
 import {
   Alert,
   Button,
-  ButtonGroup,
-  Tabs,
-  Tab,
   Col,
   Row,
 } from 'react-bootstrap';
