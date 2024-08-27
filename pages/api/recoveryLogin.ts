@@ -54,8 +54,10 @@ export default getApiHandler()
         html
       });
       
-      if(status == 200)
-        res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale||defaultLocale}/auth/emailVerify`)
+      if(status == 200){
+        res.status(status).json({data});
+        // res.redirect(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${locale||defaultLocale}/auth/emailVerify`)
+      }
       else{
         res.statusMessage = statusText;  
         res.status(status).json({data:null});
