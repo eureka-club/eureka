@@ -25,7 +25,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, Button, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -39,6 +39,7 @@ import { useModalContext } from '@/src/hooks/useModal';
 import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 import { Sumary } from '../common/Sumary';
 import { useOnWorkCommentCreated } from '../common/useOnWorkCommentCreated';
+import Masonry from '@mui/lab/Masonry';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -61,11 +62,18 @@ const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsPr
       workId={workId}
       cacheKey={cacheKey}
     ></WorkDetailPost>
-    <MosaicsGrid isLoading={isLoading}>
-      {
-        posts.map(p=><MosaicItemPost key={p.id} postId={p.id} size={'medium'} />
-      )}
-    </MosaicsGrid>
+    {/* <MosaicsGrid isLoading={isLoading}> */}
+    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+        {
+          posts.map(p=><MosaicItemPost key={p.id} postId={p.id} sx={{
+            'img':{
+              width:'100%',
+              height:'auto',
+            }
+          }} />
+        )}
+      </Masonry>
+    {/* </MosaicsGrid> */}
   </Stack>
 }
 
