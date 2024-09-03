@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
         body:JSON.stringify({
           postId,
           url:comment.url,
+          commentURL:`/post/${postId}?ht-comment-id=${comment.id}`,
           user:{name:session?.user.name,email:session?.user.email},
           parent_id:comment.parent_id,
         })

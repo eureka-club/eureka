@@ -25,7 +25,7 @@ import { Session } from '@/src/types';
 import HyvorComments from '@/src/components/common/HyvorComments';
 import useExecRatingWork from '@/src/hooks/mutations/useExecRatingWork';
 import Rating from '../common/Rating';
-import { Box, Button, CircularProgress, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import useWorkDetail from '@/src/useWorkDetail';
 import { WorkSumary } from '@/src/types/work';
@@ -42,6 +42,7 @@ import { useModalContext } from '@/src/hooks/useModal';
 import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 import { Sumary } from '../common/Sumary';
 import { useOnWorkCommentCreated } from '../common/useOnWorkCommentCreated';
+import Masonry from '@mui/lab/Masonry';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -64,11 +65,18 @@ const TabPosts:FC<TabPostsProps> = ({isLoading,workId,posts,cacheKey}:TabPostsPr
       workId={workId}
       cacheKey={cacheKey}
     ></WorkDetailPost>
-    <MosaicsGrid isLoading={isLoading}>
-      {
-        posts.map(p=><MosaicItemPost key={p.id} postId={p.id} size={'medium'} />
-      )}
-    </MosaicsGrid>
+    {/* <MosaicsGrid isLoading={isLoading}> */}
+    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+        {
+          posts.map(p=><MosaicItemPost key={p.id} postId={p.id} sx={{
+            'img':{
+              width:'100%',
+              height:'auto',
+            }
+          }} />
+        )}
+      </Masonry>
+    {/* </MosaicsGrid> */}
   </Stack>
 }
 
@@ -320,14 +328,15 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
                     <Stack gap={1}>
-                      <MosaicItem workId={work.id} sx={{
+                      <MosaicItem workId={work.id} sx={(theme)=>({
                         'img':{
-                          xs:{maxWidth:'100%'},
-                          sm:{maxWidth:'250px',height:'auto'},
+                          [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
+                          [theme.breakpoints.only('sm')]:{width:'250px'},
+                          [theme.breakpoints.up('md')]:{width:'400px'}
                         }
-                      }} />
+                      })} />
                       <Box>
-                        <Stack direction={'row'} alignItems={'flex-start'} gap={1}>
+                        <Stack direction={'row'} alignItems={'stretch'} gap={1}>
                           <Rating
                             qty={work?.currentUserRating??0}
                             onChange={handlerChangeRating}

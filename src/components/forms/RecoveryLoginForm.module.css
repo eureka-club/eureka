@@ -1,16 +1,7 @@
-.headerContainer {
-  border: none;
-  text-align: center;
-  font-size: 2rem;
-  margin-top: 5rem;
-
-}
-
 .eurekaImage {
    width: 120px;
    height: 120px;
 }
-
 .EurekaText {
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -20,46 +11,8 @@
   font-size: 1.5rem;
 }
 
-.forgotPassword {
-  margin-bottom: 2.5rem;
-  text-align: center;
-  font-size: 1.5rem;
-}
-
-.indicationsText {
-  margin-bottom: 2.5rem;
-  text-align: center;
-  font-size: 0.9rem;
-  width: 50%;
-}
-
-.submitButton {
-  margin-top: 1.5rem;
-  width: 100%;
-}
-
-.sendForm{
-  width: 40%;
-}
 
 
-@media screen and (max-width: 1024px) {
- 
-  .sendForm{
-  width: 100%;
-  margin: 1rem;
-}
-  .submitButton{
-  width: 100%;
-    margin: 1;
 
-}
-
-.indicationsText {
-  width: 100%;
-    margin: 1;
-
-}
  
    
-}

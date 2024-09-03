@@ -179,7 +179,8 @@
   "aboutBox3": "Eureka é para pessoas que querem descobrir, aprender e imaginar um mundo diferente.",
   "aboutBox4": "Trabalhamos com organizações da sociedade civil que buscam fazer com que seu ativismo chegue ao maior número de pessoas possível. Te interessa? Entre em contato conosco!",
   "readOrWatchedLbl":"Marcar como visto ou lido",
-  "unknown":"Não especificado"
+  "unknown":"Não especificado",
+  "MISSING_FIELD":"Campo {{fieldName}} ausente"
 
 
 }
