@@ -4,7 +4,7 @@ import Trans from 'next-translate/Trans'
 import { FunctionComponent } from 'react';
 import Link from 'next/link'
 import styles from './TermsAndPolicy.module.css';
-import { Box, Container, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 const TermsAndPolicy: FunctionComponent = () => {
   const { t } = useTranslation('termsAndPolicy');
