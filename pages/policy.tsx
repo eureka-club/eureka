@@ -5,7 +5,6 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import TermsAndPolicy from '@/src/components/TermsAndPolicy';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
-//import { useRouter } from 'next/router';
 
 interface Props{
   session:Session
@@ -13,9 +12,6 @@ interface Props{
 const policyPage: NextPage<Props> = ({session}) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {t } = useTranslation('termsAndPolicy');
-  //const router = useRouter();
-  //const {show} = router.query ;
-
 
   return (<>
     <Head>
