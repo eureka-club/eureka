@@ -9,6 +9,7 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import useTopics from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
 import { Feed } from '../feed';
+import FeaturedCycles from './FeaturedCycles';
 interface Props {
 }
 const HomeNotSession: FunctionComponent<Props> = ({}) => {
@@ -33,6 +34,10 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
             position:'sticky',
             top:'70px',
           }}>
+
+            <FeaturedCycles />
+            <FeaturedWorks />
+
             <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
             
             <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
@@ -45,7 +50,6 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
           {/* <section className="ms-0 ms-lg-5"> */}
           <Stack gap={3}>
               <Feed/>
-              <FeaturedWorks />
               <FeaturedEurekas />
               {/* <FeaturedCycles /> */}
           </Stack>
