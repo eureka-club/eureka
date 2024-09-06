@@ -47,6 +47,7 @@ import usePostSumary from "@/src/usePostSumary";
 
 import { Box, BoxProps, Card, CardMedia, Chip, Paper } from "@mui/material"
 import useTranslation from "next-translate/useTranslation";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -273,19 +274,12 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
     : '#';
 
   return <Box
-      sx={{
-        'img':{
-          height:'360px',
-        }
-      }}
       {...others}
       style={{
         position:'relative',
       }}
     >
-      
         <Chip 
-        
           label={
             <span>
                 {t(post?.type || 'post')}
@@ -298,12 +292,12 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
                 }
               </span>
           } 
-          color="error" sx={{position:'absolute',top:'8px',left:'8px',boxShadow: '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)'}
+          color="error" sx={{position:'absolute',top:'8px',left:'8px',zIndex:999,boxShadow: '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)'}
           }
         />
       
       <Link href={href}>
-        <img 
+        {/* <img 
           className="post-mosaic-img"
           src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
           style={{
@@ -311,7 +305,24 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
             borderRadius:'4px',
             boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`
           }}
-        />
+        /> */}
+
+        <Box style={{
+            width:'250px',
+            height:'250px',
+            display:'inline-block',
+            border:'solid 1px lightgray',
+            borderRadius:'4px',
+            boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`
+          }}>
+          <Image 
+            className="post-mosaic-img"
+            width={250} 
+            height={250} 
+            src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
+          />
+        </Box>
+        
       </Link>
   </Box>
 }

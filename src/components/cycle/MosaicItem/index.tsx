@@ -301,7 +301,8 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
             <CardMedia
               component={'img'}
               image={img}
-              // height={200}
+              height={250}
+              width={250}
             />
             <CardContent>
               {/* <Typography>

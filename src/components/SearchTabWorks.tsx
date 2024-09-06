@@ -98,7 +98,7 @@ const SearchTabworks:FunctionComponent = () => {
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
         )}
     </MosaicsGrid> */}
-    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+    <Masonry columns={{xs:1,sm:3,md:3,lg:6}} spacing={1}>
       {works?.map(p=>
         <Box key={p.id}>
           <MosaicItem   
