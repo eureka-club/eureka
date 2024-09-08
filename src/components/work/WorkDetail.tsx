@@ -40,6 +40,8 @@ import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 import { Sumary } from '../common/Sumary';
 import { useOnWorkCommentCreated } from '../common/useOnWorkCommentCreated';
 import Masonry from '@mui/lab/Masonry';
+import { useSaveWorkForLater } from './useSaveWorkForLater';
+import { useShareWork } from './useShareWork';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -178,6 +180,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     work: work!,
   });
 
+  const{SaveForLater}=useSaveWorkForLater(workId);
+  const{ShareWork}=useShareWork(workId);
+
   useEffect(() => {
     if (dataPosts && dataPosts.posts) {
       setHasMorePosts(dataPosts.fetched);
@@ -313,7 +318,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     }
     return 0;
   };
-
   
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -350,7 +354,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             <FiTrash2 />
                           </IconButton>}
                         </Stack>
-                        <WorkReadOrWatched work={work} />
+                        <Stack gap={1}>
+                          <WorkReadOrWatched work={work} sx={{textTransform:'none',minWidth:'240px'}} />
+                          <ShareWork sx={{textTransform:'none',minWidth:'240px'}}/>
+                          <SaveForLater sx={{textTransform:'none',minWidth:'240px'}}/>
+                        </Stack>
                       </Box>
                     </Stack>
                     <Stack>
@@ -385,6 +393,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       </Box>
                       
                       {/* <Stack display={{xs:'none',md:'inherit'}}> */}
+                      <Stack direction={'row'} gap={1} padding={'1rem 0'}>
+                          <WorkReadOrWatched work={work} sx={{textTransform:'none'}} />
+                          <SaveForLater sx={{textTransform:'none'}}/>
+                          <ShareWork sx={{textTransform:'none'}}/>
+                      </Stack>
+
                       <Sumary description={work?.contentText??''}/>
                         <Box>
                             {
