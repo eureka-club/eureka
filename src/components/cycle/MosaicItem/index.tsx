@@ -9,14 +9,14 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { CgMediaLive } from 'react-icons/cg';
 import { MdGroup } from 'react-icons/md';
-import { DATE_FORMAT_SHORT, LOCALES } from '../../../constants';
+import { DATE_FORMAT_SHORT, LANGUAGES, LOCALES } from '../../../constants';
 import LocalImageComponent from '../../LocalImage';
 import styles from './MosaicItem.module.css';
 import useCycleSumary from '@/src/useCycleSumary'
 import UserAvatar from '../../common/UserAvatar';
 import { CycleSumary } from '@/src/types/cycle';
 import CycleSocialInteraction from '../../common/CycleSocialInteraction';
-import { Box, BoxProps, Button, Card, CardContent, CardHeader, CardMedia, CardProps, Stack, Typography, TypographyProps } from '@mui/material';
+import { Box, BoxProps, Button, Card, CardContent, CardHeader, CardMedia, CardProps, Chip, Stack, Typography, TypographyProps } from '@mui/material';
 import { StyledBadge } from '../../common/StyledBadge';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -265,11 +265,13 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
   size,
   ...others
 })=>{
-  const{lang}=useTranslation('common');
+  const{t,lang}=useTranslation('common');
   const{data:cycle}=useCycleSumary(+cycleId);
   const img = `https://${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle?.localImages[0].storedFile}`; 
 
   const GetDatesRange = (a:any)=>`${dayjs(a?.startDate).format('YYYY-MM-DD')} - ${dayjs(a?.endDate).format('YYYY-MM-DD')}`
+  const cycleAccessTypes = ['','public','private','secret','payment'];
+  const cycleAccess = t(cycleAccessTypes[cycle?.access??0]);
 
   return <Box style={{cursor:'pointer'}} {...others}>
         <Link href={`/${lang}/cycle/${cycleId}`} >
@@ -298,12 +300,29 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
               // title={cycle?.creator.name}
               subheader={GetDatesRange(cycle)}
           />
+          <Box position={'relative'}>
             <CardMedia
               component={'img'}
               image={img}
               height={250}
               width={250}
             />
+            {
+              cycleAccess
+                ? 
+                <Chip 
+                  label={
+                    <span>
+                        {cycleAccess}
+                        <em> ({LOCALES[cycle?.languages!].toUpperCase()})</em>
+                      </span>
+                  } 
+                  color="primary" sx={{position:'absolute',top:'8px',left:'8px',zIndex:999,boxShadow: '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)'}
+                  }
+                />
+                : <></>
+            }
+          </Box>
             <CardContent>
               {/* <Typography>
                 {cycle?.title}
