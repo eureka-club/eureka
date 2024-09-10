@@ -1,11 +1,12 @@
 import { FunctionComponent, useState } from 'react';
-import { Button, Container,Carousel } from 'react-bootstrap';
+import {  Container,Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { Button } from '@mui/material';
 
 const BannerCustomizableMobile: FunctionComponent = ({
 }) => {
@@ -23,18 +24,18 @@ const BannerCustomizableMobile: FunctionComponent = ({
         <aside className="d-flex justify-content-end">
           {show && (
             <Button
-              variant="info"
+            variant='text' color="info"
               onClick={() => setShow(false)}
-              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
+              //className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('Close')} <AiOutlineClose />
             </Button>
           )}
           {!show && (
             <Button
-              variant="info"
+            variant='text' color='info'
               onClick={() => setShow(true)}
-              className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
+             // className="py-1 px-3 border-white text-white fs-6 bg-transparent rounded-pill"
             >
               {t('Expand')} <AiOutlineDown />
             </Button>
@@ -52,7 +53,8 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <div className="p-0 mx-1 text-wrap fs-6" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                       <div className="d-flex  mt-2"> 
                       {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="contained" color="info" /* className='text-white'*/
+                             onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
                             : ''
                           }
                       </div>

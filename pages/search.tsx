@@ -3,7 +3,7 @@ import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { QueryClient, dehydrate } from 'react-query';
-import { Alert } from 'react-bootstrap';
+//import { Alert } from 'react-bootstrap';
 import { Session } from '@/src/types';
 import SearchTab from '@/src/components/SearchTab';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
@@ -13,6 +13,7 @@ import { getWorksSumary } from '@/src/useWorksSumary';
 import { getCyclesSumary } from '@/src/useCyclesSumary';
 import { getPostsSumary } from '@/src/usePostsSumary';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import { Alert } from '@mui/material';
 
 const topics = [
   'gender-feminisms',
@@ -87,8 +88,8 @@ const SearchPage: NextPage<Props> = ({ hasCycles, hasPosts, hasWorks, metas,sess
           </div>
         ) : (
           <>
-            <Alert className="mt-4" variant="primary">
-              <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+            <Alert  variant="filled" severity="info">
+              {t('ResultsNotFound')}
             </Alert>
           </>
         )}

@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
-import {  Row, Col, Badge} from 'react-bootstrap';
+//import {  Row, Col, Badge} from 'react-bootstrap';
 import Image from 'next/image';
 
 import {
