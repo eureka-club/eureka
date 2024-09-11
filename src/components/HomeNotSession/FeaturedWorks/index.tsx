@@ -5,9 +5,10 @@ import MosaicItem from '@/components/work/MosaicItem';
 import WorkPostImages from './WorkPostImages';
 import WorkComments from './WorkComments';
 import Spinner from '../../Spinner';
-import { Box, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Avatar, Box, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
-import { Star } from '@mui/icons-material';
+import { deepPurple } from '@mui/material/colors';
+
 
 const FeaturedWorks = () => {
   const { data: dataFeaturedWorks,isLoading } = useFeaturedWorks();
@@ -16,9 +17,9 @@ const FeaturedWorks = () => {
   else if(!isLoading && !dataFeaturedWorks?.works?.length)return <></>;
   
   return <Box>
-    <Stack direction={'row'} alignItems={'center'}>
-      <Star color='warning'/>
-      <Typography variant='h6'>{t('FeaturedDiscussions')}</Typography>
+    <Stack direction={'row'} alignItems={'center'} gap={1}>
+      <Avatar sx={{width:24,height:24,bgcolor: 'color-mix(in srgb, var(--color-secondary) 50%, transparent)' }}>✨</Avatar>
+      <Typography variant='h6' color={'secondary'}>{t('FeaturedDiscussions')}</Typography>
     </Stack>
     <List>
     {

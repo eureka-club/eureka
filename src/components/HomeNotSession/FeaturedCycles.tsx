@@ -7,8 +7,9 @@ import Spinner from "../Spinner";
 import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
 // import Image from "next/image";
 // import LocalImage from "../LocalImage";
-import { LocalFireDepartment } from "@mui/icons-material";
+
 import Link from "next/link";
+import { deepPurple } from "@mui/material/colors";
 
 interface Props {
 }
@@ -22,8 +23,8 @@ const FeaturedCycles:FC<Props> = ({}) => {
     if(!isLoading && !data?.cycles.length)return <></>;
 
     return <Box>
-      <Stack direction={'row'} alignItems={'center'}>
-        <LocalFireDepartment color="warning"/>  
+      <Stack direction={'row'} alignItems={'center'} gap={1}>
+        <Avatar sx={{width:24,height:24,bgcolor: 'color-mix(in srgb, var(--color-secondary) 50%, transparent)' }}>🔥</Avatar>
         <Typography variant="h6" color={'secondary'}>{t('Interest cycles')}</Typography>
       </Stack>
       <List>
