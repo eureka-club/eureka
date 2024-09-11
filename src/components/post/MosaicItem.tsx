@@ -50,7 +50,7 @@ import useTranslation from "next-translate/useTranslation";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useState } from "react";
 
 // const MosaicItem: FunctionComponent<Props> = ({
 //   post:postItem,
@@ -252,9 +252,11 @@ import { FC } from "react";
 // export default MosaicItem;
 interface Props extends BoxProps{
   postId:number;
-  size?:Size
+  size?:Size;
+  Width?:number;
+  Height?:number;
 }
-const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
+  const MosaicItem:FC<Props> = ({postId,size,Width=250,Height=250,...others}:Props)=>{
   const {t,lang}=useTranslation('common');
   const{data:post}=usePostSumary(postId);
   const storedFile = post?.localImages[0].storedFile??'asd';
@@ -308,8 +310,8 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
         /> */}
 
         <Box style={{
-            width:'250px',
-            height:'250px',
+            width:`${Width}px`,
+            height:`${Height}px`,
             display:'inline-block',
             border:'solid 1px lightgray',
             borderRadius:'4px',
@@ -317,8 +319,8 @@ const MosaicItem:FC<Props> = ({postId,size,...others}:Props)=>{
           }}>
           <Image 
             className="post-mosaic-img"
-            width={250} 
-            height={250} 
+            width={Width} 
+            height={Height} 
             src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
           />
         </Box>

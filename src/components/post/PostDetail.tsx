@@ -7,7 +7,7 @@ import timezone from 'dayjs/plugin/timezone';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-import { Row, Col, Badge } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { DATE_FORMAT_SHORT, WEBAPP_URL } from '../../constants';
 import { WorkDetail } from '../../types/work';
@@ -141,15 +141,16 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
           )}
           {post?.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={post?.tags} readOnly />}
         </div>
-        <Stack direction={{xs:'column',sm:'row'}}>
-         <MosaicItem postId={post?.id!} sx={(theme)=>({
-              'img':{
-                [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
-                [theme.breakpoints.only('sm')]:{width:'350px',height:'auto'},
-                [theme.breakpoints.up('md')]:{width:'450px',height:'auto'},
-              }
-            })}
-          />
+        <Stack direction={{xs:'column',lg:'row'}}>
+          <Box sx={{display:{xs:'block',sm:'none'}}}>
+            <MosaicItem postId={post?.id!} Width={340} Height={340} />
+          </Box>
+          <Box sx={{display:{xs:'none',sm:'block',lg:'none'}}}>
+            <MosaicItem postId={post?.id!} Width={500} Height={500} />
+          </Box>
+          <Box sx={{display:{xs:'none',lg:'block'}}}>
+            <MosaicItem postId={post?.id!} Width={400} Height={400} />
+          </Box>
           <Box paddingLeft={3}>
               <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>
                 <div>

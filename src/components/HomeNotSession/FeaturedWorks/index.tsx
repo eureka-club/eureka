@@ -13,7 +13,7 @@ const FeaturedWorks = () => {
   const { data: dataFeaturedWorks,isLoading } = useFeaturedWorks();
   const { t,lang } = useTranslation('featuredWorks');
   if(isLoading)return <Spinner/>;
-  else if(!isLoading && !dataFeaturedWorks?.works.length)return <></>;
+  else if(!isLoading && !dataFeaturedWorks?.works?.length)return <></>;
   
   return <Box>
     <Stack direction={'row'} alignItems={'center'}>
