@@ -215,8 +215,10 @@ import { FC } from "react";
 interface Props extends BoxProps{
   workId:number;
   size?:Size
+  Width?:number;
+  Height?:number;
 }
-const MosaicItem:FC<Props> = ({workId,...others})=>{
+const MosaicItem:FC<Props> = ({workId,Width=184,Height=250,...others})=>{
   const{data:work}=useWorkSumary(workId);
   const storedFile = work?.localImages?.length 
     ? work?.localImages[0].storedFile!
@@ -243,8 +245,8 @@ const MosaicItem:FC<Props> = ({workId,...others})=>{
     />
     <Link href={href}>
       <Box style={{
-          width:'184px',
-          height:'250px',
+          width:`${Width}px`,
+          height:`${Height}px`,
           display:'inline-block',
           border:'solid 1px lightgray',
           borderRadius:'4px',
@@ -252,8 +254,8 @@ const MosaicItem:FC<Props> = ({workId,...others})=>{
         }}>
         <Image 
           className="work-mosaic-img"
-          width={184} 
-          height={250} 
+          width={Width} 
+          height={Height} 
           src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
         />
       </Box>

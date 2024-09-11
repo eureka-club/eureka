@@ -329,13 +329,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
                     <Stack gap={1}>
-                      <MosaicItem workId={work.id} sx={(theme)=>({
-                        'img':{
-                          [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
-                          [theme.breakpoints.only('sm')]:{width:'250px'},
-                          [theme.breakpoints.up('md')]:{width:'400px'}
-                        }
-                      })} />
+                      <MosaicItem workId={work.id} Width={250} Height={250*1.36}/>
                       <Box>
                         <Stack direction={'row'} alignItems={'stretch'} gap={1}>
                           <Rating
@@ -355,9 +349,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           </IconButton>}
                         </Stack>
                         <Stack gap={1}>
-                          <WorkReadOrWatched work={work} sx={{textTransform:'none',minWidth:'240px'}} />
-                          <ShareWork sx={{textTransform:'none',minWidth:'240px'}}/>
-                          <SaveForLater sx={{textTransform:'none',minWidth:'240px'}}/>
+                          <WorkReadOrWatched work={work} sx={{textTransform:'none',width:'250px'}} />
+                          <ShareWork sx={{textTransform:'none',width:'250px'}}/>
+                          <SaveForLater sx={{textTransform:'none',width:'250px'}}/>
                         </Stack>
                       </Box>
                     </Stack>
@@ -379,7 +373,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
                           </Box>
                       </Stack>
-                      <Box>
+                      <Box sx={{paddingBlock:1}}>
                       {work.link != null && (
                           <a
                             href={work.link}
@@ -393,11 +387,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       </Box>
                       
                       {/* <Stack display={{xs:'none',md:'inherit'}}> */}
-                      <Stack direction={'row'} gap={1} padding={'1rem 0'}>
-                          <WorkReadOrWatched work={work} sx={{textTransform:'none'}} />
-                          <SaveForLater sx={{textTransform:'none'}}/>
-                          <ShareWork sx={{textTransform:'none'}}/>
-                      </Stack>
+                      
 
                       <Sumary description={work?.contentText??''}/>
                         <Box>
