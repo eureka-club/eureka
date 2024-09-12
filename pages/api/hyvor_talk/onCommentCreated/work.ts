@@ -14,6 +14,7 @@ interface ReqProps{
   url:string;
   commentText:string;
   commentURL:string;
+  page_id:number;
   user:{id:number,name:string,email:string};
   parent_id:number;
 }
@@ -25,7 +26,7 @@ export default async function handler(
   
   if(req.method?.toLowerCase()=='post'){
     try{
-      const{workId,url:eurl,commentText,commentURL,user:{id,name,email},parent_id}=req.body as ReqProps; 
+      const{workId,url:eurl,commentText,commentURL,page_id,user:{id,name,email},parent_id}=req.body as ReqProps; 
       const pageIdentifier=`work-${workId}`;
       let locale = req.cookies.NEXT_LOCALE || i18.defaultLocale;
       let to:{email:string,name?:string}[] = [];
@@ -45,7 +46,8 @@ export default async function handler(
           type:ActionType.CommentCreatedOnWork,
           userId:id,
           commentURL,
-          commentText
+          commentText,
+          page_id
         }
       });
 

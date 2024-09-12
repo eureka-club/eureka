@@ -14,11 +14,13 @@ import useUserSumary from '@/src/useUserSumary';
 import { Sumary } from '../../common/Sumary';
 import { useRouter } from 'next/router';
 import useWorkSumary from '@/src/useWorkSumary';
+import { useLast3CommentsByPageId } from '../hooks/useLast3CommentsByPageId';
 interface Props extends CardProps {
   workId:number;
   userId:number;
   commentURL:string;
   commentText:string;
+  page_id:number;
   createdAt:Date;
 }
 export default function CommentOnWorkCard(props:Props) {
@@ -27,14 +29,19 @@ export default function CommentOnWorkCard(props:Props) {
     userId,
     commentURL,
     commentText,
+    page_id,
     createdAt
   }=props;
+  
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
   const{data:work}=useWorkSumary(workId);
   const{data:user}=useUserSumary(userId);
   const{show}=useModalContext();
   const{data:session}=useSession();
+
+  const {data:last3Comments}=useLast3CommentsByPageId(page_id);
+  
   const handleExpandClick = () => {
     if(session?.user)
       router.push(commentURL);

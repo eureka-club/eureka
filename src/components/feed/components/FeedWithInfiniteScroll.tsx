@@ -3,7 +3,7 @@ import { getActions } from "../useActions";
 import { useInView } from "react-intersection-observer";
 import { Box } from "@mui/material";
 import PostOnCycleActiveCard from "./PostOnCycleActiveCard";
-import CommentOnCycleActiveCard from "./CommentOnCycleActiveCard";
+import CommentOnCycleCard from "./CommentOnCycleCard";
 import PostOnWorkCard from "./PostOnWorkCard";
 import { ActionType } from "@/src/types";
 import { useInfiniteQuery } from "react-query";
@@ -40,11 +40,11 @@ export const FeedWithInfiniteScroll = ()=>{
             case ActionType.PostCreatedOnCycleActive:
               return <PostOnCycleActiveCard key={`${a.type}-${a.postId!}`} postId={a.postId!}/>;
             case ActionType.CommentCreatedOnCycleActive:
-              return <CommentOnCycleActiveCard key={`${a.type}-${a.cycleId!}`} userId={a.userId} cycleId={a.cycleId!} commentURL={a.commentURL!} commentText={a.commentText!} createdAt={a.createdAt}/>;
+              return <CommentOnCycleCard key={`${a.type}-${a.cycleId!}`} userId={a.userId} cycleId={a.cycleId!} commentURL={a.commentURL!} commentText={a.commentText!} page_id={a.page_id!} createdAt={a.createdAt}/>;
             case ActionType.PostCreatedOnWork:
               return <PostOnWorkCard key={`${a.type}-${a.postId!}`} postId={a.postId!}/>;
             case ActionType.CommentCreatedOnWork:
-              return <CommentOnWorkCard key={`${a.type}-${a.workId}`} userId={a.userId} workId={a.workId!} commentURL={a.commentURL!} commentText={a.commentText!} createdAt={a.createdAt}/>
+              return <CommentOnWorkCard key={`${a.type}-${a.workId}`} userId={a.userId} workId={a.workId!} commentURL={a.commentURL!} commentText={a.commentText!} page_id={a.page_id!} createdAt={a.createdAt}/>
           }
         }))}
         {

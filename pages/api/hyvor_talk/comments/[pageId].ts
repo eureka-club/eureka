@@ -25,13 +25,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     try{
-        const{page_id}=req.query;debugger;
+        const{pageId:page_id,limit=5}=req.query;debugger;
         const url=`https://talk.hyvor.com/api/console/v1/${process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID}/comments`
         const {data} = await axios.get(url,{
             headers:{
                 'X-API-KEY':process.env.HYVOR_TALK_CONSOLE_API_KEY!
             },
-            ...page_id ? {params:{page_id}} :{}
+            params:{
+                page_id,
+                limit
+            }
         });
         return res.json({data})
     // const fr=await fetch(url,{
