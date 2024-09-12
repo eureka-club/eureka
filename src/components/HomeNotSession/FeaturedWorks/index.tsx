@@ -5,9 +5,11 @@ import MosaicItem from '@/components/work/MosaicItem';
 import WorkPostImages from './WorkPostImages';
 import WorkComments from './WorkComments';
 import Spinner from '../../Spinner';
-import { Avatar, Box, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { deepPurple } from '@mui/material/colors';
+import UserAvatar from '../../common/UserAvatar';
+import LocalImage from '../../LocalImage';
 
 
 const FeaturedWorks = () => {
@@ -17,8 +19,8 @@ const FeaturedWorks = () => {
   else if(!isLoading && !dataFeaturedWorks?.works?.length)return <></>;
   
   return <Box>
-    <Stack direction={'row'} alignItems={'center'} gap={1}>
-      <Avatar sx={{width:24,height:24,bgcolor: 'color-mix(in srgb, var(--color-secondary) 50%, transparent)' }}>✨</Avatar>
+    <Stack direction={'row'} alignItems={'center'} gap={0}>
+      <Avatar sx={{width:24,height:24,bgcolor: 'transparent' }}>✨</Avatar>
       <Typography variant='h6' color={'secondary'}>{t('FeaturedDiscussions')}</Typography>
     </Stack>
     <List>
@@ -35,6 +37,9 @@ const FeaturedWorks = () => {
           }
         }
         }}>
+        <ListItemAvatar>
+          <Avatar><LocalImage filePath={w.localImages[0].storedFile} alt={w.title}/></Avatar>
+        </ListItemAvatar>
         <Link href={`/${lang}/work/${w.id}`}>
           <ListItemText primary={w.title} secondary={w.author} />
         </Link> 

@@ -10,6 +10,8 @@ import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typog
 
 import Link from "next/link";
 import { deepPurple } from "@mui/material/colors";
+import LocalImage from "../LocalImage";
+import UserAvatar from "../common/UserAvatar";
 
 interface Props {
 }
@@ -23,8 +25,8 @@ const FeaturedCycles:FC<Props> = ({}) => {
     if(!isLoading && !data?.cycles.length)return <></>;
 
     return <Box>
-      <Stack direction={'row'} alignItems={'center'} gap={1}>
-        <Avatar sx={{width:24,height:24,bgcolor: 'color-mix(in srgb, var(--color-secondary) 50%, transparent)' }}>🔥</Avatar>
+      <Stack direction={'row'} alignItems={'center'} gap={0}>
+        <Avatar sx={{width:24,height:24,bgcolor: 'transparent' }}>🔥</Avatar>
         <Typography variant="h6" color={'secondary'}>{t('Interest cycles')}</Typography>
       </Stack>
       <List>
@@ -41,13 +43,16 @@ const FeaturedCycles:FC<Props> = ({}) => {
               }
             }
             }}>
-            {/* <ListItemAvatar>
+            <ListItemAvatar>
               <Avatar>
-                <LocalImage width={40} height={40} filePath={c.localImages[0].storedFile} alt={c.title}/>
+                {/* <LocalImage filePath={c.c} alt={c.title}/> */}
+                <UserAvatar userId={c.creator.id} name={c.creator.name??""}/>
               </Avatar>
-            </ListItemAvatar> */}
+            </ListItemAvatar>
             <Link href={`/${lang}/cycle/${c.id}`}>
-              <ListItemText primary={c.title} secondary={c.creator.name}/>
+              <ListItemText primary={c.title} 
+              // secondary={c.creator.name}
+            />
             </Link>
           </ListItem>)
         }
