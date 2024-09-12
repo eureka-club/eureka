@@ -59,7 +59,7 @@ export default function CommentOnCycleActiveCard(props:Props) {
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
-            <MosaicItem cycleId={cycleId} sx={{
+            <MosaicItem hideFooter hideHeader cycleId={cycleId} sx={{
               'img':{
                 maxWidth:'250px'
               }
