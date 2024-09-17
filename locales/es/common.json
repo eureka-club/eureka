@@ -178,6 +178,7 @@
   "aboutBox4": "Trabajamos con organizaciones de la sociedad civil que buscan hacer que su activismo llegue al máximo de personas posible. Te interesa? Escríbenos!",
   "readOrWatchedLbl":"Marcar como visto o leído",
   "unknown":"Desconocido",
-  "MISSING_FIELD":"{{fieldName}} no puede estar vacio"
+  "MISSING_FIELD":"{{fieldName}} no puede estar vacio",
+  "readOrWatched":"Desmarcar como visto o leído"
 
 }

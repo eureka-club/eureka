@@ -170,7 +170,7 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
             }
             onClick={handleDeleteReadOrWatched}
           >
-            Desmarcar como visto o leído
+            {t('readOrWatched')}
           </Button>
         </>
       )}
