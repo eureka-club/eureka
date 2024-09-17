@@ -5,10 +5,10 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CreatePostForm from '@/src/components/forms/CreatePostForm';
-import { Col } from 'react-bootstrap';
+//import { Col } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Spinner from '@/components/common/Spinner';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+//import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { Grid } from '@mui/material';
 
 interface Props {

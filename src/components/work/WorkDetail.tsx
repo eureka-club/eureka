@@ -327,7 +327,19 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               {post == null ? (
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
-                    <Stack gap={1}>
+                  
+                  <Stack gap={{xs:2}}  >
+
+                  <Stack gap={1} sx={{ display: { xs: 'block', sm: 'none' } }} >
+                   
+
+                  <h1 className="fw-bold text-secondary">{work.title}</h1>
+                      <h2 className={`${styles.author}`}>{work.author}</h2>
+                      <WorkSummary work={work as unknown as WorkSumary} />
+
+                      
+                   </Stack>
+                    
                       <MosaicItem workId={work.id} sx={(theme)=>({
                         'img':{
                           [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
@@ -335,7 +347,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           [theme.breakpoints.up('md')]:{width:'400px'}
                         }
                       })} />
-                      <Box>
+
+<Box>
                         <Stack direction={'row'} alignItems={'stretch'} gap={1}>
                           <Rating
                             qty={work?.currentUserRating??0}
@@ -355,11 +368,23 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         </Stack>
                         <WorkReadOrWatched work={work} />
                       </Box>
-                    </Stack>
+                      </Stack>
+                   
                     <Stack>
-                      <h1 className="fw-bold text-secondary">{work.title}</h1>
-                      <h2 className={`${styles.author}`}>{work.author}</h2>
-                      <WorkSummary work={work as unknown as WorkSumary} />
+                      
+                    
+                    <Stack gap={1} sx={{ display: { xs: 'none', sm: 'block' } }} >
+                   
+
+                   <h1 className="fw-bold text-secondary">{work.title}</h1>
+                       <h2 className={`${styles.author}`}>{work.author}</h2>
+                       <WorkSummary work={work as unknown as WorkSumary} />
+ 
+                       
+                    </Stack>
+
+
+
                       <Stack direction={{sm:'column',md:'row'}} gap={1}>
                           <Stack direction={'row'}>
                             <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
