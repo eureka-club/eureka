@@ -328,6 +328,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               {post == null ? (
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
+                  <Stack gap={1} sx={{ display: { xs: 'block', sm: 'none' } }} >
+                      <h1 className="fw-bold text-secondary">{work.title}</h1>
+                      <h2 className={`${styles.author}`}>{work.author}</h2>
+                      <WorkSummary work={work as unknown as WorkSumary} />
+                      </Stack>
                     <Stack gap={1}>
                       <MosaicItem workId={work.id} Width={250} Height={250*1.36}/>
                       <Box>
@@ -356,9 +361,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       </Box>
                     </Stack>
                     <Stack>
+                      <Stack gap={1} sx={{ display: { xs: 'none', sm: 'block' } }} >
                       <h1 className="fw-bold text-secondary">{work.title}</h1>
                       <h2 className={`${styles.author}`}>{work.author}</h2>
                       <WorkSummary work={work as unknown as WorkSumary} />
+                      </Stack>
+                      
                       <Stack direction={{sm:'column',md:'row'}} gap={1}>
                           <Stack direction={'row'}>
                             <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />

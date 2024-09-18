@@ -157,7 +157,7 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work, ...others }) => {
             {...others}
           >
             <Typography variant='body2'>
-              Desmarcar como visto o leído
+             {t('readOrWatchedSelect')}
             </Typography>
           </Button>
         </>

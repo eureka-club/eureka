@@ -179,5 +179,6 @@
   "aboutBox4": "We work with civil society organizations that seek to amplify the reach of their activism. Interested? Contact us!",
   "readOrWatchedLbl":"Mark as seen or read",
   "unknown":"Unknown",
-  "MISSING_FIELD":"Missing field {{fieldName}}"
+  "MISSING_FIELD":"Missing field {{fieldName}}",
+  "readOrWatchedSelect":"Unmark as viewed or read"
 }

@@ -179,8 +179,7 @@
   "aboutBox4": "Nous travaillons avec des organisations de la société civile qui cherchent à faire en sorte que leur activisme touche le plus de personnes possible. Ça vous intéresse? Écrivez-nous!.",
   "readOrWatchedLbl":"Marquer comme vu ou lu",
   "unknown":"Indéterminé",
-  "MISSING_FIELD":"Champ {{fieldName}} manquant"
-
-
+  "MISSING_FIELD":"Champ {{fieldName}} manquant",
+  "readOrWatchedSelect":"Ne plus marquer comme vu ou lu"
 
 }
