@@ -76,7 +76,7 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
         <SimpleLayout title={title}>
         <ButtonsTopActions>
           {!router.query.postId && canEditWork() && (
-            <Button color="warning" onClick={handleEditClick}>
+            <Button color="warning" onClick={handleEditClick} sx={{borderRadius:'0'}}>
               {t('edit')}
             </Button>
           )}

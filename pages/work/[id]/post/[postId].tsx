@@ -80,7 +80,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
         <ButtonsTopActions>
           {post && work && canEditPost() && (
             <>
-              <Button color="warning" onClick={handleEditPostClick}>
+              <Button color="warning" onClick={handleEditPostClick} sx={{borderRadius:'0'}}>
                 {t('edit')}
               </Button>
             </>
