@@ -32,6 +32,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
       orderBy:{
         createdAt:'desc'
       },
+      distinct:['page_id','type'],
       where:{
         createdAt:{
           lte:today,

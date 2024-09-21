@@ -2,7 +2,8 @@ import * as React from 'react';
 import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Button, Stack, Typography} from '@mui/material';
+
+import { Avatar, Box, Button, Grid, Stack, Typography} from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../../forms/SignInForm';
@@ -17,6 +18,9 @@ import { useRouter } from 'next/router';
 import { useLast3CommentsByPageId } from '../hooks/useLast3CommentsByPageId';
 import Image from 'next/image';
 import { StyledInput } from './StyledInput';
+import { useReplyComment } from '../hooks/useReplyComment';
+import HyvorComments from '../../common/HyvorComments';
+import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 interface Props extends CardProps {
   cycleId:number;
   userId:number;
@@ -40,15 +44,17 @@ export default function CommentOnCycleCard(props:Props) {
   const{data:user}=useUserSumary(userId);
   const{show}=useModalContext();
   const{data:session}=useSession();
+  const[comment,setcomment]=React.useState("");
+  const{dispatch}=useOnCycleCommentCreated(cycleId);
   const handleExpandClick = () => {
     if(session?.user)
       router.push(commentURL);
     else show(<SignInForm/>)
   };
   ///cycle/29?ht-comment-id=15934922
-  // const page_id = commentURL?.replace(/^.*-id=(\d*)/g,'$1');
-  const {data:last3Comments}=useLast3CommentsByPageId(page_id);
-
+  const comment_id = commentURL?.replace(/^.*-id=(\d*)/g,'$1');
+  // const {data:last3Comments}=useLast3CommentsByPageId(page_id);
+  // const{mutate,isSuccess,isLoading}=useReplyComment(page_id)
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
           avatar={
@@ -66,30 +72,52 @@ export default function CommentOnCycleCard(props:Props) {
           subheader={(new Date(createdAt!)).toLocaleDateString(lang)}
       />
       <CardContent>
+      
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
             <MosaicItem hideFooter hideHeader cycleId={cycleId} sx={{
               'img':{
                 maxWidth:'250px'
               }
             }}/>
+            
             <Stack alignItems={'baseline'} gap={2}>
-              {/* <Sumary description={commentText}/> */}
-              <Stack direction={'row'}>
-                <UserAvatar size='small' name={user?.name!} userId={userId} image={user?.image!} photos={user?.photos!}/>
-                <StyledInput  placeholder={t('replyCommentLbl')}/>
-                {/* <Button onClick={handleExpandClick}>
-                  <CommentBankOutlined /> {t('replyCommentLbl')}
-                </Button> */}
-              </Stack>
-              {last3Comments?.map((c:any)=><Stack key={c.id} direction={'row'} gap={1}>
-                  <Avatar  sx={{width:32,height:32}}><img src={c.user.picture_url} width={32} height={32}/></Avatar>
+              {/*Requiere inicio de session, de lo contrario no muestra nada*/} 
+              <HyvorComments 
+                entity='cycle' 
+                id={`${cycleId}`} 
+                session={session!}  
+                OnCommentCreated={(comment)=>dispatch(comment)}
+              /> 
+              {/* <Sumary description={commentText}/>
+              <Button onClick={handleExpandClick}>
+                <CommentBankOutlined /> {t('replyCommentLbl')}
+              </Button> */}
+              {/* <Grid container>
+                <Grid item sm={2} md={1}>
+                  <UserAvatar size='small' name={user?.name!} userId={userId} image={user?.image!} photos={user?.photos!}/>
+                </Grid>
+                <Grid item sm={10} md={11}> 
+                  <StyledInput 
+                    placeholder={t('replyCommentLbl')} 
+                    value={comment} 
+                    onChange={(e)=>setcomment(e.target.value)}
+                    onKeyUp={(e)=>{
+                      if(e.code=='Enter'){
+                        mutate({comment_id,body:comment})
+                      }
+                    }}
+                  />
+                </Grid>
+              </Grid> */}
+              
+              {/* {last3Comments?.map((c:any)=><Stack key={c.id} direction={'row'} gap={1}>
+                <Avatar  sx={{width:32,height:32}}><img src={c.user.picture_url} width={32} height={32}/></Avatar>
                 <Stack>
                   <Typography variant='caption'>{c.user.name}</Typography>
                   <Sumary description={c.body_html}/>
                 </Stack>
-                  {/* <UserAvatar userId={c.user.sso_id} name={c.user.name!} size='small'/> */}
                 </Stack>
-              )}
+              )} */}
             </Stack>
         </Stack>
       </CardContent>

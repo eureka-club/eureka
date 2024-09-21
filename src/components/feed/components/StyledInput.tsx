@@ -9,7 +9,8 @@ export const StyledInput = styled(Input)(
     ({ theme }) => `
   
     .${inputClasses.input} {
-      width: 350px;
+      display:block;
+      width:100%;
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 0.875rem;
       font-weight: 400;
