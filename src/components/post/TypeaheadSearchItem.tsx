@@ -1,6 +1,5 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-//import { Badge } from 'react-bootstrap'
 import { PostDetail } from '@/types/post';
 import LocalImageComponent from '@/src/components/LocalImage';
 import styles from './TypeaheadSearchItem.module.css';

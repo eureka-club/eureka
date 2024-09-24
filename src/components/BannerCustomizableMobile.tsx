@@ -1,8 +1,7 @@
 import { FunctionComponent, useState } from 'react';
-import {  Container,Carousel } from 'react-bootstrap';
+import {  Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
-import styles from './BannerCustomizable.module.css';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
