@@ -55,6 +55,7 @@ export default function CommentOnCycleCard(props:Props) {
   const comment_id = commentURL?.replace(/^.*-id=(\d*)/g,'$1');
   // const {data:last3Comments}=useLast3CommentsByPageId(page_id);
   // const{mutate,isSuccess,isLoading}=useReplyComment(page_id)
+  if(!session?.user)return <></>;
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
           avatar={

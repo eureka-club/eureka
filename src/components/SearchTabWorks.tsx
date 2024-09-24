@@ -13,6 +13,7 @@ import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
 import { Alert, Box } from '@mui/material';
 import { MosaicsGrid } from './MosaicsGrid';
 import Masonry from '@mui/lab/Masonry';
+import { WorksMosaic } from './WorksMosaic';
 
 const take = 8;
 const SearchTabworks:FunctionComponent = () => {
@@ -98,7 +99,7 @@ const SearchTabworks:FunctionComponent = () => {
           <MosaicItem key={p.id} work={p} workId={p.id} className="" imageLink={true} cacheKey={cacheKey} size={'md'}  />
         )}
     </MosaicsGrid> */}
-    <Masonry columns={{xs:1,sm:3,md:3,lg:6}} spacing={1}>
+    {/* <Masonry columns={{xs:1,sm:3,md:3,lg:6}} spacing={1}>
       {works?.map(p=>
         <Box key={p.id}>
           <MosaicItem   
@@ -112,7 +113,8 @@ const SearchTabworks:FunctionComponent = () => {
           />
         </Box>
       )}
-    </Masonry>
+    </Masonry> */}
+    <WorksMosaic works={works}/>
     {/* {works?.length!=total && <CircularProgress ref={ref} />} */}
     {works?.length!=total && <hr ref={ref}/>}
 
