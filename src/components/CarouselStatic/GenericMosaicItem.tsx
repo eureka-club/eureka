@@ -2,10 +2,8 @@ import { FC } from "react";
 import MosaicItemCycle from '../cycle/MosaicItem';
 import MosaicItemPost from '../post/MosaicItem';
 import MosaicItemWork from '../work/MosaicItem';
-// import MosaicUserItem from '../user/MosaicItem';
-
-import { PostDetail, PostSumary } from '../../types/post';
-import { isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem, isUserMosaicItem } from '../../types';
+import { PostSumary } from '../../types/post';
+import { isCycleMosaicItem, isWorkMosaicItem, isPostMosaicItem } from '../../types';
 import { GenericMosaicItemProps } from "./types";
 import { WorkSumary } from "@/src/types/work";
 

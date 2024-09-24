@@ -657,6 +657,20 @@ backOfficeSettings.forEach((c) => {
   });
   
 });
+/***backOfficeSettings***/
+/***actions***/
+const actions = await prismaRemote.action.findMany();  
+actions.forEach((a) => {
+  transactions.push(
+    prismaLocal.$queryRaw(Prisma.sql` 
+    SET IDENTITY_INSERT dbo.Action ON;
+    INSERT INTO dbo.Action(id,postId,cycleId,type,userId,created_at,commentURL,workId,commentText) 
+    VALUES(${a.id},${a.postId},${a.cycleId},${a.type},${a.userId},${a.createdAt},${a.commentURL},${a.workId},${a.commentText}); 
+    SET IDENTITY_INSERT dbo.Action OFF;
+  `));   
+});
+/***actions***/
+
 
   try {
     await prismaLocal.$transaction(transactions);

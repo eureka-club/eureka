@@ -234,7 +234,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
         <ButtonsTopActions>
       {
         !router.query.postId && canEditCycle() 
-        ? <MaterialButton color="warning" onClick={handleEditClick} size="small">
+        ? <MaterialButton color="warning" onClick={handleEditClick} size="small" sx={{borderRadius:'0'}}>
               {t('Edit')}
             </MaterialButton>
         : '' 

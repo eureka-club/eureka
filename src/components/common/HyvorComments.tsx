@@ -69,7 +69,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
               }}
               on={{
                 'loaded': () => console.log('Comments loaded'),
-                'comment:published': async (comment) => {
+                'comment:published': async (comment) => {console.log("comment published ",comment)
                   if(OnCommentCreated)
                     await OnCommentCreated(comment as any);
                 },

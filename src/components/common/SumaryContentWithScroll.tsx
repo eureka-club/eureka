@@ -50,7 +50,7 @@ export const SumaryContentWithScroll = ({description,toggle,height,...others}:Su
     }
   
     return <Box {...others} sx={sxLine}>
-      <Box component={'span'} sx={sxCircle} ref={circle}/>
+      {description ? <Box component={'span'} sx={sxCircle} ref={circle}/> :<></>}
       <Box ref={sumaryCtr} onScroll={OnScrollChange} sx={sxScroll}>
         {description}
       </Box>

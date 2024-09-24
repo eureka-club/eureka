@@ -24,6 +24,7 @@ import useWorkSumary from "@/src/useWorkSumary";
 import { Badge, Box, BoxProps, Card, Chip, Link } from "@mui/material";
 import { shadows } from '@mui/system';
 import useTranslation from "next-translate/useTranslation";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC } from "react";
 
@@ -214,8 +215,10 @@ import { FC } from "react";
 interface Props extends BoxProps{
   workId:number;
   size?:Size
+  Width?:number;
+  Height?:number;
 }
-const MosaicItem:FC<Props> = ({workId,...others})=>{
+const MosaicItem:FC<Props> = ({workId,Width=184,Height=250,...others})=>{
   const{data:work}=useWorkSumary(workId);
   const storedFile = work?.localImages?.length 
     ? work?.localImages[0].storedFile!
@@ -224,11 +227,6 @@ const MosaicItem:FC<Props> = ({workId,...others})=>{
   const href=`/${lang}/work/${workId}`;
 
   return <Box 
-  sx={{
-      'img':{
-        height:'300px',
-      }
-    }}
     {...others}
     style={{
       position:'relative',
@@ -243,18 +241,24 @@ const MosaicItem:FC<Props> = ({workId,...others})=>{
           </em>
         </span>
       } 
-      color="secondary" sx={{position:'absolute',top:'8px',left:'8px',boxShadow: '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)'}}
+      color="secondary" sx={{position:'absolute',top:'8px',left:'8px',zIndex:999,boxShadow: '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)'}}
     />
     <Link href={href}>
-      <img 
-        className="work-mosaic-img"
-        src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
-        style={{
+      <Box style={{
+          width:`${Width}px`,
+          height:`${Height}px`,
+          display:'inline-block',
           border:'solid 1px lightgray',
           borderRadius:'4px',
           boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`
-        }}
-      />
+        }}>
+        <Image 
+          className="work-mosaic-img"
+          width={Width} 
+          height={Height} 
+          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
+        />
+      </Box>
     </Link>
   </Box>
 }

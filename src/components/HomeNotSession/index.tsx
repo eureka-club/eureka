@@ -9,6 +9,7 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import useTopics from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
 import { Feed } from '../feed';
+import FeaturedCycles from './FeaturedCycles';
 interface Props {
 }
 const HomeNotSession: FunctionComponent<Props> = ({}) => {
@@ -29,6 +30,10 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
 
       <Grid container spacing={1} paddingTop={'3rem'}>
         <Grid item xs={12} md={3} position={'relative'}>
+
+          <FeaturedCycles />
+          <FeaturedWorks />
+
           <Box sx={{
             position:'sticky',
             top:'70px',
@@ -45,8 +50,7 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
           {/* <section className="ms-0 ms-lg-5"> */}
           <Stack gap={3}>
               <Feed/>
-              <FeaturedWorks />
-              <FeaturedEurekas />
+              {/* <FeaturedEurekas /> */}
               {/* <FeaturedCycles /> */}
           </Stack>
           {/* </section> */}

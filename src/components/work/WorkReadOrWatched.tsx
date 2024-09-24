@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
-import Button from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,9 +18,10 @@ import useExecReadOrWatchedWork from '@/src/hooks/mutations/useExecReadOrWatched
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../forms/SignInForm';
+import { Typography } from '@mui/material';
 // import styles from './WorkSummary.module.css';
 
-interface Props {
+interface Props  extends ButtonProps{
   work: WorkDetail; //Work ID
 }
 
@@ -31,7 +32,7 @@ const years = (publicationYear:Date|null)=> {
 } 
 
 
-const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
+const WorkReadOrWatched: FunctionComponent<Props> = ({ work, ...others }) => {
   const { t } = useTranslation('common');
   const{data:session}=useSession();
   const [open, setOpen] = useState(false);
@@ -87,16 +88,14 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
       {!isReadOrWatched() && (
         <>
           <Button
-            style={{
-              // width: '280px',
-              background: 'var(--eureka-green)',
-              fontFamily: 'Open Sans, sans-serif',
-              textTransform: 'none',
-            }}
-            variant="contained"
+            variant='outlined'
             size="small"
             startIcon={<RemoveRedEyeRoundedIcon />}
             onClick={handleClickOpen}
+            {...others}
+            style={{
+              justifyContent:'flex-start'
+            }}
           >
             {t('readOrWatchedLbl')}
           </Button>
@@ -149,26 +148,13 @@ const WorkReadOrWatched: FunctionComponent<Props> = ({ work }) => {
       {isReadOrWatched() && (
         <>
           <Button
-            style={{
-              width: '280px',
-              background: 'white',
-              color: 'var(--eureka-green)',
-              border: ' 1px solid var(--eureka-green)',
-              fontFamily: 'Open Sans, sans-serif',
-              textTransform: 'none',
-            }}
             variant="contained"
             size="small"
             startIcon={
-              <VisibilityOffRoundedIcon
-                style={{
-                  color: 'var(--eureka-green)',
-                  fontFamily: 'Open Sans, sans-serif',
-                  textTransform: 'none',
-                }}
-              />
+              <VisibilityOffRoundedIcon/>
             }
             onClick={handleDeleteReadOrWatched}
+            {...others}
           >
             {t('readOrWatched')}
           </Button>

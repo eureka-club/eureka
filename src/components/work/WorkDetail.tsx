@@ -43,6 +43,8 @@ import usePostsSumary, { getPostsSumary } from '@/src/usePostsSumary';
 import { Sumary } from '../common/Sumary';
 import { useOnWorkCommentCreated } from '../common/useOnWorkCommentCreated';
 import Masonry from '@mui/lab/Masonry';
+import { useSaveWorkForLater } from './useSaveWorkForLater';
+import { useShareWork } from './useShareWork';
 
 const PostDetailComponent = lazy(() => import('@/components/post/PostDetail'));
 
@@ -181,6 +183,9 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     work: work!,
   });
 
+  const{SaveForLater}=useSaveWorkForLater(workId);
+  const{ShareWork}=useShareWork(workId);
+
   useEffect(() => {
     if (dataPosts && dataPosts.posts) {
       setHasMorePosts(dataPosts.fetched);
@@ -316,7 +321,6 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
     }
     return 0;
   };
-
   
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -327,19 +331,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               {post == null ? (
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
-                  
-                  <Stack gap={{xs:2}}  >
-
-                  <Stack gap={1} sx={{ display: { xs: 'block', sm: 'none' } }} >
-                   
-
-                  <h1 className="fw-bold text-secondary">{work.title}</h1>
-                      <h2 className={`${styles.author}`}>{work.author}</h2>
-                      <WorkSummary work={work as unknown as WorkSumary} />
-
-                      
-                   </Stack>
-                    
+                    <Stack gap={1}>
                       <MosaicItem workId={work.id} sx={(theme)=>({
                         'img':{
                           [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
@@ -347,8 +339,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           [theme.breakpoints.up('md')]:{width:'400px'}
                         }
                       })} />
-
-<Box>
+                      <Box>
                         <Stack direction={'row'} alignItems={'stretch'} gap={1}>
                           <Rating
                             qty={work?.currentUserRating??0}
@@ -366,25 +357,18 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             <FiTrash2 />
                           </IconButton>}
                         </Stack>
-                        <WorkReadOrWatched work={work} />
+                        <Stack gap={1}>
+                          <WorkReadOrWatched work={work} sx={{textTransform:'none',width:'250px'}} />
+                          <ShareWork sx={{textTransform:'none',width:'250px'}}/>
+                          <SaveForLater sx={{textTransform:'none',width:'250px'}}/>
+                        </Stack>
                       </Box>
                       </Stack>
                    
                     <Stack>
-                      
-                    
-                    <Stack gap={1} sx={{ display: { xs: 'none', sm: 'block' } }} >
-                   
-
-                   <h1 className="fw-bold text-secondary">{work.title}</h1>
-                       <h2 className={`${styles.author}`}>{work.author}</h2>
-                       <WorkSummary work={work as unknown as WorkSumary} />
- 
-                       
-                    </Stack>
-
-
-
+                      <h1 className="fw-bold text-secondary">{work.title}</h1>
+                      <h2 className={`${styles.author}`}>{work.author}</h2>
+                      <WorkSummary work={work as unknown as WorkSumary} />
                       <Stack direction={{sm:'column',md:'row'}} gap={1}>
                           <Stack direction={'row'}>
                             <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
@@ -399,7 +383,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
                           </Box>
                       </Stack>
-                      <Box>
+                      <Box sx={{paddingBlock:1}}>
                       {work.link != null && (
                           <a
                             href={work.link}
@@ -413,6 +397,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       </Box>
                       
                       {/* <Stack display={{xs:'none',md:'inherit'}}> */}
+                      
+
                       <Sumary description={work?.contentText??''}/>
                         <Box>
                             {

@@ -15,11 +15,11 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const take = +process.env.NEXT_PUBLIC_TAKE!;
     let total=+total_!??0;
 
-    const today = new Date();
-    const daysToMilliseconds = ()=>{
-      return 1*1000*60*60*24*(+process.env.DAYS_FOR_FEED!);
-    }
-    const till = new Date(today.getTime()-daysToMilliseconds());
+    // const today = new Date();
+    // const daysToMilliseconds = ()=>{
+    //   return 1*1000*60*60*24*(+process.env.DAYS_FOR_FEED!);
+    // }
+    // const till = new Date(today.getTime()-daysToMilliseconds());
     const actions = await prisma.action.findMany({
       skip,
       take,
@@ -32,22 +32,23 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
       orderBy:{
         createdAt:'desc'
       },
-      where:{
-        createdAt:{
-          lte:today,
-          gte:till
-        }
-      }
+      distinct:['page_id','type'],
+      // where:{
+      //   createdAt:{
+      //     lte:today,
+      //     gte:till
+      //   }
+      // }
     });
     
     if(!total)
       total = await prisma.action.count({
-        where:{
-          createdAt:{
-            lte:today,
-            gte:till
-          }
-        }
+        // where:{
+        //   createdAt:{
+        //     lte:today,
+        //     gte:till
+        //   }
+        // }
       });
     
     let nextSkip = (skip??0)+take < total ? (skip??0) + take: undefined;

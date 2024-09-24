@@ -104,7 +104,7 @@ const PostDetailInCyclePage: NextPage<Props> = ({postId,cycleId,metaTags,session
         <ButtonsTopActions>
           {
             post && cycle && canEditPost() 
-              ? <Button color="warning" onClick={handleEditPostClick} size="small">
+              ? <Button color="warning" onClick={handleEditPostClick} size="small" sx={{borderRadius:'0'}}>
                 {t('Edit')}
               </Button>
               : ''

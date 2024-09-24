@@ -14,11 +14,15 @@ import useUserSumary from '@/src/useUserSumary';
 import { Sumary } from '../../common/Sumary';
 import { useRouter } from 'next/router';
 import useWorkSumary from '@/src/useWorkSumary';
+import { useLast3CommentsByPageId } from '../hooks/useLast3CommentsByPageId';
+import { useOnWorkCommentCreated } from '../../common/useOnWorkCommentCreated';
+import HyvorComments from '../../common/HyvorComments';
 interface Props extends CardProps {
   workId:number;
   userId:number;
   commentURL:string;
   commentText:string;
+  page_id:number;
   createdAt:Date;
 }
 export default function CommentOnWorkCard(props:Props) {
@@ -27,20 +31,26 @@ export default function CommentOnWorkCard(props:Props) {
     userId,
     commentURL,
     commentText,
+    page_id,
     createdAt
   }=props;
+  
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
   const{data:work}=useWorkSumary(workId);
   const{data:user}=useUserSumary(userId);
   const{show}=useModalContext();
   const{data:session}=useSession();
+
+  // const {data:last3Comments}=useLast3CommentsByPageId(page_id);
+  const{dispatch}=useOnWorkCommentCreated(workId);
+  
   const handleExpandClick = () => {
     if(session?.user)
       router.push(commentURL);
     else show(<SignInForm/>)
   };
-
+  if(!session?.user)return <></>;
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
           avatar={
@@ -65,10 +75,16 @@ export default function CommentOnWorkCard(props:Props) {
               }
             }}/>
             <Stack alignItems={'baseline'} gap={2}>
-              <Sumary description={commentText}/>
+              <HyvorComments 
+                  entity='work' 
+                  id={`${workId}`} 
+                  session={session!}  
+                  OnCommentCreated={(comment)=>dispatch(comment)}
+              /> 
+              {/* <Sumary description={commentText}/>
               <Button onClick={handleExpandClick}>
                   <CommentBankOutlined /> {t('replyCommentLbl')}
-              </Button>
+              </Button> */}
             </Stack>
         </Stack>
       </CardContent>

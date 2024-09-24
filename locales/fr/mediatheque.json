@@ -6,7 +6,7 @@
   "notFound": "Non trouvé",
   "editProfile": "Editer mon profil",
   "secretMediathequeNotification": "Cette Médiathèque est secrète. L'activité de cette personne n'est pas disponible.",
-  "readOrWatchedWorks": "Mes livres et films",
+  "readOrWatchedWorks": "Mes Livres et Films",
   "readOrWatchedBooks": "Livres lus en",
   "readOrWatchedMovies": "Films et documentaires vus en",
   "MyReadOrWatched": "Livres et films vus/lus par",
@@ -18,5 +18,5 @@
   "shareText": "Partagez votre liste avec vos ami-es",
   "UrlCopied": "URL copiée",
   "ResultsNotFound": "Aucun résultat trouvé",
-  "AddWork": "Ajouter un travail à votre liste"
+  "AddWork": "Ajouter une oeuvre à votre liste"
 }
