@@ -3,13 +3,10 @@ import MosaicItemUser from '@/components/user/MosaicItem';
 import useTranslation from 'next-translate/useTranslation';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-// import { useMemo, useState } from 'react';
-// import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 
 const FeaturedUsers = () => {
   const { data: users } = useFeaturedUsers();
   const { t } = useTranslation('common');
-  // const [showUsersSection, setShowUsersSection] = useState<boolean>(false)
 
   const Title = ()=> <Typography variant='h6' color={'secondary'}>{t('Featured users')}{' '}</Typography>;
   const Items = ()=> <Stack>
@@ -19,38 +16,6 @@ const FeaturedUsers = () => {
   </Stack>
   if (users && users.length) {
     return <>
-        {/* <Box>
-          <Box sx={{display:{xs:'block'}}}>
-          {!showUsersSection && (
-            <span
-              className={`cursor-pointer d-flex d-lg-none ms-2`}
-              role="presentation"
-              onClick={() => setShowUsersSection(true)}
-            >
-              <BsChevronDown style={{ color: 'var(--color-secondary)' }} />
-            </span>
-          )}
-          {showUsersSection && (
-            <span
-              className={`cursor-pointer d-flex d-lg-none ms-2`}
-              role="presentation"
-              onClick={() => setShowUsersSection(false)}
-            >
-              <BsChevronUp style={{ color: 'var(--color-secondary)' }} />
-            </span>
-          )}
-          </Box>
-        </Box> */}
-
-        {/* {showUsersSection && (
-          <Box sx={{display:{sm:'none'}}}>
-            {users.map((user) => (
-              <Box key={user.id}>
-                <MosaicItemUser user={user} />
-              </Box>
-            ))}
-          </Box>
-        )} */}
 
         {/* Descktops */}
         <Box sx={{display:{xs:'none',md:'block'}}}>

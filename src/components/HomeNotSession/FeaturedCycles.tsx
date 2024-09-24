@@ -1,23 +1,16 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { FC } from "react";
-// import CarouselStatic from "../CarouselStatic";
 import useInterestedCycles from '@/src/useInterestedCycles';
 import Spinner from "../Spinner";
 import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
-// import Image from "next/image";
-// import LocalImage from "../LocalImage";
-
 import Link from "next/link";
-import { deepPurple } from "@mui/material/colors";
 import LocalImage from "../LocalImage";
-import UserAvatar from "../common/UserAvatar";
 
 interface Props {
 }
 
 const FeaturedCycles:FC<Props> = ({}) => {
-    const router = useRouter();
     const { t,lang } = useTranslation('common');
     const {data,isLoading} = useInterestedCycles();
 
@@ -32,7 +25,7 @@ const FeaturedCycles:FC<Props> = ({}) => {
       <List>
         {
           data?.cycles.map(c=><ListItem key={`featured-cycle-${c.id}`} sx={{
-            margin:0,padding:'0 .5rem',cursor:'pointer',
+            margin:0,padding:'.25rem .5rem',cursor:'pointer',
             ':hover':{
               borderRadius:'4px',
               boxShadow:'0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
@@ -45,8 +38,8 @@ const FeaturedCycles:FC<Props> = ({}) => {
             }}>
             <ListItemAvatar>
               <Avatar>
-                {/* <LocalImage filePath={c.c} alt={c.title}/> */}
-                <UserAvatar userId={c.creator.id} name={c.creator.name??""}/>
+                <LocalImage filePath={c.localImages[0].storedFile} alt={c.title}/>
+                {/* <UserAvatar userId={c.creator.id} name={c.creator.name??""}/> */}
               </Avatar>
             </ListItemAvatar>
             <Link href={`/${lang}/cycle/${c.id}`}>
