@@ -30,13 +30,13 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
 
       <Grid container spacing={1} paddingTop={'3rem'}>
         <Grid item xs={12} md={3} position={'relative'}>
-
+         <Stack gap={1}>
           <FeaturedCycles />
           <FeaturedWorks />
 
           <Box sx={{
             position:'sticky',
-            top:'70px',
+            top:'50px',
           }}>
             <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
             
@@ -45,6 +45,7 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
               <FeaturedUsers />
             </section>
           </Box>
+          </Stack>
         </Grid>
         <Grid item xs={12} md={9}>
           {/* <section className="ms-0 ms-lg-5"> */}
