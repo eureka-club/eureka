@@ -447,7 +447,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                         <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>{t("OrganinedBy")}</span>
                       </Row>
                       <Row className='mb-2'>
-                        <UserAvatar className='d-flex justify-content-center' size={'large'} userId={cycle.creatorId} name={cycle.creator.name!} />
+                        <UserAvatar className='d-flex justify-content-center' size={'large'} userId={cycle.creatorId} />
                       </Row>
                       <Row className='mb-4'>
                         <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>

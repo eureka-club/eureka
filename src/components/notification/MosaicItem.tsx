@@ -32,7 +32,7 @@ const MosaicItem: FunctionComponent<Props> = ({ notification }) => {
     return dayjs().to(notification.notification.createdAt);//TODO integration with i18n
   }
 return <Stack direction={'row'} gap={.5}>
-          <UserAvatar size='small' name={notification.notification.fromUser.name!} userId={notification.notification.fromUser.id} />
+          <UserAvatar size='small' userId={notification.notification.fromUser.id} />
           <Stack direction={'column'} gap={.25}>
             <Stack direction={'row'} alignItems={'center'} gap={.5}>
               <aside>

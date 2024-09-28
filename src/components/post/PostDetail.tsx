@@ -81,7 +81,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
         <div className={classNames('d-flex d-lg-none flex-row justify-content-between mt-3', styles.postInfo)}>
           <div>
             <Link href={`/mediatheque/${post?.creator.id}`} passHref>
-              <UserAvatar userId={post?.creator.id!} name={post?.creator.name!} />
+              <UserAvatar userId={post?.creator.id!} />
             </Link>
           </div>
           <div>
@@ -155,7 +155,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
               <div className={classNames('d-none d-lg-flex flex-row justify-content-between', styles.postInfo)}>
                 <div>
                   <Link href={`/mediatheque/${post?.creator.id}`} passHref>
-                    <UserAvatar userId={post?.creator.id!} name={post?.creator.name!} size='small' />
+                    <UserAvatar userId={post?.creator.id!} size='small' />
                   </Link>
                 </div>
                 <div>

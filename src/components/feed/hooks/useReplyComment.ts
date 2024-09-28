@@ -15,11 +15,11 @@ export const useReplyComment = (page_id:string|number) => {
                     body:JSON.stringify({body,sso_id:session?.user.id})
                 })
                 if(fr.ok){
-                    const{data:comment}=await fr.json();debugger;
+                    const{data:comment}=await fr.json();
                 }
             }
         },
-        async onSettled(data, error, variables, context) {debugger;
+        async onSettled(data, error, variables, context) {
             if(!error)
                 await qc.invalidateQueries(ck);
         },

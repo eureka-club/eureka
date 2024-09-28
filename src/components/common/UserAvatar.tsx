@@ -1,19 +1,17 @@
-import { FunctionComponent, SyntheticEvent,MouseEvent, FC } from 'react';
+import { FunctionComponent, SyntheticEvent,MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
 import slugify from 'slugify'
-// import useUserSumary from '@/src/useUserSumary';
-// import { UserSumary } from '@/src/types/UserSumary';
-import { Avatar, Box, BoxProps, RatingProps } from '@mui/material';
+import { Avatar, Box, BoxProps} from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { AZURE_STORAGE_URL } from '@/src/constants';
 import { Size } from '@/src/types';
-import { LocalImage } from '@prisma/client';
+import useUserSumary from '@/src/useUserSumary';
 interface Props extends BoxProps {
   userId: string|number;
-  name:string;
-  image?:string;
-  photos?:LocalImage[];
+  // name:string;
+  // image?:string;
+  // photos?:LocalImage[];
   // showName?: boolean;
   // showFullName?: boolean;
   size?: Size;
@@ -47,15 +45,14 @@ const getMediathequeSlug = (name:string,id:string|number)=>{
 // };
 
 const UserAvatar: FunctionComponent<Props> = ({
-  name,
   userId,
-  image,
-  photos,
   size = 'medium',
   ...others
 }) => {
   const router = useRouter();
   let width='3rem';
+
+  const {data:user}=useUserSumary(+userId);
   
   switch(size){
     case 'small': width='2rem'; break;
@@ -70,19 +67,19 @@ const UserAvatar: FunctionComponent<Props> = ({
     e.stopPropagation()
     router.push(`/mediatheque/${getMediathequeSlug(name,userId)}`)
   }
-  const photo = photos?.length ? photos[0].storedFile : null;
+  const photo = user?.photos?.length ? user?.photos[0].storedFile : null;
   return (
     <>
-      {(name&&userId) && (
+      {(user?.name&&userId) && (
         <Box className={`${styles[size]} cursor-pointer`} {...others}>
-            <a onClick={(e)=>onClick(e,name,userId)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
+            <a onClick={(e)=>onClick(e,user?.name!,userId)} className={`text-secondary ${styles.link} d-flex align-items-center`}>
               <Avatar 
                   sx={{width,height:width,bgcolor:'var(--color-primary)'}} 
-                  alt={name!}
+                  alt={user?.name!}
                   src={
                       photo
                         ? `${AZURE_STORAGE_URL}/users-photos/${photo}`
-                        : image!
+                        : user?.image!
                   }>
                   <AccountCircle sx={{width,height:width}}/>
               </Avatar>

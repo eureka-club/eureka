@@ -2,7 +2,7 @@ import * as React from 'react';
 import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Button, Stack, Typography} from '@mui/material';
+import { Avatar, Box, Button, Stack, styled, Typography} from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../../forms/SignInForm';
@@ -14,79 +14,208 @@ import useUserSumary from '@/src/useUserSumary';
 import { Sumary } from '../../common/Sumary';
 import { useRouter } from 'next/router';
 import useWorkSumary from '@/src/useWorkSumary';
-import { useLast3CommentsByPageId } from '../hooks/useLast3CommentsByPageId';
+import { useLastNCommentsByPageId } from '../hooks/useLastNCommentsByPageId';
 import { useOnWorkCommentCreated } from '../../common/useOnWorkCommentCreated';
-import HyvorComments from '../../common/HyvorComments';
+import Spinner from '../../Spinner';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import 'dayjs/locale/pt-br';
+import 'dayjs/locale/en';
+import 'dayjs/locale/fr';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import Image from 'next/image';
+
+dayjs.extend(relativeTime);
+
+// import HyvorComments from '../../common/HyvorComments';
 interface Props extends CardProps {
   workId:number;
-  userId:number;
-  commentURL:string;
-  commentText:string;
+  // userId:number;
+  // commentURL:string;
+  // commentText:string;
   page_id:number;
-  createdAt:Date;
+  // createdAt:Date;
+}
+
+interface UserCommentDetailProps{
+  comment:any;
+  content:React.ReactNode
+}
+const UserCommentDetail:React.FC<UserCommentDetailProps> = ({comment,content})=>{
+  const{t,lang}=useTranslation('feed');
+  if(!comment)return <></>;
+  return <Stack direction={'row'} gap={1}>
+  <Stack gap={.5}>
+    <Avatar src={comment?.user.picture_url} />
+    <Box sx={{borderRight:'solid 1.5px #dddddd85',width:'16px',height:'100%'}}/>
+  </Stack>
+  <Stack>
+    <Stack direction={{xs:'column',sm:'row'}} gap={{xs:0,sm:1}}>
+      <Typography>{comment?.user.name}</Typography>
+      <Typography variant='caption'>{dayjs(comment?.created_at*1000).locale(lang).fromNow()}</Typography>
+    </Stack>
+    {content}
+    {/* <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/> */}
+    
+  </Stack>
+</Stack>
 }
 export default function CommentOnWorkCard(props:Props) {
   const{
     workId,
-    userId,
-    commentURL,
-    commentText,
+    // userId,
+    // commentURL,
+    // commentText,
     page_id,
-    createdAt
+    // createdAt
   }=props;
-  
+  ///cycle/29?ht-comment-id=15934922
+  const[lastComment,setlastComment]=React.useState<any>();
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
   const{data:work}=useWorkSumary(workId);
-  const{data:user}=useUserSumary(userId);
+  // const{data:user}=useUserSumary(userId);
   const{show}=useModalContext();
   const{data:session}=useSession();
 
-  // const {data:last3Comments}=useLast3CommentsByPageId(page_id);
+  const {data,isLoading}=useLastNCommentsByPageId(page_id,1);
+  React.useEffect(()=>{
+    if(data?.length)
+      setlastComment(data[0]);
+  },[data])
+
   const{dispatch}=useOnWorkCommentCreated(workId);
   
   const handleExpandClick = () => {
     if(session?.user)
-      router.push(commentURL);
+      router.push(`/work/${workId}?ht-comment-id=${lastComment?.id}`);
     else show(<SignInForm/>)
   };
-  if(!session?.user)return <></>;
+  if(isLoading)return <Spinner/>;  
+
+  
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
+    
       <CardHeader
           avatar={
             <>
-                <UserAvatar name={user?.name!} userId={userId} image={user?.image!} photos={user?.photos!}/>
+                <UserAvatar 
+                  // name={lastComment?.user.name} 
+                  userId={lastComment?.user.sso_id} 
+                  // image={lastComment?.user.picture_url} 
+                  // photos={[]}
+                />
             </>
           }
           title={
-            <Typography>
-              <strong>{user?.name!} </strong>
-              {t('commentOnWorkTitle')}
-              <strong> {work?.title}</strong>
-            </Typography>
+            <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
+              <Typography>
+                <strong>{lastComment?.user.name} </strong>
+                {t('commentOnWorkTitle')}
+                <strong> {work?.title}</strong>
+              </Typography>
+              {lastComment?.parent ? <Typography variant='caption' paddingRight={1.5}>{dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}</Typography> : ''}
+            </Stack>
           }
-          subheader={(new Date(createdAt!)).toLocaleDateString(lang)}
+          // subheader={
+          //   lastComment?.parent ? dayjs(lastComment?.created_at*1000).locale(lang).fromNow() : ''
+          // }
       />
       <CardContent>
-        <Stack direction={{xs:'column',sm:'row'}} gap={2}>
+        <Stack direction={{xs:'column',sm:'row'}} gap={1}>
+          <MosaicItem workId={workId} sx={{
+            'img':{
+              maxWidth:'250px'
+            }
+          }}/>
+          <Box>
+              <UserCommentDetail comment={lastComment?.parent} 
+              content={
+                <>
+                  <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
+                  <UserCommentDetail comment={lastComment} 
+                  content={
+                    <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
+                  }
+                  />
+                </>
+              }
+              />
+                <Box display={'flex'} justifyContent={'center'}>
+                  <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                    {session?.user ? t('replyCommentLbl') : t('notSessionreplyCommentLbl')}
+                  </Button>
+                </Box>
+
+          </Box>
+        </Stack>
+        {/* <Stack direction={'row'} gap={1}>
+          <Stack>
+            <UserAvatar 
+              userId={lastComment?.parent?.user.sso_id} 
+              size='small'
+            />
+            <Box sx={{borderRight:'solid 1px #ebe8e8',width:'16px',height:'100%'}}/>
+          </Stack>
+          <Stack>
+            <Stack direction={{xs:'column',sm:'row'}} gap={{xs:0,sm:1}}>
+              <Typography>{lastComment?.parent?.user.name}</Typography>
+              <Typography variant='caption'>{dayjs(lastComment?.parent?.created_at*1000).locale(lang).fromNow()}</Typography>
+            </Stack>
+            <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
+            
+          </Stack>
+        </Stack> */}
+        {/* <Stack direction={{xs:'column',sm:'row'}} gap={2}>
             <MosaicItem workId={workId} sx={{
               'img':{
                 maxWidth:'250px'
               }
             }}/>
             <Stack alignItems={'baseline'} gap={2}>
-              <HyvorComments 
-                  entity='work' 
-                  id={`${workId}`} 
-                  session={session!}  
-                  OnCommentCreated={(comment)=>dispatch(comment)}
-              /> 
-              {/* <Sumary description={commentText}/>
-              <Button onClick={handleExpandClick}>
-                  <CommentBankOutlined /> {t('replyCommentLbl')}
-              </Button> */}
+              {
+                lastComment?.parent 
+                  ? <Stack>
+                      <Stack direction={'row'} gap={1}>
+                        <UserAvatar 
+                          userId={lastComment?.parent?.user.sso_id} 
+                          size='small'
+                        />
+                        <Stack direction={{xs:'column',sm:'row'}} gap={1}>
+                          <Typography>{lastComment?.parent?.user.name}</Typography>
+                          <Typography variant='caption'>{dayjs(lastComment?.parent?.created_at*1000).locale(lang).fromNow()}</Typography>
+                        </Stack>
+                      </Stack>
+                      <Stack direction={'row'} gap={3}>
+                        <Box sx={{borderRight:'solid 1px #ebe8e8',width:'16px'}}/>
+                        <Box>
+                          <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
+                          <Stack direction={'row'} gap={1}>
+                            <UserAvatar 
+                              userId={lastComment?.user.sso_id} 
+                              size='small'
+                            />
+                            <Stack direction={{xs:'column',sm:'row'}} gap={1}>
+                              <Typography>{lastComment?.user.name}</Typography>
+                              <Typography variant='caption'>{dayjs(lastComment.created_at*1000).locale(lang).fromNow()}</Typography>
+                            </Stack>
+                          </Stack>
+                          <Stack direction={'row'}>
+                            <Box sx={{borderRight:'solid 1px #ebe8e8',width:'16px'}}/>
+                            <Box paddingLeft={3} dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                  </Stack>
+                  :  <Sumary description={lastComment?.body_html}/>
+              }
+              <Stack justifyContent={'center'}>
+                <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                  {session?.user ? t('replyCommentLbl') : t('notSessionreplyCommentLbl')}
+                </Button>
+              </Stack>
             </Stack>
-        </Stack>
+        </Stack> */}
       </CardContent>
     </Card>;
 }
