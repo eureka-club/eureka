@@ -30,7 +30,7 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
 
       <Grid container spacing={1} paddingTop={'3rem'}>
         <Grid item xs={12} md={3} position={'relative'}>
-         <Stack gap={1}>
+         <Stack gap={0}>
           <FeaturedCycles />
           <FeaturedWorks />
           </Stack>
@@ -38,7 +38,7 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
             position:'sticky',
             top:'70px',
           }}>
-         <Stack gap={1}>
+         <Stack gap={2}>
             <Box>
               <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
               <aside >{getTopicsBadgedLinks()}</aside>
