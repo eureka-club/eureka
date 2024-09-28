@@ -33,19 +33,19 @@ const HomeNotSession: FunctionComponent<Props> = ({}) => {
          <Stack gap={1}>
           <FeaturedCycles />
           <FeaturedWorks />
-
+          </Stack>
           <Box sx={{
             position:'sticky',
-            top:'50px',
+            top:'70px',
           }}>
-            <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
-            
-            <aside className="mb-4">{getTopicsBadgedLinks()}</aside>
-            <section className="mt-4">
-              <FeaturedUsers />
-            </section>
-          </Box>
+         <Stack gap={1}>
+            <Box>
+              <Typography variant='h6' color={'secondary'}>{t('Trending topics')}{' '}</Typography>
+              <aside >{getTopicsBadgedLinks()}</aside>
+            </Box>
+            <FeaturedUsers />
           </Stack>
+          </Box>
         </Grid>
         <Grid item xs={12} md={9}>
           {/* <section className="ms-0 ms-lg-5"> */}
