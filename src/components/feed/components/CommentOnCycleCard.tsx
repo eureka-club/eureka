@@ -13,12 +13,7 @@ import MosaicItem from '@/src/components/cycle/MosaicItem';
 import UserAvatar from '../../common/UserAvatar';
 import useCycleSumary from '@/src/useCycleSumary';
 import useUserSumary from '@/src/useUserSumary';
-import { Sumary } from '../../common/Sumary';
 import { useRouter } from 'next/router';
-import { useLast3CommentsByPageId } from '../hooks/useLast3CommentsByPageId';
-import Image from 'next/image';
-import { StyledInput } from './StyledInput';
-import { useReplyComment } from '../hooks/useReplyComment';
 import HyvorComments from '../../common/HyvorComments';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 interface Props extends CardProps {
@@ -52,7 +47,7 @@ export default function CommentOnCycleCard(props:Props) {
     else show(<SignInForm/>)
   };
   ///cycle/29?ht-comment-id=15934922
-  const comment_id = commentURL?.replace(/^.*-id=(\d*)/g,'$1');
+  // const comment_id = commentURL?.replace(/^.*-id=(\d*)/g,'$1');
   // const {data:last3Comments}=useLast3CommentsByPageId(page_id);
   // const{mutate,isSuccess,isLoading}=useReplyComment(page_id)
   if(!session?.user)return <></>;
@@ -60,7 +55,7 @@ export default function CommentOnCycleCard(props:Props) {
       <CardHeader
           avatar={
             <>
-                <UserAvatar name={user?.name!} userId={userId} image={user?.image!} photos={user?.photos!}/>
+                <UserAvatar userId={userId} />
             </>
           }
           title={

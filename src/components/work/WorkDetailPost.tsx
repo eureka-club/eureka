@@ -71,7 +71,7 @@ const WorkDetailPost: FunctionComponent<Props> = ({workId,className, cacheKey })
           <Grid container className={`d-flex justify-content-center ${styles.discussionContainer}`}>
             {session && session.user && (
               <Grid item xs={12} md={1} className="d-flex justify-content-center mb-2 mt-3">
-                <UserAvatar userId={session.user.id} name={session.user.name!} />
+                <UserAvatar userId={session.user.id} />
               </Grid>
             )}
             <Grid item xs={12} md={11}>

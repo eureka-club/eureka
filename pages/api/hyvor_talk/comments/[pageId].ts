@@ -25,7 +25,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     try{
-        const{pageId:page_id,limit=5}=req.query;debugger;
+        const{pageId:page_id,limit=3}=req.query;
         const url=`https://talk.hyvor.com/api/console/v1/${process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID}/comments`
         const {data} = await axios.get(url,{
             headers:{
@@ -33,7 +33,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
             },
             params:{
                 page_id,
-                limit
+                limit:+limit
             }
         });
         return res.json({data})

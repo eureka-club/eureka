@@ -39,7 +39,7 @@ export default function PostOnWorkCard(props:Props) {
       <CardHeader
           avatar={
             <>
-                <UserAvatar name={post?.creator.name!} userId={post?.creator.id!} image={post?.creator.image!} photos={post?.creator.photos!}/>
+                <UserAvatar userId={post?.creator.id!} />
             </>
           }
           title={<Typography>
