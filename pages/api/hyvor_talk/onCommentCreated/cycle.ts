@@ -44,7 +44,7 @@ export default async function handler(
       await prisma.action.create({
         data:{
           cycleId:+cycleId,
-          type:ActionType.CommentCreatedOnCycleActive,
+          type:ActionType.CommentCreatedOnCycle,
           userId:id,
           commentURL,
           commentText,
