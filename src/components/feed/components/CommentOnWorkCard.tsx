@@ -24,6 +24,7 @@ import 'dayjs/locale/en';
 import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
+import UserCommentDetail from './UserCommentDetail';
 
 dayjs.extend(relativeTime);
 
@@ -37,29 +38,7 @@ interface Props extends CardProps {
   // createdAt:Date;
 }
 
-interface UserCommentDetailProps{
-  comment:any;
-  content:React.ReactNode
-}
-const UserCommentDetail:React.FC<UserCommentDetailProps> = ({comment,content})=>{
-  const{t,lang}=useTranslation('feed');
-  if(!comment)return <></>;
-  return <Stack direction={'row'} gap={1}>
-  <Stack gap={.5}>
-    <Avatar src={comment?.user.picture_url} />
-    <Box sx={{borderRight:'solid 1.5px #dddddd85',width:'16px',height:'100%'}}/>
-  </Stack>
-  <Stack>
-    <Stack direction={{xs:'column',sm:'row'}} gap={{xs:0,sm:1}}>
-      <Typography>{comment?.user.name}</Typography>
-      <Typography variant='caption'>{dayjs(comment?.created_at*1000).locale(lang).fromNow()}</Typography>
-    </Stack>
-    {content}
-    {/* <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/> */}
-    
-  </Stack>
-</Stack>
-}
+
 export default function CommentOnWorkCard(props:Props) {
   const{
     workId,
@@ -114,7 +93,7 @@ export default function CommentOnWorkCard(props:Props) {
                 {t('commentOnWorkTitle')}
                 <strong> {work?.title}</strong>
               </Typography>
-              {lastComment?.parent ? <Typography variant='caption' paddingRight={1.5}>{dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}</Typography> : ''}
+              <Typography variant='caption' paddingRight={1.5}>{dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}</Typography>
             </Stack>
           }
           // subheader={
@@ -129,14 +108,15 @@ export default function CommentOnWorkCard(props:Props) {
             }
           }}/>
           <Box>
-              <UserCommentDetail comment={lastComment?.parent} 
+              <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
               content={
                 <>
                   <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
                   <UserCommentDetail comment={lastComment} 
-                  content={
-                    <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
-                  }
+                    content={
+                      <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
+                    }
+                    isFull={lastComment?.parent}
                   />
                 </>
               }
