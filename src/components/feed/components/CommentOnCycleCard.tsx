@@ -21,6 +21,7 @@ import 'dayjs/locale/en';
 import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import UserCommentDetail from './UserCommentDetail';
+import Skeleton from '../../Skeleton';
 
 dayjs.extend(relativeTime);
 interface Props extends CardProps {
@@ -55,7 +56,7 @@ export default function CommentOnCycleCard(props:Props) {
       router.push(`/cycle/${cycleId}?ht-comment-id=${lastComment?.id}`);
     else show(<SignInForm/>)
   };
-  if(isLoading)return <Spinner/>;  
+  if(isLoading)return <Skeleton type="card" />;  
 
   
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>

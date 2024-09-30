@@ -25,6 +25,7 @@ import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
 import UserCommentDetail from './UserCommentDetail';
+import Skeleton from '../../Skeleton';
 
 dayjs.extend(relativeTime);
 
@@ -70,7 +71,7 @@ export default function CommentOnWorkCard(props:Props) {
       router.push(`/work/${workId}?ht-comment-id=${lastComment?.id}`);
     else show(<SignInForm/>)
   };
-  if(isLoading)return <Spinner/>;  
+  if(isLoading)return <Skeleton type="card" />;  
 
   
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
