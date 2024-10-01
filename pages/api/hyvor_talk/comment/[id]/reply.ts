@@ -11,7 +11,7 @@ import { getSession } from "next-auth/react";
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     try{
         const{id}=req.query;
-        const{body,sso_id}=JSON.parse(req.body);debugger;
+        const{body,sso_id}=JSON.parse(req.body);
         const url = `https://talk.hyvor.com/api/console/v1/${process.env.NEXT_PUBLIC_HYVOR_WEBSITE_ID}/comment/${id}/reply`
         const {data:comment} = await axios.post(url,{
             body:`

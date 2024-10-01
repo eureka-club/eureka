@@ -111,7 +111,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
               ?<CardHeader
                 avatar={
                 <>
-                    <UserAvatar size='small' name={cycle?.creator.name!} userId={cycle?.creator.id!} image={cycle?.creator.image!} photos={cycle?.creator.photos!}/>
+                    <UserAvatar size='small' userId={cycle?.creator.id!} />
                 </>
                 }
                 action={

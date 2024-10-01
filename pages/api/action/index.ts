@@ -25,9 +25,9 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
       take,
       include:{
         user:{select:{id:true,name:true,image:true,photos:true}},
-        post:{select:PostSumarySpec.select},
-        work:{select:WorkSumarySpec.select},
-        cycle:{select:CycleSumarySpec.select}
+        // post:{select:PostSumarySpec.select},
+        // work:{select:WorkSumarySpec.select},
+        // cycle:{select:CycleSumarySpec.select}
       },
       orderBy:{
         createdAt:'desc'

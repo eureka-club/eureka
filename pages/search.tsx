@@ -165,7 +165,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   qc.prefetchQuery([`posts-search-${q}-${ctx.locale}`], () => postsData);
   const hasPosts = postsData?.total > 0;
   
-  const worksData = await getWorksSumary(ctx.locale!,{ ... getWorksProps(terms), take }, origin);
+  const worksData = await getWorksSumary(ctx.locale!,{ ... getWorksProps(terms), take });
 
   qc.prefetchQuery([`works-search-${q}-${ctx.locale}`], () => worksData);
   const hasWorks = worksData.total > 0;

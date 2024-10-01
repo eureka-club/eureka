@@ -1,8 +1,8 @@
 import { WEBAPP_URL } from "@/src/constants"
 import { useQuery } from "react-query";
 
-export const getLast3CommentsByPageId = async (page_id:number|string)=>{
-    const url = `${WEBAPP_URL}/api/hyvor_talk/comments/${page_id}?limit=3`;
+export const getLastNCommentsByPageId = async (page_id:number|string,count:number)=>{
+    const url = `${WEBAPP_URL}/api/hyvor_talk/comments/${page_id}?limit=${count}`;
     const fr = await fetch(url);
     if(fr.ok){
         const {data} = await fr.json();
@@ -14,10 +14,10 @@ export const getLast3CommentsByPageId = async (page_id:number|string)=>{
 interface Opts{
     enabled:boolean
 }
-export const useLast3CommentsByPageId = (page_id:number|string,opts?:Opts)=>{
+export const useLastNCommentsByPageId = (page_id:number|string,count:number=1,opts?:Opts)=>{
     const{enabled}=opts={enabled:true};
     return useQuery({
-        queryFn:()=>getLast3CommentsByPageId(page_id),
+        queryFn:()=>getLastNCommentsByPageId(page_id,count),
         queryKey:['LAST3_COMMENTS',`${page_id}`],
         enabled
     });
