@@ -664,8 +664,8 @@ actions.forEach((a) => {
   transactions.push(
     prismaLocal.$queryRaw(Prisma.sql` 
     SET IDENTITY_INSERT dbo.Action ON;
-    INSERT INTO dbo.Action(id,postId,cycleId,type,userId,created_at,commentURL,workId,commentText) 
-    VALUES(${a.id},${a.postId},${a.cycleId},${a.type},${a.userId},${a.createdAt},${a.commentURL},${a.workId},${a.commentText}); 
+    INSERT INTO dbo.Action(id,postId,cycleId,type,userId,created_at,commentURL,workId,commentText,page_id) 
+    VALUES(${a.id},${a.postId},${a.cycleId},${a.type},${a.userId},${a.createdAt},${a.commentURL},${a.workId},${a.commentText},${a.page_id}); 
     SET IDENTITY_INSERT dbo.Action OFF;
   `));   
 });

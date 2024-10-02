@@ -2,28 +2,23 @@ import * as React from 'react';
 import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Box, Button, Stack, styled, Typography} from '@mui/material';
+import { Box, Button, Stack, Typography} from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '../../forms/SignInForm';
-import { CommentBankOutlined } from '@mui/icons-material';
 import useTranslation from 'next-translate/useTranslation';
 import MosaicItem from '@/src/components/work/MosaicItem';
 import UserAvatar from '../../common/UserAvatar';
-import useUserSumary from '@/src/useUserSumary';
-import { Sumary } from '../../common/Sumary';
 import { useRouter } from 'next/router';
 import useWorkSumary from '@/src/useWorkSumary';
 import { useLastNCommentsByPageId } from '../hooks/useLastNCommentsByPageId';
 import { useOnWorkCommentCreated } from '../../common/useOnWorkCommentCreated';
-import Spinner from '../../Spinner';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import 'dayjs/locale/pt-br';
 import 'dayjs/locale/en';
 import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Image from 'next/image';
 import UserCommentDetail from './UserCommentDetail';
 import Skeleton from '../../Skeleton';
 
@@ -60,8 +55,9 @@ export default function CommentOnWorkCard(props:Props) {
 
   const {data,isLoading}=useLastNCommentsByPageId(page_id,1);
   React.useEffect(()=>{
-    if(data?.length)
+    if(data?.length){
       setlastComment(data[0]);
+    }
   },[data])
 
   const{dispatch}=useOnWorkCommentCreated(workId);
