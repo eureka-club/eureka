@@ -332,7 +332,14 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <h1 className="fw-bold text-secondary">{work.title}</h1>
                       <h2 className={`${styles.author}`}>{work.author}</h2>
                       <WorkSummary work={work as unknown as WorkSumary} />
-                      </Stack>
+                      <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
+                      <Typography >
+                              {getRatingAvg().toFixed(1)}
+                              {' - '}
+                              <span className="ms-1 text-gray">{getRatingQty()} {t('common:ratings')}</span>
+                            </Typography>
+                     
+                          </Stack>
                     <Stack gap={1}>
                       <MosaicItem workId={work.id} Width={250} Height={250*1.36}/>
                       <Box>
@@ -368,7 +375,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       </Stack>
                       
                       <Stack direction={{sm:'column',md:'row'}} gap={1}>
-                          <Stack direction={'row'}>
+                          <Stack direction={'row'} sx={{ display: { xs: 'none', sm: 'block' } }} >
                             <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
                             <Typography>
                               {getRatingAvg().toFixed(1)}
