@@ -379,7 +379,7 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
           </Grid>
         </Grid>
       <div className='d-flex justify-content-center'>
-        <Button disabled={!currentImg || loading || editorRef.current.getContent().length>=4000} onClick={handleSubmit} className='text-white' size='large'>Save</Button>
+        <Button disabled={!currentImg || loading || editorRef.current.getContent().length>=4000} onClick={handleSubmit}  variant='contained' color='primary' size="large">Save</Button>
       </div>
     </form>
   );

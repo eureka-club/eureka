@@ -64,7 +64,7 @@ export const WorkDetailSpec = {
   include: {
     localImages: { select: { id:true, storedFile: true } },
     favs: { select: { id: true } },
-    // ratings: { select: { userId: true, qty: true } },
+    ratings: { select: { userId: true, qty: true } },
     readOrWatchedWorks: { select: { userId: true, workId: true, year: true } },
     posts: {
       select: { id: true, updatedAt: true, localImages: { select: { storedFile: true } } },

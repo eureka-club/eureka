@@ -15,12 +15,21 @@ import UserAvatar from '../../common/UserAvatar';
 import usePostSumary from '@/src/usePostSumary';
 import { Sumary } from '../../common/Sumary';
 import { useOnPostCommentCreated } from '../../common/useOnPostCommentCreated';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import 'dayjs/locale/pt-br';
+import 'dayjs/locale/en';
+import 'dayjs/locale/fr';
+
+
 interface Props extends CardProps {
   postId:number;
+  createdAt:Date;
 }
-export default function PostOnCycleActiveCard(props:Props) {
+export default function PostOnCycleCard(props:Props) {
   const{
-    postId
+    postId,
+    createdAt
   }=props;
   const{t,lang}=useTranslation('feed');
   const{data:post}=usePostSumary(postId);
@@ -42,13 +51,16 @@ export default function PostOnCycleActiveCard(props:Props) {
             </>
           }
           title={
+            <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
             <Typography>
-              <strong>{post?.creator.name} </strong>
-              {t('postOnCycleActiveTitle')}
-              <strong> {post?.cycles[0].title} </strong>
+              <strong>{post?.creator.name!} </strong>
+              {t('postOnCycleTitle')}
+              <strong> {post?.title}</strong>
             </Typography>
+            <Typography variant='caption' paddingRight={1.5}>{dayjs(createdAt).locale(lang).fromNow()}</Typography>
+            </Stack>
           }
-          subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
+          // subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
@@ -58,31 +70,37 @@ export default function PostOnCycleActiveCard(props:Props) {
               }
             }}/>
             <Box>
-              <Sumary description={post?.contentText??''}/>
+              {post?.contentText ? <Sumary description={post?.contentText??''}/> : <></>}
+              <Box display={'flex'} justifyContent={'center'}>
+                <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                {t('notSessionreplyCommentLbl')}
+                </Button>
+              </Box>
             </Box>
         </Stack>
         {
             session 
-            ? <CardContent>
+            ? 
                 <HyvorComments 
                     entity='post' 
                     id={`${postId}`} 
                     session={session!}  
                     OnCommentCreated={(comment)=>dispatch(comment)}
                 />
-                </CardContent>
             : <></>
         }
       </CardContent>
       
-      <CardActions sx={{justifyContent:"end"}}>
+      {/* <CardActions sx={{justifyContent:"end"}}>
           {
             !session
-              ? <Button onClick={handleExpandClick}>
-                  <CommentBankOutlined /> Escreva um comentario
-                </Button>
+              ? <Box>
+              <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+              {t('notSessionreplyCommentLbl')}
+              </Button>
+            </Box>
               : <></>
           }
-      </CardActions>
+      </CardActions> */}
     </Card>;
 }

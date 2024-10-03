@@ -312,15 +312,21 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
   };
 
   const getRatingQty = () => {
-    return work?.ratingCount??0;
+    return work?._count.ratings??0;
   };
 
   const getRatingAvg = () => {
-    if (work) {
-      return work.ratingAVG || 0;
+    if (work && work._count.ratings) {
+      return +(work.ratings.reduce((p,c)=>{return p+c.qty},0)/work._count.ratings || 0).toFixed(1);
     }
     return 0;
   };
+
+  const getCurrentUserRating = ()=>{
+    if(session && work)
+      return work?.ratings.find(r=>r.userId==session?.user.id)?.qty??0;
+    return 0;
+  }
   
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -331,6 +337,18 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               {post == null ? (
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
+                  <Stack gap={1} sx={{ display: { xs: 'block', sm: 'none' } }} >
+                      <h1 className="fw-bold text-secondary">{work.title}</h1>
+                      <h2 className={`${styles.author}`}>{work.author}</h2>
+                      <WorkSummary work={work as unknown as WorkSumary} />
+                      <Rating qty={getRatingQty()??0} onChange={handlerChangeRating} size="medium" readonly />
+                      <Typography >
+                              {getRatingAvg()}
+                              {' - '}
+                              <span className="ms-1 text-gray">{getRatingQty()} {t('common:ratings')}</span>
+                            </Typography>
+                     
+                          </Stack>
                     <Stack gap={1}>
                       <MosaicItem workId={work.id} sx={(theme)=>({
                         'img':{
@@ -342,11 +360,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <Box>
                         <Stack direction={'row'} alignItems={'stretch'} gap={1}>
                           <Rating
-                            qty={work?.currentUserRating??0}
+                            qty={getCurrentUserRating()}
                             onChange={handlerChangeRating}
                             size="medium"
                             iconColor="var(--bs-danger)"
-                          /> { (work?.currentUserRating??0) > 0 && <IconButton
+                          /> { (getCurrentUserRating()) > 0 && <IconButton
                             type="button"
                             size='small'
                             title={t('common:clearRating')}
@@ -370,10 +388,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <h2 className={`${styles.author}`}>{work.author}</h2>
                       <WorkSummary work={work as unknown as WorkSumary} />
                       <Stack direction={{sm:'column',md:'row'}} gap={1}>
-                          <Stack direction={'row'}>
-                            <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
+                          <Stack direction={'row'} sx={{ display: { xs: 'none', sm: 'block' } }} >
+                            <Rating qty={getRatingAvg()} onChange={handlerChangeRating} size="medium" readonly />
                             <Typography>
-                              {getRatingAvg().toFixed(1)}
+                              {getRatingAvg()}
                               {' - '}
                               <span className="ms-1 text-gray">{getRatingQty()} {t('common:ratings')}</span>
                             </Typography>
