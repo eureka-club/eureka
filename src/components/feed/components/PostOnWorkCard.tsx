@@ -3,7 +3,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { Button, Stack, Typography} from '@mui/material';
+import { Box, Button, Stack, Typography} from '@mui/material';
 import HyvorComments from '../../common/HyvorComments';
 import { useSession } from 'next-auth/react';
 import { useModalContext } from '@/src/hooks/useModal';
@@ -15,13 +15,20 @@ import UserAvatar from '../../common/UserAvatar';
 import usePostSumary from '@/src/usePostSumary';
 import { Sumary } from '../../common/Sumary';
 import { useOnPostCommentCreated } from '../../common/useOnPostCommentCreated';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import 'dayjs/locale/pt-br';
+import 'dayjs/locale/en';
+import 'dayjs/locale/fr';
 
 interface Props extends CardProps {
   postId:number;
+  createdAt:Date;
 }
 export default function PostOnWorkCard(props:Props) {
   const{
-    postId
+    postId,
+    createdAt
   }=props;
   const{t,lang}=useTranslation('feed');
   const{data:post}=usePostSumary(postId);
@@ -42,13 +49,17 @@ export default function PostOnWorkCard(props:Props) {
                 <UserAvatar userId={post?.creator.id!} />
             </>
           }
-          title={<Typography>
-            <strong>{post?.creator.name!} </strong>
-            {`${t('postOnWorkTitle')}`}
-            <strong> {post?.works[0].title}</strong>
-          </Typography>
-        }
-          subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
+          title={
+            <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
+            <Typography>
+              <strong>{post?.creator.name!} </strong>
+              {t('postOnWorkTitle')}
+              <strong> {post?.title}</strong>
+            </Typography>
+            <Typography variant='caption' paddingRight={1.5}>{dayjs(createdAt).locale(lang).fromNow()}</Typography>
+            </Stack>
+          }
+          // subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
       />
       <CardContent>
         <Stack direction={{xs:'column',sm:'row'}} gap={2}>
@@ -58,33 +69,39 @@ export default function PostOnWorkCard(props:Props) {
               }
             }}/>
             <Stack gap={2}>
-              <Typography>{post?.title}</Typography>
-              <Sumary description={post?.contentText??''}/>
-            </Stack>
-        </Stack>
-                    {
-                        session 
-                        ? <CardContent>
-                            <HyvorComments 
-                                entity='post' 
-                                id={`${postId}`} 
-                                session={session!}  
-                                OnCommentCreated={(comment)=>dispatch(comment)}
-                                
-                            />
-                            </CardContent>
-                        : <></>
-                    }
-      </CardContent>
-      
-      <CardActions sx={{justifyContent:"end"}}>
+              {
+                post?.contentText ? <Sumary description={post?.contentText??''}/> : <></>
+              }
           {
-            !session
-              ? <Button onClick={handleExpandClick}>
-                  <CommentBankOutlined /> Escreva um comentario
-                </Button>
+            !session 
+              ? <Box display={'flex'} justifyContent={'center'}>
+                  <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                  {t('notSessionreplyCommentLbl')}
+                  </Button>
+              </Box>
               : <></>
           }
-      </CardActions>
+            </Stack>
+        </Stack>
+        {
+          session 
+          ? <HyvorComments 
+          entity='post' 
+          id={`${postId}`} 
+          session={session!}  
+          OnCommentCreated={(comment)=>dispatch(comment)}
+          />
+          : <></>
+        }
+                    
+      </CardContent>
+      
+      {/* <CardActions sx={{justifyContent:"end"}}>
+        <Box display={'flex'} justifyContent={'center'}>
+          <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+            {session?.user ? t('replyCommentLbl') : t('notSessionreplyCommentLbl')}
+          </Button>
+        </Box>
+      </CardActions> */}
     </Card>;
 }

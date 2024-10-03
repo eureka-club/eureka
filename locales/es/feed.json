@@ -1,9 +1,8 @@
 {
     "postOnWorkTitle":"ha creado una Eureka sobre:",
-    "commentOnCycleActiveTitle":"ha creado un comentario sobre:",
+    "postOnCycleTitle":"ha creado una Eureka sobre:",
     "commentOnWorkTitle":"ha comentado en:",
     "commentOnCycleTitle":"ha comentado en:",
-    "postOnCycleActiveTitle":"ha creado una Eureka sobre:",
     "replyCommentLbl":"Participe en la discusión",
     "notSessionreplyCommentLbl":"Inicie sesión para participar en la discusión",
     "createCommentLbl":"Escriba un comentario"

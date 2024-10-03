@@ -104,13 +104,22 @@ export default function CommentOnWorkCard(props:Props) {
               maxWidth:'250px'
             }
           }}/>
-          <Box>
+          <Stack gap={3}>
               <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
-              content={
+              body={
                 <>
                   <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
                   <UserCommentDetail comment={lastComment} 
-                    content={
+                    sx={
+                      lastComment?.parent 
+                        ? {
+                          backgroundColor:'#dddddd85  ',
+                          borderRadius:'.5rem',
+                          padding:'1rem'
+                        }
+                        : {}
+                    }
+                    body={
                       <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
                     }
                     isFull={lastComment?.parent}
@@ -124,7 +133,7 @@ export default function CommentOnWorkCard(props:Props) {
                   </Button>
                 </Box>
 
-          </Box>
+          </Stack>
         </Stack>
         {/* <Stack direction={'row'} gap={1}>
           <Stack>
