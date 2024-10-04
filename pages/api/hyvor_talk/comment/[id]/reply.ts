@@ -38,7 +38,6 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         // })
         // if(fr.ok){
         //     const comment = await fr.json();
-        //     debugger;
         //     return res.json({comment});
         // }
         // return res.json({comment:null});

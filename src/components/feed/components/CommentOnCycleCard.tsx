@@ -90,13 +90,22 @@ export default function CommentOnCycleCard(props:Props) {
               maxWidth:'250px'
             }
           }} hideFooter hideHeader/>
-          <Box>
+          <Stack gap={3}>
               <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
-              content={
+              body={
                 <>
                   <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
-                  <UserCommentDetail comment={lastComment} 
-                    content={
+                  <UserCommentDetail comment={lastComment}
+                    sx={
+                      lastComment?.parent 
+                        ? {
+                          backgroundColor:'#dddddd85  ',
+                          borderRadius:'.5rem',
+                          padding:'1rem'
+                        }
+                        : {}
+                    } 
+                    body={
                       <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
                     }
                     isFull={lastComment?.parent}
@@ -109,7 +118,7 @@ export default function CommentOnCycleCard(props:Props) {
                     {session?.user ? t('replyCommentLbl') : t('notSessionreplyCommentLbl')}
                   </Button>
                 </Box>
-          </Box>
+          </Stack>
         </Stack>
       </CardContent>
     </Card>;
