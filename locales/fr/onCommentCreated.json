@@ -1,11 +1,11 @@
 {
   "subject-post":"Quelqu'un a commenté sur ton Moment Eureka !",
-  "subject-cycle":"Quelqu'un a commenté dans le cycle {{title}}, auquel tu participes !",
+  "subject-cycle":"Quelqu'un a commenté dans le club {{title}}, auquel tu participes !",
   "subject-work":"Quelqu'un d'autre a commenté sur {{title}} !",
   "subject-comment":"Quelqu'un a répondu à ton commentaire sur {{title}} !",
 
   "title-post": "{{name}} vient de laisser un commentaire sur ton Moment Eureka : {{title}} !",
-  "title-cycle":"{{name}} vient de laisser un commentaire dans le cycle {{title}} !",
+  "title-cycle":"{{name}} vient de laisser un commentaire dans le club {{title}} !",
   "title-work":"{{name}} vient de laisser un commentaire sur {{title}} !",
   "title-comment":"{{name}} vient de répondre à ton commentaire sur {{title}} !",
 
@@ -18,8 +18,8 @@
   "urlLabel": "Voir le commentaire",
   "unsubscribe":"Se désabonner",
 
-  "subject-cycle-sumary":"Commentaires d'aujourd'hui sur le Cycle {{title}} auquel tu participes !",
-  "title-cycle-sumary":"Quelques personnes ont laissé des commentaires sur le Cycle {{title}} ! {{first3UsersNames}} et d'autres ont partagé leurs pensées aujourd'hui.",
+  "subject-cycle-sumary":"Commentaires d'aujourd'hui sur le Club {{title}} auquel tu participes !",
+  "title-cycle-sumary":"Quelques personnes ont laissé des commentaires sur le Club {{title}} ! {{first3UsersNames}} et d'autres ont partagé leurs pensées aujourd'hui.",
   "about-cycle-sumary":"Que dirais-tu de participer et d'enrichir encore plus la discussion ? Notre communauté te remercie !",
 
   "subject-post-sumary":"Commentaires d'aujourd'hui sur ton Moment Eureka: {{title}} !",

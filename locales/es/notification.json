@@ -1,26 +1,26 @@
 {
   "viewAllNotifications":"Ver todas las notificaciones",
   
-  "eurekaCreatedAboutCycle":"{{userName}} tuvo un Momento Eureka inspirado por el ciclo '{{cycleTitle}}'!",
+  "eurekaCreatedAboutCycle":"{{userName}} tuvo un Momento Eureka inspirado por el Club '{{cycleTitle}}'!",
   "eurekaCreatedAboutWork":"{{userName}} tuvo un Momento Eureka inspirado por la obra '{{workTitle}}'!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} tuvo un Momento Eureka inspirado por la obra '{{workTitle}}' en el ciclo '{{cycleTitle}}'!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} tuvo un Momento Eureka inspirado por la obra '{{workTitle}}' en el Club '{{cycleTitle}}'!",
   
   "commentCreatedAboutComment":"{{userName}} ha respondido tu comentario Comentario  {{commentTitle}}!",
-  "commentCreatedAboutCommentInCycle":"{{userName}} ha respondido tu Comentario {{commentTitle}} en el Ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutCommentInCycle":"{{userName}} ha respondido tu Comentario {{commentTitle}} en el Club {{cycleTitle}}! ",
   
-  "commentCreatedAboutCycle":"{{userName}} ha creado un Comentario sobre el Ciclo {{cycleTitle}}!",
+  "commentCreatedAboutCycle":"{{userName}} ha creado un Comentario sobre el Club {{cycleTitle}}!",
   
   "commentCreatedAboutPost":"{{userName}} ha creado Comentario sobre la Eureka {{postTitle}}!",
-  "commentCreatedAboutPostInCycle":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en el Ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutPostInCycle":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en el Club {{cycleTitle}}! ",
   "commentCreatedAboutPostInWork":"{{userName}} ha creado un Comentario sobre la Eureka {{postTitle}} en la Obra {{workTitle}}!",
   
-  "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}} en el Ciclo {{cycleTitle}}! ",
+  "commentCreatedAboutWorkInCycle":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}} en el Club {{cycleTitle}}! ",
   "commentCreatedAboutWork":"{{userName}} ha creado un Comentario sobre la Obra {{workTitle}}!",
      
   "userStartFollowing":"{{userName}} te está siguiendo. ¡Échale un ojo a su Mediateca también!",
 
-  "userJoinedCycle":"{{userName}} se ha unido al Ciclo '{{cycleTitle}}'!",
-  "userLeftCycle":"{{userName}} ha abandonado el Ciclo '{{cycleTitle}}'!",
+  "userJoinedCycle":"{{userName}} se ha unido al Club '{{cycleTitle}}'!",
+  "userLeftCycle":"{{userName}} ha abandonado el Club '{{cycleTitle}}'!",
 
   "userHasSaveForLater":"{{userName}} ha salvado para luego '{{entityTitle}}'. Echale un vistazo.",
   "userHasRating":"{{userName}} ha puntuado '{{entityTitle}}'. Echale un vistazo también!"

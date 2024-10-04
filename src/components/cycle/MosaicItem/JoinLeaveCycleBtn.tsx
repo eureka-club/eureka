@@ -60,7 +60,7 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
         data: mutationResponse,
         // isSuccess: isJoinCycleSuccess,
       } = useJoinUserToCycleAction(user!,cycle!,(_data,error)=>{
-        if(!error) {//para q no salgan dos toast al unirse a ciclo privado
+        if(!error) {//para q no salgan dos toast al unirse a Club privado
           if (cycle && ![2,4].includes(cycle?.access))
             toast.success(t('OK'));
         }

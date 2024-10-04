@@ -1,11 +1,11 @@
 {
   "subject-post":"¡Alguien comentó en tu Momento Eureka!",
-  "subject-cycle":"¡Alguien comentó en el ciclo {{title}}, en el que estás participando!",
+  "subject-cycle":"¡Alguien comentó en el Club {{title}}, en el que estás participando!",
   "subject-work":"¡Alguien más comentó en {{title}}!",
   "subject-comment":"¡Alguien respondió a tu comentario en {{title}}!",
 
   "title-post": "{{name}} acaba de dejar un comentario en tu Momento Eureka: {{title}}!",
-  "title-cycle":"{{name}} acaba de dejar un comentario en el ciclo {{title}}!",
+  "title-cycle":"{{name}} acaba de dejar un comentario en el Club {{title}}!",
   "title-work":"{{name}} acaba de dejar un comentario en {{title}}!",
   "title-comment":"{{name}} acaba de responder a tu comentario en {{title}}!",
 
@@ -18,8 +18,8 @@
   "urlLabel": "Ver comentario",
   "unsubscribe":"Darse de baja", 
 
-  "subject-cycle-sumary":"¡Comentarios de hoy en el Ciclo {{title}} en el que estás participando!",
-  "title-cycle-sumary":"¡Algunas personas han dejado comentarios en el Ciclo {{title}}! {{first3UsersNames}} y más compartieron sus pensamientos hoy.",
+  "subject-cycle-sumary":"¡Comentarios de hoy en el Club {{title}} en el que estás participando!",
+  "title-cycle-sumary":"¡Algunas personas han dejado comentarios en el Club {{title}}! {{first3UsersNames}} y más compartieron sus pensamientos hoy.",
   "about-cycle-sumary":"¿Qué tal si participas para enriquecer aún más la discusión? ¡Nuestra comunidad te lo agradece!",
 
   "subject-post-sumary":"¡Comentarios de hoy en tu Momento Eureka: {{title}}!",
