@@ -53,16 +53,17 @@ const BannerCustomizable: FunctionComponent = ({
           }}>
            
           {bo?.sliders.map((s,currentIdx) => (
-            <Box key={`${s.title}-${currentIdx}`} sx={{ display:currentIdx==idxActive ? 'flex': 'none',width:'90%'}} position={'relative'}>
-              <Stack direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20em'}}>
+            <Box key={`${s.title}-${currentIdx}`} sx={{ 
+              display:currentIdx==idxActive ? 'flex': 'none',
+              width:'90%',
+              }} 
+              position={'relative'}
+            >
+              <Stack direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20em',width:'100%'}}>
                 <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '22em', height: '20em' }}/>
-                <Stack sx={{ whiteSpace: 'nowrap', mx: 1, overflowY:'auto' }}>
+                <Stack sx={{ whiteSpace: 'nowrap', padding:'1rem 3rem', overflowY:'auto' }}>
                   <Stack gap={1}>
-                    <Typography color={'secondary'} variant='h4'>{s.title}</Typography>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                    <Typography color={'secondary'} variant='h4' sx={{whiteSpace:'break-spaces'}}>{s.title}</Typography>
                     <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                   </Stack>
                   <Box alignSelf={'center'} padding={'1rem 0 3rem 0'}>
