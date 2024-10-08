@@ -115,7 +115,7 @@ export default function CommentOnCycleCard(props:Props) {
               />
                 <Box display={'flex'} justifyContent={'center'}>
                   <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
-                    {session?.user ? t('replyCommentLbl') : t('notSessionreplyCommentLbl')}
+                    {session?.user ? t('common:replyCommentLbl') : t('common:notSessionreplyCommentLbl')}
                   </Button>
                 </Box>
           </Stack>

@@ -324,6 +324,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       return work?.ratings.find(r=>r.userId==session?.user.id)?.qty??0;
     return 0;
   }
+
+  const handleExpandClick = () => {
+    if(!session?.user)
+     show(<SignInForm/>)
+  };
   
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -413,15 +418,16 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <Sumary description={work?.contentText??''}/>
                         <Box>
                             {
-                              !session
-                                ? <Button onClick={()=>{
-                                  show(<SignInForm/>);
-                                }}>
-                                    <CommentBankOutlined /> Escreva um comentario
-                                  </Button>
+                              !session 
+                                ? <Box display={'flex'} justifyContent={'center'}>
+                                    <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                                    {t('common:notSessionreplyCommentLbl')}
+                                    </Button>
+                                </Box>
                                 : <></>
                             }
                       </Box>
+                      
                       </Stack>
                     {/* </Stack> */}
                   </Stack>

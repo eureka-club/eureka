@@ -76,7 +76,7 @@ export default function PostOnWorkCard(props:Props) {
             !session 
               ? <Box display={'flex'} justifyContent={'center'}>
                   <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
-                  {t('notSessionreplyCommentLbl')}
+                  {t('common:notSessionreplyCommentLbl')}
                   </Button>
               </Box>
               : <></>

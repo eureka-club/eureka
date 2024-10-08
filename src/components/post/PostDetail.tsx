@@ -75,6 +75,11 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
 
   if (isLoadingPost||isLoadingUser||isLoadingCycle) return <Spinner />;
 
+  const handleExpandClick = () => {
+    if(!session?.user)
+     show(<SignInForm/>)
+  };
+
   return (
     <article data-cy="post-detail">
       <MosaicContext.Provider value={{ showShare: true }}>
@@ -218,18 +223,17 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                     ? <Box  id="uct" sx={{paddingTop:'1rem',height:'auto',overflowX:'hidden'}} dangerouslySetInnerHTML={{ __html: post?.contentText }} />
                     : <></>
                 } */}
-                <Sumary description={post?.contentText??''}/>
-              <Box>
-                  {
-                    !session
-                      ? <Button onClick={()=>{
-                        show(<SignInForm/>);
-                      }}>
-                          <CommentBankOutlined /> Escreva um comentario
+                {post?.contentText ? <Sumary description={post?.contentText??''}/> : <></>}
+                {
+                  !session?.user
+                    ? <Box display={'flex'} justifyContent={'center'}>
+                        <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                          {t('common:notSessionreplyCommentLbl')}
                         </Button>
-                      : <></>
-                  }
-            </Box>
+                      </Box>
+                    : <></>
+                }
+                
           </Box>
         </Stack>
         
