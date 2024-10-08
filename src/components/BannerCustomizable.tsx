@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useRef, useState } from 'react';
 // import { Carousel } from 'react-bootstrap';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
@@ -6,7 +6,7 @@ import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { AZURE_CDN_ENDPOINT, AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } from '../constants';
-import { Box, Button, Typography, Card, Stack, IconButton } from '@mui/material';
+import { Box, Button, Typography, Card, Stack, IconButton, BoxProps, StackProps } from '@mui/material';
 import { Circle } from '@mui/icons-material';
 
 const BannerCustomizable: FunctionComponent = ({
@@ -18,6 +18,17 @@ const BannerCustomizable: FunctionComponent = ({
   const[idxActive,setidxActive]=useState(0);
   const [show, setShow] = useState<boolean>(true);
   const {data:bo } = useBackOffice(undefined,lang);
+  const [requireScroll,setrequireScroll]=useState(false);
+  
+  useEffect(()=>{
+    const el:any = document.querySelector(`#outerRef-${idxActive}`);
+    const offsetHeight = el?.offsetHeight!;
+    const scrollHeight = el?.scrollHeight!
+    if(offsetHeight < scrollHeight){
+      setrequireScroll(true);
+    }
+  },[idxActive]);
+  
   const imgBaseUrl=`https://${AZURE_CDN_ENDPOINT}.azureedge.net/${AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
   return <Box sx={{backgroundColor:'var(--eureka-green)'}}>
       <Stack>
@@ -53,27 +64,31 @@ const BannerCustomizable: FunctionComponent = ({
           }}>
            
           {bo?.sliders.map((s,currentIdx) => (
-            <Box key={`${s.title}-${currentIdx}`} sx={{ 
+            <Box  key={`${s.title}-${currentIdx}`} sx={{ 
               display:currentIdx==idxActive ? 'flex': 'none',
               width:'90%',
               }} 
               position={'relative'}
             >
-              <Stack direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20em',width:'100%'}}>
-                <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '22em', height: '20em' }}/>
-                <Stack sx={{ whiteSpace: 'nowrap', padding:'1rem 3rem', overflowY:'auto' }}>
-                  <Stack gap={1}>
-                    <Typography color={'secondary'} variant='h4' sx={{whiteSpace:'break-spaces'}}>{s.title}</Typography>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                  </Stack>
-                  <Box alignSelf={'center'} padding={'1rem 0 3rem 0'}>
-                  {
-                    !isLoadingSession && !session
-                    ? <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                        {t('JoinEureka')}
-                      </Button>
-                    : <></>
-                  }
+              <Stack  direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'22rem',width:'100%'}}>
+                <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '22rem' }}/>
+                <Stack id={`outerRef-${currentIdx}`}  sx={{ height:'22rem',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
+                  <Box id={`innerRef-${currentIdx}`} >
+                    <Stack gap={1}>
+                      <Typography color={'secondary'} variant='h4' sx={{whiteSpace:'break-spaces'}}>{s.title}</Typography>
+                      <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                    </Stack>
+                    <Stack  padding={requireScroll ? '1rem 0 3rem 0': '.5rem 0 0'}>
+                    {
+                      !isLoadingSession && !session
+                      ? <Box alignSelf={'center'}>
+                          <Button className="btn-eureka" onClick={() => router.push('/register')}>
+                            {t('JoinEureka')}
+                          </Button>
+                        </Box>
+                      : <></>
+                    }
+                    </Stack>
                   </Box>
                 </Stack>
               </Stack>
