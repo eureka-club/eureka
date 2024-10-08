@@ -29,6 +29,7 @@ import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
 import MosaicItem from './MosaicItem';
 import { Sumary } from '../common/Sumary';
+import { useOnPostCommentCreated } from '../common/useOnPostCommentCreated';
 
 interface Props {
   postId: number;
@@ -65,7 +66,10 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
   //   , {
   //   enabled: !!postId
   // }
-)
+);
+
+  const{dispatch}=useOnPostCommentCreated(postId);
+
 
   if (!post && !isLoadingPost)
     return <Alert color='warning'>Not found</Alert>;
@@ -79,6 +83,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
     if(!session?.user)
      show(<SignInForm/>)
   };
+
 
   return (
     <article data-cy="post-detail">
@@ -236,30 +241,11 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                 
           </Box>
         </Stack>
-        
           <HyvorComments 
             entity='post' 
             id={`${post?.id}`} 
             session={session} 
-            OnCommentCreated={async (comment)=>{
-              const url = `${WEBAPP_URL}/api/hyvor_talk/onCommentCreated/post`;
-              const fr = await fetch(url,{
-                method:'POST',
-                headers:{
-                  "Content-Type":"application/json",
-                },
-                body:JSON.stringify({
-                  postId,
-                  url:comment.url,
-                  user:{name:session.user.name,email:session.user.email},
-                  parent_id:comment.parent_id,
-                })
-              });
-              if(fr.ok){
-                const res = await fr.json();
-                console.log(res);
-              }
-            }}
+            OnCommentCreated={(comment)=>dispatch(comment)}
           />
       </MosaicContext.Provider>
     </article>

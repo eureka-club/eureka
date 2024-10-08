@@ -80,7 +80,8 @@ const UserAvatar: FunctionComponent<Props> = ({
                       photo
                         ? `${AZURE_STORAGE_URL}/users-photos/${photo}`
                         : user?.image!
-                  }>
+                  }
+                >
                   <AccountCircle sx={{width,height:width}}/>
               </Avatar>
               {/* {
