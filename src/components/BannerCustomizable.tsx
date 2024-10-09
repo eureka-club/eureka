@@ -74,7 +74,7 @@ const BannerCustomizable: FunctionComponent = ({
             >
               <Stack  direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20rem',width:'100%'}}>
                 <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '20rem' }}/>
-                <Stack id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
+                <Stack id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',width:'100%',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
                   <Box id={`innerRef-${currentIdx}`} >
                     <Stack gap={1} sx={{padding:'2rem 2rem 0 2rem'}}>
                       <Typography color={'secondary'} variant='h2' sx={{whiteSpace:'break-spaces',fontSize:'1.8rem'}}>{s.title}</Typography>
