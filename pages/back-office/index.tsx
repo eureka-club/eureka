@@ -35,7 +35,7 @@ import {
 
 } from 'react-bootstrap';
 import { FiTrash2 } from 'react-icons/fi';
-import styles from './back-office.module.css'
+import styles from './index.module.css'
 import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
 import toast from 'react-hot-toast'
 import axios from 'axios';
@@ -57,6 +57,9 @@ import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
 import { error } from 'node:console';
 import { IoAddCircle, IoClose, IoPencil, IoSave, IoTrash } from 'react-icons/io5';
 import { AddBackOfficesSlidersForm } from '@/src/components/AddBackOfficesSlidersForm';
+import { useModalContext } from '@/src/hooks/useModal';
+import EditSlideForm from './Banner/EditSlideForm';
+import { Locale } from 'i18n-config';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -90,6 +93,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   //TODO
   const t = (s: string) => s;
   const router = useRouter();
+  const {show} = useModalContext();
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
   const [showCrop, setShowCrop] = useState<boolean>(false);
@@ -475,7 +479,9 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const OnAddSlide = ()=>{
     setOpenModal(true);
   }
-
+  const OnEditSlide = async (id:number,title:string,text:string,language:Locale)=>{
+    show(<EditSlideForm id={id} title={title} text={text} language={language}/>)
+  }
   const OnRemoveSlide = async (id:number)=>{
     const res = await confirm("Are you sure you wanna remove the selected slide?");
     if(res){
@@ -560,7 +566,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                       </TableCell>
                       <TableCell>
                         <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                          <Button size='small' color='info' variant='contained' onClick={(e)=>{alert("Todo")}} startIcon={<IoPencil/>}>Edit</Button>
+                          <Button size='small' color='info' variant='contained' onClick={(e)=>OnEditSlide(s.id,s.title!,s.text!,s.language as Locale)} startIcon={<IoPencil/>}>Edit</Button>
                           <Button size='small' color='warning' variant='contained' onClick={(e)=>OnRemoveSlide(s.id)} startIcon={<IoTrash/>}>Remove</Button>
                         </ButtonGroup>
                       </TableCell>

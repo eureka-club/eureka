@@ -6,8 +6,9 @@ import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { AZURE_CDN_ENDPOINT, AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } from '../constants';
-import { Box, Button, Typography, Card, Stack, IconButton, BoxProps, StackProps } from '@mui/material';
-import { Circle } from '@mui/icons-material';
+import { Box, Button, Typography, Card, Stack, IconButton, BoxProps, StackProps, Paper } from '@mui/material';
+import { Circle, Minimize } from '@mui/icons-material';
+import { LineIcon } from 'react-share';
 
 const BannerCustomizable: FunctionComponent = ({
 }) => {
@@ -60,34 +61,37 @@ const BannerCustomizable: FunctionComponent = ({
             backgroundImage: "url('/img/bg-header.svg')",
             marginBottom: show ? '8em' : '2em',
             height: show ? '15em' : '4em',
-            padding:'.5rem .25rem 0'
+            
           }}>
            
           {bo?.sliders.map((s,currentIdx) => (
             <Box  key={`${s.title}-${currentIdx}`} sx={{ 
               display:currentIdx==idxActive ? 'flex': 'none',
               width:'90%',
+              
               }} 
               position={'relative'}
             >
-              <Stack  direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'22rem',width:'100%'}}>
-                <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '22rem' }}/>
-                <Stack id={`outerRef-${currentIdx}`}  sx={{ height:'22rem',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
+              <Stack  direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20rem',width:'100%'}}>
+                <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '20rem' }}/>
+                <Stack id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
                   <Box id={`innerRef-${currentIdx}`} >
-                    <Stack gap={1}>
-                      <Typography color={'secondary'} variant='h4' sx={{whiteSpace:'break-spaces'}}>{s.title}</Typography>
-                      <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    </Stack>
-                    <Stack  padding={requireScroll ? '1rem 0 3rem 0': '.5rem 0 0'}>
-                    {
-                      !isLoadingSession && !session
-                      ? <Box alignSelf={'center'}>
-                          <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                            {t('JoinEureka')}
-                          </Button>
-                        </Box>
-                      : <></>
-                    }
+                    <Stack gap={1} sx={{padding:'2rem 2rem 0 2rem'}}>
+                      <Typography color={'secondary'} variant='h2' sx={{whiteSpace:'break-spaces',fontSize:'1.8rem'}}>{s.title}</Typography>
+                      <Box>
+                        <Typography color={'secondary'} variant='h6' marginBottom={0} sx={{whiteSpace:'normal',lineHeight:1.3}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                        <Stack  padding={requireScroll ? '.25rem 0 3rem 0': '0rem'}>
+                        {
+                          !isLoadingSession && !session
+                          ? <Box >
+                              <Button className="btn-eureka" onClick={() => router.push('/register')}>
+                                {t('JoinEureka')}
+                              </Button>
+                            </Box>
+                          : <></>
+                        }
+                        </Stack>
+                      </Box>
                     </Stack>
                   </Box>
                 </Stack>
@@ -95,6 +99,8 @@ const BannerCustomizable: FunctionComponent = ({
               <Box
                 sx={{
                   display:'flex',
+                  padding:1,
+                  gap:'.25rem',
                   width:'100%',
                   position:'absolute',
                   bottom:'0px',
@@ -108,15 +114,24 @@ const BannerCustomizable: FunctionComponent = ({
                 {
                   bo?.sliders.length>1 
                     ? [...Array(bo?.sliders.length)].map((a,idx)=>{
-                      return <IconButton
+                      return <Button
+                      variant='text'
                         key={`slider-${idx}`} 
-                        color={idx==idxActive ? 'default' : 'secondary'}
                         onClick={(e)=>{
                           setidxActive(idx);
                         }}
+                        sx={{
+                          padding:'.25rem .1rem',
+                          minWidth:'1.5rem',
+                          height:'.5rem'
+                        }}
                       >
-                        <Circle sx={{width:'.8rem',height:'.8rem'}}/>
-                      </IconButton>
+                        <Paper>
+                          <Box sx={{borderRadius:'.125rem',backgroundColor:idx==idxActive ? 'var(--color-secondary)' : 'var(--color-primary)',minWidth:'1.5rem',height:'.5rem',padding:'.4rem'}}>
+                            {/* <Typography fontSize={0} lineHeight={0} color={idx==idxActive ? 'secondary' : 'primary'}>{`_`}</Typography> */}
+                          </Box>
+                        </Paper>
+                      </Button>
                     })
                     : <></>
                 }
