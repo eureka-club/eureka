@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 import toast from "react-hot-toast";
 import { useModalContext } from "@/src/hooks/useModal";
 
-const textMaxLength = 283;
+const MaxLength = 335;
 interface StateProp {
     id:number;
     title: string;
@@ -25,7 +25,7 @@ const EditSlideForm:FC<StateProp> = ({id,title,text,language})=>{
         text,
         language,
       });
-  const [textLength, setTextLength] = useState(0);
+  const [textLength, setTextLength] = useState(text?.length??0);
   const editorRef = useRef<any>(null);
   const WYSWYGRef = useRef(null);
   const {close} = useModalContext();
@@ -36,10 +36,9 @@ const EditSlideForm:FC<StateProp> = ({id,title,text,language})=>{
   const queryClient = useQueryClient();
 
     const hasError = ()=>{
-        const q = state.title.length>200;
-        const q1 = textLength <= 0 || textLength > textMaxLength;
+        const q1 = state.title.length + textLength > MaxLength;
         const q2 = !state.language;
-        return q || q1 || q2;
+        return q1 || q2;
     }  
     const OnSubmit = async ()=>{
       const url =`${WEBAPP_URL}/api/backoffice/slide/${id}/edit`;
@@ -71,7 +70,7 @@ const EditSlideForm:FC<StateProp> = ({id,title,text,language})=>{
     return <form>
         <FormControl fullWidth>
         <TextField label="Title" value={state.title} onChange={(e) => changeHandler(e, 'title')} variant="standard" multiline maxRows={3} />
-        <FormHelperText className={`${state.title.length>=200 ? 'text-danger':''}`}>({200-state.title.length})</FormHelperText>
+        <FormHelperText className={`${state.title.length+textLength>=MaxLength ? 'text-danger':''}`}>({MaxLength-(state.title.length+textLength)})</FormHelperText>
       </FormControl>
 
       <FormControl fullWidth className='p-3'>
@@ -119,7 +118,7 @@ const EditSlideForm:FC<StateProp> = ({id,title,text,language})=>{
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           }}
         />
-        <FormHelperText className={`${textLength>=textMaxLength ? 'text-danger':''}`}>({textMaxLength-textLength})</FormHelperText>
+        <FormHelperText className={`${(state.title.length+textLength)>=MaxLength ? 'text-danger':''}`}>({MaxLength-(state.title.length+textLength)})</FormHelperText>
       </FormControl>
 
       <FormControl fullWidth className='p-3'>

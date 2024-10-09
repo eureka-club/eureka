@@ -105,7 +105,7 @@ const BannerCustomizable: FunctionComponent = ({
                   position:'absolute',
                   bottom:'0px',
                   left:'0px', 
-                  zIndex:9999,
+                  zIndex:999,
                   alignItems:'center',
                   justifyContent:'center',
                   backgroundColor:'rgba(227, 231, 239,.25)'

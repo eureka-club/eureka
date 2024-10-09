@@ -18,7 +18,6 @@ import {cors,middleware} from '@/src/lib/cors'
 
 export default getApiHandler()
   .put<NextApiRequest, NextApiResponse>(async (req, res): Promise<any> => {
-    debugger;
     const{slideId}=req.query;
     const{title,text,language}=req.body;
    const session = (await getSession({ req })) as unknown as Session;
