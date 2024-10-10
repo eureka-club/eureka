@@ -266,7 +266,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             {getRatingAvg()}
                             {' - '}
                           </Typography>
-                            <Typography>{t('common:ratings')}</Typography>
+                          <Typography>{getRatingQty()} {t('common:ratings')}</Typography>
                         </Stack>
                           <Box>
                             <TagsLinks topics={topics??[]}/>
@@ -312,8 +312,8 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             <Typography>
                               {getRatingAvg()}
                               {' - '}
-                              <span className="ms-1 text-gray">{getRatingQty()} {t('common:ratings')}</span>
                             </Typography>
+                            <Typography>{getRatingQty()} {t('common:ratings')}</Typography>
                           </Stack>
                           <Box>
                             <TagsLinks topics={topics??[]}/>
