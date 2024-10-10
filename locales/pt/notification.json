@@ -1,26 +1,26 @@
 {
   "viewAllNotifications":"Ver todas as notificações",
   
-  "eurekaCreatedAboutCycle":"{{userName}} teve um Momento Eureka inspirado pelo ciclo '{{cycleTitle}}'!",
+  "eurekaCreatedAboutCycle":"{{userName}} teve um Momento Eureka inspirado pelo Clube '{{cycleTitle}}'!",
   "eurekaCreatedAboutWork":"{{userName}} teve um Momento Eureka inspirado pela obra '{{workTitle}}'!",
-  "eurekaCreatedAboutWorkInCycle":"{{userName}} teve um Momento Eureka sobre '{{workTitle}}' no ciclo '{{cycleTitle}}'!",
+  "eurekaCreatedAboutWorkInCycle":"{{userName}} teve um Momento Eureka sobre '{{workTitle}}' no Clube '{{cycleTitle}}'!",
   
   "commentCreatedAboutComment":"{{userName}} has replied to your Comment  {{commentTitle}}!",
-  "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Cycle {{cycleTitle}}! ",
+  "commentCreatedAboutCommentInCycle":"{{userName}} has replied to your Comment in the Club {{cycleTitle}}! ",
   
   "commentCreatedAboutCycle":"{{userName}} has added a Comment about {{cycleTitle}}!",
   
   "commentCreatedAboutPost":"{{userName}} has added a Comment about Post {{postTitle}}!",
-  "commentCreatedAboutPostInCycle":"{{userName}} has added a Comment about Post {{postTitle}} in the Cycle {{cycleTitle}}! ",
+  "commentCreatedAboutPostInCycle":"{{userName}} has added a Comment about Post {{postTitle}} in the Club {{cycleTitle}}! ",
   "commentCreatedAboutPostInWork":"{{userName}} has added a Comment about Post {{postTitle}} in the Work {{workTitle}}!",
   
-  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Cycle {{cycleTitle}}! ",
+  "commentCreatedAboutWorkInCycle":"{{userName}} has added a Comment about {{workTitle}} in the Club {{cycleTitle}}! ",
   "commentCreatedAboutWork":"{{userName}} has added a Comment about {{workTitle}}!",
 
   "userStartFollowing":"{{userName}} começou a te seguir. Dê uma olhada na sua Mediateca também!",
 
-  "userJoinedCycle":"{{userName}} se uniu ao ciclo '{{cycleTitle}}'!",
-  "userLeftCycle":"{{userName}} saiu do ciclo '{{cycleTitle}}'!",
+  "userJoinedCycle":"{{userName}} se uniu ao Clube '{{cycleTitle}}'!",
+  "userLeftCycle":"{{userName}} saiu do Clube '{{cycleTitle}}'!",
 
   "userHasSaveForLater":"{{userName}} salvou '{{entityTitle}}'. Dê uma olhada também!",
   "userHasRating":"{{userName}} avaliou '{{entityTitle}}'. Dê uma olhada também!"

@@ -33,6 +33,7 @@ const RatingMUI:FC<Props> = ({qty,onChange,readonly,size=undefined,icon=undefine
     <Box
       sx={{
         '& > legend': { mt: 2 },
+        display:'flex'
       }}
     >
       <Rating

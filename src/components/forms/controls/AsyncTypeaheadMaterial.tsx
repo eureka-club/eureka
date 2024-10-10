@@ -13,7 +13,7 @@ import Spinner from '@/components/common/Spinner';
 export type AsyncTypeaheadMaterialProp = {
   item: SearchResult | null;
   searchType: string,
-  workSelected?: SearchResult | null; // para buscar solo ciclos donde este la obra
+  workSelected?: SearchResult | null; // para buscar solo Clubs donde este la obra
   label?: string;
   helperText?: string;
   onSelected: (value: SearchResult | null) => void;

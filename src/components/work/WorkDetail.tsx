@@ -93,24 +93,6 @@ const TabCycles:FC<TabCyclesProps>=({workId,cycles})=>{
       {cycles.map((c,idx)=><CMI cycleId={c.id} key={`${c.id}-${idx}`} size={'medium'}/>
       )}
     </MosaicsGrid> 
-    {/* <Grid container>
-      {cycles.map((c) => (
-        <Grid item
-          xs={12}
-          sm={6}
-          lg={3}
-          xl={2}
-          key={c.id}
-        >
-          <CMI
-            cycleId={c.id}
-            cacheKey={['CYCLES', `WORK-${workId}`]}
-            size={'md'}
-            showSaveForLater={false}
-          />
-        </Grid>
-      ))}
-    </Grid> */}
   </Stack>
 }
 
@@ -223,79 +205,12 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
 
   if (!work) return <></>;
 
-  // const renderSpinnerForLoadNextCarousel = () => {
-  //   if (hasMorePosts) return <Spinner  />;
-  //   return '';
-  // };
-
   const handleSubsectionChange = (key: string | null) => {
     if (key != null) {
       setDefaultActiveKey(key);
       setDetailPagesState({ ...detailPagesState, selectedSubsectionWork: key });
     }
   };
-
-  
-  
-
-  /*const handleEditPostOnSmallerScreen = (ev: MouseEvent<HTMLButtonElement>) => {
-    ev.preventDefault();
-        setEditPostOnSmallerScreen({ ...editOnSmallerScreens, ...{ value: !editPostOnSmallerScreen.value } });
-  };*/
-
-  // const renderPosts = () => {
-  //   if (posts) {
-  //     return (
-  //       <>
-  //         <WorkDetailPost
-  //           workId={work.id}
-  //           className="mb-2"
-  //           cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
-  //         ></WorkDetailPost>
-  //         <Row className="mt-5">
-  //           {posts.map((p) => (
-  //             <Col
-  //               key={p.id}
-  //               xs={12}
-  //               sm={6}
-  //               lg={3}
-  //               xxl={2}
-  //               className="mb-5 d-flex justify-content-center  align-items-center"
-  //             >
-  //               <MosaicItemPost cacheKey={['POST', `${p.id}`]} postId={p.id} size={'md'} showSaveForLater={true} />
-  //             </Col>
-  //           ))}
-  //         </Row>
-  //         <div className="mt-5" ref={ref}>
-  //           {hasMorePosts ? <Spinner  /> : <></>}
-  //         </div>
-  //       </>
-  //     );
-  //   }
-  //   return '';
-  // };
-
-  // const renderCycles = () => {
-  //   if (cycles) {
-  //     return (
-  //       <Row className="mt-5">
-  //         {cycles.map((c) => (
-  //           <Col
-  //             xs={12}
-  //             sm={6}
-  //             lg={3}
-  //             xxl={2}
-  //             className="mb-5 d-flex justify-content-center  align-items-center"
-  //             key={c.id}
-  //           >
-  //             <CMI cycleId={c.id} cacheKey={['CYCLES', `WORK-${workId}`]} size={'md'} showSaveForLater={true} />
-  //           </Col>
-  //         ))}
-  //       </Row>
-  //     );
-  //   }
-  //   return <></>;
-  // };
 
   const handlerChangeRating = (value: number) => {
     execRating({
@@ -327,6 +242,11 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       return work?.ratings.find(r=>r.userId==session?.user.id)?.qty??0;
     return 0;
   }
+
+  const handleExpandClick = () => {
+    if(!session?.user)
+     show(<SignInForm/>)
+  };
   
   return (
     // <WorkContext.Provider value={{ work, linkToWork: false }}>
@@ -337,59 +257,59 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
               {post == null ? (
               <>
                   <Stack gap={{xs:2}}  direction={{xs:'column',sm:'row'}}>
-                  <Stack gap={1} sx={{ display: { xs: 'block', sm: 'none' } }} >
-                      <h1 className="fw-bold text-secondary">{work.title}</h1>
-                      <h2 className={`${styles.author}`}>{work.author}</h2>
-                      <WorkSummary work={work as unknown as WorkSumary} />
-                      <Rating qty={getRatingQty()??0} onChange={handlerChangeRating} size="medium" readonly />
-                      <Typography >
-                              {getRatingAvg()}
-                              {' - '}
-                              <span className="ms-1 text-gray">{getRatingQty()} {t('common:ratings')}</span>
-                            </Typography>
-                     
-                          </Stack>
-                    <Stack gap={1}>
-                      <MosaicItem workId={work.id} sx={(theme)=>({
-                        'img':{
-                          [theme.breakpoints.only('xs')]:{width:'100%',height:'auto'},
-                          [theme.breakpoints.only('sm')]:{width:'250px'},
-                          [theme.breakpoints.up('md')]:{width:'400px'}
-                        }
-                      })} />
-                      <Box>
-                        <Stack direction={'row'} alignItems={'stretch'} gap={1}>
-                          <Rating
-                            qty={getCurrentUserRating()}
-                            onChange={handlerChangeRating}
-                            size="medium"
-                            iconColor="var(--bs-danger)"
-                          /> { (getCurrentUserRating()) > 0 && <IconButton
-                            type="button"
-                            size='small'
-                            title={t('common:clearRating')}
-                            color='warning'
-                            onClick={clearRating}
-                            // disabled={loadingSocialInteraction}
-                          >
-                            <FiTrash2 />
-                          </IconButton>}
+                    <Stack gap={1} sx={{ display: { xs: 'flex', sm: 'none' } }} >
+                        <h1 className="fw-bold text-secondary">{work.title}</h1>
+                        <h2 className={`${styles.author}`}>{work.author}</h2>
+                        <WorkSummary work={work as unknown as WorkSumary} />
+                        <Stack direction={'row'} gap={1}>
+                          <Rating qty={getRatingAvg()??0} OnChange={handlerChangeRating} size="medium" readonly sx={{padding:'.5rem 0'}} />
+                          <Typography >
+                            {getRatingAvg()}
+                            {' - '}
+                          </Typography>
+                            <Typography>{t('common:ratings')}</Typography>
                         </Stack>
+                          <Box>
+                            <TagsLinks topics={topics??[]}/>
+                            {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
+                          </Box>
+                      
+                    </Stack>
+                    <Stack gap={1}>
+                      <MosaicItem workId={work.id} Width={250} Height={250*1.36}/>
                         <Stack gap={1}>
+                          <Stack direction={'row'} alignItems={'stretch'} gap={1}>
+                            <Rating
+                              qty={getCurrentUserRating()}
+                              OnChange={handlerChangeRating}
+                              size="medium"
+                              iconColor="var(--bs-danger)"
+                            /> { (getCurrentUserRating()) > 0 && <IconButton
+                              type="button"
+                              size='small'
+                              title={t('common:clearRating')}
+                              color='warning'
+                              onClick={clearRating}
+                              // disabled={loadingSocialInteraction}
+                            >
+                              <FiTrash2 />
+                            </IconButton>}
+                          </Stack>
                           <WorkReadOrWatched work={work} sx={{textTransform:'none',width:'250px'}} />
                           <ShareWork sx={{textTransform:'none',width:'250px'}}/>
                           <SaveForLater sx={{textTransform:'none',width:'250px'}}/>
                         </Stack>
-                      </Box>
-                      </Stack>
-                   
+                    </Stack>
                     <Stack>
-                      <h1 className="fw-bold text-secondary">{work.title}</h1>
-                      <h2 className={`${styles.author}`}>{work.author}</h2>
-                      <WorkSummary work={work as unknown as WorkSumary} />
-                      <Stack direction={{sm:'column',md:'row'}} gap={1}>
-                          <Stack direction={'row'} sx={{ display: { xs: 'none', sm: 'block' } }} >
-                            <Rating qty={getRatingAvg()} onChange={handlerChangeRating} size="medium" readonly />
+                      <Stack gap={1} sx={{ display: { xs: 'none', sm: 'block' } }} >
+                        <h1 className="fw-bold text-secondary">{work.title}</h1>
+                        <h2 className={`${styles.author}`}>{work.author}</h2>
+                        <WorkSummary work={work as unknown as WorkSumary} />
+                      </Stack>
+                      
+                      <Stack direction={{sm:'column',md:'row'}} sx={{ display: { xs: 'none', sm: 'flex' } }} gap={1}>
+                          <Stack direction={'row'}  gap={1}>
+                            <Rating qty={getRatingAvg()} OnChange={handlerChangeRating} size="medium" readonly />
                             <Typography>
                               {getRatingAvg()}
                               {' - '}
@@ -420,286 +340,26 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                       <Sumary description={work?.contentText??''}/>
                         <Box>
                             {
-                              !session
-                                ? <Button onClick={()=>{
-                                  show(<SignInForm/>);
-                                }}>
-                                    <CommentBankOutlined /> Escreva um comentario
-                                  </Button>
+                              !session 
+                                ? <Box display={'flex'} justifyContent={'center'}>
+                                    <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                                    {t('common:notSessionreplyCommentLbl')}
+                                    </Button>
+                                </Box>
                                 : <></>
                             }
                       </Box>
-                      </Stack>
+                      
+                    </Stack>
                     {/* </Stack> */}
                   </Stack>
                   
-                  {/* <Stack display={{xs:'inherit',md:'none'}}>
-                    <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                    <Box>
-                          {
-                          !session?.user
-                            ? <Button size='small' variant='contained' onClick={()=>{
-                              show(<SignInForm/>);
-                            }}>{t('common:comment')}</Button>
-                            : <></>
-                          }
-                    </Box>
-                  </Stack> */}
-                  
-                 <HyvorComments 
+                  <HyvorComments 
                     entity="work" 
                     id={`${work.id}`} 
                     session={session} 
                     OnCommentCreated={dispatch}
                   />
-              {/* <Grid container sx={{display:{lg:'inherit'}}}>
-                <Grid item lg={4}>
-                </Grid>
-
-                 <Grid item lg={8}>
-                  <Stack>
-                    <h1 className="fw-bold text-secondary">{work.title}</h1>
-                    <h2 className={`${styles.author}`}>{work.author}</h2>
-                    <WorkSummary work={work as unknown as WorkSumary} />
-                    <div className="d-flex flex-wrap flex-row mt-2 mb-2">
-                      <Box sx={{ display: 'flex' }}>
-                        <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
-                        <div className="d-flex flex-nowrap ms-2">
-                          {getRatingAvg().toFixed(1)}
-                          {' - '}
-                          {getRatingQty()}
-                        </div>
-                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                      </Box>
-                      <TagsLinks topics={topics??[]}/>
-                      
-                      {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
-                    </div>
-                    <Stack gap={1}>
-                      {work.link != null && (
-                        <a
-                          href={work.link}
-                          className={classNames(styles.workLink)}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {t('workLinkLabel')} <BsBoxArrowUpRight />
-                        </a>
-                      )}
-                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                    </Stack>
-                    <HyvorComments entity="work" id={`${work.id}`} session={session} />
-                  </Stack>
-                </Grid> 
-              </Grid> */}
-              
-              {/* <Grid container>
-                <Grid item lg={4}>
-                  <Stack sx={{display:{xs:'none',md:'inherit'}}}>
-                    <MosaicItem
-                        workId={work.id}
-                        showTrash
-                        linkToWork={false}
-                        size={'lg'}
-                        showCreateEureka={false}
-                        showSaveForLater={true}
-                    />
-                    <Box className="d-flex flex-row align-items-baseline" mt={1}>
-                      <Rating
-                        qty={work?.currentUserRating??0}
-                        onChange={handlerChangeRating}
-                        size="medium"
-                        iconColor="var(--bs-danger)"
-                      /> { (work?.currentUserRating??0) > 0 && <Button
-                        type="button"
-                        title={t('common:clearRating')}
-                        color='warning'
-                        // className="text-warning p-0 ms-2"
-                        onClick={clearRating}
-                        // variant="link"
-                        //disabled={loadingSocialInteraction}
-                      >
-                        <FiTrash2 />
-                      </Button>}
-                    </Box>
-                    <Box mt={1}>
-                      <WorkReadOrWatched work={work} />
-                    </Box>
-                  </Stack>
-                </Grid>
-                <Grid item lg={8}>
-                  <Stack>
-                    <h1 className="fw-bold text-secondary">{work.title}</h1>
-                    <h2 className={`${styles.author}`}>{work.author}</h2>
-                    <WorkSummary work={work as unknown as WorkSumary} />
-                    <div className="d-flex flex-wrap flex-row mt-2 mb-2">
-                      <Box sx={{ display: 'flex' }}>
-                        <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
-                        <div className="d-flex flex-nowrap ms-2">
-                          {getRatingAvg().toFixed(1)}
-                          {' - '}
-                          {getRatingQty()}
-                        </div>
-                        <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                      </Box>
-                      <TagsLinks topics={topics??[]}/>
-                      
-                      {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
-                    </div>
-                    <Stack gap={1}>
-                      {work.link != null && (
-                        <a
-                          href={work.link}
-                          className={classNames(styles.workLink)}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {t('workLinkLabel')} <BsBoxArrowUpRight />
-                        </a>
-                      )}
-                     <Box dangerouslySetInnerHTML={{ __html: work.contentText! }}/>
-                     
-                    </Stack>
-                    
-                    <div className="d-xs-block d-lg-none position-relative">
-                      <MosaicItem
-                        className="postition-absolute start-50 translate-middle-x"
-                        work={work as unknown as WorkSumary}
-                        workId={work.id}
-                        showTrash
-                        linkToWork={false}
-                        size={'lg'}
-                        showCreateEureka={false}
-                        showSaveForLater={true}
-                      />
-                      <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
-                        <Rating
-                          qty={work.currentUserRating??0}
-                          onChange={handlerChangeRating}
-                          size="medium"
-                          iconColor="var(--bs-danger)"
-                        /> {(work.currentUserRating??0) > 0 && <Button
-                          type="button"
-                          color='warning'
-                          title={t('common:clearRating')}
-                          onClick={clearRating}
-                        >
-                          <FiTrash2 />
-                        </Button>}
-                      </Box>
-                      <Box className="d-flex justify-content-center" mt={1}>
-                        <WorkReadOrWatched work={work} />
-                      </Box>
-                    </div>
-                    
-                    <HyvorComments entity="work" id={`${work.id}`} session={session} />
-                  </Stack>
-                </Grid>
-              </Grid> */}
-             
-                {/* <Grid container className="mb-5 d-flex flex-column flex-lg-row">
-                    <Grid item md={12} lg={4} xl={3} sx={{display:{xs:'none'}}}>
-                      <MosaicItem
-                        workId={work.id}
-                        showTrash
-                        linkToWork={false}
-                        size={'lg'}
-                        showCreateEureka={false}
-                        showSaveForLater={true}
-                      />
-                      <Box className="d-flex flex-row align-items-baseline" mt={1}>
-                        <Rating
-                          qty={work?.currentUserRating??0}
-                          onChange={handlerChangeRating}
-                          size="medium"
-                          iconColor="var(--bs-danger)"
-                        /> { (work?.currentUserRating??0) > 0 && <Button
-                          type="button"
-                          title={t('common:clearRating')}
-                          className="text-warning p-0 ms-2"
-                          onClick={clearRating}
-                          variant="link"
-                          //disabled={loadingSocialInteraction}
-                        >
-                          <FiTrash2 />
-                        </Button>}
-                      </Box>
-                      <Box mt={1}>
-                        <WorkReadOrWatched work={work} />
-                      </Box>
-                    </Grid> */}
-                    {/* <Grid item md={12} lg={8} xl={9} >
-                      <section className="mx-md-4">
-                        <h1 className="fw-bold text-secondary">{work.title}</h1>
-                        <h2 className={`${styles.author}`}>{work.author}</h2>
-                        <WorkSummary work={work as unknown as WorkSumary} />
-                        <div className="d-flex flex-wrap flex-row mt-2 mb-2">
-                          <Box sx={{ display: 'flex' }}>
-                            <Rating qty={work.ratingAVG??0} onChange={handlerChangeRating} size="medium" readonly />
-                            <div className="d-flex flex-nowrap ms-2">
-                              {getRatingAvg().toFixed(1)}
-                              {' - '}
-                              {getRatingQty()}
-                            </div>
-                            <span className="ms-1 text-gray">{t('common:ratings')}</span>
-                          </Box>
-                          <TagsLinks topics={topics??[]}/>
-                          
-                          {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
-                        </div>
-                        {work.link != null && (
-                          <a
-                            href={work.link}
-                            className={classNames(styles.workLink, 'mb-5')}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {t('workLinkLabel')} <BsBoxArrowUpRight />
-                          </a>
-                        )}
-                        <div className="container d-sm-block d-lg-none mt-4 mb-4 position-relative">
-                          <MosaicItem
-                            className="postition-absolute start-50 translate-middle-x"
-                            work={work as unknown as WorkSumary}
-                            workId={work.id}
-                            showTrash
-                            linkToWork={false}
-                            size={'lg'}
-                            showCreateEureka={false}
-                            showSaveForLater={true}
-                          />
-                          <Box className="d-flex flex-row justify-content-center align-items-baseline" mt={2}>
-                            <Rating
-                              qty={work.currentUserRating??0}
-                              onChange={handlerChangeRating}
-                              size="medium"
-                              iconColor="var(--bs-danger)"
-                            /> {(work.currentUserRating??0) > 0 && <Button
-                              type="button"
-                              title={t('common:clearRating')}
-                              className="text-warning p-0 ms-2"
-                              onClick={clearRating}
-                              variant="link"
-                              //disabled={loadingSocialInteraction}
-                            >
-                              <FiTrash2 />
-                            </Button>}
-                          </Box>
-                          <Box className="d-flex justify-content-center" mt={1}>
-                            <WorkReadOrWatched work={work} />
-                          </Box>
-                        </div>
-                        <Box className="" mt={1}>
-                        {work.contentText != null && (
-                          <UnclampText isHTML={true} text={work.contentText} />
-                        )}
-                      </Box>
-                      
-                      </section>
-                    
-                      <HyvorComments entity="work" id={`${work.id}`} session={session} />
-                    </Grid> 
-                  </Grid>*/}
               </>
             ) : (
             <>
@@ -735,138 +395,13 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                     ]}>
                     </TabPanelSwipeableViews>
                     
-                    // <TabContainer
-                    //   // defaultActiveKey={defaultActiveKey}
-                    //   activeKey={defaultActiveKey}
-                    //   onSelect={handleSubsectionChange}
-                    //   transition={true}
-                    // >
-                    //   <style jsx global>
-                    //     {`
-                    //           .nav-tabs .nav-item.show .nav-link,
-                    //           .nav-tabs .nav-link.active,
-                    //           .nav-tabs .nav-link:hover {
-                    //             cursor: pointer;
-                    //             background-color: var(--bs-primary);
-                    //             color: white !important;
-                    //             border: none !important;
-                    //             border-bottom: solid 2px var(--bs-primary) !important;
-                    //           }
-                    //           .nav-tabs {
-                    //             border-bottom: solid 1px var(--bs-primary) !important;
-                    //           }
-                    //         `}
-                    //   </style>
-                     
-                      
-                      
-                    //   <Row className="mb-4">
-                    //     <Col>
-                    //       <div className="">
-                    //         <Nav variant="tabs" className="scrollNav" fill>
-                    //           {/*<NavItem>
-                    //             <NavLink eventKey="discussion">
-                    //               {t('discussion')}
-                    //             </NavLink>
-                    //           </NavItem> */}
-                    //           <NavItem>
-                    //             <NavLink eventKey="posts" data-cy="posts">
-                    //               {t('tabHeaderPosts')} ({dataPosts?.total})
-                    //             </NavLink>
-                    //           </NavItem>
-                    //           <NavItem>
-                    //             <NavLink eventKey="cycles">
-                    //               {t('tabHeaderCycles')} ({cyclesCount})
-                    //             </NavLink>
-                    //           </NavItem>
-                    //         </Nav>
-                    //       </div>
-                    //     </Col>
-                    //   </Row>
-                    //   <Row>
-                    //     <Col>
-                    //       <TabContent>
-                    //         {/*<TabPane eventKey="discussion"> 
-                    //             <HyvorComments entity='work' id={`${work.id}`}  />
-                    //           </TabPane>*/}
-                    //         <TabPane eventKey="posts">
-                    //           {posts ? (
-                    //             <>
-                    //               <WorkDetailPost
-                    //                 workId={work.id}
-                    //                 className="mb-2"
-                    //                 cacheKey={['POSTS', JSON.stringify(workPostsWhere)]}
-                    //               ></WorkDetailPost>
-                    //               <Row className="mt-5">
-                    //                 {posts.map((p) => (
-                    //                   <Col
-                    //                     key={p.id}
-                    //                     xs={12}
-                    //                     sm={6}
-                    //                     lg={3}
-                    //                     xxl={2}
-                    //                     className="mb-5 d-flex justify-content-center  align-items-center"
-                    //                   >
-                    //                     <MosaicItemPost
-                    //                       cacheKey={['POST', `${p.id}`]}
-                    //                       postId={p.id}
-                    //                       size={'md'}
-                    //                       showSaveForLater={false}
-                    //                     />
-
-                    //                   </Col>
-                    //                 ))}
-                    //               </Row>
-                    //               {/* TODO this make rerender the hyvor talk but is needed <div className="mt-5" ref={ref}>
-                    //                   {hasMorePosts ? <Spinner  />
-                    //                   :<></>}
-                    //                 </div> */}
-                    //             </>
-                    //           ) : (
-                    //             <></>
-                    //           )}
-                    //         </TabPane>
-                    //         <TabPane eventKey="cycles">
-                    //           {cycles ? (
-                    //             <Row className="mt-5">
-                    //               {cycles.map((c) => (
-                    //                 <Col
-                    //                   xs={12}
-                    //                   sm={6}
-                    //                   lg={3}
-                    //                   xxl={2}
-                    //                   className="mb-5 d-flex justify-content-center  align-items-center"
-                    //                   key={c.id}
-                    //                 >
-                    //                   <CMI
-                    //                     cycleId={c.id}
-                    //                     cacheKey={['CYCLES', `WORK-${workId}`]}
-                    //                     size={'md'}
-                    //                     showSaveForLater={false}
-                    //                   />
-                    //                 </Col>
-                    //               ))}
-                    //             </Row>
-                    //           ) : (
-                    //             <></>
-                    //           )}
-                    //         </TabPane>
-                    //       </TabContent>
-                    //     </Col>
-                    //   </Row>
-                    // </TabContainer>
                   )}
               </>
-              // <Row>
-              //   <Col>
-              //   </Col>
-              // </Row>
+              
             )}
           </Stack>
-          // : <EditPostForm noModal cacheKey={['POSTS', JSON.stringify(workPostsWhere)]} />
         }
     </MosaicContext.Provider>
-    // </WorkContext.Provider
   );
 };
 

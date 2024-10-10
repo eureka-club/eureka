@@ -16,7 +16,7 @@ import { useSession } from "next-auth/react";
           commentText:comment.content_html,
           commentURL:`/post/${postId}?ht-comment-id=${comment.id}`,
           page_id:comment.page_id,
-          user:{name:session?.user.name,email:session?.user.email},
+          user:{id:session?.user.id,name:session?.user.name,email:session?.user.email},
           parent_id:comment.parent_id,
         })
       });

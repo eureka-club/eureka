@@ -1,7 +1,7 @@
 {
   "Admin Panel": "Panel de Administración",
   "Content administration": "Administracion de contenidos",
-  "Export Cycle Participants": "Exportar participantes de un ciclo",
+  "Export Cycle Participants": "Exportar participantes de un Club",
   "Banner Settings": "Configuración del banner",
   "Slider 1": "Slider 1",
   "Slider 2": "Slider 2",
@@ -10,7 +10,7 @@
   "Text": "Texto Slider",
   "Image": "Foto Slider",
   "Content Page": "Contenido de la página",
-  "CyclesToShow": "Ciclos destacados",
+  "CyclesToShow": "Clubs destacados",
   "PostToShow": "Eurekas destacadas",
   "UsersToShow": "Usuarias destacadas",
   "WorksToShow": "Obras destacadas",
