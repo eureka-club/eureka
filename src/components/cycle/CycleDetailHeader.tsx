@@ -170,10 +170,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 <Typography>{t('common:ratings')}</Typography>
               </Stack>
               {cycle.topics && (
-                <section className=" d-flex flex-nowrap ms-2">
+                <Stack direction={'row'} flexWrap={'wrap'}>
                   <TagsLinks topics={topics??[]}/>
                   <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
-                </section>
+                </Stack>
               )}
             </Stack>
           </Stack>
@@ -211,7 +211,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
           <Stack gap={1} sx={{display:{xs:'none',sm:'flex'}}}>
             <Typography color={'secondary'} variant='h1' fontSize={'1.7rem'} fontWeight={'bold'}>{cycle.title}</Typography>
-            <Stack direction={{xs:'column',md:'row'}} gap={1}>
+            <Stack direction={{xs:'column'}} gap={1}>
               <Stack direction={'row'} gap={1}>
                 <Rating
                   readonly
@@ -226,10 +226,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 <Typography>{t('common:ratings')}</Typography>
               </Stack>
               {cycle.topics && (
-                <section className=" d-flex flex-nowrap ms-2">
+                <Stack direction={'row'} flexWrap={'wrap'}>
                   <TagsLinks topics={topics??[]}/>
                   <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
-                </section>
+                </Stack>
               )}
             </Stack>
           </Stack>
