@@ -239,35 +239,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               {t('Content calendar')} ({works && works.length})
             </h2>
             <CycleSummary cycleId={cycle.id} />
-            <Stack direction={'row'} gap={1}  flexWrap={'wrap'}>
+            <Stack direction={'row'} gap={1}  flexWrap={'wrap'} justifyContent={{xs:'center',md:'left'}}>
                 {
-                  getWorksSorted()?.map(w=><WorkMosaicItem key={`work-${w?.id!}`} workId={w?.id!} sx={{
-                    'img':{
-                      xs:{maxHeight:'248px'},
-                      sm:{maxHeight:'248px',width:'auto'},
-                    }
-                  }}/>)??<></>
+                  getWorksSorted()?.map(w=><WorkMosaicItem Width={160} Height={160*1.36} key={`work-${w?.id!}`} workId={w?.id!} />)??<></>
                 }
             </Stack>
-            
-            {/* <CarouselStatic
-              cacheKey={['CYCLE', cycle.id.toString()]}
-              showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
-              onSeeAll={onCarouselSeeAllAction}
-              title={<CycleSummary cycleId={cycle.id} />}
-              data={getWorksSorted() as WorkSumary[]}
-              iconBefore={<></>}
-              customMosaicStyle={{ height: '16em' }}
-              size="small"
-              mosaicBoxClassName="pb-5"
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            /> */}
           </Stack>
-
         </Stack>
       </Stack>
     </Box>;
 };
-
 export default CycleDetailHeader;
