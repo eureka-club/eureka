@@ -268,10 +268,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                           </Typography>
                           <Typography>{getRatingQty()} {t('common:ratings')}</Typography>
                         </Stack>
-                          <Box>
-                            <TagsLinks topics={topics??[]}/>
-                            {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
-                          </Box>
+                        <Stack direction={'row'}  flexWrap={'wrap'}>
+                          <TagsLinks topics={topics??[]}/>
+                          {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
+                        </Stack>
                       
                     </Stack>
                     <Stack gap={1}>
@@ -306,7 +306,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         <WorkSummary work={work as unknown as WorkSumary} />
                       </Stack>
                       
-                      <Stack direction={{sm:'column',md:'row'}} sx={{ display: { xs: 'none', sm: 'flex' } }} gap={1}>
+                      <Stack sx={{ display: { xs: 'none', sm: 'flex' } }} gap={1}>
                           <Stack direction={'row'}  gap={1}>
                             <Rating qty={getRatingAvg()} OnChange={handlerChangeRating} size="medium" readonly />
                             <Typography>
@@ -315,10 +315,10 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                             </Typography>
                             <Typography>{getRatingQty()} {t('common:ratings')}</Typography>
                           </Stack>
-                          <Box>
-                            <TagsLinks topics={topics??[]}/>
+                          <Stack direction={'row'}  flexWrap={'wrap'}>
+                           <TagsLinks topics={topics??[]}/>
                             {work.tags && <TagsInput className="ms-0 ms-lg-2 d-flex flex-row" tags={work.tags} readOnly />}
-                          </Box>
+                          </Stack>
                       </Stack>
                       <Box sx={{paddingBlock:1}}>
                       {work.link != null && (
