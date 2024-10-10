@@ -8,7 +8,7 @@ import { useQueryClient } from "react-query";
 import toast from "react-hot-toast";
 import { useModalContext } from "@/src/hooks/useModal";
 
-const MaxLength = 335;
+const MaxLength = 333;
 interface StateProp {
     id:number;
     title: string;
@@ -18,7 +18,7 @@ interface StateProp {
     // publishedTo?: Date;
   }
   
-const EditSlideForm:FC<StateProp> = ({id,title,text,language})=>{
+const EditSliderForm:FC<StateProp> = ({id,title,text,language})=>{
     const [state, setstate] = useState<StateProp>({
         id,
         title,
@@ -140,4 +140,4 @@ const EditSlideForm:FC<StateProp> = ({id,title,text,language})=>{
       <Button onClick={OnSubmit} disabled={hasError()} variant="contained"><FaSave/></Button>
     </form>
 }
-export default EditSlideForm;
+export default EditSliderForm;

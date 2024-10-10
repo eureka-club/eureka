@@ -7,7 +7,7 @@ import { BiUser } from 'react-icons/bi';
 import LocalImage from '../../LocalImage';
 import { AccountCircle, Login, Logout, Person, Settings } from '@mui/icons-material';
 import MenuAction from './MenuAction';
-import { Avatar, Button, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { AZURE_STORAGE_URL } from '@/src/constants';
 import { useModalContext } from '@/src/hooks/useModal';
@@ -111,11 +111,11 @@ export const SessionLinks = () => {
               </Stack>
             </Link>
           else if (i.hasOwnProperty('onClick'))
-            return <Button sx={{ padding: 0, textTransform: 'capitalize', justifyContent: 'left' }} variant='text' size='small' onClick={() => i['onClick'](i.label)}>
-              <Stack gap={3} direction={'row'}>
-                {i.icon ? i.icon : <></>} <Typography>{i.label}</Typography>
-              </Stack>
-            </Button>;
+            return <Button sx={{ padding:0, textTransform: 'capitalize', justifyContent: 'left' }} variant='text' size='small' onClick={() => i['onClick'](i.label)}>
+                <Stack gap={3} direction={'row'}>
+                  {i.icon ? i.icon : <></>} <Typography>{i.label}</Typography>
+                </Stack>
+              </Button>;
           return <></>
         }
       }

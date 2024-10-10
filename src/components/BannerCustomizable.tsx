@@ -31,6 +31,8 @@ const BannerCustomizable: FunctionComponent = ({
   },[idxActive]);
   
   const imgBaseUrl=`https://${AZURE_CDN_ENDPOINT}.azureedge.net/${AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
+  
+  if(!bo?.sliders.length)return <></>;
   return <Box sx={{backgroundColor:'var(--eureka-green)'}}>
       <Stack>
         <Box alignSelf={'end'} padding={'.5rem'}>
@@ -55,7 +57,7 @@ const BannerCustomizable: FunctionComponent = ({
         </Box>
       </Stack>
       {
-        show 
+        show
           ? <Stack alignItems={'center'}
           sx={{
             backgroundImage: "url('/img/bg-header.svg')",
@@ -73,8 +75,10 @@ const BannerCustomizable: FunctionComponent = ({
               position={'relative'}
             >
               <Stack  direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20rem',width:'100%'}}>
-                <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '20rem' }}/>
-                <Stack id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',width:'100%',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
+                <Box flex={1}>
+                  <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '20rem' }}/>
+                </Box>
+                <Stack flex={3} id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',width:'100%',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'scroll' }}>
                   <Box id={`innerRef-${currentIdx}`} >
                     <Stack gap={1} sx={{padding:'2rem 2rem 0 2rem'}}>
                       <Typography color={'secondary'} variant='h2' sx={{whiteSpace:'break-spaces',fontSize:'1.8rem'}}>{s.title}</Typography>
@@ -96,46 +100,51 @@ const BannerCustomizable: FunctionComponent = ({
                   </Box>
                 </Stack>
               </Stack>
-              <Box
-                sx={{
-                  display:'flex',
-                  padding:1,
-                  gap:'.25rem',
-                  width:'100%',
-                  position:'absolute',
-                  bottom:'0px',
-                  left:'0px', 
-                  zIndex:999,
-                  alignItems:'center',
-                  justifyContent:'center',
-                  backgroundColor:'rgba(227, 231, 239,.25)'
-                }}
-              >
-                {
-                  bo?.sliders.length>1 
-                    ? [...Array(bo?.sliders.length)].map((a,idx)=>{
-                      return <Button
-                      variant='text'
-                        key={`slider-${idx}`} 
-                        onClick={(e)=>{
-                          setidxActive(idx);
-                        }}
-                        sx={{
-                          padding:'.25rem .1rem',
-                          minWidth:'1.5rem',
-                          height:'.5rem'
-                        }}
-                      >
-                        <Paper>
-                          <Box sx={{borderRadius:'.125rem',backgroundColor:idx==idxActive ? 'var(--color-secondary)' : 'var(--color-primary)',minWidth:'1.5rem',height:'.5rem',padding:'.4rem'}}>
-                            {/* <Typography fontSize={0} lineHeight={0} color={idx==idxActive ? 'secondary' : 'primary'}>{`_`}</Typography> */}
-                          </Box>
-                        </Paper>
-                      </Button>
-                    })
-                    : <></>
-                }
-              </Box>
+              {
+                bo?.sliders.length>1 
+                 ? <Box
+                  sx={{
+                    display:'flex',
+                    padding:1,
+                    gap:'.25rem',
+                    width:'100%',
+                    position:'absolute',
+                    bottom:'0px',
+                    left:'0px', 
+                    zIndex:999,
+                    alignItems:'center',
+                    justifyContent:'center',
+                    backgroundColor:'rgba(227, 231, 239,.25)'
+                  }}
+                >
+                  {
+                      
+                      [...Array(bo?.sliders.length)].map((a,idx)=>{
+                        return <Button
+                        variant='text'
+                          key={`slider-${idx}`} 
+                          onClick={(e)=>{
+                            setidxActive(idx);
+                          }}
+                          sx={{
+                            padding:'.25rem .1rem',
+                            minWidth:'1.5rem',
+                            height:'.5rem'
+                          }}
+                        >
+                          <Paper>
+                            <Box sx={{borderRadius:'.125rem',backgroundColor:idx==idxActive ? 'var(--color-secondary)' : 'var(--color-primary)',minWidth:'1.5rem',height:'.5rem',padding:'.4rem'}}>
+                              {/* <Typography fontSize={0} lineHeight={0} color={idx==idxActive ? 'secondary' : 'primary'}>{`_`}</Typography> */}
+                            </Box>
+                          </Paper>
+                        </Button>
+                      })
+                      
+                  }
+                </Box>
+                 : <></>
+              }
+              
             </Box>
           ))}
             </Stack>
