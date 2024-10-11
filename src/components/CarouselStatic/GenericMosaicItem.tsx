@@ -19,7 +19,7 @@ const GenericMosaicItem:FC<GenericMosaicItemProps> = ({
     if (isCycleMosaicItem(item)) {
       return (
         // <CycleContext.Provider key={`cycle-${item.id}`} value={{ cycle: item as CycleDetail }}>
-          <MosaicItemCycle  cycleId={item.id} size={size} {...others} />
+          <MosaicItemCycle cycleId={item.id} size={size} {...others} />
         // </CycleContext.Provider>
       );
     }
