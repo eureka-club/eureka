@@ -11,7 +11,7 @@ import { dehydrate, QueryClient, useIsFetching } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import Banner from '@/src/components/Banner';
-import useCycle, { getCycle } from '@/src/useCycle';
+import useCycleDetail, { getCycleDetail } from '@/src/useCycleDetail';
 import { getPosts } from '@/src/usePosts';
 import { CycleContext } from '@/src/useCycleContext';
 import globalModalsAtom from '@/src/atoms/globalModals';
@@ -52,7 +52,7 @@ type CycleDetailComponent_Props = {
 }
 const RenderCycleDetailComponent:FC<CycleDetailComponent_Props> = ({cycleId,isJoinCycleLoading}:CycleDetailComponent_Props) => {
   const{data:session}=useSession();
-  const { data: cycle, isLoading, isFetching, isError, error } = useCycle(cycleId, { enabled: !isNaN(cycleId) });
+  const { data: cycle, isLoading, isFetching, isError, error } = useCycleDetail(cycleId, { enabled: !isNaN(cycleId) });
   
   if (cycle) { 
     const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
@@ -83,7 +83,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const router = useRouter();
   const {id}=router?.query;
   const cycleId = id?+id?.toString():0;
-  const { data: cycle, isLoading } = useCycle(cycleId, { enabled: !isNaN(cycleId) });
+  const { data: cycle, isLoading } = useCycleDetail(cycleId, { enabled: !isNaN(cycleId) });
 
   const isFetchingCycle = useIsFetching(['CYCLE', `${cycleId}`]);
   const { show } = useModalContext();
@@ -281,7 +281,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const wcw = whereCycleWorks(id);
 
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL;
-  let cycle = await getCycle(id);
+  let cycle = await getCycleDetail(id);
   let metaTags = null;
   if (cycle) {
 

@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { Session } from '@/src/types';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
-import useCycle from '@/src/useCycle';
+import useCycle from '@/src/useCycleDetail';
 import useUsers from '@/src/useUsers';
 import toast from 'react-hot-toast';
 import useUserSumary from '@/src/useUserSumary';

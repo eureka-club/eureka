@@ -13,13 +13,15 @@ import CycleSummary from './CycleSummary';
 import MosaicItem from './MosaicItem';
 import WorkMosaicItem from '@/src/components/work/MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
-import useCycle from '@/src/useCycle'
+import useCycle from '@/src/useCycleDetail'
 import { Alert, Box, IconButton, Stack, Typography } from '@mui/material';
 import { CycleWork } from '@/src/types/cycleWork';
 import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
 import Skeleton from '../Skeleton';
+import { useShareCycle } from './useShareCycle';
+import { useSaveCycleForLater } from './useSaveCycleForLater';
 interface Props {
   cycleId:number;
   post?: PostDetail;
@@ -59,6 +61,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const [qty, setQty] = useState(cycle?.ratingAVG||0);
   const [qtyByUser,setqtyByUser] = useState(0);
 
+  const {ShareCycle}=useShareCycle(cycleId);
+  const {SaveForLater}=useSaveCycleForLater(cycleId);
   useEffect(()=>{
     if(cycle){
       setQty(cycle?.ratingAVG||0);
@@ -170,10 +174,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 <Typography>{t('common:ratings')}</Typography>
               </Stack>
               {cycle.topics && (
-                <section className=" d-flex flex-nowrap ms-2">
+                <Stack direction={'row'} flexWrap={'wrap'}>
                   <TagsLinks topics={topics??[]}/>
                   <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
-                </section>
+                </Stack>
               )}
             </Stack>
           </Stack>
@@ -206,12 +210,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               : <></>  
             }
           </Stack>
+          <ShareCycle sx={{textTransform:'none',width:'250px'}}/>
+          <SaveForLater sx={{textTransform:'none',width:'250px'}}/>
         </Stack>
         <Stack flex={3} gap={1}>
 
           <Stack gap={1} sx={{display:{xs:'none',sm:'flex'}}}>
             <Typography color={'secondary'} variant='h1' fontSize={'1.7rem'} fontWeight={'bold'}>{cycle.title}</Typography>
-            <Stack direction={{xs:'column',md:'row'}} gap={1}>
+            <Stack direction={{xs:'column'}} gap={1}>
               <Stack direction={'row'} gap={1}>
                 <Rating
                   readonly
@@ -226,10 +232,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                 <Typography>{t('common:ratings')}</Typography>
               </Stack>
               {cycle.topics && (
-                <section className=" d-flex flex-nowrap ms-2">
+                <Stack direction={'row'} flexWrap={'wrap'}>
                   <TagsLinks topics={topics??[]}/>
                   <TagsInput className="d-flex flex-row ms-1" tags={cycle.tags!} readOnly label="" />
-                </section>
+                </Stack>
               )}
             </Stack>
           </Stack>
@@ -239,35 +245,14 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               {t('Content calendar')} ({works && works.length})
             </h2>
             <CycleSummary cycleId={cycle.id} />
-            <Stack direction={'row'} gap={1}  flexWrap={'wrap'}>
+            <Stack direction={'row'} gap={1}  flexWrap={'wrap'} justifyContent={{xs:'center',md:'left'}}>
                 {
-                  getWorksSorted()?.map(w=><WorkMosaicItem key={`work-${w?.id!}`} workId={w?.id!} sx={{
-                    'img':{
-                      xs:{maxHeight:'248px'},
-                      sm:{maxHeight:'248px',width:'auto'},
-                    }
-                  }}/>)??<></>
+                  getWorksSorted()?.map(w=><WorkMosaicItem Width={160} Height={160*1.36} key={`work-${w?.id!}`} workId={w?.id!} />)??<></>
                 }
             </Stack>
-            
-            {/* <CarouselStatic
-              cacheKey={['CYCLE', cycle.id.toString()]}
-              showSocialInteraction={false}
-              // onSeeAll={async () => seeAll(works as WorkDetail[], t('Eurekas I created'))}
-              onSeeAll={onCarouselSeeAllAction}
-              title={<CycleSummary cycleId={cycle.id} />}
-              data={getWorksSorted() as WorkSumary[]}
-              iconBefore={<></>}
-              customMosaicStyle={{ height: '16em' }}
-              size="small"
-              mosaicBoxClassName="pb-5"
-              // iconAfter={<BsCircleFill className={styles.infoCircle} />}
-            /> */}
           </Stack>
-
         </Stack>
       </Stack>
     </Box>;
 };
-
 export default CycleDetailHeader;

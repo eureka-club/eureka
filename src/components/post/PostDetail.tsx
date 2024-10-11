@@ -23,7 +23,7 @@ import TagsInput from '@/components/forms/controls/TagsInput';
 import Spinner from '../SpinnerSkeleton';
 import useUser from '@/src/useUser';
 import { Alert, Box, Button, Stack } from '@mui/material';
-import useCycle from '@/src/useCycle';
+import useCycle from '@/src/useCycleDetail';
 import { Session } from '@/src/types';
 import SignInForm from '../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
