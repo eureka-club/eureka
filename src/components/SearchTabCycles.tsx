@@ -139,7 +139,7 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
           <MosaicItem key={c.id} cycleId={c.id} size={'medium'} />
         )}
     </MosaicsGrid> */}
-    <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+    <Masonry columns={{xs:1,sm:2,md:3,lg:4}} spacing={1}>
       {cycles?.map(c=>
           <MosaicItem key={c.id} cycleId={c.id} size={'medium'} />
       )}

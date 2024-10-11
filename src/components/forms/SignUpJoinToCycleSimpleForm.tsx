@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import styles from './SignUpJoinToCycleForm.module.css';
 import MosaicItem from '@/src/components/cycle/MosaicItem';
 import { CycleContext } from '@/src/useCycleContext';
-import useCycle from '@/src/useCycle';
+import useCycle from '@/src/useCycleDetail';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';

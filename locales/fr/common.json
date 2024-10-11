@@ -180,6 +180,7 @@
   "readOrWatchedLbl":"Marquer comme vu ou lu",
   "unknown":"Indéterminé",
   "MISSING_FIELD":"Champ {{fieldName}} manquant",
-  "readOrWatchedSelect":"Ne plus marquer comme vu ou lu"
-
+  "readOrWatchedSelect":"Ne plus marquer comme vu ou lu",
+  "replyCommentLbl":"Participer au débat",
+  "notSessionreplyCommentLbl":"Connectez-vous pour participer à la discussion"
 }

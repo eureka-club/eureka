@@ -181,8 +181,7 @@
   "readOrWatchedLbl":"Marcar como visto ou lido",
   "unknown":"Não especificado",
   "MISSING_FIELD":"Campo {{fieldName}} ausente",
-  "readOrWatchedSelect":"Desmarcar como visualizado ou lido"
-
-
-
+  "readOrWatchedSelect":"Desmarcar como visualizado ou lido",
+  "replyCommentLbl":"Participe da discussão",
+  "notSessionreplyCommentLbl":"Faça login para participar da discussão"
 }

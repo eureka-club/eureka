@@ -51,7 +51,16 @@ export default function MenuAction(props: MenuActionProps) {
       >
         {
           items 
-            ? items.map((i,idx)=><MenuItem key={`${i}|${idx}`} onClick={()=>{
+            ? items.map((i,idx)=><MenuItem 
+            sx={{
+              padding:0,
+              '&>*':{
+                padding:'.25rem 1rem !important',
+                display:'block !important',
+                width:'100% !important'
+              }
+            }} 
+            key={`${i}|${idx}`} onClick={()=>{
                 handleClose();
             }}>
                 <>

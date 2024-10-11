@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { CycleDetail } from './types/cycle';
 import { WEBAPP_URL } from './constants';
 
-export const getCycle = async (id: Number): Promise<CycleDetail | undefined> => {
+export const getCycleDetail = async (id: Number): Promise<CycleDetail | undefined> => {
   if (!id) return undefined;
   const url = `${WEBAPP_URL}/api/cycle/${id}`;
 
@@ -18,15 +18,15 @@ interface Options {
   enabled?: boolean;
 }
 
-const useCycle = (id: number, options?: Options) => {
+const useCycleDetail = (id: number, options?: Options) => {
   const { staleTime, enabled } = options || {
     staleTime: 1000 * 60 * 60,
     enabled: true,
   };
-  return useQuery<CycleDetail | undefined>(['CYCLE', `${id}`], () => getCycle(id), {
+  return useQuery<CycleDetail | undefined>(['CYCLE', `${id}`], () => getCycleDetail(id), {
     staleTime,
     enabled,
   });
 };
 
-export default useCycle;
+export default useCycleDetail;

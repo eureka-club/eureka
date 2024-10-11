@@ -180,5 +180,7 @@
   "readOrWatchedLbl":"Mark as seen or read",
   "unknown":"Unknown",
   "MISSING_FIELD":"Missing field {{fieldName}}",
-  "readOrWatchedSelect":"Unmark as viewed or read"
+  "readOrWatchedSelect":"Unmark as viewed or read",
+  "replyCommentLbl":"Participate in the discussion",
+    "notSessionreplyCommentLbl":"Log in to participate in the discussion"
 }

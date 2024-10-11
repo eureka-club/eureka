@@ -71,11 +71,15 @@ export default function PostOnCycleCard(props:Props) {
             }}/>
             <Box>
               {post?.contentText ? <Sumary description={post?.contentText??''}/> : <></>}
-              <Box display={'flex'} justifyContent={'center'}>
-                <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
-                {t('notSessionreplyCommentLbl')}
-                </Button>
+              {
+            !session 
+              ? <Box display={'flex'} justifyContent={'center'}>
+                  <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                  {t('common:notSessionreplyCommentLbl')}
+                  </Button>
               </Box>
+              : <></>
+          }
             </Box>
         </Stack>
         {

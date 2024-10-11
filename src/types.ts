@@ -149,6 +149,7 @@ export const UserLanguages: Record<string, string> = {
 export type Size = 'small'|'medium'|'large';
 
 export enum ActionType {
+  CommentCreatedOnPost=1,
   CommentCreatedOnCycle=2,
   PostCreatedOnCycleActive=3,
   PostCreatedOnWork=4,

@@ -11,10 +11,9 @@ import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import LocalImageComponent from '@/src/components/LocalImage';
 import { getWorksDetail } from '@/src/useWorksDetail';
 import useWorks from '@/src/useWorksDetail';
-import { Edition, Work } from '@prisma/client';
+import { Work } from '@prisma/client';
 import { Session } from '@/src/types';
-import dayjs from 'dayjs';
-import { DATE_FORMAT_ONLY_YEAR, WEBAPP_URL } from '@/src/constants';
+import { WEBAPP_URL } from '@/src/constants';
 import FindInPageOutlinedIcon from '@mui/icons-material/FindInPageOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -34,9 +33,7 @@ import {
   //Table,
 
 } from 'react-bootstrap';
-import { FiTrash2 } from 'react-icons/fi';
-import styles from './back-office.module.css'
-import CropImageFileSelect from '@/components/forms/controls/CropImageFileSelect';
+import styles from './index.module.css'
 import toast from 'react-hot-toast'
 import axios from 'axios';
 import MosaicItem from '@/src/components/work/MosaicItem';
@@ -49,14 +46,16 @@ import PaginationActions from '@/src/components/common/MUITablePaginationActions
 import { styled, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { EditWorkClientPayload, WorkDetail, WorkSumary } from '@/src/types/work';
+import { EditWorkClientPayload, WorkDetail } from '@/src/types/work';
 import { EditionMosaicItem } from '@/src/types/edition';
 
 import { FaSave } from 'react-icons/fa';
 import useUpdateWork from '@/src/hooks/mutations/useUpdateWork';
-import { error } from 'node:console';
 import { IoAddCircle, IoClose, IoPencil, IoSave, IoTrash } from 'react-icons/io5';
-import { AddBackOfficesSlidersForm } from '@/src/components/AddBackOfficesSlidersForm';
+import { useModalContext } from '@/src/hooks/useModal';
+import EditSliderForm from './Banner/EditSliderForm';
+import { Locale } from 'i18n-config';
+import AddSliderForm from './Banner/AddSliderForm';
 const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
 const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
 interface Props {
@@ -90,6 +89,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   //TODO
   const t = (s: string) => s;
   const router = useRouter();
+  const {show} = useModalContext();
   const [tabKey, setTabKey] = useState<string>();
   const [currentSlider, setCurrentSlider] = useState<number>(0);
   const [showCrop, setShowCrop] = useState<boolean>(false);
@@ -475,7 +475,9 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   const OnAddSlide = ()=>{
     setOpenModal(true);
   }
-
+  const OnEditSlide = async (id:number,title:string,text:string,language:Locale)=>{
+    show(<EditSliderForm id={id} title={title} text={text} language={language}/>)
+  }
   const OnRemoveSlide = async (id:number)=>{
     const res = await confirm("Are you sure you wanna remove the selected slide?");
     if(res){
@@ -559,8 +561,11 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         <p className="p-0 mx-1 text-wrap fs-5" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                       </TableCell>
                       <TableCell>
+                        <Typography fontWeight={'bold'} textTransform={'uppercase'}>{s.language}</Typography>
+                      </TableCell>
+                      <TableCell>
                         <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                          <Button size='small' color='info' variant='contained' onClick={(e)=>{alert("Todo")}} startIcon={<IoPencil/>}>Edit</Button>
+                          <Button size='small' color='info' variant='contained' onClick={(e)=>OnEditSlide(s.id,s.title!,s.text!,s.language as Locale)} startIcon={<IoPencil/>}>Edit</Button>
                           <Button size='small' color='warning' variant='contained' onClick={(e)=>OnRemoveSlide(s.id)} startIcon={<IoTrash/>}>Remove</Button>
                         </ButtonGroup>
                       </TableCell>
@@ -1050,7 +1055,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
         aria-describedby="modal-modal-description"
       >
         <DialogContent>
-          <AddBackOfficesSlidersForm/>
+          <AddSliderForm/>
         </DialogContent>
       </Dialog>
 

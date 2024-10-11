@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { QueryClient } from 'react-query';
-import CropImageFileSelect from './forms/controls/CropImageFileSelect';
+import CropImageFileSelect from '../../../src/components/forms/controls/CropImageFileSelect';
 import {Button} from '@mui/material';
 
 interface StateProp {
@@ -21,7 +21,7 @@ interface StateProp {
 interface Props {
   searchstyle?: string | '';
 }
-export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
+const AddSliderForm = ({ searchstyle }: Props) => {
   const [loading, setLoading] = useState(false);
   const [showOptions, setShowOptions] = useState<boolean>(true);
   const [file, setFile] = useState<File>();
@@ -384,3 +384,4 @@ export const AddBackOfficesSlidersForm = ({ searchstyle }: Props) => {
     </form>
   );
 };
+export default AddSliderForm;

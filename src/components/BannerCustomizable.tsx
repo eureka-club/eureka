@@ -1,13 +1,12 @@
-import { FunctionComponent, useState } from 'react';
-// import { Carousel } from 'react-bootstrap';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { AZURE_CDN_ENDPOINT, AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } from '../constants';
-import { Box, Button, Typography, Card, Stack, IconButton } from '@mui/material';
-import { Circle } from '@mui/icons-material';
+import { Box, Button, Typography,  Stack } from '@mui/material';
+import { BsCircle, BsCircleFill } from 'react-icons/bs';
 
 const BannerCustomizable: FunctionComponent = ({
 }) => {
@@ -18,7 +17,20 @@ const BannerCustomizable: FunctionComponent = ({
   const[idxActive,setidxActive]=useState(0);
   const [show, setShow] = useState<boolean>(true);
   const {data:bo } = useBackOffice(undefined,lang);
+  const [requireScroll,setrequireScroll]=useState(false);
+  
+  useEffect(()=>{
+    const el:any = document.querySelector(`#outerRef-${idxActive}`);
+    const offsetHeight = el?.offsetHeight!;
+    const scrollHeight = el?.scrollHeight!
+    if(offsetHeight < scrollHeight){
+      setrequireScroll(true);
+    }
+  },[idxActive]);
+  
   const imgBaseUrl=`https://${AZURE_CDN_ENDPOINT}.azureedge.net/${AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
+  
+  if(!bo?.sliders.length)return <></>;
   return <Box sx={{backgroundColor:'var(--eureka-green)'}}>
       <Stack>
         <Box alignSelf={'end'} padding={'.5rem'}>
@@ -43,68 +55,97 @@ const BannerCustomizable: FunctionComponent = ({
         </Box>
       </Stack>
       {
-        show 
+        show
           ? <Stack alignItems={'center'}
           sx={{
             backgroundImage: "url('/img/bg-header.svg')",
             marginBottom: show ? '8em' : '2em',
             height: show ? '15em' : '4em',
-            padding:'.5rem .25rem 0'
+            
           }}>
            
           {bo?.sliders.map((s,currentIdx) => (
-            <Box key={`${s.title}-${currentIdx}`} sx={{ display:currentIdx==idxActive ? 'flex': 'none',width:'90%'}} position={'relative'}>
-              <Stack direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20em'}}>
-                <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '22em', height: '20em' }}/>
-                <Stack sx={{ whiteSpace: 'nowrap', mx: 1, overflowY:'auto' }}>
-                  <Stack gap={1}>
-                    <Typography color={'secondary'} variant='h4'>{s.title}</Typography>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                    <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal'}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
-                  </Stack>
-                  <Box alignSelf={'center'} padding={'1rem 0 3rem 0'}>
-                  {
-                    !isLoadingSession && !session
-                    ? <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                        {t('JoinEureka')}
-                      </Button>
-                    : <></>
-                  }
+            <Box  key={`${s.title}-${currentIdx}`} sx={{ 
+              display:currentIdx==idxActive ? 'flex': 'none',
+              width:'90%',
+              
+              }} 
+              position={'relative'}
+            >
+              <Stack  direction={'row'} sx={{backgroundColor:'#F8F9FB',height:'20rem',width:'100%'}}>
+                <Box flex={1}>
+                  <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '20rem' }}/>
+                </Box>
+                <Stack flex={3} id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',width:'100%',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'hidden' }}>
+                  <Box id={`innerRef-${currentIdx}`} >
+                    <Stack gap={1} sx={{padding:'2rem 2rem 0 2rem'}}>
+                      <Typography color={'secondary'} variant='h2' sx={{whiteSpace:'break-spaces',fontSize:'1.8rem'}}>{s.title}</Typography>
+                      <Box>
+                        <Typography color={'secondary'} variant='h6' marginBottom={0} sx={{whiteSpace:'normal',lineHeight:1.3}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                        <Stack  padding={requireScroll ? '.25rem 0 3rem 0': '0rem'}>
+                        {
+                          !isLoadingSession && !session
+                          ? <Box >
+                              <Button className="btn-eureka" onClick={() => router.push('/register')}>
+                                {t('JoinEureka')}
+                              </Button>
+                            </Box>
+                          : <></>
+                        }
+                        </Stack>
+                      </Box>
+                    </Stack>
                   </Box>
                 </Stack>
               </Stack>
-              <Box
-                sx={{
-                  display:'flex',
-                  width:'100%',
-                  position:'absolute',
-                  bottom:'0px',
-                  left:'0px', 
-                  zIndex:9999,
-                  alignItems:'center',
-                  justifyContent:'center',
-                  backgroundColor:'rgba(227, 231, 239,.25)'
-                }}
-              >
-                {
-                  bo?.sliders.length>1 
-                    ? [...Array(bo?.sliders.length)].map((a,idx)=>{
-                      return <IconButton
-                        key={`slider-${idx}`} 
-                        color={idx==idxActive ? 'default' : 'secondary'}
-                        onClick={(e)=>{
-                          setidxActive(idx);
-                        }}
-                      >
-                        <Circle sx={{width:'.8rem',height:'.8rem'}}/>
-                      </IconButton>
-                    })
-                    : <></>
-                }
-              </Box>
+              {
+                bo?.sliders.length>1 
+                 ? <Box
+                  sx={{
+                    display:'flex',
+                    padding:'1rem .5rem',
+                    gap:'.25rem',
+                    width:'100%',
+                    position:'absolute',
+                    bottom:'0px',
+                    left:'0px', 
+                    zIndex:999,
+                    alignItems:'center',
+                    justifyContent:'center',
+                    // backgroundColor:'rgba(227, 231, 239,.25)'
+                  }}
+                >
+                  {
+                      
+                      [...Array(bo?.sliders.length)].map((a,idx)=>{
+                        return <Button
+                        variant='text'
+                          key={`slider-${idx}`} 
+                          onClick={(e)=>{
+                            setidxActive(idx);
+                          }}
+                          sx={{
+                            padding:'.25rem .1rem',
+                            minWidth:'1.5rem',
+                            height:'.5rem'
+                          }}
+                        >
+                          {/* <Paper> */}
+                          {
+                            idx==idxActive
+                              ? <BsCircleFill/>
+                              : <BsCircle/>
+                          }
+                            {/* <Box sx={{borderRadius:'.125rem',backgroundColor:idx==idxActive ? 'var(--color-secondary)' : 'var(--color-primary)',minWidth:'1.5rem',height:'.5rem',padding:'.4rem'}}/> */}
+                          {/* </Paper> */}
+                        </Button>
+                      })
+                      
+                  }
+                </Box>
+                 : <></>
+              }
+              
             </Box>
           ))}
             </Stack>

@@ -30,7 +30,7 @@ import globalModalsAtom from '@/src/atoms/globalModals';
 import styles from './index.module.css';
 import { useCycleContext } from '@/src/useCycleContext';
 // import CycleDetailHeader from './CycleDetailHeader';
-import useCycle from '@/src/useCycle';
+import useCycle from '@/src/useCycleDetail';
 import usePosts from '@/src/usePosts'
 import { CycleDetail } from '@/src/types/cycle';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
