@@ -13,13 +13,15 @@ import CycleSummary from './CycleSummary';
 import MosaicItem from './MosaicItem';
 import WorkMosaicItem from '@/src/components/work/MosaicItem';
 import TagsInput from '../forms/controls/TagsInput';
-import useCycle from '@/src/useCycle'
+import useCycle from '@/src/useCycleDetail'
 import { Alert, Box, IconButton, Stack, Typography } from '@mui/material';
 import { CycleWork } from '@/src/types/cycleWork';
 import useExecRatingCycle from '@/src/hooks/mutations/useExecRatingCycle';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
 import Skeleton from '../Skeleton';
+import { useShareCycle } from './useShareCycle';
+import { useSaveCycleForLater } from './useSaveCycleForLater';
 interface Props {
   cycleId:number;
   post?: PostDetail;
@@ -59,6 +61,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
   const [qty, setQty] = useState(cycle?.ratingAVG||0);
   const [qtyByUser,setqtyByUser] = useState(0);
 
+  const {ShareCycle}=useShareCycle(cycleId);
+  const {SaveForLater}=useSaveCycleForLater(cycleId);
   useEffect(()=>{
     if(cycle){
       setQty(cycle?.ratingAVG||0);
@@ -206,6 +210,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
               : <></>  
             }
           </Stack>
+          <ShareCycle sx={{textTransform:'none',width:'250px'}}/>
+          <SaveForLater sx={{textTransform:'none',width:'250px'}}/>
         </Stack>
         <Stack flex={3} gap={1}>
 

@@ -5,7 +5,7 @@ import { Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import SimpleLayout from '../../../src/components/layouts/SimpleLayout';
 import EditCycleForm from '../../../src/components/forms/EditCycleForm';
-import useCycle,{getCycle} from '@/src/useCycle';
+import useCycleDetail,{getCycleDetail} from '@/src/useCycleDetail';
 import { useEffect, useState } from 'react';
 import { Cycle } from '@prisma/client';
 import { Session } from '@/src/types';
@@ -25,7 +25,7 @@ const EditCyclePage: NextPage<Props> = ({session}) => {
   useEffect(()=>{
     if(router.query?.id)setId(router.query.id?.toString())
   },[router])
-  const {data:cycle,isLoading} = useCycle(+id,{enabled:!!id})
+  const {data:cycle,isLoading} = useCycleDetail(+id,{enabled:!!id})
 
   if(isLoading)
     return <SimpleLayout title={t('editCycle')}>
@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
  
   const qc = new QueryClient()
-  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycle(cycleId))
+  await qc.fetchQuery(['CYCLE', `${cycleId}`], () => getCycleDetail(cycleId))
 
   // const cycle = await find(cycleId);
   // if (session == null || (session.user.id !== cycle?.creatorId && !session.user.roles.includes('admin'))) {
