@@ -27,6 +27,8 @@ import { CycleSumary } from '@/src/types/cycle';
 import useTopics, { TopicItem } from '@/src/useTopics';
 import { TagsLinks } from '../common/TagsLinks';
 import Masonry from '@mui/lab/Masonry';
+import {Typography} from '@mui/material';
+
 interface Props {
   cycleId:number;
   post?: PostDetail;
@@ -188,7 +190,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
           </Box>
         </Stack>
         <Stack flex={3}>
-          <h1 className="d-none d-xl-block mb-1 fw-bold text-secondary">{cycle.title}</h1>
+          <Typography variant='h5' color={'secondary'} style={{ fontWeight: 600 }} >{cycle.title}</Typography>
           <div className="d-flex flex-row justify-content-start">
             <Rating
               readonly
@@ -211,9 +213,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             )}
           </div>
           <Stack gap={1}>
-            <h2 className="mt-4 mb-1 text-dark" style={{ fontSize: '1.4rem' }}>
+           <Typography variant='h6' paddingTop={3}>
               {t('Content calendar')} ({works && works.length})
-            </h2>
+            </Typography>
+            
             <CycleSummary cycleId={cycle.id} />
             <Stack direction={'row'} gap={1}  flexWrap={'wrap'}>
                 {
