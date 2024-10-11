@@ -1,14 +1,12 @@
-import { FunctionComponent, useEffect, useRef, useState } from 'react';
-// import { Carousel } from 'react-bootstrap';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineDown } from 'react-icons/ai';
 import useTranslation from 'next-translate/useTranslation';
 import useBackOffice from '@/src/useBackOffice';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { AZURE_CDN_ENDPOINT, AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } from '../constants';
-import { Box, Button, Typography, Card, Stack, IconButton, BoxProps, StackProps, Paper } from '@mui/material';
-import { Circle, Minimize } from '@mui/icons-material';
-import { LineIcon } from 'react-share';
+import { Box, Button, Typography,  Stack } from '@mui/material';
+import { BsCircle, BsCircleFill } from 'react-icons/bs';
 
 const BannerCustomizable: FunctionComponent = ({
 }) => {
@@ -132,11 +130,14 @@ const BannerCustomizable: FunctionComponent = ({
                             height:'.5rem'
                           }}
                         >
-                          <Paper>
-                            <Box sx={{borderRadius:'.125rem',backgroundColor:idx==idxActive ? 'var(--color-secondary)' : 'var(--color-primary)',minWidth:'1.5rem',height:'.5rem',padding:'.4rem'}}>
-                              {/* <Typography fontSize={0} lineHeight={0} color={idx==idxActive ? 'secondary' : 'primary'}>{`_`}</Typography> */}
-                            </Box>
-                          </Paper>
+                          {/* <Paper> */}
+                          {
+                            idx==idxActive
+                              ? <BsCircleFill/>
+                              : <BsCircle/>
+                          }
+                            {/* <Box sx={{borderRadius:'.125rem',backgroundColor:idx==idxActive ? 'var(--color-secondary)' : 'var(--color-primary)',minWidth:'1.5rem',height:'.5rem',padding:'.4rem'}}/> */}
+                          {/* </Paper> */}
                         </Button>
                       })
                       
