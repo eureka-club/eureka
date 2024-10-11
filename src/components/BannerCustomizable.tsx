@@ -103,7 +103,7 @@ const BannerCustomizable: FunctionComponent = ({
                  ? <Box
                   sx={{
                     display:'flex',
-                    padding:1,
+                    padding:'1rem .5rem',
                     gap:'.25rem',
                     width:'100%',
                     position:'absolute',
