@@ -93,7 +93,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
   const cycleAccess = t(cycleAccessTypes[cycle?.access??0]);
 
   return <Box style={{cursor:'pointer'}} {...others}>
-        <Link href={`/${lang}/cycle/${cycleId}`} >
+        <Link href={`/cycle/${cycleId}`} >
           <Card sx={{minWidth:{xs:'248px',sm:'248px'},maxWidth:{sm:'250px'}}}>
             <style jsx global>{`
               .MuiCardHeader-root{
