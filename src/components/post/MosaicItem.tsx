@@ -272,7 +272,7 @@ interface Props extends BoxProps{
     parentId = post?.works[0].id;
   }
   const href = parentId 
-    ? `/${lang}/${parentName}/${parentId}/post/${postId}`
+    ? `/${parentName}/${parentId}/post/${postId}`
     : '#';
 
   return <Box
