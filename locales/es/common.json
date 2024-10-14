@@ -181,5 +181,5 @@
   "MISSING_FIELD":"{{fieldName}} no puede estar vacio",
   "readOrWatchedSelect":"Desmarcar como visto o leído",
   "replyCommentLbl":"Participe en la discusión",
-  "notSessionreplyCommentLbl":"Inicie sesión para participar en la discusión"
+  "notSessionreplyCommentLbl":"Inicia sesión para participar en la discusión"
 }
