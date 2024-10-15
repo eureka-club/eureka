@@ -16,7 +16,7 @@ import styles from './WorkDetail.module.css';
 import TagsInput from '@/components/forms/controls/TagsInput';
 import MosaicItem from './MosaicItem';
 import { MosaicContext } from '@/src/useMosaicContext';
-import useCycles from '@/src/useCycles';
+import useCyclesSumary from '@/src/useCyclesSumary';
 import WorkDetailPost from './WorkDetailPost';
 import CMI from '@/src/components/cycle/MosaicItem';
 import MosaicItemPost from '@/src/components/post/MosaicItem';
@@ -146,7 +146,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
       },
     },
   });
-  const { data: dataCycles } = useCycles('',workCyclessWhere
+  const { data: dataCycles } = useCyclesSumary('',workCyclessWhere
   // , { enabled: !!workId }
 );
   const { data: dataPosts,isLoading } = usePostsSumary(workPostsWhere

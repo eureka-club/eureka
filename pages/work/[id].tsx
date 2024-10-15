@@ -10,8 +10,8 @@ import { WEBAPP_URL } from '@/src/constants';
 import WorkDetailComponent from '@/src/components/work/WorkDetail';
 import { dehydrate, QueryClient } from 'react-query';
 import useWork,{getWork} from '@/src/useWorkDetail';
-import {getCycles} from '@/src/useCycles'
-import {getPosts} from '@/src/usePosts'
+import {getCyclesSumary} from '@/src/useCyclesSumary'
+import {getPostsSumary} from '@/src/usePostsSumary'
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { Button } from '@mui/material';
@@ -157,8 +157,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     metaTags = { id: work.id, title: work.title, author: work.author, storedFile: work.localImages[0].storedFile };
     const workPostsWhere = {take:8,where:{works:{some:{id}}}}
     await qc.prefetchQuery(['WORK', `${id}-${lang}`],()=>work)
-    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCycles(ctx.locale!,workCyclesWhere))
-    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPosts(ctx.locale!,workPostsWhere))
+    await qc.prefetchQuery(['CYCLES',JSON.stringify(workCyclesWhere)],()=>getCyclesSumary(ctx.locale!,workCyclesWhere))
+    await qc.prefetchQuery(['POSTS',JSON.stringify(workPostsWhere)],()=>getPostsSumary(session?.user?.id!,'',workPostsWhere))
   }
   
   return {
