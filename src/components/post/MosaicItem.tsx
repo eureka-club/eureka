@@ -310,6 +310,7 @@ interface Props extends BoxProps{
         /> */}
 
         <Box style={{
+            cursor:'pointer',
             width:`${Width}px`,
             height:`${Height}px`,
             display:'inline-block',
