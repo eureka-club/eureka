@@ -340,7 +340,7 @@ const WorkDetailComponent: FunctionComponent<Props> = ({ workId, post, session }
                         <Box>
                             {
                               !session 
-                                ? <Box display={'flex'} justifyContent={'center'}>
+                                ? <Box paddingTop={3} display={'flex'} justifyContent={'center'}>
                                     <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
                                     {t('common:notSessionreplyCommentLbl')}
                                     </Button>

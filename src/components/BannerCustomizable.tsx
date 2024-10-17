@@ -85,9 +85,9 @@ const BannerCustomizable: FunctionComponent = ({
                         <Stack  padding={requireScroll ? '.25rem 0 3rem 0': '0rem'}>
                         {
                           !isLoadingSession && !session
-                          ? <Box >
-                              <Button className="btn-eureka" onClick={() => router.push('/register')}>
-                                {t('JoinEureka')}
+                          ? <Box paddingTop={2}>
+                              <Button style={{textTransform: 'none'}} className="btn-eureka" onClick={() => router.push('/register')}>
+                                {t('JoinEureka')} 
                               </Button>
                             </Box>
                           : <></>

@@ -248,7 +248,7 @@ const MosaicItem:FC<Props> = ({workId,Width=184,Height=250,...others})=>{
           width:`${Width}px`,
           height:`${Height}px`,
           display:'inline-block',
-          border:'solid 1px lightgray',
+          border:'solid 0px lightgray',
           borderRadius:'4px',
           boxShadow:`0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)`
         }}>
