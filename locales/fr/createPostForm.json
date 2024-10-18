@@ -31,7 +31,7 @@
   "showCrop":"Téléchargez une image ou une photo de votre choix au lieu d'utiliser l'IA.",
   "showOthersFields":"Je veux ajouter mon Moment Eureka à un club et/ou ajouter des tags.",
   "NoPromptText":"Vous devez écrire une description détaillée afin de générer des possibles images.",
-  "CreateEureka": "Créez un Moment Eureka pour résumer une œuvre qui vous a touché en utilisant une image!",
+  "CreateEureka": "Créez votre Moment Eureka!",
   "SelectImage":"Vous n'aimez pas l'image ? Ajustez votre prompt pour en créer une autre !",
   "SelectImageContinue":"Sélectionner l'image pour continuer",
   "descriptionLabel": "Décrivez l'image que vous souhaitez générer avec le plus de détails possible",
