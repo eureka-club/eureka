@@ -51,12 +51,12 @@ export default function PostOnWorkCard(props:Props) {
           }
           title={
             <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
-            <Typography>
-              <strong>{post?.creator.name!} </strong>
-              {t('postOnWorkTitle')}
-              <strong> {post?.title}</strong>
-            </Typography>
-            <Typography variant='caption' paddingRight={1.5}>{dayjs(createdAt).locale(lang).fromNow()}</Typography>
+              <Typography sx={{flex:1}}>
+                <strong>{post?.creator.name!} </strong>
+                {t('postOnWorkTitle')}
+                <strong> {post?.title}</strong>
+              </Typography>
+              <Typography variant='caption' paddingRight={1.5}>{dayjs(createdAt).locale(lang).fromNow()}</Typography>
             </Stack>
           }
           // subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
