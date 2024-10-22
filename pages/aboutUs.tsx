@@ -1,18 +1,18 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
-import {  Row, Col, Badge } from 'react-bootstrap';
+
 import Image from 'next/image';
 
 import { TiSocialLinkedinCircular } from 'react-icons/ti';
-import { SiUpwork } from 'react-icons/si';
+//import { SiUpwork } from 'react-icons/si';
 import styles from './aboutUs.module.css';
 
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 import {Container, Grid, Chip, Typography} from '@mui/material';
-import { ReactElement } from 'react';
+//import { ReactElement } from 'react';
 
 interface Props {
   session: Session;
@@ -273,7 +273,7 @@ José Manuel Gallardo
                 />
                 <Typography variant='h2' className={styles.peopleName}>
                  Henry Ruffo Wood
-                  <a href="https://www.linkedin.com/in/aranzazuzg/" target="_blank" rel="noreferrer">
+                  <a href="" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
