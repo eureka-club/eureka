@@ -231,7 +231,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
                 {post?.contentText ? <Sumary description={post?.contentText??''}/> : <></>}
                 {
                   !session?.user
-                    ? <Box display={'flex'} justifyContent={'center'}>
+                    ? <Box paddingTop={3} display={'flex'} justifyContent={'center'}>
                         <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
                           {t('common:notSessionreplyCommentLbl')}
                         </Button>

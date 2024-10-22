@@ -71,7 +71,7 @@ export default function CommentOnCycleCard(props:Props) {
           }
           title={
             <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
-              <Typography>
+              <Typography sx={{flex:1}}>
                 <strong>{lastComment?.user.name} </strong>
                 {t('commentOnCycleTitle')}
                 <strong> {cycle?.title}</strong>
