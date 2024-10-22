@@ -80,8 +80,13 @@ const BannerCustomizable: FunctionComponent = ({
                   <Box id={`innerRef-${currentIdx}`} >
                     <Stack gap={1} sx={{padding:'2rem 2rem 0 2rem'}}>
                       <Typography color={'secondary'} variant='h2' sx={{whiteSpace:'break-spaces',fontSize:'1.8rem'}}>{s.title}</Typography>
-                      <Box>
-                        <Typography color={'secondary'} variant='h6' marginBottom={0} sx={{whiteSpace:'normal',lineHeight:1.3}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
+                      <Stack gap={1} className='Zxc'>
+                        <style jsx global>{`
+                          .Zxc p{
+                            margin:0!important;
+                          }
+                        `}</style>
+                        <Typography color={'secondary'} variant='h6' sx={{whiteSpace:'normal',lineHeight:1.3}} textAlign={'justify'} dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                         <Stack  padding={requireScroll ? '.25rem 0 3rem 0': '0rem'}>
                         {
                           !isLoadingSession && !session
@@ -93,7 +98,7 @@ const BannerCustomizable: FunctionComponent = ({
                           : <></>
                         }
                         </Stack>
-                      </Box>
+                      </Stack>
                     </Stack>
                   </Box>
                 </Stack>
