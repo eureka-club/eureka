@@ -266,16 +266,16 @@ José Manuel Gallardo
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={``}
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
                   alt="Picture of Developer"
                   width={200}
                   height={200}
                 />
                 <Typography variant='h2' className={styles.peopleName}>
                  Henry Ruffo Wood
-                  <a href="" target="_blank" rel="noreferrer">
+                  {/* <a href="" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
-                  </a>
+                  </a> */}
                 </Typography>
                 <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Developer')}</Typography>
                 <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Front-end expert')}</Typography>
