@@ -291,6 +291,7 @@ José Manuel Gallardo
                   label={`${t('music')}`}
                   size="small"
                   color='secondary'
+                  
                 />
               </Grid>
               <Grid container className="w-100 d-flex justify-content-center">
