@@ -89,7 +89,7 @@ export default function CommentOnPostCard(props:Props) {
               <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
               body={
                 <>
-                  <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>
+                  {lastComment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>:<></>}
                   <UserCommentDetail comment={lastComment} 
                     sx={
                       lastComment?.parent 

@@ -16,18 +16,18 @@ interface UserCommentDetailProps extends BoxProps {
     if(!comment ||!isFull)return <>{body}</>;
     return <Box {...others}>
       <Stack direction={'row'} gap={1}>
-      <Stack gap={.5}>
-        <Avatar src={comment?.user.picture_url} />
-        <Box sx={{borderRight:'solid 1.5px #dddddd85',width:'16px',height:'100%'}}/>
-      </Stack>
-      <Stack>
-        <Stack direction={{xs:'column',sm:'row'}} gap={{xs:0,sm:1}}>
-          <Typography>{comment?.user.name}</Typography>
-          <Typography variant='caption'>{dayjs(comment?.created_at*1000).locale(lang).fromNow()}</Typography>
+        <Stack gap={.5}>
+          <Avatar src={comment?.user.picture_url} />
+          <Box sx={{borderRight:'solid 1.5px #dddddd85',width:'16px',height:'100%'}}/>
         </Stack>
-        {body}
+        <Stack>
+          <Stack direction={{xs:'column',sm:'row'}} gap={{xs:0,sm:1}}>
+            <Typography>{comment?.user.name}</Typography>
+            <Typography variant='caption'>{dayjs(comment?.created_at*1000).locale(lang).fromNow()}</Typography>
+          </Stack>
+          {body}
+        </Stack>
       </Stack>
-    </Stack>
 
     </Box> 
   }
