@@ -263,7 +263,7 @@ José Manuel Gallardo
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={``}
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
                   alt="Picture of Developer"
                   width={200}
                   height={200}
