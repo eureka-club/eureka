@@ -126,7 +126,7 @@
   "public": "Clube público",
   "private": "Clube privado",
   "secret": "Clube secreto",
-  "payment": "Clube R$",
+  "payment": "Clube $",
   "Notifications": "Notificações",
   "abandoningPaidCycleWarning": "Você está abandonando um Clube pago, tem certeza que deseja continuar?",
   "select": "Selecionar",

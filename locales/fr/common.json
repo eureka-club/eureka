@@ -126,7 +126,7 @@
   "public": "Club public",
   "private": "Club privé",
   "secret": "Club secret",
-  "payment": "Club R$",
+  "payment": "Club $",
   "abandoningPaidCycleWarning": "Vous abandonnez un club payant, êtes-vous sûr de vouloir continuer?",
   "select": "Sélectionner",
   "next": "prochain",

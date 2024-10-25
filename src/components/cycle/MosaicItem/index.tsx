@@ -136,7 +136,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
                 <Chip 
                   label={
                     <span>
-                        {`${cycleAccess}${CycleAcces.payment == cycle?.access ? ` ${cycle.price} BRL` : ''}`}
+                        {`${cycleAccess}`}
                         <em> ({LOCALES[cycle?.languages!].toUpperCase()})</em>
                       </span>
                   } 
