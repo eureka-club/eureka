@@ -57,7 +57,7 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
     // , { enabled: !!session?.user.id }
   );
 
-  const currentUserIsParticipant = user?.cycles.findIndex((c) => c.id == +router.query.id!);
+  const currentUserIsParticipant = (user && user.cycles.findIndex((c) => c.id == +router.query.id!) >=0) || cycle?.creator.id == user?.id;
   const isPublicPost = cycle?.access == 1;
 
   // if(status=='unauthenticated')
