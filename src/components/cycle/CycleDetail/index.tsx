@@ -3,24 +3,10 @@ import { useAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { FunctionComponent, MouseEvent, useState, useRef, useEffect, Suspense, lazy, FC } from 'react';
-import {
-  TabPane,
-  TabContent,
-  TabContainer,
-  Row,
-  Col,
-  Nav,
-  NavItem,
-  NavLink,
-  // Spinner,
-} from 'react-bootstrap';
-// import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import { FunctionComponent, MouseEvent, useState, useRef, useEffect, lazy, FC } from 'react';
+import { Row, Col, NavItem, NavLink } from 'react-bootstrap';
 import { MosaicContext } from '@/src/useMosaicContext';
-// import { useQueryClient } from 'react-query';
-// import { Grid, Button as MaterialButton } from '@mui/material';
-import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ 
-WEBAPP_URL} from '@/src/constants';
+import { ASSETS_BASE_URL, DATE_FORMAT_SHORT_MONTH_YEAR, /* , HYVOR_WEBSITE_ID, WEBAPP_URL */ } from '@/src/constants';
 import { PostDetail } from '@/src/types/post';
 import { WorkDetail } from '@/src/types/work';
 import PostDetailComponent from '../../post/PostDetail';
@@ -34,18 +20,15 @@ import useCycle from '@/src/useCycleDetail';
 import usePosts from '@/src/usePosts'
 import { CycleDetail } from '@/src/types/cycle';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
-import { CycleWork } from '@/src/types/cycleWork';
 import { RenderCycleDetailHeader } from '../RenderCycleDetailHeader';
-// import { RenderRestrictedTabs } from '../RenderRestrictedTabs';
 import HyvorComments from '../../common/HyvorComments';
-// import { Stack } from '@mui/material';
 import CycleDetailDiscussion from '../CycleDetailDiscussion';
 import { RenderPosts } from './RenderPosts';
 import { RenderGuidelines } from './RenderGuideLines';
 import { RenderParticipants } from './RenderParticipants';
 import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
-import { Box, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
 const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {
