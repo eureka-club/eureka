@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import useTranslation from 'next-translate/useTranslation';
 import { useState,  FC } from 'react';
-import { LOCALES } from '../../../constants';
+import { CycleAcces, LOCALES } from '../../../constants';
 import useCycleSumary from '@/src/useCycleSumary'
 import UserAvatar from '../../common/UserAvatar';
 import { Box, BoxProps, Card, CardContent, CardHeader, CardMedia, CardProps, Chip, Stack, Typography, TypographyProps } from '@mui/material';
@@ -136,7 +136,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
                 <Chip 
                   label={
                     <span>
-                        {cycleAccess}
+                        {`${cycleAccess}`}
                         <em> ({LOCALES[cycle?.languages!].toUpperCase()})</em>
                       </span>
                   } 
