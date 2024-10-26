@@ -8,7 +8,7 @@ import styles from './aboutUs.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
-import {Container, Grid, Chip, Typography} from '@mui/material';
+import { Container, Grid, Chip, Typography } from '@mui/material';
 //import { ReactElement } from 'react';
 
 interface Props {
@@ -26,9 +26,11 @@ const AboutPage: NextPage<Props> = ({ session }) => {
       </Head>
       <SimpleLayout title={t('browserTitle')}>
         <div style={{ textAlign: 'center', paddingTop: 40 }}>
-          <Typography variant='h5' className="text-secondary fw-bold">{t('title')}</Typography>
+          <Typography variant="h5" className="text-secondary fw-bold">
+            {t('title')}
+          </Typography>
         </div>
-        <br /> 
+        <br />
         <br />
         <div className="middle-container">
           <Container maxWidth="lg">
@@ -41,23 +43,23 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName} >
+                <Typography variant="h2" className={styles.peopleName}>
                   Julie Ricard
                   <a href="https://www.linkedin.com/in/ricardjulie/" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Founder, Director')}</Typography>
-                <Typography variant='h4'paddingY={'9px'} className={styles.positionName}>{t('Researcher and technologist')}</Typography>
-                <Chip label={`${t('social justice')}`} size="small" color='secondary' />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Founder, Director')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Researcher and technologist')}
+                </Typography>
+                <Chip label={`${t('social justice')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('intersectional feminism')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('intersectional feminism')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('disinformation')}`} size="small" color='secondary' />
+                <Chip label={`${t('disinformation')}`} size="small" color="secondary" />
               </Grid>
 
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -68,7 +70,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName}>
+                <Typography variant="h2" className={styles.peopleName}>
                   Alejandro Noriega
                   <a
                     href="https://www.linkedin.com/in/alejandro-noriega-campero-40305637/"
@@ -78,17 +80,17 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Co-creator from Prosperia')}</Typography>
-                <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('AI and technology expert')}</Typography>
-                <Chip 
-                  label={`${t('artificial intelligence')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Co-creator from Prosperia')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('AI and technology expert')}
+                </Typography>
+                <Chip label={`${t('artificial intelligence')}`} size="small" color="secondary" />
                 <br />
-                <Chip  label={`${t('social policies')}`} size="small" color='secondary' />
+                <Chip label={`${t('social policies')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('public health')}`} size="small" color='secondary' />
+                <Chip label={`${t('public health')}`} size="small" color="secondary" />
               </Grid>
 
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -99,19 +101,23 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                   width={200}
                   height={200}
                 />
-                <Typography  variant='h2' className={styles.peopleName}>
+                <Typography variant="h2" className={styles.peopleName}>
                   Geordanis Baño Vega
                   <a href="https://linkedin.com/in/geordanis-baño-vega-488a1863/" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Software Engineer')}</Typography>
-                <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Full-stack expert')}</Typography>
-                <Chip label={`${t('environment')}`} size="small" color='secondary' />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Software Engineer')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Full-stack expert')}
+                </Typography>
+                <Chip label={`${t('environment')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('good cinema')}`} size="small" color='secondary' />
+                <Chip label={`${t('good cinema')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('music')}`} size="small" color='secondary' />
+                <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
 
               {/* <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -146,28 +152,28 @@ José Manuel Gallardo
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aime_cruz.webp`}
+                  src={``}
                   alt="Picture of Software Engineer"
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName}>
-                  Aimé Cruz
-                  <a
-                    href="https://www.linkedin.com/in/aim%C3%A9-rub%C3%AD-cruz-ruiz-72776113b/ "
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                <Typography variant="h2" className={styles.peopleName}>
+                  Julia Amadio
+                  <a href="" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Communications Officer')}</Typography>
-                <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Graphic design and social media expert')}</Typography>
-                <Chip label={`${t('Communications')}`} size="small" color='secondary' />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Visual identity collaborator')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Social media design specialist')}
+                </Typography>
+                <Chip label={`${t('music')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('Graphic design')}`} size="small" color='secondary' />
+                <Chip label={`${t('movies')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('Social Media')}`} size="small" color='secondary' />
+                <Chip label={`${t('gastronomy')}`} size="small" color="secondary" />
               </Grid>
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
@@ -177,7 +183,7 @@ José Manuel Gallardo
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName}>
+                <Typography variant="h2" className={styles.peopleName}>
                   Amanda Quitério de Gois
                   <a
                     href="https://www.linkedin.com/in/amanda-quit%C3%A9rio-de-gois-0b5b111b5/"
@@ -187,21 +193,17 @@ José Manuel Gallardo
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Partnerships and Development')}</Typography>
-                <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Master in Literature')}</Typography>
-                <Chip
-                  label={`${t('Gender and feminisms')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Partnerships and Development')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Master in Literature')}
+                </Typography>
+                <Chip label={`${t('Gender and feminisms')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('Brazilian Popular Music')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('Brazilian Popular Music')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('Books')}`} size="small" color='secondary' />
+                <Chip label={`${t('Books')}`} size="small" color="secondary" />
               </Grid>
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
@@ -211,23 +213,23 @@ José Manuel Gallardo
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName}>
+                <Typography variant="h2" className={styles.peopleName}>
                   Daniela Gonçalves
                   <a href="https://www.linkedin.com/in/daniela-gonçalves-565aba50/" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Advisor')}</Typography>
-                <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Cinema and documentary expert')}</Typography>
-                <Chip label={`${t('anthropology')}`} size="small" color='secondary' />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Advisor')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Cinema and documentary expert')}
+                </Typography>
+                <Chip label={`${t('anthropology')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('cultural heritage and memory')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('cultural heritage and memory')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('education')}`} size="small" color='secondary' />
+                <Chip label={`${t('education')}`} size="small" color="secondary" />
               </Grid>
 
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -238,27 +240,23 @@ José Manuel Gallardo
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName}>
+                <Typography variant="h2" className={styles.peopleName}>
                   Aranzazu Zaga
                   <a href="https://www.linkedin.com/in/aranzazuzg/" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3'paddingTop={'9px'} className={styles.professionName}>{t('Advisor')}</Typography>
-                <Typography variant='h4'paddingY={'9px'} className={styles.positionName}>{t('Narrative and public affairs expert')}</Typography>
-                <Chip label={`${t('Communication')}`} size="small" color='secondary' />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Advisor')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Narrative and public affairs expert')}
+                </Typography>
+                <Chip label={`${t('Communication')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('Crisis management')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('Crisis management')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('Public relations')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('Public relations')}`} size="small" color="secondary" />
               </Grid>
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
@@ -268,27 +266,23 @@ José Manuel Gallardo
                   width={200}
                   height={200}
                 />
-                <Typography variant='h2' className={styles.peopleName}>
-                 Henry Ruffo Wood
+                <Typography variant="h2" className={styles.peopleName}>
+                  Henry Ruffo Wood
                   <a href="https://www.linkedin.com/in/henry-ruffo-a076b5334" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
-                <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Developer')}</Typography>
-                <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Front-end expert')}</Typography>
-                <Chip label={`${t('Nature')}`} size="small" color='secondary' />
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Developer')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Front-end expert')}
+                </Typography>
+                <Chip label={`${t('Nature')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('Photograph')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('Photograph')}`} size="small" color="secondary" />
                 <br />
-                <Chip
-                  label={`${t('music')}`}
-                  size="small"
-                  color='secondary'
-                />
+                <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
               <Grid container className="w-100 d-flex justify-content-center">
                 <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -299,19 +293,43 @@ José Manuel Gallardo
                     width={200}
                     height={200}
                   />
-                  <Typography variant='h2' className={styles.peopleName}>
+                  <Typography variant="h2" className={styles.peopleName}>
                     Don Zamna
                     <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
                       <TiSocialLinkedinCircular className={styles.si} />
                     </a>
                   </Typography>
-                  <Typography variant='h3' paddingTop={'9px'} className={styles.professionName}>{t('Mastermind')}</Typography>
-                  <Typography variant='h4' paddingY={'9px'} className={styles.positionName}>{t('Napping expert')}</Typography>
-                  <Chip label={`${t('birds')}`} size="small" color='secondary' />
+                  <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                    {t('Mastermind')}
+                  </Typography>
+                  <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                    {t('Napping expert')}
+                  </Typography>
+                  <Chip label={`${t('birds')}`} size="small" color="secondary" />
                   <br />
-                  <Chip label={`${t('sleeping')}`} size="small" color='secondary' />
+                  <Chip label={`${t('sleeping')}`} size="small" color="secondary" />
                   <br />
-                  <Chip label={`${t('music')}`} size="small" color='secondary' />
+                  <Chip label={`${t('music')}`} size="small" color="secondary" />
+                </Grid>
+                <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                  <Image className="rounded-circle" src={``} alt="Picture of Mastermind" width={200} height={200} />
+                  <Typography variant="h2" className={styles.peopleName}>
+                    Alush
+                    <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
+                      <TiSocialLinkedinCircular className={styles.si} />
+                    </a>
+                  </Typography>
+                  <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                    {t('Little ball hunter')}
+                  </Typography>
+                  <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                    {t('Companionship expert')}
+                  </Typography>
+                  <Chip label={`${t('Games')}`} size="small" color="secondary" />
+                  <br />
+                  <Chip label={`${t('Sachets')}`} size="small" color="secondary" />
+                  <br />
+                  <Chip label={`${t('Paws')}`} size="small" color="secondary" />
                 </Grid>
               </Grid>
             </Grid>
@@ -323,8 +341,9 @@ José Manuel Gallardo
                 {t('We are grateful for Eureka’s many friends that support us in a variety of ways!')}
               </Typography>
               <Typography>
-                Roland Trompette, Giovanna Salazar, Maïssa Hubert Chakour, Amy Shapiro Raikar, Jessie Keating, Jacques
-                Ricard, Ricardo Sanginés, Rafael Millán
+                Ivette Yañez, Roland Trompette, Ricardo Sanginés, Jacques Ricard, Rafael Millán, Daniel C. Zorrilla,
+                Giovana Salazar, Amy Shapiro Raikar, Jessie Keating, Igor Hlina, Fernanda Pacheco, Aimé Cruz, Leticia
+                Hora
               </Typography>
             </div>
 
@@ -361,6 +380,9 @@ José Manuel Gallardo
                     src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
                     alt=""
                   />
+                </figure>
+                <figure>
+                  <Image width={120} height={80} src="" alt="" />
                 </figure>
               </section>
             </div>

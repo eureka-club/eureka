@@ -46,10 +46,14 @@
   "Crisis management": "Gerenciamento de crise",
   "Public relations": "Relações Públicas",
   "Narrative and public affairs expert": "Especialista em comunicação e relações públicas",
+  "gastronomy":"Gastronomia",
+  "movies":"Filmes",
+  "Visual identity collaborator":"Colaboradora de identidade visual",
+  "Social media design specialist":"Especialista em design para redes sociais",
 
-  "We are grateful for Eureka’s many friends that support us in a variety of ways!": "Agradecemos a todxs que contribuiram com a Eureka!",
+  "We are grateful for Eureka’s many friends that support us in a variety of ways!": "Agradecemos os muitos amigos Eureka que nos apoiam de diversas maneiras!",
   "Follow us on social media": "Siga-nos nas redes sociais ou entre em contato por email",
-
+ 
   "Developer":"Desenvolvedor",
   "Front-end expert": "Especialista front-end",
   "History": "História",
@@ -66,5 +70,11 @@
   "Master in Literature": "Mestra em Literatura",
   "Gender and feminisms": "Gênero e feminismos",
   "Brazilian Popular Music": "MPB",
-  "Books": "Livros"
+  "Books": "Livros",
+
+  "Little ball hunter":"Caçador de bolinhas",
+  "Companionship expert":"Especialista em companheirismo",
+  "Games":"Brincadeiras",
+  "Sachets":"Sachês",
+  "Paws":"Patinhas"
 }
