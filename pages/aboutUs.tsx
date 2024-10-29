@@ -285,6 +285,32 @@ José Manuel Gallardo
                 <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
               <Grid container className="w-100 d-flex justify-content-center">
+              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Image
+                  className="rounded-circle"
+                  src={``}
+                  alt="Picture of Developer"
+                  width={200}
+                  height={200}
+                />
+                <Typography variant="h2" className={styles.peopleName}>
+                Michel Igielka
+                  <a href="" target="_blank" rel="noreferrer">
+                    <TiSocialLinkedinCircular className={styles.si} />
+                  </a>
+                </Typography>
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Photographer')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Photos specialist')}
+                </Typography>
+                <Chip label={`${t('environment')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('movies')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('Adventure sports')}`} size="small" color="secondary" />
+              </Grid>
                 <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image
                     className="rounded-circle"
