@@ -159,7 +159,7 @@ José Manuel Gallardo
                 />
                 <Typography variant="h2" className={styles.peopleName}>
                   Julia Amadio
-                  <a href="" target="_blank" rel="noreferrer">
+                  <a href="https://www.linkedin.com/in/juliaamadiomerces/" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
@@ -295,7 +295,7 @@ José Manuel Gallardo
                 />
                 <Typography variant="h2" className={styles.peopleName}>
                 Michel Igielka
-                  <a href="" target="_blank" rel="noreferrer">
+                  <a href="https://www.linkedin.com/in/michel-igielka-b4205b134/" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
