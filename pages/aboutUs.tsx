@@ -152,7 +152,7 @@ José Manuel Gallardo
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={``}
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Julia_Amadio.webp`}
                   alt="Picture of Software Engineer"
                   width={200}
                   height={200}
@@ -288,7 +288,7 @@ José Manuel Gallardo
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={``}
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Michel.webp`}
                   alt="Picture of Developer"
                   width={200}
                   height={200}
@@ -338,7 +338,9 @@ José Manuel Gallardo
                   <Chip label={`${t('music')}`} size="small" color="secondary" />
                 </Grid>
                 <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
-                  <Image className="rounded-circle" src={``} alt="Picture of Mastermind" width={200} height={200} />
+                  <Image className="rounded-circle" 
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Alush.webp`}
+                  alt="Picture of Mastermind" width={200} height={200} />
                   <Typography variant="h2" className={styles.peopleName}>
                     Alush
                     <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
