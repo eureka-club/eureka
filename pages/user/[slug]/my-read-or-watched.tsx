@@ -252,7 +252,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 value={yearFilter}
               >
                 {years.map(x => (
-                  <MenuItem key={x} value={x}>{x}</MenuItem>
+                  <MenuItem key={`1-${x}`} value={x}>{x}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -270,7 +270,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 value={yearFilter}
               >
                 {years.map(x => (
-                  <MenuItem key={x} value={x}>{x}</MenuItem>
+                  <MenuItem key={`2-${x}`} value={x}>{x}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -299,7 +299,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                   <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
                   {
                     books[year].map((w: any) => (
-                      <Box key={w.id}>
+                      <Box key={`${year}-${w.id}`}>
                       <WMI workId={w.workId!} 
                         sx={{
                           'img':{
