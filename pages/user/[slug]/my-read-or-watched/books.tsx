@@ -26,7 +26,6 @@ import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Masonry from '@mui/lab/Masonry';
 import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
-//import styles from './my-read-or-watched.module.css';
 
 interface Props {
   id: number;
@@ -39,25 +38,20 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const query = router.query;
   const user = useMyReadOrWatched(id)
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
-  const [booksTotal, setBooksTotal] = useState<number>(0);
-  const [moviesTotal, setMoviesTotal] = useState<number>(0);
   const [books, setBooks] = useState<any>(null);
-  const [movies, setMovies] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
 
   let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
-  let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
       
   const res = Array.from(new Set([
     ...(bs??[]).map(b=>b.year),
-    ...(ms??[]).map(m=>m.year)
   ]))
   .sort(
     (a,b)=>+a>+b ? -1 : 1
   );
   
   const [years]=useState<number[]>(res);
-  
+
   useEffect(() => {
     if (query?.tabKey) {
       setTabKey(query.tabKey.toString());
@@ -66,31 +60,27 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       setYearFilter(query.year.toString());
     }
   }, [query]);
-
+  
   useEffect(() => {
+    if(years.length)
+      setYearFilter(years[0].toString());
+  }, [years]);
+
+  const setFilterElements = (year:string)=>{
     if (user && user.readOrWatchedWorks.length) {
       let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
-      let movies = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
-      
-
-      if (yearFilter.length) {
-        books = books.filter((b) => b.year.toString() === yearFilter);
-        movies = movies.filter((b) => b.year.toString() === yearFilter);
+      if (year) {
+        books = books.filter((b) => b.year.toString() === year);
       }
       if (books.length) {
         setBooks(groupBy(books, 'year'));
       }
       else setBooks(null);
-      if (movies.length) {
-        setMovies(groupBy(movies, 'year'));
-      }
-      else setMovies(null);
-
-      setBooksTotal(books.length);
-      setMoviesTotal(movies.length);
-      
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+  
+  useEffect(() => {
+    setFilterElements(yearFilter);
   }, [yearFilter]);
 
   const groupBy = (array: any[], key: string | number) => {
@@ -100,9 +90,6 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       return acc;
     }, {});
   };
-
-  //console.log(books, 'books');
-  //console.log(movies, 'movies');
 
   function handlerComboxesChangeYear(e: SelectChangeEvent<HTMLTextAreaElement>) {
     setYearFilter(e.target.value.toString());
@@ -119,37 +106,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
         //console.error('Error al copiar al portapapeles:', err)
       })
   };
-
-
-  const getDefaultActiveIndex = () => {
-    if (booksTotal > 0)
-      return 0
-    else if (moviesTotal > 0 && !books)
-      return 1;
-    else
-      return 0;
-  };
-  const getDefaultActiveKey = () => {
-    if (booksTotal > 0)
-      return 'books'
-    else if (moviesTotal > 0 && !books)
-      return 'movies';
-    else
-      return 'books';
-  };
-
-  const handleSubsectionChange = (key: string | null) => {
-    if (key != null) {
-      setTabKey(key);
-    }
-  };
-
-  // const getYears = () => {
-  //   let years = [];
-  //   for (let i = 0; i < 7; i++)
-  //     years.push((dayjs().year() - i).toString())
-  //   return years;
-  // };
+  
   const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';
   };
@@ -277,7 +234,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             </section>
             
             <TabPanelSwipeableViews
-              indexActive={getDefaultActiveIndex()}
+              indexActive={0  }
               items={[
               {
                 label:t('Books'),
@@ -323,47 +280,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
               },
               {
                 label:t('Movies'),
-                content:<>
-                  {movies ? (
-                    Object.keys(movies)
-                      .reverse()
-                      .map((year) => (
-                        <Stack key={year}>
-                          <section className="d-flex flex-row">
-                            <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
-
-                              <ContentCopyRoundedIcon
-                                className="ms-2"
-                                style={{
-                                  color: 'var(--eureka-purple)',
-                                }}
-                              />
-                            </div>
-                          </section>
-                          <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
-                          {movies[year].map((w: any) => (
-                            <Box key={w.workId}>
-                              <WMI  
-                                 workId={w.workId!} 
-                                sx={{
-                                  'img':{
-                                    width:'100%',
-                                    height:'auto',
-                                  }
-                                }}  
-                              />
-                            </Box>
-                          ))}
-                          </Masonry>
-                        </Stack>
-                      ))
-                  ) : (
-                    <Alert className="mt-4" variant="primary">
-                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-                    </Alert>
-                  )}
-                </>
+                linkTo:`${router.basePath}/user/${router.query.slug}/my-read-or-watched/movies`
               }
               ]}
             />

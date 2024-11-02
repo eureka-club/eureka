@@ -1,19 +1,24 @@
 import { Box, BoxProps, Tab, Tabs } from "@mui/material"
+import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import SwipeableViews from 'react-swipeable-views';
 
 export type TabPanelProps = {
     items:{
         label:string|ReactElement|ReactElement[];
-        content:any;
+        content?:any;
+        linkTo?:string;
     }[];
     indexActive:number
 } & BoxProps;
 export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPanelProps)=>{
     const [value, setValue] = useState(indexActive??0);
-
+    const router = useRouter();
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+        if(items[newValue].linkTo)
+            router.push(items[newValue].linkTo!);
+        else 
+            setValue(newValue);
     };
     const handleChangeIndex = (index: number) => {
         setValue(index);
@@ -30,6 +35,9 @@ export const TabPanelSwipeableViews = ({items,indexActive,...otherProps}:TabPane
                         & button.Mui-selected {
                             background:var(--color-primary);
                             color:white;
+                        }
+                        & button.Mui-selected a{
+                            color:white!important;
                         }
                     }
         `}</style>

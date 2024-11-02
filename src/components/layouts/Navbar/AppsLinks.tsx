@@ -101,7 +101,7 @@ const MediathequeMenu = ()=>{
           <MenuList>
             <Typography variant="button">{t('My Mediatheque')}</Typography>
             <MenuItem><Link href={`/mediatheque/${getMediathequeSlug()}`}>{t('My Mediatheque')}</Link></MenuItem>
-            <MenuItem><Link href={`/user/${getMediathequeSlug() }/my-read-or-watched`}>{t('MyReadOrWatched')}</Link></MenuItem>
+            <MenuItem><Link href={`/user/${getMediathequeSlug() }/my-read-or-watched/books`}>{t('MyReadOrWatched')}</Link></MenuItem>
           </MenuList>
         :<></>
     }

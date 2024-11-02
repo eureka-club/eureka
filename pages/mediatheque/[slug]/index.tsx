@@ -216,7 +216,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     if (tab && year)
       router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
     else
-      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched`)
+      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched/books`)
   };
 
   return (

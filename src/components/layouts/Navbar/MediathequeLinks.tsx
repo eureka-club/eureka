@@ -23,7 +23,7 @@ export const MediathequeLinks = () => {
         {label:t('My Mediatheque'),link:`/mediatheque/${getMediathequeSlug()}`},
         {label:t('common:myPosts'),link:`/user/${getMediathequeSlug()}/my-posts`},
         {label:t('common:MyCycles'),link:`/user/${getMediathequeSlug()}/my-cycles`},
-        {label:t('MyReadOrWatched'),link:`/user/${getMediathequeSlug() }/my-read-or-watched`},
+        {label:t('MyReadOrWatched'),link:`/user/${getMediathequeSlug() }/my-read-or-watched/books`},
     ]
     return <MenuAction key='MediathequeLinks' items={mediathequeLinksInfo} label={
       <Stack justifyContent={'center'} alignItems={'center'} paddingTop={1}>

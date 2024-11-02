@@ -204,7 +204,7 @@ const NavBar: FunctionComponent = () => {
 
                     </Dropdown.Item>
                     <Dropdown.Item>
-                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched`}>
+                      <Link href={`/user/${getMediathequeSlug()}/my-read-or-watched/books`}>
                         <a className={styles.navLink}>
                           {t("MyReadOrWatched")}
                         </a>
