@@ -47,7 +47,36 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const router = useRouter();
   const{data:session}=useSession();
   
+  const [indexActive, setindexActive] = useState(-1);
   const [tabKey, setTabKey] = useState<string>();
+  
+  useEffect(()=>{
+    if(router.query.tabKey){
+      switch(router.query.tabKey){
+        case 'about':
+          setindexActive(0);
+          break;
+        case 'discussion':
+          setindexActive(1);
+          break;
+        case 'eurekaMoments':
+          setindexActive(2);
+          break;
+        case 'guidelines':
+          setindexActive(3);
+          break;
+      }
+    }
+    else
+      setindexActive(0);
+  },[router.query]);
+
+  useEffect(()=>{
+    if(router.query.tabKey){
+      const c = document.querySelector('#tab-container');
+      c?.scrollIntoView({block:"start",inline:"start"});    
+    }
+  },[indexActive]);
 
   const [cycleId,setCycleId] = useState<string>('')
   useEffect(()=>{
@@ -196,7 +225,7 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
   };
 
   const GetTabPanelItems=()=>{
-    let res = [{
+    let res:any = [{
       label:t('About'),
       content:<>
         <h3 className="h5 mt-4 mb-3 fw-bold text-gray-dark">{t('WhyJoin')}</h3>
@@ -254,7 +283,7 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
             />
           </>
         });
-        //posts
+        //Eurekas
         res.push({
           label:`${t('EurekaMoments')} (${dataPosts?.total})`,
           content:<>
@@ -275,13 +304,13 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
         //Participants
         res.push({
           label:`${t('Participants')} (${cycle.participants.length+1})`,
-          content:<RenderParticipants cycle={cycle}/>
+          linkTo:`${router.basePath}/cycle/${cycleId}/participants`,
+          // content:<RenderParticipants cycle={cycle}/>
         })
       }
     }
     return res;
   }
-
   return (
     <>
     {
@@ -309,9 +338,9 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
           //     )}
           //   </Col>
           // </Row>
-          <Box paddingTop={3}>
+          <Box paddingTop={3} id="tab-container">
             {detailPagesState.selectedSubsectionCycle != null && (
-                <TabPanelSwipeableViews indexActive={0} items={GetTabPanelItems()}/>
+                <TabPanelSwipeableViews indexActive={indexActive} items={GetTabPanelItems()}/>
               )}
           </Box>
         )

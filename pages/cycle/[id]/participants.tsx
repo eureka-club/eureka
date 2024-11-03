@@ -6,13 +6,13 @@ import { useRouter } from 'next/router';
 import { getSession, useSession } from 'next-auth/react';
 import { Spinner, Alert, Button } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
-import { Button as MaterialButton } from '@mui/material';
+import { Box, Button as MaterialButton } from '@mui/material';
 import { dehydrate, QueryClient, useIsFetching } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import Banner from '@/src/components/Banner';
 import useCycleDetail, { getCycleDetail } from '@/src/useCycleDetail';
-import { getPosts } from '@/src/usePosts';
+import usePosts, { getPosts } from '@/src/usePosts';
 import { CycleContext } from '@/src/useCycleContext';
 import globalModalsAtom from '@/src/atoms/globalModals';
 import { ITEMS_IN_LIST_PAGES, WEBAPP_URL } from '@/src/constants';
@@ -25,6 +25,8 @@ import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
 import { CycleSumary } from '@/src/types/cycle';
+import { TabPanelProps, TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
+import { RenderParticipants } from '@/src/components/cycle/CycleDetail/RenderParticipants';
 
 
 const whereCycleParticipants = (id: number) => ({
@@ -67,7 +69,7 @@ const RenderCycleDetailComponent:FC<CycleDetailComponent_Props> = ({cycleId,isJo
   }
 
   if (isError)
-    return (
+    return ( 
       <Alert variant="warning">
         <>{error}</>
       </Alert>
@@ -83,7 +85,6 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const {id}=router?.query;
   const cycleId = id?+id?.toString():0;
   const { data: cycle, isLoading } = useCycleDetail(cycleId, { enabled: !isNaN(cycleId) });
-
   const isFetchingCycle = useIsFetching(['CYCLE', `${cycleId}`]);
   const { show } = useModalContext();
 
@@ -92,6 +93,8 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   //   from: 'cycle/[id]',
   // });
   const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{ enabled: !isNaN(cycleId) });
+  const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycleId}}}});
+  const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
 
   const { t } = useTranslation('common');
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -195,6 +198,39 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     return <></>;
   };
 
+  const GetTabPanelItems=()=>{
+    let res:any = [{
+      label:t('About'),
+      linkTo:`${router.basePath}/cycle/${cycleId}/?tabKey=about`,
+    }];
+    if(cycle && session){
+      const allowed=participants?.findIndex(p=>p.id==session?.user.id)!=-1 || session?.user.id==cycle?.creatorId
+      if(session && allowed){
+        //Discussion
+        res.push({
+          label:t('Discussion'),
+          linkTo:`${router.basePath}/cycle/${cycleId}/?tabKey=discussion`
+        });
+        //posts
+        res.push({
+          label:`${t('EurekaMoments')} (${dataPosts?.total})`,
+          linkTo:`${router.basePath}/cycle/${cycleId}/?tabKey=eurekaMoments`
+        });
+        //Guidelines
+        res.push({
+          label:t('cycleDetail:Guidelines'),
+          linkTo:`${router.basePath}/cycle/${cycleId}/?tabKey=guidelines`
+        });
+        //Participants
+        res.push({
+          label:`${t('Participants')} (${participants!.length+1})`,
+          content: <RenderParticipants cycle={cycle}/>,
+        })
+      }
+    }
+    return res;
+  }
+
   if (cycle)
     return (
       <CycleContext.Provider
@@ -248,12 +284,14 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           : ''
       } */}
     </ButtonsTopActions>
-          <RenderCycleDetailComponent cycleId={cycleId} isJoinCycleLoading={isJoinCycleLoading}/>
+          <Box paddingTop={3}>
+            <TabPanelSwipeableViews indexActive={4} items={GetTabPanelItems()}/>
+          </Box>
         </SimpleLayout>
       </CycleContext.Provider>
     );
 
-
+    
   return (
     <SimpleLayout banner={getBanner()} title="Loading...">
       <Spinner animation="grow" variant="info" />
