@@ -4,9 +4,8 @@ import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession, useSession } from 'next-auth/react';
-import { Spinner, Alert, Button } from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
-import { Button as MaterialButton } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Button as MaterialButton, Skeleton, Stack } from '@mui/material';
 import { dehydrate, QueryClient, useIsFetching } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
@@ -25,6 +24,7 @@ import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
 import { CycleSumary } from '@/src/types/cycle';
+import Spinner from '@/src/components/Spinner';
 
 
 const whereCycleParticipants = (id: number) => ({
@@ -53,22 +53,49 @@ const RenderCycleDetailComponent:FC<CycleDetailComponent_Props> = ({cycleId,isJo
   const{data:session}=useSession();
   const { data: cycle, isLoading, isFetching, isError, error } = useCycleDetail(cycleId, { enabled: !isNaN(cycleId) });
   
+  if (/* isLoadingSession || */ isFetching || isLoading) {
+    return <Stack direction={{xs:'column',sm:'row'}} gap={1} width={'100%'} alignContent={'center'}>
+            <Box sx={{width:284,height:500}}>
+              <Skeleton variant="rounded" width={'100%'} height={'100%'} />
+            </Box>
+            <Box flex={3}>
+              <Stack gap={3}>
+                <Box>
+                  <Skeleton variant="text" sx={{ fontSize: '1.5rem' }} />
+                  <Skeleton variant="text" sx={{ fontSize: '.8rem' }} />
+                  <Skeleton variant="text" sx={{ fontSize: '.8rem' }} />
+                </Box>
+                <Box>
+                  <Skeleton variant="text" sx={{ fontSize: '1.5rem' }} />
+                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                  <Stack direction={'row'} gap={1}>
+                    <Skeleton variant="rectangular" width='100%' height={218} />
+                    <Skeleton variant="rectangular" width='100%' height={218} />
+                    <Skeleton sx={{display:{xs:'none',md:'inherit'}}} variant="rectangular" width='100%' height={218} />
+                    <Skeleton sx={{display:{xs:'none',md:'inherit'}}} variant="rectangular" width='100%' height={218} />
+                    <Skeleton sx={{display:{xs:'none',md:'inherit'}}} variant="rectangular" width='100%' height={218} />
+                  </Stack>
+                </Box>
+              </Stack>
+            </Box>
+          </Stack>
+  }
+  
   if (cycle) { 
     const res = <div style={isJoinCycleLoading ? {pointerEvents:'none'}:{}}>
       <CycleDetailComponent/>
-      </div>
+    </div>
     if([1,2,4].includes(cycle.access))return res;
     if (cycle.access === 3 && !cycle.currentUserIsParticipant && cycle.creatorId!=session?.user.id) return <Alert>Not authorized</Alert>;
     else return res;
   }
 
-  if (/* isLoadingSession || */ isFetching || isLoading) {
-    return <Spinner animation="grow" variant="info" />;
-  }
+  
+  
 
   if (isError)
     return (
-      <Alert variant="warning">
+      <Alert severity="warning">
         <>{error}</>
       </Alert>
     );
@@ -140,7 +167,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   if (!isPending() && !cycle)
     return (
       <SimpleLayout title={t('notFound')}>
-        <Alert variant="danger">{t('notFound')}</Alert>
+        <Alert severity="error">{t('notFound')}</Alert>
       </SimpleLayout>
     );
 
@@ -177,13 +204,13 @@ const CycleDetailPage: NextPage<Props> = (props) => {
                 <div className="d-grid gap-2">
                   <Button
                     disabled={isPending()}
-                    className="pt-2 pb-1 px-5"
-                    variant="primary"
-                    size="lg"
+                    color="primary"
+                    size="large"
+                    variant='contained'
                     onClick={requestJoinCycle}
                   >
                     <h4 className="text-white fw-bold">
-                      ¡Unirse ya! {isPending() && <Spinner size="sm" animation="grow" variant="info" />}
+                      ¡Unirse ya! {isPending() && <CircularProgress />}
                     </h4>
                   </Button>
                 </div>
@@ -256,7 +283,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
 
   return (
     <SimpleLayout banner={getBanner()} title="Loading...">
-      <Spinner animation="grow" variant="info" />
+      <Spinner/>
     </SimpleLayout>
   );
 };
