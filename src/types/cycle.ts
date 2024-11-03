@@ -51,11 +51,16 @@ export const CycleDetailSpec = {
     cycleWorksDates: {
       select:CycleWorkSpec.select
     },
-    participants:{select:{id: true, name: true, email: true, countryOfOrigin: true}},
+    participants:{
+      select:{
+        id: true,
+        //  name: true, email: true, countryOfOrigin: true
+      }},
     _count: {
       select: {
         // participants: true,
         ratings: true,
+        posts:true
       },
     },
     complementaryMaterials: true,

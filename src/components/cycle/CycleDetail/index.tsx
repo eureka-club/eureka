@@ -19,18 +19,17 @@ import { useCycleContext } from '@/src/useCycleContext';
 import useCycle from '@/src/useCycleDetail';
 import usePosts from '@/src/usePosts'
 import { CycleDetail } from '@/src/types/cycle';
-import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
+// import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { RenderCycleDetailHeader } from '../RenderCycleDetailHeader';
 import HyvorComments from '../../common/HyvorComments';
 import CycleDetailDiscussion from '../CycleDetailDiscussion';
 import { RenderPosts } from './RenderPosts';
 import { RenderGuidelines } from './RenderGuideLines';
-import { RenderParticipants } from './RenderParticipants';
 import { TabPanelSwipeableViews } from '../../common/TabPanelSwipeableViews';
 import { useOnCycleCommentCreated } from '../../common/useOnCycleCommentCreated';
 import { Box } from '@mui/material';
 // const CycleDetailDiscussion = lazy(() => import ('./CycleDetailDiscussion')) 
-const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
+// const CycleDetailWorks = lazy(() => import('../CycleDetailWorks'))
 interface Props {
   post?: PostDetail;
   work?: WorkDetail;
@@ -48,7 +47,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   const{data:session}=useSession();
   
   const [indexActive, setindexActive] = useState(-1);
-  const [tabKey, setTabKey] = useState<string>();
+  // const [tabKey, setTabKey] = useState<string>();
   
   useEffect(()=>{
     if(router.query.tabKey){
@@ -84,7 +83,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
       if(router.query.id){
         setCycleId(router.query.id?.toString())
       }
-      if(router.query.tabKey)setTabKey(router.query.tabKey.toString())
+      // if(router.query.tabKey)setTabKey(router.query.tabKey.toString())
     }
   },[router])
 
@@ -96,37 +95,37 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
 
 const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
 const{dispatch}=useOnCycleCommentCreated(cycleId);
-  const works = cycle?.cycleWorksDates?.length
-    ? cycle?.cycleWorksDates
-    : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
+  // const works = cycle?.cycleWorksDates?.length
+  //   ? cycle?.cycleWorksDates
+  //   : cycle?.works.map(w=>({id:w.id,workId:w.id,work:w,startDate:new Date(),endDate:new Date()}))
 
-  const{data:participants}=useCycleParticipants(cycle?.id!
-    ,{enabled:!!cycle?.id!}
-  );
+  // const{data:participants}=useCycleParticipants(cycle?.id!
+  //   ,{enabled:!!cycle?.id!}
+  // );
 
   const [detailPagesState, setDetailPagesState] = useAtom(detailPagesAtom);
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
  // const [editPostOnSmallerScreen,setEditPostOnSmallerScreen] = useAtom(editOnSmallerScreens);
   
   //const {data:session, status} = useSession();
   const { t } = useTranslation('cycleDetail');
   
-  const tabContainnerRef = useRef<HTMLDivElement>(null);
+  // const tabContainnerRef = useRef<HTMLDivElement>(null);
   const cycleWorksRef = useRef<HTMLDivElement>(null);
-  const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
+  // const [filtersContentType, setFiltersContentType] = useState<string[]>([]);
     
   if(!cycle)return <></>
 
-  const handleSubsectionChange = (key: string | null) => {
-    if (key != null) {
-      setTabKey(key);
+  // const handleSubsectionChange = (key: string | null) => {
+  //   if (key != null) {
+  //     // setTabKey(key);
 
-      setDetailPagesState({ ...detailPagesState, selectedSubsectionCycle: key });
-    }
-  };
+  //     setDetailPagesState({ ...detailPagesState, selectedSubsectionCycle: key });
+  //   }
+  // };
 
   const onCarouselSeeAllAction = async () => {
-    setTabKey('cycle-about');
+    // setTabKey('cycle-about');
     if (cycleWorksRef)
       cycleWorksRef.current!.scrollIntoView({
         behavior: 'smooth',
@@ -147,82 +146,82 @@ const{dispatch}=useOnCycleCommentCreated(cycleId);
   };*/
   
 
-  const RenderRestrictTabsHeaders:FC<{cycle:CycleDetail}> = ({cycle}) => {
-    if (cycle) {
-      const res = (
-        <>
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="cycle-discussion">
-              <span className="mb-3">{t('Discussion')}</span>
-            </NavLink>
-          </NavItem>
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="eurekas">
-              <span className="mb-3">{t('EurekaMoments')} ({dataPosts?.total})</span>
-            </NavLink>
-          </NavItem>
-          {/* <NavItem className={`${styles.tabBtn}`}>
-            <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
-          </NavItem> */}
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="guidelines">
-              <span className="mb-3">{t('Guidelines')}</span>
-            </NavLink>
-          </NavItem>
+  // const RenderRestrictTabsHeaders:FC<{cycle:CycleDetail}> = ({cycle}) => {
+  //   if (cycle) {
+  //     const res = (
+  //       <>
+  //         <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+  //           <NavLink eventKey="cycle-discussion">
+  //             <span className="mb-3">{t('Discussion')}</span>
+  //           </NavLink>
+  //         </NavItem>
+  //         <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+  //           <NavLink eventKey="eurekas">
+  //             <span className="mb-3">{t('EurekaMoments')} ({dataPosts?.total})</span>
+  //           </NavLink>
+  //         </NavItem>
+  //         {/* <NavItem className={`${styles.tabBtn}`}>
+  //           <NavLink eventKey="my_milestone">{t('My milestones')}</NavLink>
+  //         </NavItem> */}
+  //         <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+  //           <NavLink eventKey="guidelines">
+  //             <span className="mb-3">{t('Guidelines')}</span>
+  //           </NavLink>
+  //         </NavItem>
 
-          <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
-            <NavLink eventKey="participants">
-              <span className="mb-3">{t('Participants')} ({participants?.length})</span>
-            </NavLink>
-          </NavItem>
-        </>
-      );
-      const allowed = participants && participants.findIndex(p=>p.id==session?.user.id)>-1
-        || cycle.creatorId == session?.user.id;
-      if(allowed)return res;
-      if (cycle.access === 3) return <></>;
-      if (cycle.access === 1) return res;
-      if ([2, 4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
-    }
-    return <></>;
-  };
+  //         <NavItem className={`cursor-pointer ${styles.tabBtn}`}>
+  //           <NavLink eventKey="participants">
+  //             <span className="mb-3">{t('Participants')} ({cycle?.participants.length})</span>
+  //           </NavLink>
+  //         </NavItem>
+  //       </>
+  //     );
+  //     const allowed = cycle?.participants && cycle?.participants.findIndex(p=>p.id==session?.user.id)>-1
+  //       || cycle.creatorId == session?.user.id;
+  //     if(allowed)return res;
+  //     if (cycle.access === 3) return <></>;
+  //     if (cycle.access === 1) return res;
+  //     if ([2, 4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return res;
+  //   }
+  //   return <></>;
+  // };
 
-  const getDefaultActiveKey = () => {
-    if (cycle) {
-      if (cycle.access === 1) {
-        if (cycleContext.currentUserIsParticipant) return 'cycle-discussion';
-        return 'cycle-about';
-      }
-      if ([2, 4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return 'cycle-discussion';
-      if (cycle.access === 3 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
-    }
-    return 'cycle-about';
-  };
+  // const getDefaultActiveKey = () => {
+  //   if (cycle) {
+  //     if (cycle.access === 1) {
+  //       if (cycleContext.currentUserIsParticipant) return 'cycle-discussion';
+  //       return 'cycle-about';
+  //     }
+  //     if ([2, 4].includes(cycle.access) && (cycleContext.cycle?.currentUserIsCreator || cycleContext.cycle?.currentUserIsParticipant)) return 'cycle-discussion';
+  //     if (cycle.access === 3 && cycleContext.currentUserIsParticipant) return 'cycle-discussion';
+  //   }
+  //   return 'cycle-about';
+  // };
 
-  const removeCycle = async (e:MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    if(cycle){
-      const res = await fetch(`/api/cycle/${cycle.id}`,{
-        method:'delete',
-      });
-      if(res.ok){
-        const json = await res.json();
-        return json;
-      }
-      else{
-        setGlobalModalsState({
-          ...globalModalsState,
-          showToast: {
-            show: true,
-            type: 'warning',
-            title: t(`common:${res.statusText}`),
-            message: res.statusText,
-          },
-        });
-      }
-    }
-    return null;
-  };
+  // const removeCycle = async (e:MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault()
+  //   if(cycle){
+  //     const res = await fetch(`/api/cycle/${cycle.id}`,{
+  //       method:'delete',
+  //     });
+  //     if(res.ok){
+  //       const json = await res.json();
+  //       return json;
+  //     }
+  //     else{
+  //       setGlobalModalsState({
+  //         ...globalModalsState,
+  //         showToast: {
+  //           show: true,
+  //           type: 'warning',
+  //           title: t(`common:${res.statusText}`),
+  //           message: res.statusText,
+  //         },
+  //       });
+  //     }
+  //   }
+  //   return null;
+  // };
 
   const GetTabPanelItems=()=>{
     let res:any = [{

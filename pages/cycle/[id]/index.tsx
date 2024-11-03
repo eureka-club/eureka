@@ -91,7 +91,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   //   enabled: !!props.id,
   //   from: 'cycle/[id]',
   // });
-  const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{ enabled: !isNaN(cycleId) });
+  // const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{ enabled: !isNaN(cycleId) });
 
   const { t } = useTranslation('common');
   const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
@@ -122,7 +122,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     if (
       session?.user &&
       join &&
-      participants && participants.findIndex(i => i.id == session.user.id) == -1
+      cycle?.participants && cycle?.participants.findIndex(i => i.id == session.user.id) == -1
     ) {
       execJoinCycle();
     }
@@ -135,7 +135,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
     }
   };
 
-  const isPending = () => isFetchingCycle > 0 || isJoinCycleLoading || isLoading || isLoadingParticipants;
+  const isPending = () => isFetchingCycle > 0 || isJoinCycleLoading || isLoading;
 
   if (!isPending() && !cycle)
     return (

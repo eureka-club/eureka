@@ -1,6 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useAtom } from 'jotai';
+// import { useAtom } from 'jotai';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { getSession, useSession } from 'next-auth/react';
@@ -9,25 +9,25 @@ import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { Box, Button as MaterialButton } from '@mui/material';
 import { dehydrate, QueryClient, useIsFetching } from 'react-query';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
-import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 import Banner from '@/src/components/Banner';
 import useCycleDetail, { getCycleDetail } from '@/src/useCycleDetail';
-import usePosts, { getPosts } from '@/src/usePosts';
+import { getPosts } from '@/src/usePosts';
 import { CycleContext } from '@/src/useCycleContext';
-import globalModalsAtom from '@/src/atoms/globalModals';
+// import globalModalsAtom from '@/src/atoms/globalModals';
 import { ITEMS_IN_LIST_PAGES, WEBAPP_URL } from '@/src/constants';
 import toast from 'react-hot-toast';
 import { useJoinUserToCycleAction } from '@/src/hooks/mutations/useCycleJoinOrLeaveActions';
 import { useModalContext } from '@/src/hooks/useModal';
 import SignInForm from '@/components/forms/SignInForm';
-import { FC, MouseEvent, useEffect } from 'react';
+import { FC, MouseEvent, useEffect, useRef } from 'react';
 import { useCycleParticipants } from '@/src/hooks/useCycleParticipants';
 import { getCycleParticipants } from '@/src/actions/getCycleParticipants';
 import { getWorksSumary } from '@/src/useWorksSumary';
 import { CycleSumary } from '@/src/types/cycle';
-import { TabPanelProps, TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
+import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
 import { RenderParticipants } from '@/src/components/cycle/CycleDetail/RenderParticipants';
-
+import { RenderCycleDetailHeader } from '@/src/components/cycle/RenderCycleDetailHeader';
+import CycleDetailComponent from '@/src/components/cycle/CycleDetail';
 
 const whereCycleParticipants = (id: number) => ({
   where: {
@@ -87,17 +87,19 @@ const CycleDetailPage: NextPage<Props> = (props) => {
   const { data: cycle, isLoading } = useCycleDetail(cycleId, { enabled: !isNaN(cycleId) });
   const isFetchingCycle = useIsFetching(['CYCLE', `${cycleId}`]);
   const { show } = useModalContext();
+  const cycleWorksRef = useRef<HTMLDivElement>(null);
+
 
   // const { data: participants, isLoading: isLoadingParticipants } = useUsers(whereCycleParticipants(props.id), {
   //   enabled: !!props.id,
   //   from: 'cycle/[id]',
   // });
   const {data:participants,isLoading:isLoadingParticipants}=useCycleParticipants(cycle?.id!,{ enabled: !isNaN(cycleId) });
-  const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycleId}}}});
-  const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
+  // const cyclePostsProps = (cycleId:number)=>({take:8,where:{cycles:{some:{id:cycleId}}}});
+  // const {data:dataPosts} = usePostsSumary(cyclePostsProps(+cycleId),{cacheKey:['CYCLE',`${cycleId}`,'POSTS']});
 
   const { t } = useTranslation('common');
-  const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
+  // const [globalModalsState, setGlobalModalsState] = useAtom(globalModalsAtom);
   const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT, NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = props;
 
   
@@ -130,6 +132,13 @@ const CycleDetailPage: NextPage<Props> = (props) => {
       execJoinCycle();
     }
   }, [])
+
+  useEffect(()=>{
+    if(cycle){
+      const c = document.querySelector('#tab-container');
+      c?.scrollIntoView({block:"start",inline:"start"});    
+    }
+  },[cycle])
 
   const requestJoinCycle = async () => {
     if (!session) openSignInModal();
@@ -213,7 +222,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
         });
         //posts
         res.push({
-          label:`${t('EurekaMoments')} (${dataPosts?.total})`,
+          label:`${t('EurekaMoments')} (${cycle._count.posts})`,
           linkTo:`${router.basePath}/cycle/${cycleId}/?tabKey=eurekaMoments`
         });
         //Guidelines
@@ -223,13 +232,21 @@ const CycleDetailPage: NextPage<Props> = (props) => {
         });
         //Participants
         res.push({
-          label:`${t('Participants')} (${participants!.length+1})`,
+          label:`${t('Participants')} (${participants!.length})`,
           content: <RenderParticipants cycle={cycle}/>,
         })
       }
     }
     return res;
   }
+
+  const onCarouselSeeAllAction = async () => {
+    // setTabKey('cycle-about');
+    if (cycleWorksRef)
+      cycleWorksRef.current!.scrollIntoView({
+        behavior: 'smooth',
+      });
+  };
 
   if (cycle)
     return (
@@ -284,7 +301,12 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           : ''
       } */}
     </ButtonsTopActions>
-          <Box paddingTop={3}>
+          <RenderCycleDetailHeader 
+            cycle={cycle}
+            // onParticipantsAction={onParticipantsAction}
+            onCarouselSeeAllAction={onCarouselSeeAllAction}
+          /> 
+          <Box paddingTop={3} id="tab-container">
             <TabPanelSwipeableViews indexActive={4} items={GetTabPanelItems()}/>
           </Box>
         </SimpleLayout>
