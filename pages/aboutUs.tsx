@@ -61,6 +61,62 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('disinformation')}`} size="small" color="secondary" />
               </Grid>
+              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Image
+                  className="rounded-circle"
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
+                  alt="Picture of Software Engineer"
+                  width={200}
+                  height={200}
+                />
+                <Typography variant="h2" className={styles.peopleName}>
+                  Geordanis Baño Vega
+                  <a href="https://linkedin.com/in/geordanis-baño-vega-488a1863/" target="_blank" rel="noreferrer">
+                    <TiSocialLinkedinCircular className={styles.si} />
+                  </a>
+                </Typography>
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Software Engineer')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Full-stack expert')}
+                </Typography>
+                <Chip label={`${t('environment')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('good cinema')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('music')}`} size="small" color="secondary" />
+              </Grid>
+              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Image
+                  className="rounded-circle"
+                  alt="Partnerships and Development"
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/amanda_gois.webp`}
+                  width={200}
+                  height={200}
+                />
+                <Typography variant="h2" className={styles.peopleName}>
+                  Amanda Quitério de Gois
+                  <a
+                    href="https://www.linkedin.com/in/amanda-quit%C3%A9rio-de-gois-0b5b111b5/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <TiSocialLinkedinCircular className={styles.si} />
+                  </a>
+                </Typography>
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Partnerships and Development')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Master in Literature')}
+                </Typography>
+                <Chip label={`${t('Gender and feminisms')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('Brazilian Popular Music')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('Books')}`} size="small" color="secondary" />
+              </Grid>
 
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
@@ -92,34 +148,84 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('public health')}`} size="small" color="secondary" />
               </Grid>
-
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
-                  alt="Picture of Software Engineer"
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
+                  alt="Picture of Developer"
                   width={200}
                   height={200}
                 />
                 <Typography variant="h2" className={styles.peopleName}>
-                  Geordanis Baño Vega
-                  <a href="https://linkedin.com/in/geordanis-baño-vega-488a1863/" target="_blank" rel="noreferrer">
+                  Henry Ruffo Wood
+                  <a href="https://www.linkedin.com/in/henry-ruffo-a076b5334" target="_blank" rel="noreferrer">
                     <TiSocialLinkedinCircular className={styles.si} />
                   </a>
                 </Typography>
                 <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Software Engineer')}
+                  {t('Developer')}
                 </Typography>
                 <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
-                  {t('Full-stack expert')}
+                  {t('Front-end expert')}
                 </Typography>
-                <Chip label={`${t('environment')}`} size="small" color="secondary" />
+                <Chip label={`${t('Nature')}`} size="small" color="secondary" />
                 <br />
-                <Chip label={`${t('good cinema')}`} size="small" color="secondary" />
+                <Chip label={`${t('Photograph')}`} size="small" color="secondary" />
                 <br />
                 <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
-
+              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Image
+                  className="rounded-circle"
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
+                  alt="Picture of Advisor"
+                  width={200}
+                  height={200}
+                />
+                <Typography variant="h2" className={styles.peopleName}>
+                  Daniela Gonçalves
+                  <a href="https://www.linkedin.com/in/daniela-gonçalves-565aba50/" target="_blank" rel="noreferrer">
+                    <TiSocialLinkedinCircular className={styles.si} />
+                  </a>
+                </Typography>
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Advisor')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Cinema and documentary expert')}
+                </Typography>
+                <Chip label={`${t('anthropology')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('cultural heritage and memory')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('education')}`} size="small" color="secondary" />
+              </Grid>
+              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Image
+                  className="rounded-circle"
+                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
+                  alt="Picture of Advisor"
+                  width={200}
+                  height={200}
+                />
+                <Typography variant="h2" className={styles.peopleName}>
+                  Aranzazu Zaga
+                  <a href="https://www.linkedin.com/in/aranzazuzg/" target="_blank" rel="noreferrer">
+                    <TiSocialLinkedinCircular className={styles.si} />
+                  </a>
+                </Typography>
+                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                  {t('Advisor')}
+                </Typography>
+                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                  {t('Narrative and public affairs expert')}
+                </Typography>
+                <Chip label={`${t('Communication')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('Crisis management')}`} size="small" color="secondary" />
+                <br />
+                <Chip label={`${t('Public relations')}`} size="small" color="secondary" />
+              </Grid>
               {/* <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
 <Image
 className="rounded-circle"
@@ -174,115 +280,6 @@ José Manuel Gallardo
                 <Chip label={`${t('movies')}`} size="small" color="secondary" />
                 <br />
                 <Chip label={`${t('gastronomy')}`} size="small" color="secondary" />
-              </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
-                <Image
-                  className="rounded-circle"
-                  alt="Partnerships and Development"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/amanda_gois.webp`}
-                  width={200}
-                  height={200}
-                />
-                <Typography variant="h2" className={styles.peopleName}>
-                  Amanda Quitério de Gois
-                  <a
-                    href="https://www.linkedin.com/in/amanda-quit%C3%A9rio-de-gois-0b5b111b5/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <TiSocialLinkedinCircular className={styles.si} />
-                  </a>
-                </Typography>
-                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Partnerships and Development')}
-                </Typography>
-                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
-                  {t('Master in Literature')}
-                </Typography>
-                <Chip label={`${t('Gender and feminisms')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('Brazilian Popular Music')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('Books')}`} size="small" color="secondary" />
-              </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
-                <Image
-                  className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
-                  alt="Picture of Advisor"
-                  width={200}
-                  height={200}
-                />
-                <Typography variant="h2" className={styles.peopleName}>
-                  Daniela Gonçalves
-                  <a href="https://www.linkedin.com/in/daniela-gonçalves-565aba50/" target="_blank" rel="noreferrer">
-                    <TiSocialLinkedinCircular className={styles.si} />
-                  </a>
-                </Typography>
-                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Advisor')}
-                </Typography>
-                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
-                  {t('Cinema and documentary expert')}
-                </Typography>
-                <Chip label={`${t('anthropology')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('cultural heritage and memory')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('education')}`} size="small" color="secondary" />
-              </Grid>
-
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
-                <Image
-                  className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
-                  alt="Picture of Advisor"
-                  width={200}
-                  height={200}
-                />
-                <Typography variant="h2" className={styles.peopleName}>
-                  Aranzazu Zaga
-                  <a href="https://www.linkedin.com/in/aranzazuzg/" target="_blank" rel="noreferrer">
-                    <TiSocialLinkedinCircular className={styles.si} />
-                  </a>
-                </Typography>
-                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Advisor')}
-                </Typography>
-                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
-                  {t('Narrative and public affairs expert')}
-                </Typography>
-                <Chip label={`${t('Communication')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('Crisis management')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('Public relations')}`} size="small" color="secondary" />
-              </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
-                <Image
-                  className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
-                  alt="Picture of Developer"
-                  width={200}
-                  height={200}
-                />
-                <Typography variant="h2" className={styles.peopleName}>
-                  Henry Ruffo Wood
-                  <a href="https://www.linkedin.com/in/henry-ruffo-a076b5334" target="_blank" rel="noreferrer">
-                    <TiSocialLinkedinCircular className={styles.si} />
-                  </a>
-                </Typography>
-                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Developer')}
-                </Typography>
-                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
-                  {t('Front-end expert')}
-                </Typography>
-                <Chip label={`${t('Nature')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('Photograph')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
               <Grid container className="w-100 d-flex justify-content-center">
               <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
@@ -374,7 +371,6 @@ José Manuel Gallardo
                 Hora
               </Typography>
             </div>
-
             <div className={styles['contact-me']}>
               <br />
               <hr />
