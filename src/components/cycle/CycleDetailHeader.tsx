@@ -22,6 +22,11 @@ import { TagsLinks } from '../common/TagsLinks';
 import Skeleton from '../Skeleton';
 import { useShareCycle } from './useShareCycle';
 import { useSaveCycleForLater } from './useSaveCycleForLater';
+import { DATE_FORMAT_SHORT } from '@/src/constants';
+require('dayjs/locale/pt')
+require('dayjs/locale/en')
+require('dayjs/locale/es')
+require('dayjs/locale/fr')
 interface Props {
   cycleId:number;
   post?: PostDetail;
@@ -43,7 +48,8 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 }) => {
   const [show, setShow] = useState<boolean>(s);
   const {data:session} = useSession();
-  const { t } = useTranslation('cycleDetail');
+  const { t,lang } = useTranslation('cycleDetail');
+
   const {data:cycle,isLoading:isLoadingCycle} = useCycle(cycleId
     // ,{enabled:!!cycleId}
   );
@@ -114,10 +120,11 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
 
   const getWorksSorted = () => {
     const res: CycleWork[] = [];
-    if(!cycle)return []
+    if(!cycle)return [];
     if(!cycle.cycleWorksDates)return works||[];
     (cycle.cycleWorksDates as CycleWork[])
       .sort((f, s) => {
+        if(!f.startDate || !s.startDate)return 0;
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
 
@@ -143,7 +150,10 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
       .forEach((cw) => {
         if (works) {
           const idx = works?.findIndex((w) => w!.id === cw.workId);
-          res.push(works[idx]! as unknown as CycleWork);          
+          const w = works[idx]! as unknown as CycleWork;
+          w.startDate = cw.startDate ? new Date(cw.startDate):null!;
+          w.endDate = cw.endDate ? new Date(cw.endDate):null!;
+          res.push(w);          
         }
       });
     if (cycle.cycleWorksDates.length) return res;
@@ -247,7 +257,16 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
             <CycleSummary cycleId={cycle.id} />
             <Stack direction={'row'} gap={1}  flexWrap={'wrap'} justifyContent={{xs:'center',md:'left'}}>
                 {
-                  getWorksSorted()?.map(w=><WorkMosaicItem Width={160} Height={160*1.36} key={`work-${w?.id!}`} workId={w?.id!} />)??<></>
+                  getWorksSorted()?.map((w:any)=>
+                    <Stack alignItems={'center'} key={`work-${w?.id!}`}>
+                      <WorkMosaicItem Width={160} Height={160*1.36} workId={w?.id!} />
+                      {
+                        w?.startDate&&w?.endDate
+                          ?<Typography variant='caption'>{`${dayjs(w?.startDate).utc().format(DATE_FORMAT_SHORT)}—${dayjs(w?.endDate).utc().format(DATE_FORMAT_SHORT)}`}</Typography>
+                          :<></>
+                      }
+                    </Stack>
+                  )??<></>
                 }
             </Stack>
           </Stack>
