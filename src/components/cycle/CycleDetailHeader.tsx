@@ -23,6 +23,7 @@ import Skeleton from '../Skeleton';
 import { useShareCycle } from './useShareCycle';
 import { useSaveCycleForLater } from './useSaveCycleForLater';
 import { DATE_FORMAT_SHORT } from '@/src/constants';
+import { StyledBadge } from '../common/StyledBadge';
 require('dayjs/locale/pt')
 require('dayjs/locale/en')
 require('dayjs/locale/es')
@@ -118,6 +119,12 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
     });
   };
 
+  const isActive = (w: {startDate:Date|null;endDate:Date|null}) => {
+    if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
+    if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
+    return false;
+  };
+
   const getWorksSorted = () => {
     const res: CycleWork[] = [];
     if(!cycle)return [];
@@ -128,11 +135,7 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
         const fCD = dayjs(f.startDate!);
         const sCD = dayjs(s.startDate!);
 
-        const isActive = (w: {startDate:Date|null;endDate:Date|null}) => {
-          if (w.startDate && w.endDate) return dayjs().isBetween(w.startDate!, w.endDate);
-          if (w.startDate && !w.endDate) return dayjs().isAfter(w.startDate);
-          return false;
-        };
+        
         const isPast = (w: {startDate:Date|null;endDate:Date|null})  => {
           if (w.endDate) return dayjs().isAfter(w.endDate);
           return false;
@@ -262,9 +265,17 @@ const CycleDetailHeader: FunctionComponent<Props> = ({
                       <WorkMosaicItem Width={160} Height={160*1.36} workId={w?.id!} />
                       {
                         w?.startDate&&w?.endDate
-                          ?<Typography variant='caption'>{`${dayjs(w?.startDate).utc().format(DATE_FORMAT_SHORT)}—${dayjs(w?.endDate).utc().format(DATE_FORMAT_SHORT)}`}</Typography>
+                          ?<Stack direction={'row'} alignItems={'center'} gap={1}>
+                            <Typography variant='caption'>{`${dayjs(w?.startDate).utc().format(DATE_FORMAT_SHORT)}—${dayjs(w?.endDate).utc().format(DATE_FORMAT_SHORT)}`}</Typography>
+                            {
+                              isActive(w)
+                              ? <StyledBadge/> 
+                              : <></>
+                            }
+                          </Stack> 
                           :<></>
                       }
+                      
                     </Stack>
                   )??<></>
                 }
