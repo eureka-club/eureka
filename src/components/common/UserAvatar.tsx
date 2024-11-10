@@ -2,7 +2,7 @@ import { FunctionComponent, SyntheticEvent,MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import styles from './UserAvatar.module.css';
 import slugify from 'slugify'
-import { Avatar, Box, BoxProps} from '@mui/material';
+import { Avatar, Box, BoxProps, Skeleton, Stack} from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { AZURE_STORAGE_URL } from '@/src/constants';
 import { Size } from '@/src/types';
@@ -52,7 +52,7 @@ const UserAvatar: FunctionComponent<Props> = ({
   const router = useRouter();
   let width='3rem';
 
-  const {data:user}=useUserSumary(+userId);
+  const {data:user,isLoading}=useUserSumary(+userId);
   
   switch(size){
     case 'small': width='2rem'; break;
@@ -68,6 +68,12 @@ const UserAvatar: FunctionComponent<Props> = ({
     router.push(`/mediatheque/${getMediathequeSlug(name,userId)}`)
   }
   const photo = user?.photos?.length ? user?.photos[0].storedFile : null;
+
+  if(isLoading)
+    return <Stack direction={'row'} alignItems={'center'} gap={1}>
+      <Skeleton variant="circular" width={size} height={size} />
+      <Skeleton variant="rounded" width={'90%'} height={'1rem'} />
+    </Stack>;
   return (
     <>
       {(user?.name&&userId) && (
