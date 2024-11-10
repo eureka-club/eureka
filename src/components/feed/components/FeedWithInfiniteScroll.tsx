@@ -45,7 +45,7 @@ export const FeedWithInfiniteScroll = ()=>{
             case ActionType.CommentCreatedOnCycle:
               return <CommentOnCycleCard key={`${a.type}-${a.cycleId!}`} cycleId={a.cycleId!} page_id={a.page_id!} />;
             case ActionType.PostCreatedOnWork:
-              return <PostOnWorkCard key={`${a.type}-${a.postId!}`} postId={a.postId!} createdAt={a.createdAt}/>;
+              return <PostOnWorkCard key={`${a.type}-${a.postId!}`} postId={a.postId!} workId={a.workId!} createdAt={a.createdAt}/>;
             case ActionType.CommentCreatedOnWork:
               return <CommentOnWorkCard key={`${a.type}-${a.workId}`} workId={a.workId!} page_id={a.page_id!} />
           }
