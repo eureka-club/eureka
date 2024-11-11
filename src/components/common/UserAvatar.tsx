@@ -69,11 +69,9 @@ const UserAvatar: FunctionComponent<Props> = ({
   }
   const photo = user?.photos?.length ? user?.photos[0].storedFile : null;
 
-  if(isLoading)
-    return <Stack direction={'row'} alignItems={'center'} gap={1}>
-      <Skeleton variant="circular" width={size} height={size} />
-      <Skeleton variant="rounded" width={'90%'} height={'1rem'} />
-    </Stack>;
+  if(!userId || isLoading){
+    return <Skeleton variant="circular" width={width} height={width} />;
+  }
   return (
     <>
       {(user?.name&&userId) && (
