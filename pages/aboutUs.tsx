@@ -35,7 +35,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
         <div className="middle-container">
           <Container maxWidth="lg">
             <Grid container>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/julie_ricard.webp`}
@@ -61,7 +61,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('disinformation')}`} size="small" color="secondary" />
               </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
@@ -87,7 +87,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   alt="Partnerships and Development"
@@ -118,7 +118,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <Chip label={`${t('Books')}`} size="small" color="secondary" />
               </Grid>
 
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/alejandro_noriega.jpeg`}
@@ -148,7 +148,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('public health')}`} size="small" color="secondary" />
               </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
@@ -174,7 +174,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('music')}`} size="small" color="secondary" />
               </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
@@ -200,7 +200,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <br />
                 <Chip label={`${t('education')}`} size="small" color="secondary" />
               </Grid>
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
@@ -255,7 +255,7 @@ José Manuel Gallardo
 </Badge>
 </Col> */}
 
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Julia_Amadio.webp`}
@@ -282,7 +282,7 @@ José Manuel Gallardo
                 <Chip label={`${t('gastronomy')}`} size="small" color="secondary" />
               </Grid>
               <Grid container className="w-100 d-flex justify-content-center">
-              <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Michel.webp`}
@@ -308,7 +308,7 @@ José Manuel Gallardo
                 <br />
                 <Chip label={`${t('Adventure sports')}`} size="small" color="secondary" />
               </Grid>
-                <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image
                     className="rounded-circle"
                     src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
@@ -334,7 +334,7 @@ José Manuel Gallardo
                   <br />
                   <Chip label={`${t('music')}`} size="small" color="secondary" />
                 </Grid>
-                <Grid className={styles.peopleCard} lg={3} md={3} xs={12}>
+                <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image className="rounded-circle" 
                   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Alush.webp`}
                   alt="Picture of Mastermind" width={200} height={200} />
