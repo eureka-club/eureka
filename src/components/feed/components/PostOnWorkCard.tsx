@@ -22,6 +22,8 @@ import 'dayjs/locale/en';
 import 'dayjs/locale/fr';
 import useWorkSumary from '@/src/useWorkSumary';
 import Link from 'next/link';
+import {Skeleton as SkeletonMUI}  from '@mui/material';
+
 import { WorkSumary } from '@/src/types/work';
 import { PostSumary } from '@/src/types/post';
 
@@ -36,21 +38,24 @@ const CardTitle = ({workId,postId,createdAt}:{postId?:number,workId?:number,crea
   const{data:post,isLoading:isLoadingPost}=usePostSumary(postId!);
   const{data:work,isLoading:isLoadingWork}=useWorkSumary(workId!);
 
-  if(isLoadingPost || isLoadingWork)
-    return <Stack direction={'row'} alignItems={'center'} gap={1}>
-      <Skeleton variant="circular" width={'3rem'} height={'3rem'} />
-      <Skeleton variant="rounded" width={'90%'} height={'1rem'} />
-    </Stack>;
-
   return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
     <Typography sx={{flex:1}}>
-      <strong>{post?.creator.name!} </strong>
-      {t('postOnWorkTitle')}
-      <strong style={{paddingLeft:'.25rem'}}>
-        <Link href={`/work/${work?.id}`}>
-          {work?.title}
-        </Link>
-      </strong>
+      {
+        post?.creator.name 
+           ? <strong>{post?.creator.name!} </strong>
+           : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
+      }
+      <span style={{padding:'0 .25rem'}}>{t('postOnWorkTitle')}</span>
+      {
+        work?.title
+          ? <strong style={{paddingLeft:'.25rem'}}>
+              <Link href={`/work/${work?.id}`}>
+                {work?.title}
+              </Link>
+            </strong>
+          : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
+      }
+      
     </Typography>
     <Typography variant='caption' paddingRight={1.5}>{dayjs(createdAt).locale(lang).fromNow()}</Typography>
   </Stack>;
