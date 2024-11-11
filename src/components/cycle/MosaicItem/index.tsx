@@ -115,7 +115,9 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
                 </>
                 }
                 action={
-                  <StyledBadge/>
+                  dayjs().utc().isBetween(dayjs(cycle?.startDate), dayjs(cycle?.endDate), 'day', '[]')
+                    ? <StyledBadge/> 
+                    : <></>
                 }
                 title={<CardHeaderTitle creatorName={cycle?.creator.name!}/>}
                 // title={cycle?.creator.name}
