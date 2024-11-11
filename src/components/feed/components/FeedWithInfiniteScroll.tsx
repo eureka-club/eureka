@@ -34,20 +34,19 @@ export const FeedWithInfiniteScroll = ()=>{
         }
     });
 
-
     return <>
         {data?.pages.map(p=>p?.actions?.map(a=>{
           switch(a.type){
             case ActionType.PostCreatedOnCycleActive:
-              return <PostOnCycleCard key={`${a.type}-${a.postId!}`} postId={a.postId!} createdAt={a.createdAt}/>;
+              return <PostOnCycleCard key={`${a.id}`} postId={a.postId!} createdAt={a.createdAt}/>;
             case ActionType.CommentCreatedOnPost:
-              return <CommentOnPostCard key={`${a.type}-${a.postId!}`} postId={a.postId!} page_id={a.page_id!}/>
+              return <CommentOnPostCard key={`${a.id}`} postId={a.postId!} commentURL={a.commentURL!}/>
             case ActionType.CommentCreatedOnCycle:
-              return <CommentOnCycleCard key={`${a.type}-${a.cycleId!}`} cycleId={a.cycleId!} page_id={a.page_id!} />;
+              return <CommentOnCycleCard key={`${a.id}`} cycleId={a.cycleId!} page_id={a.page_id!} />;
             case ActionType.PostCreatedOnWork:
-              return <PostOnWorkCard key={`${a.type}-${a.postId!}`} postId={a.postId!} workId={a.workId!} createdAt={a.createdAt}/>;
+              return <PostOnWorkCard key={`${a.id}`} postId={a.postId!} workId={a.workId!} createdAt={a.createdAt}/>;
             case ActionType.CommentCreatedOnWork:
-              return <CommentOnWorkCard key={`${a.type}-${a.workId}`} workId={a.workId!} page_id={a.page_id!} />
+              return <CommentOnWorkCard key={`${a.id}`} workId={a.workId!} page_id={a.page_id!} />
           }
         }))}
         {

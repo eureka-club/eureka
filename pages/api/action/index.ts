@@ -32,7 +32,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
       orderBy:{
         createdAt:'desc'
       },
-      // distinct:['page_id','type'],
+      distinct:['page_id','type','postId'],
       // where:{
       //   createdAt:{
       //     lte:today,
@@ -40,6 +40,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
       //   }
       // }
     });
+    
     
     if(!total)
       total = await prisma.action.count({
