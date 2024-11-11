@@ -32,25 +32,22 @@ interface Props extends CardProps {
   workId:number;
   createdAt:Date;
 }
-const CardTitle = ({workId,postId,createdAt}:{postId?:number,workId?:number,createdAt:Date})=>{
+const CardTitle = ({workId,workTitle,postCreatorName,createdAt}:{workId?:string|number,postCreatorName?:string,workTitle?:string,createdAt:Date})=>{
   const{t,lang}=useTranslation('feed');
-  
-  const{data:post,isLoading:isLoadingPost}=usePostSumary(postId!);
-  const{data:work,isLoading:isLoadingWork}=useWorkSumary(workId!);
 
   return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
     <Typography sx={{flex:1}}>
       {
-        post?.creator.name 
-           ? <strong>{post?.creator.name!} </strong>
+        postCreatorName 
+           ? <strong>{postCreatorName!} </strong>
            : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
       }
       <span style={{padding:'0 .25rem'}}>{t('postOnWorkTitle')}</span>
       {
-        work?.title
+        workTitle
           ? <strong style={{paddingLeft:'.25rem'}}>
-              <Link href={`/work/${work?.id}`}>
-                {work?.title}
+              <Link href={`/work/${workId}`}>
+                {workTitle}
               </Link>
             </strong>
           : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
@@ -66,13 +63,13 @@ export default function PostOnWorkCard(props:Props) {
     workId,
     createdAt
   }=props;
-  const{t,lang}=useTranslation('feed');
-  const{data:post,isLoading:isLoadingPost}=usePostSumary(postId);
-  const{data:work,isLoading:isLoadingWork}=useWorkSumary(workId);
+  const{t}=useTranslation('feed');
+  const{data:post}=usePostSumary(postId);
+  const{data:work}=useWorkSumary(workId);
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
   const{dispatch}=useOnPostCommentCreated(postId);
-  const{data:session,status}=useSession();
+  const{data:session}=useSession();
   const handleExpandClick = () => {
     if(session?.user)
       setExpanded(!expanded);
@@ -82,17 +79,13 @@ export default function PostOnWorkCard(props:Props) {
   // if(isLoadingWork || isLoadingPost || status == 'loading')
   //   return <></>;
 
-  
-
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
           avatar={
-            <>
-                <UserAvatar userId={post?.creator.id!} />
-            </>
+            <UserAvatar userId={post?.creator.id!} />
           }
           title={
-            <CardTitle postId={postId} workId={workId} createdAt={createdAt}/>
+            <CardTitle postCreatorName={post?.creator?.name!} workId={workId} workTitle={work?.title} createdAt={createdAt}/>
           }
           // subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
       />
