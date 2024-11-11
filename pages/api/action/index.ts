@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import {prisma} from '@/src/lib/prisma';
 import { SERVER_ERROR } from '@/src/api_code';
 // import { getSession } from 'next-auth/react';
-import { PostSumarySpec } from '@/src/types/post';
-import { WorkSumarySpec } from '@/src/types/work';
-import { CycleSumarySpec } from '@/src/types/cycle';
+// import { PostSumarySpec } from '@/src/types/post';
+// import { WorkSumarySpec } from '@/src/types/work';
+// import { CycleSumarySpec } from '@/src/types/cycle';
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
   // const session = await getSession({ req });
@@ -13,7 +13,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const{skip:skip_,total:total_}=req.query;
     const skip = skip_ ? +skip_! : undefined;
     const take = +process.env.NEXT_PUBLIC_TAKE!;
-    let total=+total_!??0;
+    let total=total_ ? +total_ : 0;
 
     // const today = new Date();
     // const daysToMilliseconds = ()=>{
@@ -32,7 +32,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
       orderBy:{
         createdAt:'desc'
       },
-      distinct:['page_id','type'],
+      // distinct:['page_id','type'],
       // where:{
       //   createdAt:{
       //     lte:today,
