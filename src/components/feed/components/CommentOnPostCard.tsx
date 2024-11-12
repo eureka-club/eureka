@@ -21,11 +21,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import UserCommentDetail from './UserCommentDetail';
 import Skeleton from '../../Skeleton';
 import {Skeleton as SkeletonMUI}  from '@mui/material';
+import { useGetCommentById } from '../hooks/useGetCommentById';
 dayjs.extend(relativeTime);
 
 interface Props extends CardProps {
   postId:number;
-  page_id:number;
+  commentURL:string;
 }
 
 const CardTitle=({userName,postTitle,createdAt}:{userName?:string,postTitle?:string,createdAt?:string})=>{
@@ -52,9 +53,9 @@ const CardTitle=({userName,postTitle,createdAt}:{userName?:string,postTitle?:str
 export default function CommentOnPostCard(props:Props) {
   const{
     postId,
-    page_id,
+    commentURL
   }=props;
-  const[lastComment,setlastComment]=React.useState<any>();
+  // const[comment,setComment]=React.useState<any>();
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
   const{data:post}=usePostSumary(postId);
@@ -62,19 +63,21 @@ export default function CommentOnPostCard(props:Props) {
   const{show}=useModalContext();
   const{data:session}=useSession();
 
-  const {data,isLoading}=useLastNCommentsByPageId(page_id,1);
-  React.useEffect(()=>{
-    if(data?.length){
-      setlastComment(data[0]);
-    }
-  },[data])
+  const commnet_id = commentURL?.replace(/(.*ht-comment-id=)/g,'')
+  
+  const {data:comment,isLoading}=useGetCommentById(commnet_id);
+  // React.useEffect(()=>{
+  //   if(data?.length){
+  //     setComment(data[0]);
+  //   }
+  // },[data])
   
   const handleExpandClick = () => {
     const baseParent = post?.works?.length ? 'work' : 'cycle';
     const baseParentId = post?.works?.length ? post?.works[0].id : post?.cycles[0];
 
     if(session?.user)
-      router.push(`/${baseParent}/${baseParentId}/post/${postId}?ht-comment-id=${lastComment?.id}`);
+      router.push(`/${baseParent}/${baseParentId}/post/${postId}?ht-comment-id=${comment?.id}`);
     else show(<SignInForm/>)
   };
   if(isLoading)return <Skeleton type="card" />;  
@@ -84,15 +87,15 @@ export default function CommentOnPostCard(props:Props) {
           avatar={
             <>
                 <UserAvatar 
-                  userId={lastComment?.user.sso_id} 
+                  userId={comment?.user.sso_id} 
                 />
             </>
           }
           title={
             <CardTitle 
-              userName={lastComment?.user.name}
+              userName={comment?.user.name}
               postTitle={post?.title}
-              createdAt={dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}
+              createdAt={dayjs(comment?.created_at*1000).locale(lang).fromNow()}
             />
           }
       />
@@ -105,15 +108,15 @@ export default function CommentOnPostCard(props:Props) {
           }}/>
           <Stack gap={3} sx={{width:'100%'}}>
             {
-              !lastComment 
+              !comment 
                 ? <Skeleton type="card" />
-                : <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
+                : <UserCommentDetail isFull={comment?.parent} comment={comment?.parent} 
                   body={
                     <>
-                      {lastComment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>:<></>}
-                      <UserCommentDetail comment={lastComment} 
+                      {comment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:comment?.parent?.body_html}}/>:<></>}
+                      <UserCommentDetail comment={comment} 
                         sx={
-                          lastComment?.parent 
+                          comment?.parent 
                             ? {
                               backgroundColor:'#dddddd85  ',
                               borderRadius:'.5rem',
@@ -122,9 +125,9 @@ export default function CommentOnPostCard(props:Props) {
                             : {}
                         }
                         body={
-                          <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
+                          <Box dangerouslySetInnerHTML={{__html:comment?.body_html}}/>
                         }
-                        isFull={lastComment?.parent}
+                        isFull={comment?.parent}
                       />
                     </>
                   }
