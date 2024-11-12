@@ -8,7 +8,7 @@ import styles from './aboutUs.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
-import { Container, Grid, Chip, Typography } from '@mui/material';
+import { Container, Grid, Chip, Typography, Stack } from '@mui/material';
 //import { ReactElement } from 'react';
 
 interface Props {
@@ -38,7 +38,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/julie_ricard.webp`}
+                  src="/julie-NUEVA.webp"
                   alt="Founder, Director"
                   width={200}
                   height={200}
@@ -282,32 +282,32 @@ José Manuel Gallardo
                 <Chip label={`${t('gastronomy')}`} size="small" color="secondary" />
               </Grid>
               <Grid container className="w-100 d-flex justify-content-center">
-              <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
-                <Image
-                  className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Michel.webp`}
-                  alt="Picture of Developer"
-                  width={200}
-                  height={200}
-                />
-                <Typography variant="h2" className={styles.peopleName}>
-                Michel Igielka
-                  <a href="https://www.linkedin.com/in/michel-igielka-b4205b134/" target="_blank" rel="noreferrer">
-                    <TiSocialLinkedinCircular className={styles.si} />
-                  </a>
-                </Typography>
-                <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Photographer')}
-                </Typography>
-                <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
-                  {t('Photos specialist')}
-                </Typography>
-                <Chip label={`${t('environment')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('movies')}`} size="small" color="secondary" />
-                <br />
-                <Chip label={`${t('Adventure sports')}`} size="small" color="secondary" />
-              </Grid>
+                <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
+                  <Image
+                    className="rounded-circle"
+                    src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Michel.webp`}
+                    alt="Picture of Developer"
+                    width={200}
+                    height={200}
+                  />
+                  <Typography variant="h2" className={styles.peopleName}>
+                    Michel Igielka
+                    <a href="https://www.linkedin.com/in/michel-igielka-b4205b134/" target="_blank" rel="noreferrer">
+                      <TiSocialLinkedinCircular className={styles.si} />
+                    </a>
+                  </Typography>
+                  <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
+                    {t('Photographer')}
+                  </Typography>
+                  <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
+                    {t('Photos specialist')}
+                  </Typography>
+                  <Chip label={`${t('environment')}`} size="small" color="secondary" />
+                  <br />
+                  <Chip label={`${t('movies')}`} size="small" color="secondary" />
+                  <br />
+                  <Chip label={`${t('Adventure sports')}`} size="small" color="secondary" />
+                </Grid>
                 <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image
                     className="rounded-circle"
@@ -335,9 +335,13 @@ José Manuel Gallardo
                   <Chip label={`${t('music')}`} size="small" color="secondary" />
                 </Grid>
                 <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
-                  <Image className="rounded-circle" 
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Alush.webp`}
-                  alt="Picture of Mastermind" width={200} height={200} />
+                  <Image
+                    className="rounded-circle"
+                    src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Alush.webp`}
+                    alt="Picture of Mastermind"
+                    width={200}
+                    height={200}
+                  />
                   <Typography variant="h2" className={styles.peopleName}>
                     Alush
                     <a href="https://linkedin.com/company/eleurekaclub" target="_blank" rel="noreferrer">
@@ -371,43 +375,69 @@ José Manuel Gallardo
                 Hora
               </Typography>
             </div>
+
             <div className={styles['contact-me']}>
               <br />
               <hr />
               <Typography className="h4" style={{ color: 'var(--eureka-green)' }}>
                 {t('common:eurekaSupport')}
               </Typography>
+
               <section className="d-flex flex-row justify-content-around align-items-center mt-3">
-                <figure>
-                  <Image
-                    width={120}
-                    height={37}
-                    src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
-                    alt=""
-                  />
-                </figure>
-                <figure>
-                  <Image width={110} height={110} src="/equis.jpg" alt="" />
-                </figure>
-                <figure>
-                  <Image
-                    width={70}
-                    height={90}
-                    src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
-                    alt=""
-                  />
-                </figure>
-                <figure>
-                  <Image
-                    width={120}
-                    height={80}
-                    src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
-                    alt=""
-                  />
-                </figure>
-                <figure>
-                  <Image width={120} height={80} src="" alt="" />
-                </figure>
+               
+                  <Stack  alignItems={'center'} alignContent={'center'} direction={{ xs:'column', sm: 'row', md:'row', }}spacing={{ xs: 1, sm: 2, md: 3 }} useFlexGap sx={{ flexWrap: 'wrap' }}>
+                    <div>
+                      <Image
+                        width={110}
+                        height={30}
+                        src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <Image
+                        width={90}
+                        height={70}
+                        src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <Image
+                        width={50}
+                        height={70}
+                        src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <Image width={90} height={80} src="/logos/4.equis-justicias.webp" alt="" />
+                    </div>
+                    <div>
+                      <Image width={70} height={70} src="/logos/5.dw-akademie.webp" alt="" />
+                    </div>
+                      <div>
+                        <Image width={80} height={30} src="/logos/6.data against feminicide.webp" alt="" />
+                      </div>
+                      <div>
+                        <Image width={60} height={40} src="/logos/7.data feminism lab.webp" alt="" />
+                      </div>
+                      <div>
+                        <Image width={80} height={80} src="/logos/8.instituto da hora.webp" alt="" />
+                      </div>
+                      <div>
+                        <Image width={70} height={50} src="/logos/9.instituto futuro.webp" alt="" />
+                      </div>
+                      <div>
+                        <Image width={54} height={50} src="/logos/10.mit press.webp" alt="" />
+                      </div>
+                      <div>
+                        <Image width={90} height={50} src="/logos/11.Penguin Random House.webp" alt="" />
+                      </div>
+                      <div>
+                        <Image width={90} height={60} src="/logos/12.fósforo.webp" alt="" />
+                      </div>
+                    </Stack>
               </section>
             </div>
           </div>
