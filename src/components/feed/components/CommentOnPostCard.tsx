@@ -20,20 +20,42 @@ import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import UserCommentDetail from './UserCommentDetail';
 import Skeleton from '../../Skeleton';
-
+import {Skeleton as SkeletonMUI}  from '@mui/material';
+import { useGetCommentById } from '../hooks/useGetCommentById';
 dayjs.extend(relativeTime);
 
 interface Props extends CardProps {
   postId:number;
-  page_id:number;
+  commentURL:string;
+}
+
+const CardTitle=({userName,postTitle,createdAt}:{userName?:string,postTitle?:string,createdAt?:string})=>{
+  const{t}=useTranslation('feed');
+
+  return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
+    <Typography sx={{flex:1}}>
+        {
+          userName 
+            ? <strong>{userName} </strong>
+            : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
+        }
+        <span style={{padding:'0 .25rem'}}>{t('commentOnWorkTitle')}</span>
+        {
+         postTitle
+            ? <strong>{postTitle}</strong>
+            : <SkeletonMUI variant="text" width={240} sx={{display:'inline-block'}} />
+        }
+    </Typography>
+    <Typography variant='caption' paddingRight={1.5}>{createdAt}</Typography>
+  </Stack>;
 }
 
 export default function CommentOnPostCard(props:Props) {
   const{
     postId,
-    page_id,
+    commentURL
   }=props;
-  const[lastComment,setlastComment]=React.useState<any>();
+  // const[comment,setComment]=React.useState<any>();
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
   const{data:post}=usePostSumary(postId);
@@ -41,19 +63,21 @@ export default function CommentOnPostCard(props:Props) {
   const{show}=useModalContext();
   const{data:session}=useSession();
 
-  const {data,isLoading}=useLastNCommentsByPageId(page_id,1);
-  React.useEffect(()=>{
-    if(data?.length){
-      setlastComment(data[0]);
-    }
-  },[data])
+  const commnet_id = commentURL?.replace(/(.*ht-comment-id=)/g,'')
+  
+  const {data:comment,isLoading}=useGetCommentById(commnet_id);
+  // React.useEffect(()=>{
+  //   if(data?.length){
+  //     setComment(data[0]);
+  //   }
+  // },[data])
   
   const handleExpandClick = () => {
     const baseParent = post?.works?.length ? 'work' : 'cycle';
     const baseParentId = post?.works?.length ? post?.works[0].id : post?.cycles[0];
 
     if(session?.user)
-      router.push(`/${baseParent}/${baseParentId}/post/${postId}?ht-comment-id=${lastComment?.id}`);
+      router.push(`/${baseParent}/${baseParentId}/post/${postId}?ht-comment-id=${comment?.id}`);
     else show(<SignInForm/>)
   };
   if(isLoading)return <Skeleton type="card" />;  
@@ -63,19 +87,16 @@ export default function CommentOnPostCard(props:Props) {
           avatar={
             <>
                 <UserAvatar 
-                  userId={lastComment?.user.sso_id} 
+                  userId={comment?.user.sso_id} 
                 />
             </>
           }
           title={
-            <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
-              <Typography sx={{flex:1}}>
-                <strong>{lastComment?.user.name} </strong>
-                {t('commentOnWorkTitle')}
-                <strong> {post?.title}</strong>
-              </Typography>
-              <Typography variant='caption' paddingRight={1.5}>{dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}</Typography>
-            </Stack>
+            <CardTitle 
+              userName={comment?.user.name}
+              postTitle={post?.title}
+              createdAt={dayjs(comment?.created_at*1000).locale(lang).fromNow()}
+            />
           }
       />
       <CardContent>
@@ -85,29 +106,33 @@ export default function CommentOnPostCard(props:Props) {
               maxWidth:'250px'
             }
           }}/>
-          <Stack gap={3}>
-              <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
-              body={
-                <>
-                  {lastComment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>:<></>}
-                  <UserCommentDetail comment={lastComment} 
-                    sx={
-                      lastComment?.parent 
-                        ? {
-                          backgroundColor:'#dddddd85  ',
-                          borderRadius:'.5rem',
-                          padding:'1rem'
+          <Stack gap={3} sx={{width:'100%'}}>
+            {
+              !comment 
+                ? <Skeleton type="card" />
+                : <UserCommentDetail isFull={comment?.parent} comment={comment?.parent} 
+                  body={
+                    <>
+                      {comment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:comment?.parent?.body_html}}/>:<></>}
+                      <UserCommentDetail comment={comment} 
+                        sx={
+                          comment?.parent 
+                            ? {
+                              backgroundColor:'#dddddd85  ',
+                              borderRadius:'.5rem',
+                              padding:'1rem'
+                            }
+                            : {}
                         }
-                        : {}
-                    }
-                    body={
-                      <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
-                    }
-                    isFull={lastComment?.parent}
+                        body={
+                          <Box dangerouslySetInnerHTML={{__html:comment?.body_html}}/>
+                        }
+                        isFull={comment?.parent}
+                      />
+                    </>
+                  }
                   />
-                </>
-              }
-              />
+            }
               <Box display={'flex'} justifyContent={'center'}>
                 <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
                   {session?.user ? t('common:replyCommentLbl') : t('common:notSessionreplyCommentLbl')}

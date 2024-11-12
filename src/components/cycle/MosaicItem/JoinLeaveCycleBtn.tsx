@@ -10,7 +10,7 @@ import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import { useIsFetching } from 'react-query';
 import SignInForm from '../../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
-import { Button } from '@mui/material';
+import { Button, CircularProgress, Stack } from '@mui/material';
 import Spinner from '../../Spinner';
 
 
@@ -80,7 +80,7 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     
   if (cycle && !isLoadingSession ){
     if(!session){
-      return <Button variant='contained' onClick={handleJoinCycleClick}>
+      return <Button disabled={isPending()} variant='contained' onClick={handleJoinCycleClick}>
           {t('joinCycleLabel')}
           {
             cycle.access==4 && price!=-1
@@ -107,13 +107,16 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     }
     
     if(cycle?.participants.findIndex(p=>p.id==session?.user.id)<0){
-      return <Button variant='contained' onClick={handleJoinCycleClick}>
+      return <Button disabled={isPending()} variant='contained' onClick={handleJoinCycleClick}>
+        <Stack gap={1} direction={'row'} alignItems={'center'}>
+          {isPending() ? <CircularProgress color="inherit" size={'1rem'}/> : <></>}
           {t('joinCycleLabel')}
           {
             cycle.access==4 && price!=-1
               ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
               : <></>
           }
+        </Stack>
         </Button>
     }
 
