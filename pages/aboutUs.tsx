@@ -76,7 +76,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                   </a>
                 </Typography>
                 <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('Software Engineer')}
+                  {t('software_architect')}
                 </Typography>
                 <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
                   {t('Full-stack expert')}
@@ -240,7 +240,7 @@ José Manuel Gallardo
 <TiSocialLinkedinCircular className={styles.si} />
 </a>
 </h2>
-<h3 className={styles.professionName}>{t('Software Engineer')}</h3>
+<h3 className={styles.professionName}>{t('software_architect')}</h3>
 <h4 className={styles.positionName}>{t('Front-end expert')}</h4>
 <Badge pill className={`badge-secondary ${styles.interest}`}>
 {t('History')}
