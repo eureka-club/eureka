@@ -30,19 +30,19 @@ interface Props extends CardProps {
   cycleId:number;
   createdAt:Date;
 }
-const CardTitle=({userName,cycleId,cycleTitle,createdAt}:{userName?:string,cycleId:number,cycleTitle?:string,createdAt:string})=>{
+const CardTitle=({userName,cycleId,cycleTitle,createdAt,isLoadingPost,isLoadingCycle}:{userName?:string,cycleId:number,cycleTitle?:string,createdAt:string,isLoadingPost:boolean,isLoadingCycle:boolean})=>{
   const{t}=useTranslation('feed');
 
   return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
     <Typography sx={{flex:1}}>
         {
-          userName 
+          !isLoadingPost 
             ? <strong>{userName} </strong>
             : <Skeleton variant="text" width={150} sx={{display:'inline-block'}} />
         }
         <span style={{padding:'0 .25rem'}}>{t('postOnCycleTitle')}</span>
         {
-         cycleTitle
+          !isLoadingCycle
             ? <strong>
                <Link href={`/cycle/${cycleId}`}>{cycleTitle}</Link> 
               </strong>
@@ -61,7 +61,7 @@ export default function PostOnCycleCard(props:Props) {
   }=props;
   const{t,lang}=useTranslation('feed');
   const{data:post,isLoading:isLoadingPost}=usePostSumary(postId);
-  const{data:cycle}=useCycleSumary(cycleId);
+  const{data:cycle,isLoading:isLoadingCycle}=useCycleSumary(cycleId);
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
   const{dispatch}=useOnPostCommentCreated(postId);
@@ -80,7 +80,14 @@ export default function PostOnCycleCard(props:Props) {
             </>
           }
           title={
-            <CardTitle cycleId={cycleId} cycleTitle={cycle?.title} userName={post?.creator.name!} createdAt={dayjs(createdAt).locale(lang).fromNow()}/>
+            <CardTitle 
+              cycleId={cycleId} 
+              cycleTitle={cycle?.title} 
+              userName={post?.creator.name!} 
+              createdAt={dayjs(createdAt).locale(lang).fromNow()}
+              isLoadingCycle={isLoadingCycle}
+              isLoadingPost={isLoadingPost}
+            />
           }
           // subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
       />
@@ -94,15 +101,18 @@ export default function PostOnCycleCard(props:Props) {
             <Stack flex={1} gap={1}>
               { 
                 isLoadingPost 
-                  ? <Skeleton variant="text" width={'100%'} sx={{display:'inline-block'}} />
-                  : <Typography variant='h6'>{post?.title}</Typography>
-              }
-              {
-                isLoadingPost 
-                  ? <Skeleton variant='rectangular' width={'100%'} height={'50%'} sx={{display:'inline-block'}} />
-                  : post?.contentText
-                    ? <Sumary description={post?.contentText}/> 
-                    : <></> 
+                  ? <>
+                    <Skeleton variant="text" width={'100%'} sx={{display:'inline-block'}} />
+                    <Skeleton variant='rectangular' width={'100%'} height={'50%'} sx={{display:'inline-block'}} />
+                  </>
+                  : <>
+                      <Typography variant='h6'>{post?.title}</Typography>
+                      {
+                        post?.contentText
+                        ? <Sumary description={post?.contentText}/> 
+                        : <></> 
+                      }
+                    </>
               }
               {
                 !session 
