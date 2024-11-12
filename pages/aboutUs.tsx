@@ -8,7 +8,7 @@ import styles from './aboutUs.module.css';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
-import { Container, Grid, Chip, Typography, Stack } from '@mui/material';
+import { Container, Grid, Chip, Typography, Stack, Box } from '@mui/material';
 //import { ReactElement } from 'react';
 
 interface Props {
@@ -384,60 +384,66 @@ José Manuel Gallardo
               </Typography>
 
               <section className="d-flex flex-row justify-content-around align-items-center mt-3">
-               
-                  <Stack  alignItems={'center'} alignContent={'center'} direction={{ xs:'column', sm: 'row', md:'row', }}spacing={{ xs: 1, sm: 2, md: 3 }} useFlexGap sx={{ flexWrap: 'wrap' }}>
-                    <div>
-                      <Image
-                        width={110}
-                        height={30}
-                        src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
-                        alt=""
-                      />
-                    </div>
-                    <div>
-                      <Image
-                        width={90}
-                        height={70}
-                        src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
-                        alt=""
-                      />
-                    </div>
-                    <div>
-                      <Image
-                        width={50}
-                        height={70}
-                        src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
-                        alt=""
-                      />
-                    </div>
-                    <div>
-                      <Image width={90} height={80} src="/logos/4.equis-justicias.webp" alt="" />
-                    </div>
-                    <div>
-                      <Image width={70} height={70} src="/logos/5.dw-akademie.webp" alt="" />
-                    </div>
-                      <div>
-                        <Image width={80} height={30} src="/logos/6.data against feminicide.webp" alt="" />
-                      </div>
-                      <div>
-                        <Image width={60} height={40} src="/logos/7.data feminism lab.webp" alt="" />
-                      </div>
-                      <div>
-                        <Image width={80} height={80} src="/logos/8.instituto da hora.webp" alt="" />
-                      </div>
-                      <div>
-                        <Image width={70} height={50} src="/logos/9.instituto futuro.webp" alt="" />
-                      </div>
-                      <div>
-                        <Image width={54} height={50} src="/logos/10.mit press.webp" alt="" />
-                      </div>
-                      <div>
-                        <Image width={90} height={50} src="/logos/11.Penguin Random House.webp" alt="" />
-                      </div>
-                      <div>
-                        <Image width={90} height={60} src="/logos/12.fósforo.webp" alt="" />
-                      </div>
-                    </Stack>
+                <Stack
+                  alignItems={'center'}
+                  alignContent={'center'}
+                  direction={{ xs: 'column', sm: 'row', md: 'row' }}
+                  spacing={{ xs: 1, sm: 2, md: 3 }}
+                  useFlexGap
+                  sx={{ flexWrap: 'wrap' }}
+                >
+                  <Box>
+                    <Image
+                      width={110}
+                      height={35}
+                      src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
+                      alt=""
+                    />
+                  </Box>
+                  <Box>
+                    <Image
+                      width={90}
+                      height={70}
+                      src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
+                      alt=""
+                    />
+                  </Box>
+                  <Box>
+                    <Image
+                      width={50}
+                      height={70}
+                      src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
+                      alt=""
+                    />
+                  </Box>
+                  <Box>
+                    <Image width={90} height={80} src="/logos/4.equis-justicias.webp" alt="" />
+                  </Box>
+                  <Box>
+                    <Image width={70} height={70} src="/logos/5.dw-akademie.webp" alt="" />
+                  </Box>
+                  <Box>
+                    <Image width={80} height={30} src="/logos/6.data against feminicide.webp" alt="" />
+                  </Box>
+                  <Box paddingTop={2}>
+                    <Image width={60} height={40} src="/logos/7.data feminism lab.webp" alt="" />
+                  </Box>
+                  <Box paddingTop={2}>
+                    <Image width={70} height={50} src="/logos/8.instituto da hora.webp" alt="" />
+                  </Box>
+                  <Box paddingTop={2}>
+                    <Image width={70} height={50} src="/logos/9.instituto futuro.webp" alt="" />
+                  </Box>
+                  <Box paddingTop={2}>
+                    <Image width={54} height={50} src="/logos/10.mit press.webp" alt="" />
+                  </Box>
+                  <Box paddingTop={2}>
+                    <Image width={90} height={50} src="/logos/11.Penguin Random House.webp" alt="" />
+                  </Box>
+                  <Box>
+                    <Image width={90} height={60} src="/logos/12.fósforo.webp" alt="" />
+                  </Box>
+                </Stack>
               </section>
             </div>
           </div>
