@@ -38,7 +38,7 @@ export const FeedWithInfiniteScroll = ()=>{
         {data?.pages.map(p=>p?.actions?.map(a=>{
           switch(a.type){
             case ActionType.PostCreatedOnCycleActive:
-              return <PostOnCycleCard key={`${a.id}`} postId={a.postId!} createdAt={a.createdAt}/>;
+              return <PostOnCycleCard key={`${a.id}`} postId={a.postId!} cycleId={a.cycleId!} createdAt={a.createdAt}/>;
             case ActionType.CommentCreatedOnPost:
               return <CommentOnPostCard key={`${a.id}`} postId={a.postId!} commentURL={a.commentURL!}/>
             case ActionType.CommentCreatedOnCycle:
