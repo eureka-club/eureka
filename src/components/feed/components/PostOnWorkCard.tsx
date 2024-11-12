@@ -32,19 +32,19 @@ interface Props extends CardProps {
   workId:number;
   createdAt:Date;
 }
-const CardTitle = ({workId,workTitle,postCreatorName,createdAt}:{workId?:string|number,postCreatorName?:string,workTitle?:string,createdAt:Date})=>{
+const CardTitle = ({workId,workTitle,postCreatorName,createdAt,isLoadingPost,isLoadingWork}:{workId?:string|number,postCreatorName?:string,workTitle?:string,createdAt:Date,isLoadingPost:boolean,isLoadingWork:boolean})=>{
   const{t,lang}=useTranslation('feed');
 
   return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
     <Typography sx={{flex:1}}>
       {
-        postCreatorName 
+        !isLoadingPost 
            ? <strong>{postCreatorName!} </strong>
            : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
       }
       <span style={{padding:'0 .25rem'}}>{t('postOnWorkTitle')}</span>
       {
-        workTitle
+        !isLoadingWork
           ? <strong style={{paddingLeft:'.25rem'}}>
               <Link href={`/work/${workId}`}>
                 {workTitle}
@@ -64,8 +64,8 @@ export default function PostOnWorkCard(props:Props) {
     createdAt
   }=props;
   const{t}=useTranslation('feed');
-  const{data:post}=usePostSumary(postId);
-  const{data:work}=useWorkSumary(workId);
+  const{data:post,isLoading:isLoadingPost}=usePostSumary(postId);
+  const{data:work,isLoading:isLoadingWork}=useWorkSumary(workId);
   const [expanded, setExpanded] = React.useState(false);
   const{show}=useModalContext();
   const{dispatch}=useOnPostCommentCreated(postId);
@@ -85,7 +85,14 @@ export default function PostOnWorkCard(props:Props) {
             <UserAvatar userId={post?.creator.id!} />
           }
           title={
-            <CardTitle postCreatorName={post?.creator?.name!} workId={workId} workTitle={work?.title} createdAt={createdAt}/>
+            <CardTitle 
+              postCreatorName={post?.creator?.name!}
+              workId={workId} 
+              workTitle={work?.title} 
+              createdAt={createdAt}
+              isLoadingPost={isLoadingPost}
+              isLoadingWork={isLoadingWork}
+            />
           }
           // subheader={(new Date(post?.createdAt!)).toLocaleDateString(lang)}
       />
@@ -96,19 +103,30 @@ export default function PostOnWorkCard(props:Props) {
                 maxWidth:'250px'
               }
             }}/>
-            <Stack gap={2}>
-              {
-                post?.contentText ? <Sumary description={post?.contentText??''}/> : <></>
+            <Stack flex={1} gap={1}>
+              { 
+                isLoadingPost 
+                  ? <>
+                      <SkeletonMUI variant="text" width={'100%'} sx={{display:'inline-block'}} />
+                      <SkeletonMUI variant='rectangular' width={'100%'} height={'50%'} sx={{display:'inline-block'}} />
+                    </>
+                  : <>
+                      <Typography variant='h6'>{post?.title}</Typography>
+                      {
+                          post?.contentText ? <Sumary description={post?.contentText??''}/> 
+                          : <></>
+                      }
+                    </>
               }
-          {
-            !session 
-              ? <Box display={'flex'} justifyContent={'center'}>
-                  <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
-                  {t('common:notSessionreplyCommentLbl')}
-                  </Button>
-              </Box>
-              : <></>
-          }
+              {
+                !session 
+                  ? <Box display={'flex'} justifyContent={'center'}>
+                      <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
+                      {t('common:notSessionreplyCommentLbl')}
+                      </Button>
+                  </Box>
+                  : <></>
+              }
             </Stack>
         </Stack>
         {

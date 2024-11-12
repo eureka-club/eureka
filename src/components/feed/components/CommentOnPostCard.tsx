@@ -29,19 +29,19 @@ interface Props extends CardProps {
   commentURL:string;
 }
 
-const CardTitle=({userName,postTitle,createdAt}:{userName?:string,postTitle?:string,createdAt?:string})=>{
+const CardTitle=({userName,postTitle,createdAt,isLoadingComment,isLoadingPost}:{userName?:string,postTitle?:string,createdAt?:string,isLoadingComment:boolean,isLoadingPost:boolean})=>{
   const{t}=useTranslation('feed');
 
   return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
     <Typography sx={{flex:1}}>
         {
-          userName 
+          !isLoadingComment 
             ? <strong>{userName} </strong>
             : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
         }
         <span style={{padding:'0 .25rem'}}>{t('commentOnWorkTitle')}</span>
         {
-         postTitle
+         !isLoadingPost
             ? <strong>{postTitle}</strong>
             : <SkeletonMUI variant="text" width={240} sx={{display:'inline-block'}} />
         }
@@ -58,14 +58,14 @@ export default function CommentOnPostCard(props:Props) {
   // const[comment,setComment]=React.useState<any>();
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
-  const{data:post}=usePostSumary(postId);
+  const{data:post,isLoading:isLoadingPost}=usePostSumary(postId);
 
   const{show}=useModalContext();
   const{data:session}=useSession();
 
   const commnet_id = commentURL?.replace(/(.*ht-comment-id=)/g,'')
   
-  const {data:comment,isLoading}=useGetCommentById(commnet_id);
+  const {data:comment,isLoading:isLoadingComment}=useGetCommentById(commnet_id);
   // React.useEffect(()=>{
   //   if(data?.length){
   //     setComment(data[0]);
@@ -80,7 +80,7 @@ export default function CommentOnPostCard(props:Props) {
       router.push(`/${baseParent}/${baseParentId}/post/${postId}?ht-comment-id=${comment?.id}`);
     else show(<SignInForm/>)
   };
-  if(isLoading)return <Skeleton type="card" />;  
+  // if(isLoading)return <Skeleton type="card" />;  
   
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
       <CardHeader
@@ -96,6 +96,8 @@ export default function CommentOnPostCard(props:Props) {
               userName={comment?.user.name}
               postTitle={post?.title}
               createdAt={dayjs(comment?.created_at*1000).locale(lang).fromNow()}
+              isLoadingComment={isLoadingComment}
+              isLoadingPost={isLoadingPost}
             />
           }
       />
@@ -108,7 +110,7 @@ export default function CommentOnPostCard(props:Props) {
           }}/>
           <Stack gap={3} sx={{width:'100%'}}>
             {
-              !comment 
+              isLoadingComment 
                 ? <Skeleton type="card" />
                 : <UserCommentDetail isFull={comment?.parent} comment={comment?.parent} 
                   body={

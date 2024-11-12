@@ -12,7 +12,7 @@ import UserAvatar from '../../common/UserAvatar';
 import { useRouter } from 'next/router';
 import useWorkSumary from '@/src/useWorkSumary';
 import { useLastNCommentsByPageId } from '../hooks/useLastNCommentsByPageId';
-import { useOnWorkCommentCreated } from '../../common/useOnWorkCommentCreated';
+// import { useOnWorkCommentCreated } from '../../common/useOnWorkCommentCreated';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import 'dayjs/locale/pt-br';
@@ -21,6 +21,9 @@ import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import UserCommentDetail from './UserCommentDetail';
 import Skeleton from '../../Skeleton';
+import {Skeleton as SkeletonMUI}  from '@mui/material';
+
+import Link from 'next/link';
 
 dayjs.extend(relativeTime);
 
@@ -32,6 +35,29 @@ interface Props extends CardProps {
   // commentText:string;
   page_id:number;
   // createdAt:Date;
+}
+
+const CardTitle=({userName,workId,workTitle,createdAt,isLoadingComment,isLoadingWork}:{userName?:string,workId:number,workTitle?:string,createdAt:string,isLoadingComment:boolean,isLoadingWork:boolean})=>{
+  const{t}=useTranslation('feed');
+
+  return <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
+    <Typography sx={{flex:1}}>
+        {
+          !isLoadingComment 
+            ? <strong>{userName} </strong>
+            : <SkeletonMUI variant="text" width={150} sx={{display:'inline-block'}} />
+        }
+        <span style={{padding:'0 .25rem'}}>{t('commentOnWorkTitle')}</span>
+        {
+         !isLoadingWork
+            ? <strong>
+               <Link href={`/work/${workId}`}>{workTitle}</Link> 
+              </strong>
+            : <SkeletonMUI variant="text" width={240} sx={{display:'inline-block'}} />
+        }
+    </Typography>
+    <Typography variant='caption' paddingRight={1.5}>{createdAt}</Typography>
+  </Stack>;
 }
 
 
@@ -48,26 +74,26 @@ export default function CommentOnWorkCard(props:Props) {
   const[lastComment,setlastComment]=React.useState<any>();
   const{t,lang}=useTranslation('feed');
   const router=useRouter();
-  const{data:work}=useWorkSumary(workId);
+  const{data:work,isLoading:isLoadingWork}=useWorkSumary(workId);
   // const{data:user}=useUserSumary(userId);
   const{show}=useModalContext();
   const{data:session}=useSession();
 
-  const {data,isLoading}=useLastNCommentsByPageId(page_id,1);
+  const {data,isLoading:isLoadingComment}=useLastNCommentsByPageId(page_id,1);
   React.useEffect(()=>{
     if(data?.length){
       setlastComment(data[0]);
     }
   },[data])
 
-  const{dispatch}=useOnWorkCommentCreated(workId);
+  // const{dispatch}=useOnWorkCommentCreated(workId);
   
   const handleExpandClick = () => {
     if(session?.user)
       router.push(`/work/${workId}?ht-comment-id=${lastComment?.id}`);
     else show(<SignInForm/>)
   };
-  if(isLoading)return <Skeleton type="card" />;  
+  // if(isLoading)return <Skeleton type="card" />;  
 
   
   return <Card sx={{width:{xs:'auto'}}} elevation={1}>
@@ -84,14 +110,22 @@ export default function CommentOnWorkCard(props:Props) {
             </>
           }
           title={
-            <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
-              <Typography sx={{flex:1}}>
-                <strong>{lastComment?.user.name} </strong>
-                {t('commentOnWorkTitle')}
-                <strong> {work?.title}</strong>
-              </Typography>
-              <Typography variant='caption' paddingRight={1.5}>{dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}</Typography>
-            </Stack>
+            <CardTitle 
+              userName={lastComment?.user.name} 
+              workId={work?.id!} 
+              workTitle={work?.title} 
+              createdAt={dayjs(lastComment?.created_at*1000).locale(lang).fromNow()} 
+              isLoadingComment={isLoadingComment}
+              isLoadingWork={isLoadingWork}
+            />
+            // <Stack direction={{xs:'column',md:'row'}} justifyContent={'space-between'}>
+            //   <Typography sx={{flex:1}}>
+            //     <strong>{lastComment?.user.name} </strong>
+            //     {t('commentOnWorkTitle')}
+            //     <strong> {work?.title}</strong>
+            //   </Typography>
+            //   <Typography variant='caption' paddingRight={1.5}>{dayjs(lastComment?.created_at*1000).locale(lang).fromNow()}</Typography>
+            // </Stack>
           }
           // subheader={
           //   lastComment?.parent ? dayjs(lastComment?.created_at*1000).locale(lang).fromNow() : ''
@@ -104,29 +138,34 @@ export default function CommentOnWorkCard(props:Props) {
               maxWidth:'250px'
             }
           }}/>
-          <Stack gap={3}>
-              <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
-              body={
-                <>
-                  {lastComment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>:<></>}
-                  <UserCommentDetail comment={lastComment} 
-                    sx={
-                      lastComment?.parent 
-                        ? {
-                          backgroundColor:'#dddddd85  ',
-                          borderRadius:'.5rem',
-                          padding:'1rem'
-                        }
-                        : {}
-                    }
+          <Stack gap={3} sx={{width:'100%'}}>
+            {
+              isLoadingComment 
+                ? <Skeleton type="card" />
+                : <UserCommentDetail isFull={lastComment?.parent} comment={lastComment?.parent} 
                     body={
-                      <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
+                      <>
+                        {lastComment?.parent?.body_html ? <Box dangerouslySetInnerHTML={{__html:lastComment?.parent?.body_html}}/>:<></>}
+                        <UserCommentDetail comment={lastComment} 
+                          sx={
+                            lastComment?.parent 
+                              ? {
+                                backgroundColor:'#dddddd85  ',
+                                borderRadius:'.5rem',
+                                padding:'1rem'
+                              }
+                              : {}
+                          }
+                          body={
+                            <Box dangerouslySetInnerHTML={{__html:lastComment?.body_html}}/>
+                          }
+                          isFull={lastComment?.parent}
+                        />
+                      </>
                     }
-                    isFull={lastComment?.parent}
                   />
-                </>
-              }
-              />
+            }
+              
                 <Box display={'flex'} justifyContent={'center'}>
                   <Button onClick={handleExpandClick} variant='outlined' sx={{textTransform:'none'}}>
                     {session?.user ? t('common:replyCommentLbl') : t('common:notSessionreplyCommentLbl')}
