@@ -33,7 +33,11 @@ export const UserDetailSpec = {
           workId: true,
           year: true,
           work: {
-            select:WorkSumarySpec.select
+            select:{
+              ...WorkSumarySpec.select,
+              authorGender:true,
+              countryOfOrigin:true
+            }
           },
         },
       },

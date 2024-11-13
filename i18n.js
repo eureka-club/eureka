@@ -21,7 +21,7 @@ module.exports = {
     '/policy': ['termsAndPolicy'],
     '/back-office': ['backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
-    'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque'],
+    'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque','countries'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['common','workDetail', 'countries', 'cycleDetail'],
   },

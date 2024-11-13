@@ -26,6 +26,7 @@ import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Masonry from '@mui/lab/Masonry';
 import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
+import Bar from './components/charts/Bar';
 
 interface Props {
   id: number;
@@ -40,6 +41,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [books, setBooks] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
+  const[genderData,setgenderData]=useState<Record<string,number>>({});
+  const[conuntriOfOriginData,setconuntriOfOriginData]=useState<Record<string,number>>({});
 
   let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
       
@@ -72,8 +75,34 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       if (year) {
         books = books.filter((b) => b.year.toString() === year);
       }
+
       if (books.length) {
-        setBooks(groupBy(books, 'year'));
+        // const bs = groupBy(books, 'year');
+        let gd:Record<string,any> = {};
+        let cod:Record<string,any> = {};
+        books.forEach(b=>{
+          const keyauthorGender =  t(b.work?.authorGender??'other');
+          if(keyauthorGender in gd){
+            gd[keyauthorGender] += 1;
+          }
+          else{
+            gd[keyauthorGender] = 1;
+          }
+          const keycountryOfOrigin = b.work?.countryOfOrigin 
+            ? t(`countries:${b.work?.countryOfOrigin}`)
+            : t(`common:${'unknown'}`);
+
+          if(keycountryOfOrigin in cod){
+            cod[keycountryOfOrigin] += 1;
+          }
+          else{
+            cod[keycountryOfOrigin] = 1;
+          }
+        });
+        
+        setgenderData(gd);
+        setconuntriOfOriginData(cod);
+        setBooks(books);
       }
       else setBooks(null);
     }
@@ -239,43 +268,50 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
               {
                 label:t('Books'),
                 content:<>
-                {books ? (
-              Object.keys(books).reverse().map((year) => (
-                <Stack key={year}>
-                  <section className="d-flex flex-row">
-                    <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                    <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", year)}>
-                      <ContentCopyRoundedIcon
-                        className="ms-2"
-                        style={{
-                          color: 'var(--eureka-purple)',
-                        }}
-                      />
-                    </div>
-                  </section>
-                  <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
-                  {
-                    books[year].map((w: any) => (
-                      <Box key={`${year}-${w.id}`}>
-                      <WMI workId={w.workId!} 
-                        sx={{
-                          'img':{
-                            width:'100%',
-                            height:'auto',
-                          }
-                        }} 
-                      />
-                  </Box>
-                    ))
-                  }
-                  </Masonry>
+                <Stack direction={'row'}>
+                  <Bar data={genderData}/>
+                  <Bar data={conuntriOfOriginData}/>
                 </Stack>
-              ))
-            ) : (
-              <Alert className="mt-4" variant="primary">
-                <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
-              </Alert>
-            )}
+                {
+                  books 
+                  ? (
+                    // Object.keys(books).reverse().map((year) => (
+                      <Stack key={yearFilter}>
+                        <section className="d-flex flex-row">
+                          <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
+                          <div className="cursor-pointer" onClick={(e) => copyURL(e, "books", yearFilter)}>
+                            <ContentCopyRoundedIcon
+                              className="ms-2"
+                              style={{
+                                color: 'var(--eureka-purple)',
+                              }}
+                            />
+                          </div>
+                        </section>
+                        <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
+                        {
+                          books.map((w: any) => (
+                            <Box key={`${yearFilter}-${w.id}`}>
+                            <WMI workId={w.workId!} 
+                              sx={{
+                                'img':{
+                                  width:'100%',
+                                  height:'auto',
+                                }
+                              }} 
+                            />
+                        </Box>
+                          ))
+                        }
+                        </Masonry>
+                      </Stack>
+                    // ))
+                  ) 
+                  : (
+                    <Alert className="mt-4" variant="primary">
+                      <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
+                    </Alert>
+                  )}
                 </>
               },
               {

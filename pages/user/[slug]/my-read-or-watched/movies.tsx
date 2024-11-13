@@ -26,6 +26,7 @@ import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Masonry from '@mui/lab/Masonry';
 import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
+import Bar from './components/charts/Bar';
 
 interface Props {
   id: number;
@@ -40,6 +41,9 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [movies, setMovies] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
+  const[genderData,setgenderData]=useState<Record<string,number>>({});
+  const[conuntriOfOriginData,setconuntriOfOriginData]=useState<Record<string,number>>({});
+
 
   let ms = user.readOrWatchedWorks.filter((rw) => ['movie', 'documentary'].includes(rw.work?.type??'')).reverse();
       
@@ -76,6 +80,30 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       
       if (movies.length) {
         setMovies(groupBy(movies, 'year'));
+        let gd:Record<string,any> = {};
+        let cod:Record<string,any> = {};
+        movies.forEach(b=>{
+          const keyauthorGender =  t(b.work?.authorGender??'other');
+          if(keyauthorGender in gd){
+            gd[keyauthorGender] += 1;
+          }
+          else{
+            gd[keyauthorGender] = 1;
+          }
+          const keycountryOfOrigin = b.work?.countryOfOrigin 
+            ? t(`countries:${b.work?.countryOfOrigin}`)
+            : t(`common:${'unknown'}`);
+
+          if(keycountryOfOrigin in cod){
+            cod[keycountryOfOrigin] += 1;
+          }
+          else{
+            cod[keycountryOfOrigin] = 1;
+          }
+        });
+        
+        setgenderData(gd);
+        setconuntriOfOriginData(cod);
       }
       else setMovies(null);
     }
@@ -246,6 +274,10 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
               {
                 label:t('Movies'),
                 content:<>
+                  <Stack direction={'row'}>
+                    <Bar data={genderData}/>
+                    <Bar data={conuntriOfOriginData}/>
+                  </Stack>
                   {movies ? (
                     Object.keys(movies)
                       .reverse()

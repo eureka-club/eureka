@@ -18,5 +18,10 @@
   "shareText": "Compartir tu lista con tus amigues",
   "UrlCopied": "URL copiada al portapapeles",
   "ResultsNotFound": "No se encontraron resultados",
-  "AddWork": "Agregar obra a tu lista"
+  "AddWork": "Agregar obra a tu lista",
+  "female": "Femenino",
+  "male": "Masculino",
+  "non-binary": "No-binaro",
+  "trans": "Trans",
+  "other": "Otro"
 }
