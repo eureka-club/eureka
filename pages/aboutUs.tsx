@@ -36,13 +36,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
           <Container maxWidth="lg">
             <Grid container>
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
-                <Image
-                  className="rounded-circle"
-                  src="/julie-NUEVA.webp"
-                  alt="Founder, Director"
-                  width={200}
-                  height={200}
-                />
+                <Image className="rounded-circle" src="/Julie1.webp" alt="Founder, Director" width={200} height={200} />
                 <Typography variant="h2" className={styles.peopleName}>
                   Julie Ricard
                   <a href="https://www.linkedin.com/in/ricardjulie/" target="_blank" rel="noreferrer">
@@ -76,7 +70,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                   </a>
                 </Typography>
                 <Typography variant="h3" paddingTop={'9px'} className={styles.professionName}>
-                  {t('software_architect')}
+                  {t('Software Engineer')}
                 </Typography>
                 <Typography variant="h4" paddingY={'9px'} className={styles.positionName}>
                   {t('Full-stack expert')}
@@ -91,7 +85,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
                 <Image
                   className="rounded-circle"
                   alt="Partnerships and Development"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/amanda_gois.webp`}
+                  src="/Amanda_Quitério_de_Gois.webp"
                   width={200}
                   height={200}
                 />
@@ -240,7 +234,7 @@ José Manuel Gallardo
 <TiSocialLinkedinCircular className={styles.si} />
 </a>
 </h2>
-<h3 className={styles.professionName}>{t('software_architect')}</h3>
+<h3 className={styles.professionName}>{t('Software Engineer')}</h3>
 <h4 className={styles.positionName}>{t('Front-end expert')}</h4>
 <Badge pill className={`badge-secondary ${styles.interest}`}>
 {t('History')}
@@ -388,60 +382,45 @@ José Manuel Gallardo
                   alignItems={'center'}
                   alignContent={'center'}
                   direction={{ xs: 'column', sm: 'row', md: 'row' }}
-                  spacing={{ xs: 1, sm: 2, md: 3 }}
+                  spacing={{ xs: 1, sm: 4, md: 4 }}
                   useFlexGap
                   sx={{ flexWrap: 'wrap' }}
                 >
-                  <Box>
-                    <Image
-                      width={110}
-                      height={35}
-                      src="https://mozilla.design/files/2019/06/Mozilla_Logo_Static.png"
-                      alt=""
-                    />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L1.webp" alt="" />
                   </Box>
-                  <Box>
-                    <Image
-                      width={90}
-                      height={70}
-                      src="https://static.wixstatic.com/media/9c73d4_6be410789c004ed2b2281f0b7503645f~mv2.png/v1/fill/w_1046,h_700,al_c,q_90,usm_0.66_1.00_0.01/Logo%20-%20prosperia%20only%20-%20E%20normal%20-%20point.webp"
-                      alt=""
-                    />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L2.webp" alt="" />
                   </Box>
-                  <Box>
-                    <Image
-                      width={50}
-                      height={70}
-                      src="https://datapopalliance.org/wp-content/uploads/2019/02/DPA-Logo-Color.png"
-                      alt=""
-                    />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L3.webp" alt="" />
                   </Box>
-                  <Box>
-                    <Image width={90} height={80} src="/logos/4.equis-justicias.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L4.webp" alt="" />
                   </Box>
-                  <Box>
-                    <Image width={70} height={70} src="/logos/5.dw-akademie.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L5.webp" />
                   </Box>
-                  <Box>
-                    <Image width={80} height={30} src="/logos/6.data against feminicide.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L6.webp" alt="" />
                   </Box>
-                  <Box paddingTop={2}>
-                    <Image width={60} height={40} src="/logos/7.data feminism lab.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L7.webp" alt="" />
                   </Box>
-                  <Box paddingTop={2}>
-                    <Image width={70} height={50} src="/logos/8.instituto da hora.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L8.webp" alt="" />
                   </Box>
-                  <Box paddingTop={2}>
-                    <Image width={70} height={50} src="/logos/9.instituto futuro.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L9.webp" alt="" />
                   </Box>
-                  <Box paddingTop={2}>
-                    <Image width={54} height={50} src="/logos/10.mit press.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L10.webp" alt="" />
                   </Box>
-                  <Box paddingTop={2}>
-                    <Image width={90} height={50} src="/logos/11.Penguin Random House.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L11.webp" alt="" />
                   </Box>
-                  <Box>
-                    <Image width={90} height={60} src="/logos/12.fósforo.webp" alt="" />
+                  <Box paddingRight={2}>
+                    <Image width={70} height={70} src="/logos/L12.webp" alt="" />
                   </Box>
                 </Stack>
               </section>
