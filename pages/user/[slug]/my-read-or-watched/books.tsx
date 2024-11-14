@@ -86,7 +86,13 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const [yearFilter, setYearFilter] = useState<any>(dayjs().year().toString());
   const [books, setBooks] = useState<any>(null);
   const [tabKey, setTabKey] = useState<string>();
-  const[genderData,setgenderData]=useState<Record<string,number>>({});
+  const[genderData,setgenderData]=useState<Record<string,number>>({
+    "female":0,
+    "male":0,
+    "non-binary":0,
+    "trans":0,
+    "other":0
+  });
   const[conuntriOfOriginData,setconuntriOfOriginData]=useState<Record<string,number>>({});
 
   let bs = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
@@ -115,6 +121,10 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   }, [years]);
 
   const setFilterElements = (year:string)=>{
+    
+
+      
+
     if (user && user.readOrWatchedWorks.length) {
       let books = user.readOrWatchedWorks.filter((rw) => ['book', 'fiction-book'].includes(rw.work?.type??'')).reverse();
       if (year) {
@@ -123,10 +133,16 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
 
       if (books.length) {
         // const bs = groupBy(books, 'year');
-        let gd:Record<string,any> = {};
+        let gd={ 
+          [t("female")]:0,
+          [t("male")]:0,
+          [t("non-binary")]:0,
+          [t("trans")]:0,
+          [t("other")]:0
+        };
         let cod:Record<string,any> = {};
         books.forEach(b=>{
-          const keyauthorGender =  t(b.work?.authorGender??'other');
+          const keyauthorGender = t(b.work?.authorGender??'other');
           if(keyauthorGender in gd){
             gd[keyauthorGender] += 1;
           }
@@ -134,7 +150,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             gd[keyauthorGender] = 1;
           }
           const keycountryOfOrigin = b.work?.countryOfOrigin 
-            ? t(`countries:${b.work?.countryOfOrigin}`)
+            ? b.work?.countryOfOrigin.split(',').map(i=>t(`countries:${i}`)).join(',') 
             : t(`common:${'unknown'}`);
 
           if(keycountryOfOrigin in cod){
@@ -275,8 +291,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 label:t('Books'),
                 content:<>
                 <Stack direction={'row'}>
-                  <Bar data={genderData}/>
-                  <Bar data={conuntriOfOriginData}/>
+                  <Bar data={genderData} layoutHorizontal/>
+                  <Bar data={conuntriOfOriginData} layoutHorizontal/>
                 </Stack>
                 {
                   books 
