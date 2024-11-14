@@ -1,5 +1,5 @@
 import { NextPage, GetServerSideProps } from 'next';
-import { useState, useEffect, SyntheticEvent, MouseEvent } from 'react';
+import { useState, useEffect, SyntheticEvent, MouseEvent, FC } from 'react';
 import Head from 'next/head';
 import {
   Alert,
@@ -22,16 +22,61 @@ import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
 import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, Stack, Box } from '@mui/material';
 import dayjs from 'dayjs';
-import LocalImageComponent from '@/src/components/LocalImage';
+// import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Masonry from '@mui/lab/Masonry';
 import { TabPanelSwipeableViews } from '@/src/components/common/TabPanelSwipeableViews';
 import Bar from './components/charts/Bar';
+const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
+const { NEXT_PUBLIC_AZURE_CDN_ENDPOINT } = process.env;
+
 
 interface Props {
   id: number;
   session: Session;
 }
+
+interface RenderAvatarProps{
+  user:any;
+}
+const RenderAvatar:FC<RenderAvatarProps> = ({user}) => {
+  const srcBase =`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}`
+
+  const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/img/default-avatar.png';
+  };
+
+  if (user) {
+    if (!user?.photos || !user?.photos.length)
+      return <Box>
+        <img
+          onError={avatarError}
+          style={{ width: '60px',borderRadius:'50%' }}
+          src={user.image || '/img/default-avatar.png'}
+          alt={user.userName || ''}
+        />
+      </Box>;
+
+    return (
+        <Box>
+          <img
+            onError={avatarError}
+            style={{ width: '60px',borderRadius:'50%' }}
+            src={`${srcBase}/users-photos/${user.photos[0].storedFile}`}
+            alt={user.userName || ''}
+          />
+          {/* <LocalImageComponent
+            className="rounded rounded-circle"
+            width={60}
+            height={60}
+            filePath={`users-photos/${user.photos[0].storedFile}`}
+            alt={user.userName || ''}
+          /> */}
+        </Box>
+    );
+  }
+  return <></>;
+};
 
 const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const { t } = useTranslation('mediatheque');
@@ -136,47 +181,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       })
   };
   
-  const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = '/img/default-avatar.png';
-  };
 
-  const renderAvatar = () => {
-    if (user) {
-      if (!user?.photos || !user?.photos.length)
-        return (
-          <img
-            onError={avatarError}
-            className="rounded rounded-circle"
-            style={{ width: '60px', height: '60px' }}
-            src={user.image || '/img/default-avatar.png'}
-            alt={user.userName || ''}
-          />
-        );
-      return (
-        <>
-          <div className="d-flex d-md-none mb-2">
-            <LocalImageComponent
-              className="rounded rounded-circle"
-              /* className='avatar' */ width={60}
-              height={60}
-              filePath={`users-photos/${user.photos[0].storedFile}`}
-              alt={user.userName || ''}
-            />
-          </div>
-          <div className="d-none d-md-flex">
-            <LocalImageComponent
-              className="rounded rounded-circle"
-              /* className='avatar' */ width={60}
-              height={60}
-              filePath={`users-photos/${user.photos[0].storedFile}`}
-              alt={user.userName || ''}
-            />
-          </div>
-        </>
-      );
-    }
-    return '';
-  };
+  
 
   return (
     <>
@@ -201,7 +207,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             <Row className='mt-sm-0 mb-4 d-flex flex-column flex-lg-row'>
               <Col className='d-flex flex-row'>
                 <h1 className="text-secondary fw-bold me-3 d-flex align-items-center">{`${t('MyReadOrWatched')} ${user.userName}`}</h1>
-                {renderAvatar()}
+                <RenderAvatar user={user}/>
               </Col>
               <Col className='d-flex flex-row justify-content-center justify-content-lg-end'>
                 <Button type='button' className='d-none d-lg-block btn-eureka btn btn-primary mt-2 mt-lg-0 px-5' style={{ width: '50%' }} onClick={() => router.push('/work/create')} size="sm">
