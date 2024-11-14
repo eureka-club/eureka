@@ -20,7 +20,7 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import slugify from 'slugify';
 import toast from 'react-hot-toast'
 import useMyReadOrWatched from '@/src/useMyReadOrWatched'
-import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, Stack, Box } from '@mui/material';
+import { SelectChangeEvent, Button as ButtonMui, FormControl, InputLabel, Select, MenuItem, Stack, Box, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 // import LocalImageComponent from '@/src/components/LocalImage';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
@@ -290,6 +290,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
               {
                 label:t('Books'),
                 content:<>
+                <Typography variant='h6' textAlign={'center'}>📚 {books?.length} {t('books-read-in')} {yearFilter}</Typography>
                 <Stack direction={'row'}>
                   <Bar data={genderData} layoutHorizontal/>
                   <Bar data={conuntriOfOriginData} layoutHorizontal/>

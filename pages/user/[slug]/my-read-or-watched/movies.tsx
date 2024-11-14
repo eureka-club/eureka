@@ -79,8 +79,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       }
       
       if (movies.length) {
+        let gd={ 
+          [t("female")]:0,
+          [t("male")]:0,
+          [t("non-binary")]:0,
+          [t("trans")]:0,
+          [t("other")]:0
+        };
         setMovies(groupBy(movies, 'year'));
-        let gd:Record<string,any> = {};
+        
         let cod:Record<string,any> = {};
         movies.forEach(b=>{
           const keyauthorGender =  t(b.work?.authorGender??'other');
@@ -91,7 +98,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             gd[keyauthorGender] = 1;
           }
           const keycountryOfOrigin = b.work?.countryOfOrigin 
-            ? t(`countries:${b.work?.countryOfOrigin}`)
+            ? b.work?.countryOfOrigin.split(',').map(i=>t(`countries:${i}`)).join(',') 
             : t(`common:${'unknown'}`);
 
           if(keycountryOfOrigin in cod){
@@ -275,8 +282,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                 label:t('Movies'),
                 content:<>
                   <Stack direction={'row'}>
-                    <Bar data={genderData}/>
-                    <Bar data={conuntriOfOriginData}/>
+                    <Bar data={genderData} layoutHorizontal/>
+                    <Bar data={conuntriOfOriginData} layoutHorizontal/>
                   </Stack>
                   {movies ? (
                     Object.keys(movies)
