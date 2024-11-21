@@ -87,6 +87,11 @@ const WorkDetailPage: NextPage<Props> = ({ session, metas, workId }) => {
               </Button>
             </>
           )} */}
+          {
+            router.query.previous=='work-create'
+             ? <Button onClick={()=>{router.push('/work/create')}}>{t('workDetail:add_another_work')}</Button>
+             : null
+          }
         </ButtonsTopActions>
           {children}
         </SimpleLayout>;

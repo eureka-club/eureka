@@ -250,7 +250,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
         if (isSuccess === true && !showExistingWork) {
             setGlobalModalsState({ ...globalModalsState, ...{ createWorkModalOpened: false } });
             queryClient.invalidateQueries('works.mosaic');
-            router.push(`/work/${workId}`);
+            router.push(`/work/${workId}?previous=work-create`);
         }
 
         if (isLoading === true) {
