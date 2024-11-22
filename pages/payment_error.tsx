@@ -77,7 +77,7 @@ const StripePaymentErrorPage: NextPage = () => {
                       <Grid container justifyContent="center"
                       alignItems="center"
                       alignContent={'center'}>
-                        <Button variant="contained" size="large" onClick={() => router.push('/')}>
+                        <Button variant="contained" size="large" onClick={() => router.push('/')} sx={{textTransform: 'none'}}>
                          <b>{t('Try again')}</b> 
                         </Button>
                       </Grid>

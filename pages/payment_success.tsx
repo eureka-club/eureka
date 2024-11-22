@@ -65,7 +65,7 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
                     <Grid container justifyContent="center" alignItems="center" alignContent={'center'}><h1 className='text-primary text-center  mb-5'><b>{t('successText')}</b></h1></Grid>
                     <Grid container justifyContent="center" alignItems="center" alignContent={'center'} ><h1 className='text-primary text-center   mb-5'><b>{t('successExtraText')}</b></h1></Grid>
                     <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
-                      <Button variant="contained" size="large"  onClick={() => router.push(`/cycle/${cycleId}`)}>
+                      <Button variant="contained" size="large"  onClick={() => router.push(`/cycle/${cycleId}`)} sx={{textTransform: 'none'}}>
                         <b>{t('successButtomText')}</b>
                       </Button>
                     </Grid>

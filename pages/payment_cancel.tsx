@@ -57,7 +57,7 @@ const StripePaymentCancelPage: NextPage = () => {
                     </h1>
                   </Grid>
                   <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
-                    <Button variant="contained" size="large" onClick={() => router.push('/')}>
+                    <Button variant="contained" size="large" onClick={() => router.push('/')} sx={{textTransform: 'none'}}>
                       <b>{t('VisitEureka')}</b>
                     </Button>
                   </Grid>

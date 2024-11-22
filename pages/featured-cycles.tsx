@@ -10,6 +10,7 @@ import MosaicItem from '@/src/components/cycle/MosaicItem';
 import {useRouter} from 'next/router'
 import { getSession } from 'next-auth/react';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import {Grid} from '@mui/material/'
 
 interface Props{
 }
@@ -39,13 +40,13 @@ console.log("dataCycles ",dataCycles)
       <article className='mt-4' data-cy="my-cycles">
         <>
           <h1 className="text-secondary fw-bold mt-sm-0 mb-4">{t('Interest cycles')}</h1>
-            <Row>
+            <Grid container alignContent={'center'} alignItems={'center'}>
               {dataCycles?.cycles.map(c=>
-                <Col key={c.id} xs={12} sm={6} lg={3} xxl={2} className='mb-5 d-flex justify-content-center  align-items-center'>
-                  <MosaicItem cycleId={c.id} />
-                </Col>
+                <Grid  key={c.id} xs={12} sm={5} lg={3}  alignContent={'center'} alignItems={'center'}>
+                  <MosaicItem padding={2} cycleId={c.id} />
+                </Grid>
               )}
-            </Row>
+            </Grid>
             </>
 
       </article>

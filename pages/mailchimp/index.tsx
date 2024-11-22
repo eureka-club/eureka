@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+/*import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -276,4 +276,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default IndexPage;
+export default IndexPage;*/
