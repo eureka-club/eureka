@@ -1,4 +1,4 @@
-import { WorkDetail, WorkSumary } from '@/src/types/work';
+import { WorkDetail } from '@/src/types/work';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState } from 'react';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';

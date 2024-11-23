@@ -290,7 +290,11 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
               {
                 label:t('Books'),
                 content:<>
-                <Typography variant='h6' textAlign={'center'}>📚 {books?.length} {t('books-read-in')} {yearFilter}</Typography>
+                <Typography variant='h6' textAlign={'center'}>📚 {
+                  books?.length>1
+                    ? `${books?.length} ${t('books-read-in')}`
+                    : t('book-read-in')
+                } {yearFilter}</Typography>
                 <Stack direction={'row'}>
                   <Bar data={genderData} layoutHorizontal/>
                   <Bar data={conuntriOfOriginData} layoutHorizontal/>
