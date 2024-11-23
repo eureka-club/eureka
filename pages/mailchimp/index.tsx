@@ -7,9 +7,9 @@ import { QueryClient, dehydrate, useQuery } from 'react-query';
 import { Session } from '@/src/types';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { Box, Chip, LinearProgress, Tab, Tabs, Typography } from '@mui/material';
-//import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
-/*
+
 interface Props {
 }
 interface TabPanelProps {
@@ -278,4 +278,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default IndexPage;*/
+export default IndexPage;
