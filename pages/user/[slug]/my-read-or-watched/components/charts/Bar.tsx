@@ -29,7 +29,7 @@ const Bar:React.FC<Props> = ({data,layoutHorizontal}) => {
           if(total>0){
             let perc = (+item.value!*100)/total;
             if(perc==0)return null;
-            return `${item.value} (${perc==100 ? perc : perc?.toFixed(1)}%)`;
+            return `${item.value} (${perc==100 ? perc : perc?.toFixed(0)}%)`;
           }
         }
         return `${item.value}`;
