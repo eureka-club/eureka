@@ -25,5 +25,7 @@
   "male": "Masculino",
   "non-binary": "Não-binário",
   "trans": "Trans",
-  "other": "Outro"
+  "other": "Outro",
+  "movies-read-in":"filmes assistidos em",
+  "movie-read-in":"1 filme assistido em"
 }

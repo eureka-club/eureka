@@ -25,5 +25,7 @@
   "male": "Masculino",
   "non-binary": "No-binaro",
   "trans": "Trans",
-  "other": "Otro"
+  "other": "Otro",
+  "movies-read-in":"películas vistas en",
+  "movie-read-in":" 1 Pelicula vista en"
 }
