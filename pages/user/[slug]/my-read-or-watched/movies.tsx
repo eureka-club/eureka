@@ -77,7 +77,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       if (yearFilter.length) {
         movies = movies.filter((b) => b.year.toString() === yearFilter);
       }
-      
+      debugger;
       if (movies.length) {
         let gd={ 
           [t("female")]:0,
@@ -86,7 +86,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
           [t("trans")]:0,
           [t("other")]:0
         };
-        setMovies(groupBy(movies, 'year'));
+        // setMovies(groupBy(movies, 'year'));
         
         let cod:Record<string,any> = {};
         movies.forEach(b=>{
@@ -111,6 +111,8 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
         
         setgenderData(gd);
         setconuntriOfOriginData(cod);
+        setMovies(movies);
+
       }
       else setMovies(null);
     }
@@ -290,14 +292,15 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     <Bar data={genderData} layoutHorizontal/>
                     <Bar data={conuntriOfOriginData} layoutHorizontal/>
                   </Stack>
+                  
+
                   {movies ? (
-                    Object.keys(movies)
-                      .reverse()
-                      .map((year) => (
-                        <Stack key={year}>
+                    // Object.keys(movies)
+                    //   .reverse()
+                    <Stack key={yearFilter}>
                           <section className="d-flex flex-row">
                             <h2 className="fs-5 mb-3 text-secondary">{t('shareText')}</h2>
-                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", year)}>
+                            <div className="cursor-pointer" onClick={(e) => copyURL(e, "movies", yearFilter)}>
 
                               <ContentCopyRoundedIcon
                                 className="ms-2"
@@ -308,7 +311,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                             </div>
                           </section>
                           <Masonry columns={{xs:1,sm:3,md:3,lg:4}} spacing={1}>
-                          {movies[year].map((w: any) => (
+                          {movies.map((w: any) => (
                             <Box key={w.workId}>
                               <WMI  
                                  workId={w.workId!} 
@@ -323,7 +326,6 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                           ))}
                           </Masonry>
                         </Stack>
-                      ))
                   ) : (
                     <Alert className="mt-4" variant="primary">
                       <Alert.Heading>{t('ResultsNotFound')}</Alert.Heading>
