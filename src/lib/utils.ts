@@ -5,8 +5,15 @@ import { v4 } from 'uuid';
 import { Area } from 'react-easy-crop/types';
 import { Session } from '../types';
 import { UserDetail } from '../types/user';
-import fs from 'fs'
 
+export const validateEmail = (text: string) => {
+  const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+
+  if (!text.trimEnd().trimStart().match(emailRegex)) {
+    return false;
+  }
+  return true;
+};
 export const advancedDayjs = (date: string | number | Date): dayjs.Dayjs => {
   dayjs.extend(advancedFormat);
   dayjs.extend(isBetween);

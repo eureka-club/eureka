@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import styles from './SignUpForm.module.css';
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box } from '@mui/material';
 import LanguageSelect from './controls/LanguageSelect';
+import { validateEmail } from '@/src/lib/utils';
 
 
 interface Props {
@@ -115,15 +116,6 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     }
     return null;
   });
-
-  const validateEmail = (text: string) => {
-    const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-
-    if (!text.match(emailRegex)) {
-      return false;
-    }
-    return true;
-  };
 
   const validatePassword = (text: string) => {
     if (text.length < 8) {

@@ -32,6 +32,7 @@ import useUsers from '@/src/useUsers'
 import { useCyclePrice } from '@/src/hooks/useCyclePrices';
 import LinearProgress from '@mui/material/LinearProgress';
 import { CycleSumary } from '@/src/types/cycle';
+import { validateEmail } from '@/src/lib/utils';
 
 
 
@@ -186,15 +187,6 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
     }
     return null;
   });
-
-  const validateEmail = (text: string) => {
-    const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-
-    if (!text.match(emailRegex)) {
-      return false;
-    }
-    return true;
-  };
 
   const validatePassword = (text: string) => {
     if (text.length < 8) {

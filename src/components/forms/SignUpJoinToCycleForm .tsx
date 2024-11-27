@@ -31,6 +31,7 @@ import { CycleWork } from '@/src/types/cycleWork';
 import useUserSumary from '@/src/useUserSumary';
 import { CycleSumary } from '@/src/types/cycle';
 import Mosaic from '../Mosaic';
+import { validateEmail } from '@/src/lib/utils';
 
 interface Props {
   noModal?: boolean;
@@ -193,14 +194,6 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
     return null;
   });
 
-  const validateEmail = (text: string) => {
-    const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-
-    if (!text.match(emailRegex)) {
-      return false;
-    }
-    return true;
-  };
 
   const validatePassword = (text: string) => {
     if (text.length < 8) {
