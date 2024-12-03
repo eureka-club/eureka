@@ -10,10 +10,12 @@ import { useInfiniteQuery } from "react-query";
 import CommentOnWorkCard from "./CommentOnWorkCard";
 import CommentOnPostCard from "./CommentOnPostCard";
 
+const take = +process.env.NEXT_PUBLIC_TAKE!;
+
 export const FeedWithInfiniteScroll = ()=>{
     const[page,setpage]=useState(-1);
     const total=useRef<number|undefined>(undefined);
-
+    const hasMore=useRef(true);
     const [ref, inView] = useInView({
         triggerOnce: false,
     });
@@ -29,10 +31,15 @@ export const FeedWithInfiniteScroll = ()=>{
         queryKey:['FEED'],
         queryFn:(props)=>getActions({total:total.current,skip:props?.pageParam}),
         getNextPageParam:(lastPage,pages)=>{
-            total.current=lastPage?.total??-1;
-            return lastPage?.nextSkip
+          // total.current=lastPage?.total??-1;
+          const q = !!lastPage && lastPage?.nextSkip!>0
+          && lastPage?.total!>0
+          && lastPage?.actions?.length!>0;
+          hasMore.current=q;
+          return lastPage?.nextSkip
         }
     });
+
 
     return <>
         {data?.pages.map(p=>p?.actions?.map(a=>{
@@ -50,9 +57,10 @@ export const FeedWithInfiniteScroll = ()=>{
           }
         }))}
         {
-            hasNextPage ? <Box sx={{padding:'10rem 0'}}>
+           hasMore.current 
+            ? <Box sx={{padding:'10rem 0'}}>
                     <hr ref={ref}/> 
-                </Box>
+              </Box>
             : <></>
         }
     </>

@@ -77,7 +77,6 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
       if (yearFilter.length) {
         movies = movies.filter((b) => b.year.toString() === yearFilter);
       }
-      debugger;
       if (movies.length) {
         let gd={ 
           [t("female")]:0,
