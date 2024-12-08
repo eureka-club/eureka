@@ -327,7 +327,7 @@ model Post {
   creatorId   Int      @map(name: "creator_id")
   title       String
   language    String
-  contentText String   @map(name: "content_text") @db.Text
+  contentText String   @map(name: "content_text") @db.NVarChar(Max)
   isPublic    Boolean  @map(name: "is_public")
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @updatedAt @map(name: "updated_at")
