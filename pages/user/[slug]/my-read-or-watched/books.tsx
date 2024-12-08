@@ -295,7 +295,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
                     ? `${books?.length} ${t('books-read-in')}`
                     : t('book-read-in')
                 } {yearFilter}</Typography>
-                <Stack direction={'row'}>
+                <Stack direction={{ xs: 'column', sm: 'row' }}>
                   <Bar data={genderData} layoutHorizontal/>
                   <Bar data={conuntriOfOriginData} layoutHorizontal/>
                 </Stack>
