@@ -500,7 +500,7 @@ const EditWorkForm: FunctionComponent = () => {
                       'searchreplace', 'visualblocks', 'fullscreen',
                       'insertdatetime', 'media', 'table', 'paste', 'code', 'help', 'wordcount', 'emoticons'
                     ],
-                    emoticons_database: 'emojiimages',
+                    emoticons_database: 'emojis',
                     relative_urls: false,
                     forced_root_block : "div",
                     toolbar: 'undo redo | formatselect | bold italic backcolor color | insertfile | link | emoticons | code  | help',
