@@ -150,7 +150,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
             gd[keyauthorGender] = 1;
           }
           const keycountryOfOrigin = b.work?.countryOfOrigin 
-            ? b.work?.countryOfOrigin.split(',').map(i=>t(`countries:${i}`)).join(',') 
+            ? b.work?.countryOfOrigin.split(',').map(i=>t(`countries-abbr:${i}`)).join(',') 
             : t(`common:${'unknown'}`);
 
           if(keycountryOfOrigin in cod){
