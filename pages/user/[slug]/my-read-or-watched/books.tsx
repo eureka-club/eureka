@@ -151,7 +151,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
           }
           const keycountryOfOrigin = b.work?.countryOfOrigin 
             ? b.work?.countryOfOrigin.split(',').map(i=>t(`countries-abbr:${i}`)).join(',') 
-            : t(`common:${'unknown'}`);
+            : t(`countries-abbr:${'unknown'}`);
 
           if(keycountryOfOrigin in cod){
             cod[keycountryOfOrigin] += 1;
