@@ -40,7 +40,7 @@ interface RenderAvatarProps{
   user:any;
 }
 const RenderAvatar:FC<RenderAvatarProps> = ({user}) => {
-  const srcBase =`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}`
+  const srcBase =`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}`
 
   const avatarError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/img/default-avatar.png';

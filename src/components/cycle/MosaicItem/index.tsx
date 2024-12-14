@@ -86,7 +86,7 @@ const MosaicItem:FC<CycleMosaiItemProps> = ({
 })=>{
   const{t,lang}=useTranslation('common');
   const{data:cycle}=useCycleSumary(+cycleId);
-  const img = `https://${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle?.localImages[0].storedFile}`; 
+  const img = `${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle?.localImages[0].storedFile}`; 
 
   const GetDatesRange = (a:any)=>`${dayjs(a?.startDate).format('YYYY-MM-DD')} - ${dayjs(a?.endDate).format('YYYY-MM-DD')}`
   const cycleAccessTypes = ['','public','private','secret','payment'];

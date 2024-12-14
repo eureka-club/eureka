@@ -301,7 +301,7 @@ interface Props extends BoxProps{
       <Link href={href}>
         {/* <img 
           className="post-mosaic-img"
-          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
+          src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
           style={{
             border:'solid 1px lightgray',
             borderRadius:'4px',
@@ -322,7 +322,7 @@ interface Props extends BoxProps{
             className="post-mosaic-img"
             width={Width} 
             height={Height} 
-            src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
+            src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
           />
         </Box>
         

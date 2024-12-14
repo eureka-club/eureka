@@ -7,7 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-const fallbakImgURL = `https://${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
+const fallbakImgURL = `${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
 
 interface Props {
     video: TMDBVideosProps

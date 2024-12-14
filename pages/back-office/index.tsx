@@ -171,15 +171,15 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
   //   if (bo && bo.sliderImages.length) {
   //     if (bo.SlideImage1 != 'null') {
   //       let storeFile1 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage1)[0].storedFile;
-  //       setImage1(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
+  //       setImage1(`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile1}`);
   //     }
   //     if (bo.SlideImage2 != 'null') {
   //       let storeFile2 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage2)[0].storedFile;
-  //       setImage2(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
+  //       setImage2(`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile2}`);
   //     }
   //     if (bo.SlideImage3 != 'null') {
   //       let storeFile3 = bo.sliderImages.filter(x => x.originalFilename == bo.SlideImage3)[0].storedFile;
-  //       setImage3(`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
+  //       setImage3(`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/${storeFile3}`);
   //     }
   //   }
   // }, [bo]);
@@ -470,7 +470,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
     setAllWorks([]);
   };
 
-  const imgBaseUrl=`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
+  const imgBaseUrl=`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
 
   const OnAddSlide = ()=>{
     setOpenModal(true);

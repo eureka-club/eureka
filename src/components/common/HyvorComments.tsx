@@ -41,7 +41,7 @@ const { NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME } = process.env;
       name: user.name || user.email?.split('@')[0] || 'User',
       email: user.email,
       picture_url: (user.photos && user.photos.length) 
-      ? `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/users-photos/${user.photos[0].storedFile}` 
+      ? `${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/users-photos/${user.photos[0].storedFile}` 
       : user.image,
       timestamp: Math.floor(Date.now() / 1000),
     };

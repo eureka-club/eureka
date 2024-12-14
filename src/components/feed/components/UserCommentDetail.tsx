@@ -5,6 +5,7 @@ import 'dayjs/locale/pt-br';
 import 'dayjs/locale/en';
 import 'dayjs/locale/fr';
 import useTranslation from "next-translate/useTranslation";
+import { AZURE_CDN_ENDPOINT } from "@/src/constants";
 
 interface UserCommentDetailProps extends BoxProps {
     comment:any;
@@ -17,7 +18,9 @@ interface UserCommentDetailProps extends BoxProps {
     return <Box {...others}>
       <Stack direction={'row'} gap={1}>
         <Stack gap={.5}>
-          <Avatar src={comment?.user.picture_url} />
+          <Avatar 
+            src={comment?.user.picture_url.replace('https://eurekastagingassets.azureedge.net',AZURE_CDN_ENDPOINT)} 
+          />
           <Box sx={{borderRight:'solid 1.5px #dddddd85',width:'16px',height:'100%'}}/>
         </Stack>
         <Stack>

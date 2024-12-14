@@ -58,7 +58,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
+                  src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/geordanis_bano_vega.png`}
                   alt="Picture of Software Engineer"
                   width={200}
                   height={200}
@@ -115,7 +115,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/alejandro_noriega.jpeg`}
+                  src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/alejandro_noriega.jpeg`}
                   alt="Co-creator from Prosperia"
                   width={200}
                   height={200}
@@ -145,7 +145,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
+                  src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/henry-rufo.webp`}
                   alt="Picture of Developer"
                   width={200}
                   height={200}
@@ -171,7 +171,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
+                  src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/daniela-goncalves.jpeg`}
                   alt="Picture of Advisor"
                   width={200}
                   height={200}
@@ -197,7 +197,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
+                  src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/aranzazu-zaga.jpeg`}
                   alt="Picture of Advisor"
                   width={200}
                   height={200}
@@ -223,7 +223,7 @@ const AboutPage: NextPage<Props> = ({ session }) => {
               {/* <Col className={styles.peopleCard} lg={3} md={3} xs={12}>
 <Image
 className="rounded-circle"
-src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/jose-manuel-gallardo.webp`}
+src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/jose-manuel-gallardo.webp`}
 alt="Picture of Software Engineer"
 width={200}
 height={200}
@@ -252,7 +252,7 @@ José Manuel Gallardo
               <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                 <Image
                   className="rounded-circle"
-                  src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Julia_Amadio.webp`}
+                  src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Julia_Amadio.webp`}
                   alt="Picture of Software Engineer"
                   width={200}
                   height={200}
@@ -279,7 +279,7 @@ José Manuel Gallardo
                 <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image
                     className="rounded-circle"
-                    src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Michel.webp`}
+                    src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Michel.webp`}
                     alt="Picture of Developer"
                     width={200}
                     height={200}
@@ -305,7 +305,7 @@ José Manuel Gallardo
                 <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image
                     className="rounded-circle"
-                    src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
+                    src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/don-zamna.jpeg`}
                     alt="Picture of Mastermind"
                     width={200}
                     height={200}
@@ -331,7 +331,7 @@ José Manuel Gallardo
                 <Grid item className={styles.peopleCard} lg={3} md={3} xs={12}>
                   <Image
                     className="rounded-circle"
-                    src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Alush.webp`}
+                    src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/aboutUs/Alush.webp`}
                     alt="Picture of Mastermind"
                     width={200}
                     height={200}

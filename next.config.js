@@ -9,7 +9,7 @@ module.exports = nextTranslate({
     },
     images:{
         domains:[
-            `${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net`,
+            `${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT.replace('https://','')}`,
             'mozilla.design',
             'datapopalliance.org',
             'static.wixstatic.com',

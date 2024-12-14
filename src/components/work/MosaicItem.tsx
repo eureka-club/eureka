@@ -256,7 +256,7 @@ const MosaicItem:FC<Props> = ({workId,Width=184,Height=250,...others})=>{
           className="work-mosaic-img"
           width={Width} 
           height={Height} 
-          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
+          src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${storedFile}`}
         />
       </Box>
     </Link>

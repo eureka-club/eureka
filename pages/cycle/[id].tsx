@@ -240,7 +240,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           <meta property="og:url" content={`${WEBAPP_URL}/cycle/${props.metas?.id || ''}`} />
           <meta
             property="og:image"
-            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile || ''
+            content={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile || ''
               }`}
           />
           <meta property="og:type" content="article" />
@@ -252,7 +252,7 @@ const CycleDetailPage: NextPage<Props> = (props) => {
           <meta name="twitter:url" content={`${WEBAPP_URL}/cycle/${props.metas?.id || ''}`}></meta>
           <meta
             name="twitter:image"
-            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile || ''
+            content={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${props.metas?.storedFile || ''
               }`}
           ></meta>
         </Head>

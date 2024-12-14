@@ -62,7 +62,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
           <meta property="og:url" content={`${WEBAPP_URL}/work/${metaTags.workId}/post/${metaTags.id}`} />
           <meta
             property="og:image"
-            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
+            content={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
           />
           <meta property="og:type" content="article" />
 
@@ -73,7 +73,7 @@ const PostDetailInWorkPage: NextPage<Props> = ({postId,workId,metaTags,session})
           <meta name="twitter:url" content={`${WEBAPP_URL}/work/${metaTags.workId}/post/${metaTags.id}`}></meta>
           <meta
             name="twitter:image"
-            content={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
+            content={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${metaTags.storedFile}`}
           ></meta>
         </Head>
         <SimpleLayout title={title}>

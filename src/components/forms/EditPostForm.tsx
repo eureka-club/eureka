@@ -131,7 +131,7 @@ const EditPostForm: FunctionComponent<Props> = ({ noModal = false, id }) => {
         title: post.title,
         language: post.language,
         image: null,
-        currentImage: `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post.localImages[0].storedFile}`,
+        currentImage: `${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${post.localImages[0].storedFile}`,
         contentText: post.contentText,
         selectedCycle: post.cycles[0] as CycleDetail | null,
         selectedWork: post.works[0] as WorkDetail | null,

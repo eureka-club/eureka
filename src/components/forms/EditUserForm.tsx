@@ -20,7 +20,6 @@ import { useMutation, useQueryClient } from 'react-query';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useSession } from 'next-auth/react';
 // import TagsInputTypeAhead from './controls/TagsInputTypeAhead';
-import { User } from '@prisma/client';
 import TagsInputMaterial from '@/components/forms/controls/TagsInputMaterial';
 import { Country } from '@/src/types';
 import { EditUserClientPayload } from '../../types/user';
@@ -29,10 +28,6 @@ import useUser from '@/src/useUser';
 import globalModalsAtom from '../../atoms/globalModals';
 import styles from './EditUserForm.module.css';
 import toast from 'react-hot-toast'
-import i18nConfig from '../../../i18n';
-import Toast from '../common/Toast';
-import { Select, FormControl as FormControlMUI, InputLabel, MenuItem } from '@mui/material';
-import Image from 'next/image';
 // import useTopics from '../../useTopics';
 
 dayjs.extend(utc);

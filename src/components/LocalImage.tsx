@@ -18,7 +18,7 @@ interface Props {
 }
 
 const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, title,alt,width,height,blurDataURL=false,notNextImage }) => {
-  const fallbakImgURL = `https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
+  const fallbakImgURL = `${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/Image-not-found.webp`
   const [imgError,setImgError] = useState<boolean>(false)
   const onLoadImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = fallbakImgURL;
@@ -31,7 +31,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, titl
         // !notNextImage ? <Image
         //   blurDataURL={blurDataURL ? fallbakImgURL: undefined}
         //   placeholder={blurDataURL ? 'blur': undefined}
-        //   src={imgError ? fallbakImgURL :`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+        //   src={imgError ? fallbakImgURL :`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
         //   alt={alt}
         //   className={`${className}`}
         //   onError={onLoadImgError}
@@ -46,7 +46,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, titl
         // // eslint-disable-next-line @next/next/no-img-element
         // : 
         // <img
-        //   src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+        //   src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
         //   title={title}
         //   alt={alt}
         //   className={className}
@@ -54,7 +54,7 @@ const LocalImage: FunctionComponent<Props> = ({ className, style, filePath, titl
         //   style={{...style,width:`${width}px`,height:`${height}px`}}
         //  />
          <Image 
-          src={`https://${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}.azureedge.net/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
+          src={`${NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${filePath}`}
           alt={alt}
           {...(width&&height) && {width,height}}
           {...(!(width&&height)) && {layout:'fill'}}
