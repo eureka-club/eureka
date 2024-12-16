@@ -116,7 +116,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   }, [query]);
   
   useEffect(() => {
-    if(years.length)
+    if(years.length && !query?.year)
       setYearFilter(years[0].toString());
   }, [years]);
 
@@ -188,7 +188,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
     const sts = `${user.userName || id.toString()}-${id}`;
-    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched/books/?year=${year}`)
       .then(() => {
         toast.success(t('UrlCopied'))
       })
