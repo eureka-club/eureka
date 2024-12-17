@@ -136,7 +136,7 @@ const MyReadOrWatched: NextPage<Props> = ({ id, session }) => {
   const copyURL = (e: MouseEvent<HTMLDivElement>, tab: string, year: string) => {
     e.preventDefault();
     const sts = `${user.userName || id.toString()}-${id}`;
-    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/user/${slugify(sts, { lower: true })}/my-read-or-watched/movies/?year=${year}`)
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${router.locale}/user/${slugify(sts, { lower: true })}/my-read-or-watched/movies/?year=${year}`)
       .then(() => {
         toast.success(t('UrlCopied'))
       })
