@@ -60,9 +60,7 @@ const CycleDetailComponent: FunctionComponent<Props> = ({
   },[router])
 
   const {data:cycle,isLoading} = useCycle(+cycleId
-  //   ,{
-  //   enabled:!!cycleId
-  // }
+  
 );
 
 const {data:dataPosts} = usePosts(cyclePostsProps(+cycleId),['CYCLE',`${cycleId}`,'POSTS']);
