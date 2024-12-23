@@ -31,14 +31,15 @@ import { UserDetail } from '@/src/types/user';
 
 interface Props {
   id: number;
-  session: Session;posts:PostDetail[]
+  session: Session;
+  posts: PostDetail[];
 }
 const Mediatheque: NextPage<Props> = ({ id, session }) => {
   const router = useRouter();
   const { notifier } = useNotificationContext();
   const queryClient = useQueryClient();
   const { t } = useTranslation('mediatheque');
-  const {FilterMediatheque,filtersChecked}=useFilterMediatheque();
+  const { FilterMediatheque, filtersChecked } = useFilterMediatheque();
   const {
     data: user,
     isLoading: isLoadingUser,
@@ -46,13 +47,13 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
   } = useUser(id, {
     enabled: !isNaN(id),
   });
-  
+
   const [isFollowedByMe, setIsFollowedByMe] = useState<boolean>(false);
 
-  const { data: postsData } = useMyPosts(id); 
+  const { data: postsData } = useMyPosts(id);
   // const [posts, setPosts] = useState(dataPosts?.posts);
 
-  const { data:cyclesData } = useMyCycles(id);
+  const { data: cyclesData } = useMyCycles(id);
   // const [cycles, setCycles] = useState(dataCycles?.cycles);
 
   // useEffect(() => {
@@ -179,49 +180,49 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     [router, user],
   );
 
-  
-
-  
-
-  
-
   const isPending = () => {
     return isLoadingUser || isLoadingMutateFollowing;
   };
 
- const getReadOrWatchedTotal = () => {
+  const getReadOrWatchedTotal = () => {
     return user?.readOrWatchedWorks?.length;
   };
 
   const getReadCurrentYear = () => {
     if (user) {
-      if (user.readOrWatchedWorks?.length) return user.readOrWatchedWorks.filter(x => ['book', 'fiction-book'].includes(x?.work?.type??'') && x.year === dayjs().year()).length;
-      else return 0;
-    }
-  };
-
-  const getWatchedCurrentYear = (u:UserDetail) => {
-    if (u) {
-      if (u.readOrWatchedWorks.length)
-        return u.readOrWatchedWorks.filter(
-          (x) => ['movie', 'documentary'].includes(x.work?.type??'') && x.year === dayjs().year(),
+      if (user.readOrWatchedWorks?.length)
+        return user.readOrWatchedWorks.filter(
+          (x) => ['book', 'fiction-book'].includes(x?.work?.type ?? '') && x.year === dayjs().year(),
         ).length;
       else return 0;
     }
   };
 
-  const goToReadOrWatched = (e: MouseEvent<HTMLDivElement>, tab: string | null, year: string | null) => {
+  const getWatchedCurrentYear = (u: UserDetail) => {
+    if (u) {
+      if (u.readOrWatchedWorks.length)
+        return u.readOrWatchedWorks.filter(
+          (x) => ['movie', 'documentary'].includes(x.work?.type ?? '') && x.year === dayjs().year(),
+        ).length;
+      else return 0;
+    }
+  };
+  const currentYear = dayjs().year().toString();
+  const goToReadOrWatched = (e: MouseEvent<HTMLDivElement>, tab: string, year?: string) => {
     e.preventDefault();
-    const sts = `${user!.name || id.toString()}-${id}`;
-    if (tab && year)
-      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`)
-    else
-      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched/books`)
+    const sts = `${user?.name || id.toString()}-${id}`;
+    const baseUrl = `/user/${slugify(sts, { lower: true })}/my-read-or-watched/${tab}`;
+    const queryParams = new URLSearchParams();
+
+    if (year) {
+      queryParams.append('year', year);
+    }
+    router.push(`${baseUrl}?${queryParams.toString()}`);
   };
 
   return (
     <SimpleLayout title={t('Mediatheque')}>
-        <ButtonsTopActions/>
+      <ButtonsTopActions />
       <article data-cy="mediatheque">
         {!isLoadingUser && user && (
           <section>
@@ -230,18 +231,23 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                 <Row className="d-flex flex-column flex-md-row">
                   <Col className="d-flex flex-column flex-sm-wrap align-items-start">
                     <div className="d-flex flex-nowrap">
-                      <RenderAvatar/>
+                      <RenderAvatar />
                       <div className="ms-3 d-sm-block d-md-none">
                         <h2>{user.name}</h2>
-                        <RenderCountry userId={user.id}/>
+                        <RenderCountry userId={user.id} />
                       </div>
                     </div>
-                    <TagsInput className="d-sm-flex d-md-none d-flex flex-row" tags={user.tags || ''} readOnly label="" />
+                    <TagsInput
+                      className="d-sm-flex d-md-none d-flex flex-row"
+                      tags={user.tags || ''}
+                      readOnly
+                      label=""
+                    />
                   </Col>
                   <Col className="col col-sm-12 col-md-8">
                     <div className="d-none d-md-block">
                       <h2>{user.name}</h2>
-                      <RenderCountry userId={user.id}/>
+                      <RenderCountry userId={user.id} />
                     </div>
                     <div className="">
                       <p className={styles.description}>{user.aboutMe}</p>
@@ -286,47 +292,69 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
               <Stack rowGap={6}>
                 <Stack rowGap={1}>
                   <h1 className="text-secondary fw-bold mt-sm-0 mb-2">{t('Mediatheque')}</h1>
-                  <FilterMediatheque/>
+                  <FilterMediatheque />
                 </Stack>
-                  {/* <FilterEngine fictionOrNotFilter={false} geographyFilter={false} /> */}
-                  <section className="d-flex flex-column flex-lg-row">
-                    <Col xs={12} lg={2} className="me-2">
-                      <h2 onClick={(e) => goToReadOrWatched(e, null, null)} className="text-secondary text-center  cursor-pointer" style={{ textDecoration: "underline" }}>{`${t('readOrWatchedWorks')}`}</h2>
-                      <h2 className="text-secondary text-center fs-5">{`(${getReadOrWatchedTotal()})`}</h2>
-                      <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
-                        <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'books', dayjs().year().toString())}>
-                          {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
-                        </h2>
-                        <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getReadCurrentYear()})`}</h2>
-                      </section>
-                      <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
-                        <h2 className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer" style={{ textDecoration: "underline" }} onClick={(e) => goToReadOrWatched(e, 'movies', dayjs().year().toString())}>
-                          {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
-                        </h2>
-                        <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear(user)})`}</h2>
-                      </section>
-                    </Col>
-                    <Col xs={12} lg={10} className="mt-5 mt-lg-0">
-                      <Stack gap={3} className="ms-0 ms-lg-5">
-                        {
-                          filtersChecked.post
-                             ? <PostsCreated showSeeAll={postsData?.fetched!<postsData?.total!} posts={postsData?.posts?.slice(0, 6)!} user={user} goTo={goTo} id={id.toString()} t={t} />
-                             : <></>
-                        }
-                        {
-                          filtersChecked.cycle
-                            ? <CyclesJoined showSeeAll={cyclesData?.fetched!<cyclesData?.total!} cycles={cyclesData?.cycles?.slice(0, 6)!} goTo={goTo} id={id.toString()} />
-                            : <></>
-                        }
-                        <SavedForLater 
-                          showCycles={filtersChecked.cycle} 
-                          showPosts={filtersChecked.post} 
-                          showBooks={filtersChecked.book} 
-                          showMovies={filtersChecked.movie} 
-                          user={user} goTo={goTo} t={t} id={id} />
-                      </Stack>
-                    </Col>
-                  </section>
+                {/* <FilterEngine fictionOrNotFilter={false} geographyFilter={false} /> */}
+                <section className="d-flex flex-column flex-lg-row">
+                  <Col xs={12} lg={2} className="me-2">
+                    <section className="mt-4 p-3 rounded overflow-auto bg-secondary text-white" role="presentation">
+                      <h2
+                        className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer"
+                        style={{ textDecoration: 'underline' }}
+                        onClick={(e) => goToReadOrWatched(e, 'books', currentYear)}
+                      >
+                        {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
+                      </h2>
+                      <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getReadCurrentYear()})`}</h2>
+                    </section>
+                    <section className="mt-5 p-3 rounded overflow-auto bg-yellow text-secondary" role="presentation">
+                      <h2
+                        className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer"
+                        style={{ textDecoration: 'underline' }}
+                        onClick={(e) => goToReadOrWatched(e, 'movies', currentYear)}
+                      >
+                        {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
+                      </h2>
+                      <h2 className="p-1 m-0 text-wrap text-center fs-5">{`(${getWatchedCurrentYear(user)})`}</h2>
+                    </section>
+                  </Col>
+                  <Col xs={12} lg={10} className="mt-5 mt-lg-0">
+                    <Stack gap={3} className="ms-0 ms-lg-5">
+                      {filtersChecked.post ? (
+                        <PostsCreated
+                          showSeeAll={postsData?.fetched! < postsData?.total!}
+                          posts={postsData?.posts?.slice(0, 6)!}
+                          user={user}
+                          goTo={goTo}
+                          id={id.toString()}
+                          t={t}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                      {filtersChecked.cycle ? (
+                        <CyclesJoined
+                          showSeeAll={cyclesData?.fetched! < cyclesData?.total!}
+                          cycles={cyclesData?.cycles?.slice(0, 6)!}
+                          goTo={goTo}
+                          id={id.toString()}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                      <SavedForLater
+                        showCycles={filtersChecked.cycle}
+                        showPosts={filtersChecked.post}
+                        showBooks={filtersChecked.book}
+                        showMovies={filtersChecked.movie}
+                        user={user}
+                        goTo={goTo}
+                        t={t}
+                        id={id}
+                      />
+                    </Stack>
+                  </Col>
+                </section>
               </Stack>
             )}
           </section>
@@ -351,7 +379,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient();
   const session = await getSession(ctx);
   let id = 0;
-  
+
   if (ctx.query && ctx.query.slug) {
     const slug = ctx.query.slug.toString();
     const li = slug.split('-').slice(-1);
@@ -364,7 +392,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-    const { posts } = await getMyPosts(id!,session);
+    const { posts } = await getMyPosts(id!, session);
 
     await queryClient.prefetchQuery(['MY-POSTS'], () => posts);
     posts.forEach((p) => {
@@ -372,7 +400,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     });
 
     const { cycles } = await getMyCycles(id!);
-    await queryClient.prefetchQuery(['MY-CYCLES',id.toString()], () => cycles);
+    await queryClient.prefetchQuery(['MY-CYCLES', id.toString()], () => cycles);
     cycles.forEach((c) => {
       queryClient.setQueryData(['CYCLE', c.id], () => c);
     });
@@ -382,7 +410,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {
         session,
-        id,posts,
+        id,
+        posts,
         dehydratedState: dehydrate(queryClient),
       },
     };
