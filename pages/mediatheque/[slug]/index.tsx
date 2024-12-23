@@ -207,22 +207,17 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
       else return 0;
     }
   };
-
-  const goToReadOrWatched = (e: MouseEvent<HTMLDivElement>, tab: string | null, year: string | null) => {
-    e.preventDefault();
-    const sts = `${user!.name || id.toString()}-${id}`;
-    if (tab && year)
-      router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched?tabKey=${tab}&year=${year}`);
-    else router.push(`/user/${slugify(sts, { lower: true })}/my-read-or-watched/books`);
-  };
-
   const currentYear = dayjs().year().toString();
-
-  const handleNavigation = (e: MouseEvent<HTMLDivElement>, tab: string | null, year: string | null) => {
+  const goToReadOrWatchedd = (e: MouseEvent<HTMLDivElement>, tab: string, year?: string) => {
     e.preventDefault();
-    const sts = `${user!.name || id.toString()}-${id}`;
-    const path = `/user/${slugify(sts, { lower: true })}/my-read-or-watched/${tab && year ? 'books' : 'movies'}`;
-    router.push(path);
+    const sts = `${user?.name || id.toString()}-${id}`;
+    const baseUrl = `/user/${slugify(sts, { lower: true })}/my-read-or-watched/${tab}`;
+    const queryParams = new URLSearchParams();
+
+    if (year) {
+      queryParams.append('year', year);
+    }
+    router.push(`${baseUrl}?${queryParams.toString()}`);
   };
 
   return (
@@ -306,7 +301,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <h2
                         className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer"
                         style={{ textDecoration: 'underline' }}
-                        onClick={(e) => handleNavigation(e, 'books', currentYear)}
+                        onClick={(e) => goToReadOrWatchedd(e, 'books', currentYear)}
                       >
                         {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
                       </h2>
@@ -316,7 +311,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <h2
                         className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer"
                         style={{ textDecoration: 'underline' }}
-                        onClick={(e) => handleNavigation(e, 'movies', null)}
+                        onClick={(e) => goToReadOrWatchedd(e, 'movies', currentYear)}
                       >
                         {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
                       </h2>
