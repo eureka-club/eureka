@@ -208,7 +208,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
     }
   };
   const currentYear = dayjs().year().toString();
-  const goToReadOrWatchedd = (e: MouseEvent<HTMLDivElement>, tab: string, year?: string) => {
+  const goToReadOrWatched = (e: MouseEvent<HTMLDivElement>, tab: string, year?: string) => {
     e.preventDefault();
     const sts = `${user?.name || id.toString()}-${id}`;
     const baseUrl = `/user/${slugify(sts, { lower: true })}/my-read-or-watched/${tab}`;
@@ -301,7 +301,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <h2
                         className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer"
                         style={{ textDecoration: 'underline' }}
-                        onClick={(e) => goToReadOrWatchedd(e, 'books', currentYear)}
+                        onClick={(e) => goToReadOrWatched(e, 'books', currentYear)}
                       >
                         {`${t('readOrWatchedBooks').toLocaleUpperCase()} ${dayjs().year()}`}
                       </h2>
@@ -311,7 +311,7 @@ const Mediatheque: NextPage<Props> = ({ id, session }) => {
                       <h2
                         className="p-1 m-0 text-wrap text-center fs-6 cursor-pointer"
                         style={{ textDecoration: 'underline' }}
-                        onClick={(e) => goToReadOrWatchedd(e, 'movies', currentYear)}
+                        onClick={(e) => goToReadOrWatched(e, 'movies', currentYear)}
                       >
                         {`${t('readOrWatchedMovies').toLocaleUpperCase()} ${dayjs().year()}`}
                       </h2>
