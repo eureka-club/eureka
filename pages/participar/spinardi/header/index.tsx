@@ -1,4 +1,4 @@
-import Counter from "pages/ads/counter";
+import Counter from "pages/participar/components/counter";
 
 const Header = ()=>{
     return <>
