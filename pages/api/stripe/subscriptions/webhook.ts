@@ -35,14 +35,7 @@ export default async function handler(
     let event = req.body;
     console.log('event ',event); 
 
-    await sendMail({
-      from:process.env.EMAILING_FROM!,
-      to:[{email:'gbanoaol@gmail.com'}],
-      subject:`Stripe Webhook event payload`,
-      html:`
-      ${JSON.stringify(event)}
-      `
-    });
+    
 
 
     const body = await buffer(req);
@@ -87,25 +80,38 @@ export default async function handler(
         await sendMail({
           from:process.env.EMAILING_FROM!,
           to:[{email:user?.email!}],
-          subject:`Você entrou no clube ${cycle?.title}`,
+          subject:`Você entrou no clube ${cycle?.title} - checkout.session.completed`,
           html:`
             <p>
               Você entrou no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycle?.title}</a> com sucesso.
             </p>
           `
         });
-        
         break;
       // Payment is successful and the subscription is created.
       // You should provision the subscription and save the customer ID to your database.
-      break;
       case 'customer.created':
         debugger;
-          const {...othersCC} = event.data;
+          await sendMail({
+            from:process.env.EMAILING_FROM!,
+            to:[{email:'gbanoaol@gmail.com'}],
+            subject:`Stripe Webhook event payload - customer.created`,
+            html:`
+            ${JSON.stringify(event.data.object.customer)}
+            `
+          });
         break;
       case 'invoice.paid':
         debugger;
         const {...othersIP} = event.data;
+        await sendMail({
+          from:process.env.EMAILING_FROM!,
+          to:[{email:'gbanoaol@gmail.com'}],
+          subject:`Stripe Webhook event payload - invoice.paid`,
+          html:`
+          ${JSON.stringify(othersIP)}
+          `
+        });
         // Continue to provision the subscription as payments continue to be made.
         // Store the status in your database and check when a user accesses your service.
         // This approach helps you avoid hitting rate limits.
@@ -114,6 +120,18 @@ export default async function handler(
         // The payment failed or the customer does not have a valid payment method.
         // The subscription becomes past_due. Notify your customer and send them to the
         // customer portal to update their payment information.
+        break;
+      case 'payment_intent.succeeded':
+        debugger;
+        const {...othersIP2} = event.data;
+        await sendMail({
+          from:process.env.EMAILING_FROM!,
+          to:[{email:'gbanoaol@gmail.com'}],
+          subject:`Stripe Webhook event payload - payment_intent.succeeded`,
+          html:`
+          ${JSON.stringify(othersIP2)}
+          `
+        });
         break;
       
       default:
