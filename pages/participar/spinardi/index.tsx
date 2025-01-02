@@ -8,10 +8,13 @@ import FAQ from "../components/faq";
 import WhatAreYouAaitingFor from "./whatAreYouAaitingFor";
 import SubscriptionForm from "./subscriptionForm";
 import Footer from "@/src/components/layouts/Footer";
+import useTranslation from "next-translate/useTranslation";
 
 interface Props {}
 const Spinardi:NextPage<Props> = ({})=>{
+    const{t}=useTranslation('spinardi');
     return <>
+        <p>{t('test')}</p>
         <Header/>
         <WhyBePartOf/>
         <ClubProgramming/>
