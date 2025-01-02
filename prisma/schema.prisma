@@ -586,16 +586,18 @@ model Action {
 //Clubs subscriptions
 
 model Subscription {
-  id        Int    @id @default(autoincrement())
 
-  cycle     Cycle?    @relation(fields: [cycleId], references: [id])
-  cycleId   Int?
+  cycle     Cycle    @relation(fields: [cycleId], references: [id])
+  cycleId   Int
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
   
-  customerId String?
+  customerId String 
+  productId String? 
   status  String?
+
+  @@id([cycleId,userId,customerId])
 
   createdAt        DateTime  @default(now()) @map(name: "created_at")
   updatedAt        DateTime  @updatedAt @map(name: "updated_at")

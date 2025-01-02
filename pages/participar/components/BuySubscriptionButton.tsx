@@ -1,3 +1,4 @@
+import useCycleSumary from "@/src/useCycleSumary";
 import { Button } from "@mui/material";
 import { getSession, useSession } from "next-auth/react";
 import useTranslation from "next-translate/useTranslation";
@@ -8,11 +9,13 @@ interface Props {
     label:string;
     price:string;
     product_id:string;
-    cycleId:string;
+    cycleId:number;
+    
 }   
 const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId}) => { 
   const {data:session}=useSession();
   const {t}=useTranslation('common');
+  const {data:cycle}=useCycleSumary(cycleId);
   if(!session){
     toast.error(t('Unauthorized'));
     return null;
@@ -25,13 +28,18 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId}) => {
             price,
             customer_email: session?.user.email,
             cycleId,
-            userId:session?.user.id
+            cycleTitle:cycle?.title,
+            userId:session?.user.id,
+            userName:session?.user.name
           }),
           headers:{
             'Content-Type':'application/json'
           }
         });
-        const {stripe_session_url} = await fr.json();
+        const {stripe_session_url,subscription_already_exist} = await fr.json();
+        if(subscription_already_exist){ 
+          return toast.error(t('Você já está inscrito no clube.'));
+        }
         window.location.href = stripe_session_url;
   };   
   return (

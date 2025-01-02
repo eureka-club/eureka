@@ -30,16 +30,11 @@ export const config = {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) {debugger;
+) {
   if (req.method === 'POST') {
     let event = req.body;
-    console.log('event ',event); 
-
-    
-
 
     const body = await buffer(req);
-
     if (endpointSecret) {
       // Get the signature sent by Stripe
       const signature = req.headers['stripe-signature'];
@@ -56,92 +51,148 @@ export default async function handler(
       }
     }
 
-    // Handle the event
-    switch (event.type) {
-      case 'checkout.session.completed':debugger;
-        const {data:{object:{status,customer:{id},metadata:{cycleId,userId}}}} = event.data;
-        const user = await prisma.user.findUnique({
-          select:{email:true},
-          where:{id:userId}
-        });
-        const cycle = await prisma.cycle.findUnique({
-          select:{title:true},
-          where:{id:cycleId}
-        });
-        await prisma.subscription.create({
-          data:{
-            status,
-            userId,
-            cycleId,
-            customerId:id
-          }
-        });
-        await addParticipant(userId,cycleId);
-        await sendMail({
-          from:process.env.EMAILING_FROM!,
-          to:[{email:user?.email!}],
-          subject:`Você entrou no clube ${cycle?.title} - checkout.session.completed`,
-          html:`
-            <p>
-              Você entrou no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycle?.title}</a> com sucesso.
-            </p>
-          `
-        });
-        break;
-      // Payment is successful and the subscription is created.
-      // You should provision the subscription and save the customer ID to your database.
-      case 'customer.created':
-        debugger;
+    if (event.data){
+      let userId;
+      let cycleId;
+      let email;
+      let userName;
+      let cycleTitle;
+      let productId;
+      let customerId;
+      let status;
+      let obj;
+      
+      switch (event.type) {
+        case 'checkout.session.completed':
+          obj = event.data.object;
+          cycleId = +obj.metadata.cycleId;
+          cycleTitle = obj.metadata.cycleTitle;
+          userId = +obj.metadata.userId;
+          userName = obj.metadata.userName;
+          customerId = obj.customer;
+          email = obj.customer_email;
+          productId = obj.metadata.product_id;
+          status = obj.payment_status;
+
+          await prisma.subscription.create({
+            data:{
+              status,
+              userId,
+              cycleId,
+              customerId,
+              productId,
+            }
+          });
+          await addParticipant(cycleId,userId);
           await sendMail({
             from:process.env.EMAILING_FROM!,
-            to:[{email:'gbanoaol@gmail.com'}],
-            subject:`Stripe Webhook event payload - customer.created`,
+            to:[{email}],
+            subject:`Assinatura no clube "${cycleTitle}", concluída com sucesso`,
             html:`
-            ${JSON.stringify(event.data.object.customer)}
+              <h5>${userName}, sua assinatura no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>, foi concluída com sucesso.</h5>
             `
           });
-        break;
-      case 'invoice.paid':
-        debugger;
-        const {...othersIP} = event.data;
-        await sendMail({
-          from:process.env.EMAILING_FROM!,
-          to:[{email:'gbanoaol@gmail.com'}],
-          subject:`Stripe Webhook event payload - invoice.paid`,
-          html:`
-          ${JSON.stringify(othersIP)}
-          `
-        });
-        // Continue to provision the subscription as payments continue to be made.
-        // Store the status in your database and check when a user accesses your service.
-        // This approach helps you avoid hitting rate limits.
-        break;
-      case 'invoice.payment_failed':
-        // The payment failed or the customer does not have a valid payment method.
-        // The subscription becomes past_due. Notify your customer and send them to the
-        // customer portal to update their payment information.
-        break;
-      case 'payment_intent.succeeded':
-        debugger;
-        const {...othersIP2} = event.data;
-        await sendMail({
-          from:process.env.EMAILING_FROM!,
-          to:[{email:'gbanoaol@gmail.com'}],
-          subject:`Stripe Webhook event payload - payment_intent.succeeded`,
-          html:`
-          ${JSON.stringify(othersIP2)}
-          `
-        });
-        break;
-      
-      default:
-        // Unexpected event type
-        console.log(`Unhandled event type ${event.type}.`);
+          break;
+        case 'invoice.paid':
+          obj = event.data.object.subscription_details;
+          cycleId = +obj.metadata.cycleId;
+          userId = +obj.metadata.userId;
+          customerId = obj.customer;
+          email = obj.customer_email;
+          productId = obj.metadata.product_id;
+          status = obj.payment_status;
+          
+          await sendMail({
+            from:process.env.EMAILING_FROM!,
+            to:[{email:event.data.object.customer_email}],
+            subject:`Pagamento da conta da assinatura no clube "${cycleTitle}", concluída com sucesso`,
+            html:`
+              <p><a href="${event.data.object.invoice_pdf}">Fatura em PDF</a></p>
+            `
+          });
+
+          await prisma.subscription.update({
+            where:{
+              cycleId_userId_customerId:{
+                cycleId,
+                userId,
+                customerId
+              }
+            },
+            data:{
+              status:'paid',
+            }
+          });
+          
+          break;
+        case 'invoice.payment_failed':
+          obj = event.data.object;
+          customerId = obj.customer;
+          status = obj?.status;
+
+          await sendMail({
+            from:process.env.EMAILING_FROM!,
+            to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
+            subject:`invoice.payment_failed for customer: "${customerId}" invoice: ${obj.invoice}`,
+            html:`
+              <p>invoice.payment_failed for customer: "${customerId}" invoice: ${obj.invoice}</p>
+              <code>${JSON.stringify(obj)}</code>
+            `
+          });
+
+          const invoice = await stripe.invoices.retrieve(obj.invoice);
+          const subs = await stripe.subscriptions.retrieve(invoice.subscription);
+          await prisma.subscription.update({
+            where:{
+              cycleId_userId_customerId:{
+                cycleId:+subs.metadata.cycleId,
+                userId:+subs.metadata.userId,
+                customerId:subs.customer
+              }
+            },
+            data:{
+              status,
+            }
+          });
+
+          break;
+        case 'customer.subscription.deleted':
+          await sendMail({
+            from:process.env.EMAILING_FROM!,
+            to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
+            subject:`customer.subscription.deleted`,
+            html:`
+              <code>${JSON.stringify(obj)}</code>
+            `
+          });
+
+          obj = event.data.object;
+          let subscriptionId = +obj.id;
+          status = obj.status;
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+
+          await prisma.subscription.update({
+            where:{
+              cycleId_userId_customerId:{
+                cycleId:+subscription.metadata.cycleId,
+                userId:+subscription.metadata.userId,
+                customerId:subscription.customer
+              }
+            },
+            data:{
+              status,
+            }
+          });
+          break;
+        
+          default:
+          // Unexpected event type
+          console.log(`Unhandled event type ${event.type}.`);
+      }
     }
 
     // Return a 200 response to acknowledge receipt of the event
     res.status(200).send('Acknowledge receipt');
-
   } 
   else {
     res.setHeader('Allow', 'POST');

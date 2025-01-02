@@ -6,7 +6,7 @@ const Header = ()=>{
         <BuySubscriptionButton 
             price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr" 
             product_id="prod_RTLCazmGCcyKKH" 
-            cycleId="30" 
+            cycleId={30} 
             label="Garanta sua vaga neste cluve exclusivo!"
         />
         <Countdown startDate={new Date('2025-01-12')}/>
