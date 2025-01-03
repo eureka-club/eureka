@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { getSession, useSession } from "next-auth/react";
 import useTranslation from "next-translate/useTranslation";
 import { FC } from "react";
-import {Grid} from '@mui/material'
+import {Grid, Stack} from '@mui/material'
 import toast from "react-hot-toast";
 
 interface Props {
@@ -44,6 +44,12 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId}) => {
         window.location.href = stripe_session_url;
   };   
   return (
+    <>
+    <Stack direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 3 }}
+        paddingLeft={4}
+        justifyContent={'center'}
+        justifyItems={'center'}>
     <Button
           variant="contained"
           color="primary"
@@ -54,7 +60,8 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId}) => {
       >
           {label}
       </Button>
-      
+      </Stack>
+      </>
   );
 }
 export default BuySubscriptionButton;

@@ -22,7 +22,7 @@ const Countdown:FC<Props> = ({startDate}) => {
         return () => clearInterval(interval);
     }, []);
 
-    return <Stack direction="row" spacing={0.5} paddingLeft={2} paddingRight={2}>
+    return <Stack direction="row" spacing={0.5} paddingLeft={6} paddingRight={2} paddingTop={2}>
         <Stack direction={'column'} padding={1} alignItems={'center'} justifyContent={'center'} style={{backgroundColor:'var(--color-danger)',width:'5.6rem', height:'5.6rem'}}>
             <Typography color="white" fontWeight={'bolder'} fontSize={'1.5rem'}>{days}</Typography>
             <Typography color="white" fontSize={'0.8rem'}  textTransform={'uppercase'}>Dias</Typography>
