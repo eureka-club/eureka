@@ -1,3 +1,4 @@
+
 module.exports = {
   // loader: false, // because we use babel plugins 😕
   // loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
@@ -24,5 +25,6 @@ module.exports = {
     'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque','countries','countries-abbr'],
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['common','workDetail', 'countries', 'cycleDetail'],
+    '/participar/spinardi': ['spinardi'],
   },
 };

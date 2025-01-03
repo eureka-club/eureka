@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { FC } from "react";
+import {Grid} from '@mui/material'
 
 interface Props {
     label:string;
@@ -9,7 +10,9 @@ const BuySubscriptionButton:FC<Props> = ({label}) => {
 
     };   
     return (
-        <Button
+        <Grid paddingBlockEnd={2} paddingLeft={2} paddingRight={2} >
+        <Button 
+            
             variant="contained"
             color="primary"
             size="large"
@@ -17,6 +20,7 @@ const BuySubscriptionButton:FC<Props> = ({label}) => {
         >
             {label}
         </Button>
+        </Grid>
     );
 }
 export default BuySubscriptionButton;
