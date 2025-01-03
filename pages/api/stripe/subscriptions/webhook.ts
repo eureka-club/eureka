@@ -61,6 +61,8 @@ export default async function handler(
       let customerId;
       let status;
       let obj;
+      let invoice;
+      let subscription;
       
       switch (event.type) {
         case 'checkout.session.completed':
@@ -126,28 +128,27 @@ export default async function handler(
           
           break;
         case 'invoice.payment_failed':
-          obj = event.data.object;
-          customerId = obj.customer;
-          status = obj?.status;
+          invoice = event.data.object;
+          subscription = invoice.subscription_details;
+          customerId = invoice.customer;
+          userName = invoice.customer_name;
+          status = 'failed';
 
           await sendMail({
             from:process.env.EMAILING_FROM!,
             to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
-            subject:`invoice.payment_failed for customer: "${customerId}" invoice: ${obj.invoice}`,
+            subject:`invoice.payment_failed (${subscription.customer}|${subscription.id})`,
             html:`
-              <p>invoice.payment_failed for customer: "${customerId}" invoice: ${obj.invoice}</p>
-              <code>${JSON.stringify(obj)}</code>
+              <p>user: ${subscription.metadata.userId}, cycle: ${subscription.metadata.cycleId}</code>
             `
           });
 
-          const invoice = await stripe.invoices.retrieve(obj.invoice);
-          const subs = await stripe.subscriptions.retrieve(invoice.subscription);
           await prisma.subscription.update({
             where:{
               cycleId_userId_customerId:{
-                cycleId:+subs.metadata.cycleId,
-                userId:+subs.metadata.userId,
-                customerId:subs.customer
+                cycleId:+subscription.metadata.cycleId,
+                userId:+subscription.metadata.userId,
+                customerId
               }
             },
             data:{
@@ -157,19 +158,17 @@ export default async function handler(
 
           break;
         case 'customer.subscription.deleted':
+          subscription = event.data.object;
+          status = subscription.status;
+
           await sendMail({
             from:process.env.EMAILING_FROM!,
             to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
-            subject:`customer.subscription.deleted`,
+            subject:`customer.subscription.deleted (${subscription.customer}|${subscription.id})`,
             html:`
-              <code>${JSON.stringify(obj)}</code>
+              <p>user: ${subscription.metadata.userId}, cycle: ${subscription.metadata.cycleId}</code>
             `
           });
-
-          obj = event.data.object;
-          let subscriptionId = +obj.id;
-          status = obj.status;
-          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
           await prisma.subscription.update({
             where:{
