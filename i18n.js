@@ -20,6 +20,7 @@ module.exports = {
     '/profile': ['common', 'profile', 'countries'],
     '/manifest': ['manifest'],
     '/policy': ['termsAndPolicy'],
+    '/participar/spinardi': ['spinardi'],
     '/back-office': ['backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
     'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque','countries','countries-abbr'],

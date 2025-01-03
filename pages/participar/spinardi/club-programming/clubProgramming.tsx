@@ -48,7 +48,7 @@ const ClubProgramming = () => {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
             <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton label={t('btn to sign up')} />
+              <BuySubscriptionButton label={t('btn to sign up')} price={''} product_id={''} cycleId={0} />
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>

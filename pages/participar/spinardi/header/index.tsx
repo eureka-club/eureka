@@ -5,10 +5,17 @@ import Image from 'next/image';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 
+
 const Header = () => {
   const { t } = useTranslation('spinardi');
   return (
     <>
+     <BuySubscriptionButton 
+            price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr" 
+            product_id="prod_RTLCazmGCcyKKH" 
+            cycleId={30} 
+            label="Garanta sua vaga neste cluve exclusivo!"
+        />
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         spacing={{ xs: 1, sm: 2, md: 3 }}
@@ -39,7 +46,7 @@ const Header = () => {
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingRight={2.5} paddingLeft={1}>
             <Box sx={{ maxWidth: { lg: '30dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton label={t('btn exclusive club')} />
+              <BuySubscriptionButton label={t('btn exclusive club')} price={''} product_id={''} cycleId={0} />
               <Countdown startDate={new Date('2025-01-12')} />
               <Typography paddingBlockStart={2}paddingLeft={1} textAlign="center" variant="subtitle2">
                 <i>{t('written')}</i>

@@ -104,7 +104,7 @@ const InvestInYourself = () => {
           <Grid>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingBlockEnd={2}>
           <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton label={t('lbl button cost and payment')} />
+              <BuySubscriptionButton label={t('lbl button cost and payment')} price={''} product_id={''} cycleId={0} />
             </Box>
           </Box>
           </Grid>

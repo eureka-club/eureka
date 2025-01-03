@@ -56,6 +56,7 @@ model User {
   editions           Edition[]
   language           String?
   actions            Action[]
+  subscriptions      Subscription[]
 
   @@map(name: "users")
 }
@@ -178,7 +179,7 @@ model Cycle {
   cycleWorksDates CycleWork[]
   usersJoined     CycleUserJoin[]
   actions         Action[]
-
+  subscriptions   Subscription[]
 
   tags String?
 
@@ -581,5 +582,29 @@ model Action {
   createdAt    DateTime  @default(now()) @map(name: "created_at")
 
 }
+
+//Clubs subscriptions
+
+model Subscription {
+
+  cycle     Cycle    @relation(fields: [cycleId], references: [id])
+  cycleId   Int
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  
+  customerId String 
+  productId String? 
+  status  String?
+
+  @@id([cycleId,userId,customerId])
+
+  createdAt        DateTime  @default(now()) @map(name: "created_at")
+  updatedAt        DateTime  @updatedAt @map(name: "updated_at")
+
+}
+
+
+
 
 
