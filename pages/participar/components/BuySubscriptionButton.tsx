@@ -1,12 +1,13 @@
 import useCycleSumary from "@/src/useCycleSumary";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { getSession, useSession } from "next-auth/react";
 import useTranslation from "next-translate/useTranslation";
-import { FC } from "react";
+import { FC, useState } from "react";
 import {Grid, Stack} from '@mui/material'
 import toast from "react-hot-toast";
 import { useModalContext } from "@/src/hooks/useModal";
 import SignInForm from "@/src/components/forms/SignInForm";
+import { set } from "lodash";
 
 interface Props {
     label:string;
@@ -20,7 +21,10 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) 
   const {t}=useTranslation('common');
   const {data:cycle}=useCycleSumary(cycleId);
   const {show} = useModalContext();
+  const[isLoading,setIsLoading] = useState(false);
+  
   const onClickHandle = async (e:any) => {
+    setIsLoading(true);
     if(session?.user){
       const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
           method:'POST',
@@ -43,9 +47,11 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) 
         }
         window.location.href = stripe_session_url;
     }else{
-      show(<SignInForm next={next}/>);
+      show(<SignInForm/>);
     }
+    setIsLoading(false);
   };   
+  
   return (
     <>
     <Stack direction={{ xs: 'column', sm: 'row' }}
@@ -60,8 +66,10 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) 
           style={{color: 'white!important;'}}
           type="submit"
           onClick={onClickHandle}
+          disabled={isLoading}
+
       >
-          {label}
+          {label} <CircularProgress size={'2rem'} color="inherit" style={{display: isLoading ? 'block' : 'none'}}/>
       </Button>
       </Stack>
       </>
