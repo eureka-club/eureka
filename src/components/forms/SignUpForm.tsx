@@ -28,7 +28,7 @@ interface FormValues {
 }
 
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
-  const { t } = useTranslation('signUpForm');
+  const { t, lang } = useTranslation('signUpForm');
   //const formRef = useRef<HTMLFormElement>(null);
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
@@ -109,7 +109,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     });
     if (res.ok) {
       const data = await res.json();
-      signIn('email', { email: identifier });
+      signIn('email', { email: identifier, callbackUrl:localStorage.getItem('loginRedirect')??`/${lang}` });
       // return data;
     } else {
       toast.error(t(res.statusText));

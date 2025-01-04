@@ -20,7 +20,6 @@ interface Props {
   noModal?: boolean;
   logoImage?:boolean;
   joinToCycle?:number;
-  next?:string;
 }
 
 const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>{
@@ -36,19 +35,18 @@ const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>
   </Button>
 }
 
-const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true,next }) => {
+const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true }) => {
   const router = useRouter()
-  const { t } = useTranslation('signInForm');
+  const { t,lang } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
   const [loading,setLoading] = useState(false)
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     if(!noModal)
-      localStorage.setItem('loginRedirect', router.asPath)
+      localStorage.setItem('loginRedirect', `/${lang}/${router.asPath}`)
     let callbackUrl = !!joinToCycle&&joinToCycle!=-1 
-       ? `/cycle/${joinToCycle}?join=true`
+       ? `/${lang}/cycle/${joinToCycle}?join=true`
        : localStorage.getItem('loginRedirect')?.toString()||'/';
-    if(next)callbackUrl=next;
     signIn('google',{ callbackUrl });
   };
 
@@ -94,10 +92,11 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
             setLoading(false)
            }
            else {
+            localStorage.setItem('loginRedirect',`/${lang}/${router.asPath}`)
+
             let callbackUrl = !!joinToCycle&&joinToCycle>0 
-            ? `/cycle/${joinToCycle}?join=true`
-            : localStorage.getItem('loginRedirect')?.toString()||'/';
-            if(next)callbackUrl=next;
+            ? `/${lang}/cycle/${joinToCycle}?join=true`
+            : localStorage.getItem('loginRedirect')?.toString()||`/${lang}`;
 
             signIn('credentials' ,{
               callbackUrl,
@@ -112,8 +111,8 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
               }
               else{
                 close();
-                localStorage.setItem('loginRedirect',router.asPath)
-                router.push(localStorage.getItem('loginRedirect') || '/').then(()=>{
+                localStorage.setItem('loginRedirect',`/${lang}/${router.asPath}`)
+                router.push(localStorage.getItem('loginRedirect') || `/${lang}`).then(()=>{
                   localStorage.setItem('loginRedirect','')
                 })
               }
