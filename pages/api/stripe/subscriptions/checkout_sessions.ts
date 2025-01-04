@@ -1,5 +1,6 @@
 import { MISSING_FIELD, UNAUTHORIZED } from "@/src/api_code";
 import { NextApiRequest, NextApiResponse } from "next";
+import {prisma} from '@/src/lib/prisma';
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(
