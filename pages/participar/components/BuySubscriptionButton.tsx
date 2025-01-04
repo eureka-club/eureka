@@ -5,23 +5,23 @@ import useTranslation from "next-translate/useTranslation";
 import { FC } from "react";
 import {Grid, Stack} from '@mui/material'
 import toast from "react-hot-toast";
+import { useModalContext } from "@/src/hooks/useModal";
+import SignInForm from "@/src/components/forms/SignInForm";
 
 interface Props {
     label:string;
     price:string;
     product_id:string;
     cycleId:number;
-    
+    next?:string;
 }   
-const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId}) => { 
+const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) => { 
   const {data:session}=useSession();
   const {t}=useTranslation('common');
   const {data:cycle}=useCycleSumary(cycleId);
-  if(!session){
-    toast.error(t('Unauthorized'));
-    return null;
-  }
+  const {show} = useModalContext();
   const onClickHandle = async (e:any) => {
+    if(session?.user){
       const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
           method:'POST',
           body:JSON.stringify({
@@ -42,6 +42,9 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId}) => {
           return toast.error(t('Você já está inscrito no clube.'));
         }
         window.location.href = stripe_session_url;
+    }else{
+      show(<SignInForm next={next}/>);
+    }
   };   
   return (
     <>

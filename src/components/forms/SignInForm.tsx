@@ -20,6 +20,7 @@ interface Props {
   noModal?: boolean;
   logoImage?:boolean;
   joinToCycle?:number;
+  next?:string;
 }
 
 const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>{
@@ -35,7 +36,7 @@ const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>
   </Button>
 }
 
-const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true }) => {
+const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true,next }) => {
   const router = useRouter()
   const { t } = useTranslation('signInForm');
   const formRef=useRef<HTMLFormElement>(null)
@@ -44,9 +45,10 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
     ev.preventDefault();
     if(!noModal)
       localStorage.setItem('loginRedirect', router.asPath)
-    const callbackUrl = !!joinToCycle&&joinToCycle!=-1 
+    let callbackUrl = !!joinToCycle&&joinToCycle!=-1 
        ? `/cycle/${joinToCycle}?join=true`
        : localStorage.getItem('loginRedirect')?.toString()||'/';
+    if(next)callbackUrl=next;
     signIn('google',{ callbackUrl });
   };
 
@@ -92,9 +94,11 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
             setLoading(false)
            }
            else {
-            const callbackUrl = !!joinToCycle&&joinToCycle>0 
+            let callbackUrl = !!joinToCycle&&joinToCycle>0 
             ? `/cycle/${joinToCycle}?join=true`
             : localStorage.getItem('loginRedirect')?.toString()||'/';
+            if(next)callbackUrl=next;
+
             signIn('credentials' ,{
               callbackUrl,
               email:form.email.value,

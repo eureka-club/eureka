@@ -6,7 +6,7 @@ import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 
 const Header = () => {
-  const { t } = useTranslation('spinardi');
+  const { t, lang } = useTranslation('spinardi');
   return (
     <>
       <Stack
@@ -49,6 +49,7 @@ const Header = () => {
                 price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
                 product_id="prod_RTLCazmGCcyKKH"
                 cycleId={30}
+                next={`/${lang}/participar/spinardi`}
               />
               <Countdown startDate={new Date('2025-01-12')} />
               <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
