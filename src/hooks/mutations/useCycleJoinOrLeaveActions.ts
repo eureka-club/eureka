@@ -9,6 +9,7 @@ import {setCycleJoinRequests,removeCycleJoinRequest} from '@/src/useCycleJoinReq
 import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailchimp';
 import { UserSumary } from '@/src/types/UserSumary';
 import { useCycleParticipants } from '../useCycleParticipants';
+import { useSession } from 'next-auth/react';
 
 type ctx = {
     ss: UserDetail[] | undefined;
@@ -20,7 +21,7 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCal
     const {notifier} = useNotificationContext();
     const queryClient = useQueryClient();
     const{data:participants}=useCycleParticipants(cycle?.id);
-
+    const{data:session}=useSession();
     const whereCycleParticipants = {
         OR:[
             {cycles: { some: { id: cycle?.id } }},//creator
@@ -38,22 +39,26 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCal
           const notificationToUsers = (participants || []).map(p=>p.id);
           if(cycle?.creator.id) notificationToUsers.push(cycle?.creator.id);
           if(cycle.access==4){
-            const fr = await fetch('/api/stripe/checkout_sessions',{
+            const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
               method:'POST',
               body:JSON.stringify({
                 product_id:cycle.product_id,
                 price:cycle.price,
-                client_reference_id:user.id,
-                customer_email: user.email,
-                cycleId:cycle.id
+                customer_email: session?.user.email,
+                cycleId:cycle?.id,
+                cycleTitle:cycle?.title,
+                userId:session?.user.id,
+                userName:session?.user.name
               }),
               headers:{
                 'Content-Type':'application/json'
               }
             });
-            const {stripe_session_url} = await fr.json();
+            const {stripe_session_url,subscription_already_exist} = await fr.json();
+            if(subscription_already_exist){ 
+              return toast.error(t('Você já está inscrito no clube.'));
+            }
             window.location.href = stripe_session_url;
-            return;
           }
           else{
             const res = await fetch(`/api/cycle/${cycle!.id}/join`, { 

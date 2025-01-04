@@ -13,8 +13,6 @@ const bcrypt = require('bcryptjs');
 import { subscribe_to_segment } from '@/src/lib/mailchimp';
 import { Cycle } from '@prisma/client';
 import { defaultLocale } from 'i18n';
-import { findSumary } from '@/src/facades/user';
-import { UserSumary } from '@/src/types/UserSumary';
 
 /* const getOptions = (req: NextApiRequest) => {
   const locale = req.cookies.NEXT_LOCALE;
