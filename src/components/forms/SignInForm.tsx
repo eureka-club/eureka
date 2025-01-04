@@ -111,7 +111,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
                 setLoading(false)
               }
               else{
-                close()
+                close();
                 localStorage.setItem('loginRedirect',router.asPath)
                 router.push(localStorage.getItem('loginRedirect') || '/').then(()=>{
                   localStorage.setItem('loginRedirect','')
