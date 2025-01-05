@@ -9,20 +9,25 @@ const InvestInYourself = () => {
   return (
     <>
     <div>
-     
-       <Stack direction={{ xs: 'column' }} gap={2} bgcolor= "#ecf0f1" width={{xs:350, sm:1100}}>
-       <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} >
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-              <Typography textAlign="center" paddingTop={2}  fontSize={30}>
-                <b> {t('sub title invest in yourself')}</b>
-              </Typography>
-             
-            </Box>
-          </Box>
 
-          <Grid container>
-          <Grid item xs={12} sm={6} padding={2}>
-              <Card
+    <Stack gap={5} paddingTop={5} paddingBottom={1} >
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"}  paddingLeft={2} paddingRight={2}>
+                    <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+                        <Typography fontSize={30} textAlign="center">
+                        <b> {t('sub title invest in yourself')}</b>
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box sx={{display:'flex',justifyContent:'center'}} alignItems={"center"} paddingLeft={2} paddingRight={2}>
+                    <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+                        <Grid container gap={4}  sx={{justifyContent:'center'}}>
+                            
+                            <Grid item xs={12}
+                                sm={6}
+                                
+                            >
+                                <Stack gap={4}>
+                                <Card
                 elevation={0}
                 sx={{
                   maxWidth: 500,
@@ -53,9 +58,15 @@ const InvestInYourself = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} padding={2}>
-              <Card
+                                </Stack>
+                            </Grid>
+
+                            <Grid item xs={12}
+                                sm={6}
+                                md={4}
+                            >
+                                <Stack gap={4}>
+                                <Card
                 elevation={0}
                 sx={{
                   maxWidth: 500,
@@ -86,11 +97,14 @@ const InvestInYourself = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            
-            </Grid>
-            
-          </Grid>
-          <Grid>
+                                </Stack>
+                            </Grid>
+
+                        </Grid>
+                    </Box>
+                </Box>
+               
+                <Grid>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} >
             <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
               <Typography textAlign="center" paddingBlockEnd={2}  variant='body2'>
@@ -102,16 +116,15 @@ const InvestInYourself = () => {
           </Grid>
 
           <Grid>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingBlockEnd={2}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} >
           <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
               <BuySubscriptionButton label={t('lbl button cost and payment')} price={''} product_id={''} cycleId={0} />
             </Box>
           </Box>
           </Grid>
-
-          
-
-        </Stack>
+            </Stack>
+     
+      
     </div>
     </>
   );

@@ -11,8 +11,8 @@ const WhatAreYouAaitingFor = () => {
   return (
     <>
     <div>
-    <Stack direction={{ xs: 'column' }} gap={2} bgcolor= "#ecf0f1" width={{xs:350, sm:1100}} sx={{ backgroundColor: "#00cec9" }}>
-       <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} >
+    <Stack direction={{ xs: 'column' }} gap={2}  >
+       <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={2} paddingX={1} >
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
               <Typography textAlign="center" paddingTop={2}   fontSize={30}>
                 <b> {t('footer Club title')}</b>
@@ -23,7 +23,7 @@ const WhatAreYouAaitingFor = () => {
 
         
           <Grid>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} >
+          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingX={1}>
             <Box sx={{ maxWidth: { lg: '40dvw', sm: '40dvw', xs: '100dvw' } }}>
               <Typography textAlign="center" paddingBlockEnd={2}  fontSize={22}>
                 {t('footer Club sub title 1')}

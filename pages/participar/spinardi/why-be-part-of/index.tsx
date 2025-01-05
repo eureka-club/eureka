@@ -16,7 +16,7 @@ const WhyBePartOf = () => {
   return (
     <div>
      
-      <Stack id="asUl" direction={{ xs: 'column'}} gap={2} justifyContent={'center'} alignItems={'center'}  bgcolor= "#ecf0f1" width={{xs:350, sm:1100}}>
+      <Stack id="asUl" direction={{ xs: 'column'}} gap={2} justifyContent={'center'} alignItems={'center'}  width={{xs:350, sm:1100}}>
      
         <style jsx global>{
               `
@@ -51,7 +51,7 @@ const WhyBePartOf = () => {
                       zIndex:1,
                       top:'0',
                       right:'0',
-                      marginRight:30,
+                      marginRight:0,
                       marginTop:165,
                         display:{xs:'none',lg:'block'}
                     }}>
