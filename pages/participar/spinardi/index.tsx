@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Header from './header';
 import WhyBePartOf from './why-be-part-of';
 import ClubProgramming from './club-programming/clubProgramming';
@@ -16,10 +16,12 @@ import Head from 'next/head';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { Stack, Box, Container, Typography } from '@mui/material';
 import Image from 'next/image';
+import { getCycleSumary } from '@/src/useCycleSumary';
+import { dehydrate, QueryClient } from 'react-query';
 interface Props {
   session: Session;
 }
-const Spinardi: NextPage<Props> = ({}) => {
+const Spinardi: NextPage<Props> = ({session}) => {
   const { t } = useTranslation('spinardi');
   return (
     <>
@@ -134,5 +136,21 @@ const Spinardi: NextPage<Props> = ({}) => {
       </SimpleLayout>
     </>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+  const cycle = getCycleSumary(30);
+  const qc = new QueryClient();
+  await qc.prefetchQuery({
+    queryKey:['CYCLE',`${30}`,'SUMARY'],
+    queryFn:()=>cycle
+  })
+  return {
+    props: {
+      session,
+      dehydratedState: dehydrate(qc),      
+    },
+  };
+  
 };
 export default Spinardi;
