@@ -15,7 +15,7 @@ const Header = () => {
             <Grid container gap={2} sx={{ justifyContent: 'center' }}>
               <Grid item xs={12} sm={6} md={4} >
                 <Stack gap={2}>
-                <Box sx={{ maxWidth: { lg: '80dvw', sm: '100dvw', xs: '100dvw' } }} paddingLeft={2} paddingTop={3}>
+                <Box sx={{ maxWidth: { lg: '80dvw', sm: '100dvw', xs: '100dvw' } }} paddingLeft={2} paddingTop={2} paddingRight={2}>
                     <Image src="/img/spinardi/provisoria.webp" width={340} height={380}></Image>
                     </Box> 
                 </Stack>
