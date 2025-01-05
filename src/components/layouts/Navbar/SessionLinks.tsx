@@ -89,7 +89,7 @@ export const SessionLinks = () => {
           sx={{width:32,height:32,bgcolor:'var(--color-primary)'}} 
           alt={session?.user.name!}
           src={
-            session?.user.photos.length 
+            session?.user.photos?.length 
               ? `${AZURE_STORAGE_URL}/users-photos/${session?.user.photos[0].storedFile}`
               : session?.user.image!
           }>

@@ -287,7 +287,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
             subject: `Sign in to Eureka on: ${new Date().toUTCString()}`,
             html: `<a href="{{url}}" target="_blank"
             style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #000000; text-decoration: none; text-decoration: none;border-radius: 5px; padding: 10px 20px; border: 1px solid green; display: inline-block;">
-            Click here to finalize your login to Eureka
+            !Click here to finalize your login to Eureka!
           </a>`,
           };
           try {

@@ -14,7 +14,7 @@ const ClubProgramming = () => {
       <div>
       <Stack
         gap={5}
-        paddingTop={1}
+        paddingTop={4}
         paddingBottom={1}
         sx={{ backgroundColor: 'white' }}
         paddingLeft={2}
@@ -27,7 +27,7 @@ const ClubProgramming = () => {
         </Box>
 
         <Box sx={{ position: 'relative' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} padding={4}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }} paddingY={1}>
             <Box sx={{ width: { xs: '90dvw', md: '85dvw' } }}>
               <AnimatedIMGCarousel
                 imgsSrc={[
@@ -46,15 +46,15 @@ const ClubProgramming = () => {
               />
             </Box>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>
             <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
               <BuySubscriptionButton label={t('btn to sign up')} price={''} product_id={''} cycleId={0} />
             </Box>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>
             <Typography textAlign={'center'} alignItems={'center'} padding={2} variant="h4">
               <b> {t('sub title join people')}</b>
-            </Typography>
+            </Typography> 
           </Box>
         </Box>
         <Stack id="asUl" direction={{ xs: 'column' }} gap={2}>

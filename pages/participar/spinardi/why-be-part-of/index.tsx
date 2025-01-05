@@ -16,7 +16,7 @@ const WhyBePartOf = () => {
   return (
     <div>
      
-      <Stack id="asUl" direction={{ xs: 'column'}} gap={2} justifyContent={'center'} alignItems={'center'}  bgcolor= "#ecf0f1" width={{xs:350, sm:1100}}>
+      <Stack id="asUl" direction={{ xs: 'column',  sm: 'column'}} gap={2} justifyContent={'center'} alignItems={'center'} >
      
         <style jsx global>{
               `
@@ -42,7 +42,7 @@ const WhyBePartOf = () => {
               }
         </style>
         
-        <Typography justifyContent={'center'} alignItems={'center'} paddingLeft={2} paddingTop={4} variant="h4" ><b> {t('title question')}</b></Typography>
+        <Typography justifyContent={'center'} alignItems={'center'} paddingLeft={2} paddingTop={6} variant="h4" ><b> {t('title question')}</b></Typography>
         
         <Grid container justifyContent={'center'} alignItems={'center'}>
 
@@ -51,7 +51,7 @@ const WhyBePartOf = () => {
                       zIndex:1,
                       top:'0',
                       right:'0',
-                      marginRight:30,
+                      marginRight:0,
                       marginTop:165,
                         display:{xs:'none',lg:'block'}
                     }}>
@@ -82,9 +82,9 @@ const WhyBePartOf = () => {
                   </Box>
 
                   <Box   >
-                    <Typography paddingLeft={0}  variant="h5">{t('lbl1H')}</Typography>
+                    <Typography paddingLeft={0} paddingX={2} variant="h5">{t('lbl1H')}</Typography>
                     <br></br>
-                    <Typography  paddingLeft={0} textAlign={"justify"} variant="body2"   fontSize={17}>
+                    <Typography  paddingLeft={0} paddingX={2} textAlign={"justify"} variant="body2"   fontSize={17}>
                     {t('lbl1B')}
                     </Typography>
                    

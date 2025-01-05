@@ -2,12 +2,13 @@ import useCycleSumary from "@/src/useCycleSumary";
 import { Button, CircularProgress } from "@mui/material";
 import { getSession, useSession } from "next-auth/react";
 import useTranslation from "next-translate/useTranslation";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {Grid, Stack} from '@mui/material'
 import toast from "react-hot-toast";
 import { useModalContext } from "@/src/hooks/useModal";
 import SignInForm from "@/src/components/forms/SignInForm";
 import { set } from "lodash";
+import { useRouter } from "next/router";
 
 interface Props {
     label:string;
@@ -18,34 +19,47 @@ interface Props {
 }   
 const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) => { 
   const {data:session}=useSession();
-  const {t}=useTranslation('common');
+  const router=useRouter();
+  const {t,lang}=useTranslation('common');
   const {data:cycle}=useCycleSumary(cycleId);
   const {show} = useModalContext();
   const[isLoading,setIsLoading] = useState(false);
+      
+  useEffect(()=>{
+    localStorage.setItem('loginRedirect', `/${router.locale}${router.asPath}?doAction=1`)
+  },[]);
+  useEffect(()=>{
+    if(router.query.doAction && session?.user){
+      doAction();
+    }
+  },[router.query,session]);
   
+  const doAction = async ()=>{
+    const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
+      method:'POST',
+      body:JSON.stringify({
+        product_id,
+        price,
+        customer_email: session?.user.email,
+        cycleId,
+        cycleTitle:cycle?.title,
+        userId:session?.user.id,
+        userName:session?.user.name
+      }),
+      headers:{
+        'Content-Type':'application/json'
+      }
+    });
+    const {stripe_session_url,subscription_already_exist} = await fr.json();
+    if(subscription_already_exist){ 
+      return toast.error(t('Você já está inscrito no clube.'));
+    }
+    window.location.href = stripe_session_url;
+  }
   const onClickHandle = async (e:any) => {
     setIsLoading(true);
     if(session?.user){
-      const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
-          method:'POST',
-          body:JSON.stringify({
-            product_id,
-            price,
-            customer_email: session?.user.email,
-            cycleId,
-            cycleTitle:cycle?.title,
-            userId:session?.user.id,
-            userName:session?.user.name
-          }),
-          headers:{
-            'Content-Type':'application/json'
-          }
-        });
-        const {stripe_session_url,subscription_already_exist} = await fr.json();
-        if(subscription_already_exist){ 
-          return toast.error(t('Você já está inscrito no clube.'));
-        }
-        window.location.href = stripe_session_url;
+      doAction();
     }else{
       show(<SignInForm/>);
     }
