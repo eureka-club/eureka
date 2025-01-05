@@ -13,6 +13,7 @@ import styles from './SignUpForm.module.css';
 import { SelectChangeEvent, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box } from '@mui/material';
 import LanguageSelect from './controls/LanguageSelect';
 import { validateEmail } from '@/src/lib/utils';
+import { useRouter } from 'next/router';
 
 
 interface Props {
@@ -29,6 +30,8 @@ interface FormValues {
 
 const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
   const { t, lang } = useTranslation('signUpForm');
+  const router = useRouter();
+
   //const formRef = useRef<HTMLFormElement>(null);
   const [formValues, setFormValues] = useState<FormValues>({
     identifier: '',
@@ -109,7 +112,8 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     });
     if (res.ok) {
       const data = await res.json();
-      signIn('email', { email: identifier, callbackUrl:localStorage.getItem('loginRedirect')??`/${lang}` });
+      const urlRedirect = localStorage.getItem('loginRedirect')??`/${lang}${router.asPath}`;
+      signIn('email', { email: identifier, callbackUrl:urlRedirect });
       // return data;
     } else {
       toast.error(t(res.statusText));

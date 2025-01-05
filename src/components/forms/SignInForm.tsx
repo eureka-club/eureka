@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 // import {Form, Spinner} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { useState, FunctionComponent, MouseEvent,useRef } from 'react';
+import { useState, FunctionComponent, MouseEvent,useRef, useEffect } from 'react';
 // import Button from 'react-bootstrap/Button';
 // import Container from 'react-bootstrap/Container';
 // import ModalBody from 'react-bootstrap/ModalBody';
@@ -15,6 +15,7 @@ import { useModalContext } from "@/src/hooks/useModal";
 import { Button,Box, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
 import Image from "next/image";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { WEBAPP_URL } from "@/src/constants";
 
 interface Props {
   noModal?: boolean;
@@ -38,15 +39,16 @@ const SubmitButton = ({handleSubmitSignIn}:{handleSubmitSignIn:(e:any)=>void})=>
 const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,logoImage = true }) => {
   const router = useRouter()
   const { t,lang } = useTranslation('signInForm');
-  const formRef=useRef<HTMLFormElement>(null)
-  const [loading,setLoading] = useState(false)
+  const formRef=useRef<HTMLFormElement>(null);
+  const [loading,setLoading] = useState(false);
+  
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    if(!noModal)
-      localStorage.setItem('loginRedirect', `/${lang}/${router.asPath}`)
+    // if(!noModal)
+    //   localStorage.setItem('loginRedirect', `/${lang}${router.asPath}`)
     let callbackUrl = !!joinToCycle&&joinToCycle!=-1 
        ? `/${lang}/cycle/${joinToCycle}?join=true`
-       : localStorage.getItem('loginRedirect')?.toString()||'/';
+       : localStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`;
     signIn('google',{ callbackUrl });
   };
 
@@ -92,11 +94,11 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
             setLoading(false)
            }
            else {
-            localStorage.setItem('loginRedirect',`/${lang}/${router.asPath}`)
+            // localStorage.setItem('loginRedirect',`/${lang}${router.asPath}`)
 
             let callbackUrl = !!joinToCycle&&joinToCycle>0 
             ? `/${lang}/cycle/${joinToCycle}?join=true`
-            : localStorage.getItem('loginRedirect')?.toString()||`/${lang}`;
+            : localStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`;
 
             signIn('credentials' ,{
               callbackUrl,
@@ -111,8 +113,7 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
               }
               else{
                 close();
-                localStorage.setItem('loginRedirect',`/${lang}/${router.asPath}`)
-                router.push(localStorage.getItem('loginRedirect') || `/${lang}`).then(()=>{
+                router.push(localStorage.getItem('loginRedirect') || `/${lang}${router.asPath}`).then(()=>{
                   localStorage.setItem('loginRedirect','')
                 })
               }
