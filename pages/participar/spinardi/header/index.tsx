@@ -6,7 +6,7 @@ import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 
 const Header = () => {
-  const { t } = useTranslation('spinardi');
+  const { t, lang } = useTranslation('spinardi');
   return (
     <>
       <Stack gap={2} paddingTop={0} paddingBottom={1}>
