@@ -209,6 +209,8 @@ export default async function handler(
         <code>${JSON.stringify(e)}</code>
       `
     });
+    res.status(405).send('stripe subscription webhook error');
+
   }
   
 }
