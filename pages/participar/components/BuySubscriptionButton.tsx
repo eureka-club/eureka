@@ -20,7 +20,7 @@ interface Props {
 const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) => { 
   const {data:session}=useSession();
   const router=useRouter();
-  const {t,lang}=useTranslation('common');
+  const {t}=useTranslation('common');
   const {data:cycle}=useCycleSumary(cycleId);
   const {show} = useModalContext();
   const[isLoading,setIsLoading] = useState(false);

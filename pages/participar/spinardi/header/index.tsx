@@ -6,7 +6,7 @@ import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 
 const Header = () => {
-  const { t, lang } = useTranslation('spinardi');
+  const { t } = useTranslation('spinardi');
   return (
     <>
       <Stack gap={2} paddingTop={0} paddingBottom={1}>
@@ -19,8 +19,6 @@ const Header = () => {
                     <Image src="/img/spinardi/provisoria.webp" width={340} height={380}></Image>
                     </Box> 
                 </Stack>
-
-                
               </Grid>
 
               <Grid item xs={12} sm={6} md={4}>
@@ -28,12 +26,10 @@ const Header = () => {
 
                 <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingX={1}>
                     <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                    
                        
                       <Typography textAlign="center" paddingTop={2} variant="h4">
                         <b> {t('club title')}</b>
                       </Typography>
-                      
                      
                       <Typography paddingBlockEnd={2} textAlign="center" variant="subtitle1" paddingTop={2}>
                         {t('club dates')}
@@ -61,15 +57,10 @@ const Header = () => {
                   </Box>
                 </Stack>
               </Grid>
-
              
             </Grid>
           </Box>
         </Box>
-
-        
-       
-        
       </Stack>
     </>
   );
