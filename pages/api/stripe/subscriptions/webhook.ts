@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 import {prisma} from '@/src/lib/prisma';
-import { sendMail} from "@/src/facades/mail";
+import { sendMail} from "@/src/facades/mail"; 
 
 const buffer = (req:any) => {
   return new Promise((resolve, reject) => {
