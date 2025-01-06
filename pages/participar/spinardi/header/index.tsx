@@ -48,7 +48,7 @@ const Header = () => {
                         product_id="prod_RTLCazmGCcyKKH"
                         cycleId={30}
                       />
-                      <Countdown startDate={new Date('2025-01-12')} />
+                      <Countdown startDate={new Date('2025-03-10')} />
 
                       <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
                         <i>{t('written')}</i>
