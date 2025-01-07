@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
 import { Grid, Box, Card, CardContent, CardHeader,Avatar, IconButton, Divider} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
+import BuyButton from 'pages/participar/components/BuyButton';
 
 
 const InvestInYourself = () => {
@@ -118,11 +119,10 @@ const InvestInYourself = () => {
           <Grid>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} >
           <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton 
+              <BuyButton 
                 label={t('lbl button cost and payment')} 
-                price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
+                price="price_1QelFrLbVcSeBXdQ2NJ8LHxS"
                 product_id="prod_RTLCazmGCcyKKH"
-                iterations={3}
                 cycleId={30} 
               />
             </Box>

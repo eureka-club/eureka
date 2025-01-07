@@ -4,6 +4,7 @@ import Countdown from 'pages/participar/components/Countdown';
 import Image from 'next/image';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
+import BuyButton from 'pages/participar/components/BuyButton';
 
 const Header = () => {
   const { t } = useTranslation('spinardi');
@@ -42,11 +43,10 @@ const Header = () => {
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingRight={2}>
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-                      <BuySubscriptionButton
+                      <BuyButton
                         label={t('btn exclusive club')}
-                        price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
+                        price="price_1QelFrLbVcSeBXdQ2NJ8LHxS"
                         product_id="prod_RTLCazmGCcyKKH"
-                        iterations={3}
                         cycleId={30}
                       />
                       <Countdown startDate={new Date('2025-03-10')} />

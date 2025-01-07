@@ -12,7 +12,7 @@ export const getPrices = async (product_id:string):Promise<Type> => {
       if(fr.ok){
         const {prices:{data}} = await fr.json();
         if((data as [])?.length ){
-          price = data[0]['unit_amount']/100;
+          price =data.filter((d:any)=>d.type=='one_time')[0]['unit_amount']/100;
           currency = `${data[0]['currency']}`.toUpperCase();
         }   
       }

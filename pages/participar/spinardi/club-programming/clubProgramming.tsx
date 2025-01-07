@@ -6,6 +6,7 @@ import AnimatedIMGCarousel from 'pages/about/components/AnimatedIMGCarousel';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 import Stars from 'pages/about/components/Stars';
+import BuyButton from 'pages/participar/components/BuyButton';
 
 const ClubProgramming = () => {
   const { t } = useTranslation('spinardi');
@@ -48,11 +49,10 @@ const ClubProgramming = () => {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>
             <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton 
+              <BuyButton 
                 label={t('btn to sign up')} 
-                price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
+                price="price_1QelFrLbVcSeBXdQ2NJ8LHxS"
                 product_id="prod_RTLCazmGCcyKKH"
-                iterations={3}
                 cycleId={30} 
               />
             </Box>

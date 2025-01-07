@@ -12,6 +12,7 @@ import SignInForm from '../../forms/SignInForm';
 import { useModalContext } from '@/src/hooks/useModal';
 import { Button, CircularProgress, Stack } from '@mui/material';
 import Spinner from '../../Spinner';
+import BuyButton from 'pages/participar/components/BuyButton';
 
 
 interface Props{
@@ -80,13 +81,25 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     
   if (cycle && !isLoadingSession ){
     if(!session){
+      if(cycle.access==4 && price!=-1)
+        return <BuyButton
+          price={cycle?.price}
+          product_id={cycle.product_id}
+          cycleId={cycle.id}
+          label={
+            <>
+              {t('joinCycleLabel')}
+              <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+            </>
+          }
+        />
       return <Button disabled={isPending()} variant='contained' onClick={handleJoinCycleClick}>
           {t('joinCycleLabel')}
-          {
+          {/* {
             cycle.access==4 && price!=-1
               ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
               : <></>
-          }
+          } */}
         </Button>
     }
 
@@ -107,15 +120,27 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     }
     
     if(cycle?.participants.findIndex(p=>p.id==session?.user.id)<0){
+      if(cycle.access==4 && price!=-1)
+        return <BuyButton
+          price={cycle?.price}
+          product_id={cycle.product_id}
+          cycleId={cycle.id}
+          label={
+            <>
+              {t('joinCycleLabel')}
+              <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+            </>
+          }
+        />
       return <Button disabled={isPending()} variant='contained' onClick={handleJoinCycleClick}>
         <Stack gap={1} direction={'row'} alignItems={'center'}>
           {isPending() ? <CircularProgress color="inherit" size={'1rem'}/> : <></>}
           {t('joinCycleLabel')}
-          {
+          {/* {
             cycle.access==4 && price!=-1
               ? <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
               : <></>
-          }
+          } */}
         </Stack>
         </Button>
     }
