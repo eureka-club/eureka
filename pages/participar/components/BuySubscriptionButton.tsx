@@ -14,10 +14,11 @@ interface Props {
     label:string;
     price:string;
     product_id:string;
+    iterations:number;
     cycleId:number;
     next?:string;
 }   
-const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) => { 
+const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,iterations}) => { 
   const {data:session}=useSession();
   const router=useRouter();
   const {t}=useTranslation('common');
@@ -44,7 +45,8 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,next}) 
         cycleId,
         cycleTitle:cycle?.title,
         userId:session?.user.id,
-        userName:session?.user.name
+        userName:session?.user.name,
+        iterations
       }),
       headers:{
         'Content-Type':'application/json'

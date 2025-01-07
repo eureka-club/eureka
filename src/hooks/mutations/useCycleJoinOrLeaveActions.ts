@@ -10,6 +10,7 @@ import { subscribe_to_segment, unsubscribe_from_segment } from '@/src/lib/mailch
 import { UserSumary } from '@/src/types/UserSumary';
 import { useCycleParticipants } from '../useCycleParticipants';
 import { useSession } from 'next-auth/react';
+import dayjs from 'dayjs';
 
 type ctx = {
     ss: UserDetail[] | undefined;
@@ -39,6 +40,7 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCal
           const notificationToUsers = (participants || []).map(p=>p.id);
           if(cycle?.creator.id) notificationToUsers.push(cycle?.creator.id);
           if(cycle.access==4){
+            let iterations=dayjs(cycle.endDate).diff(dayjs(cycle.startDate),'months');
             const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
               method:'POST',
               body:JSON.stringify({
@@ -48,7 +50,8 @@ const useJoinUserToCycleAction = (user:UserSumary,cycle:CycleSumary,onSettledCal
                 cycleId:cycle?.id,
                 cycleTitle:cycle?.title,
                 userId:session?.user.id,
-                userName:session?.user.name
+                userName:session?.user.name,
+                iterations
               }),
               headers:{
                 'Content-Type':'application/json'

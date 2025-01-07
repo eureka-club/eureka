@@ -48,7 +48,13 @@ const ClubProgramming = () => {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>
             <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton label={t('btn to sign up')} price={''} product_id={''} cycleId={0} />
+              <BuySubscriptionButton 
+                label={t('btn to sign up')} 
+                price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
+                product_id="prod_RTLCazmGCcyKKH"
+                iterations={3}
+                cycleId={30} 
+              />
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>

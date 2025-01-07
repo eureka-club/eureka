@@ -370,9 +370,19 @@ export const addParticipant = async (cycleId: number, userId: number): Promise<b
   });
   const alreadyParticipant = cycle?.participants.findIndex(p=>p.id==userId)!=-1;
   if(alreadyParticipant)return true;
-  const res = await prisma.cycle.update({
+  let res = await prisma.cycle.update({
     where: { id: cycleId },
-    data: { participants: { connect: { id:userId } } },
+    data: { 
+      participants: { connect: { id:userId } },
+      usersJoined: { connectOrCreate: {
+          where:{cycleId_userId:{cycleId,userId}},
+          create:{
+            userId,
+            pending:false,
+          }
+        } 
+      }
+    },
   });
   if(res){
     const user = await prisma.user.findUnique({where:{id:userId}});

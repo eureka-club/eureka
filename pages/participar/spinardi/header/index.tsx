@@ -46,6 +46,7 @@ const Header = () => {
                         label={t('btn exclusive club')}
                         price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
                         product_id="prod_RTLCazmGCcyKKH"
+                        iterations={3}
                         cycleId={30}
                       />
                       <Countdown startDate={new Date('2025-03-10')} />
