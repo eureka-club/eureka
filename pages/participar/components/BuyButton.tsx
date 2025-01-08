@@ -73,7 +73,7 @@ const BuyButton:FC<Props> = ({label,price,product_id,cycleId}) => {
           variant="contained"
           color="primary"
           size="large"
-          style={{color: 'white!important;'}}
+          style={{color: 'white!important'}}
           type="submit"
           onClick={onClickHandle}
           disabled={isLoading}
