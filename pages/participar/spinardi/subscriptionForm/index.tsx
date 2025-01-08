@@ -1,14 +1,10 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import Countdown from 'pages/participar/components/Countdown';
-
-import Image from 'next/image';
-import { Container } from '@mui/system';
-import { Grid, Box, Card, CardContent, CardHeader, Avatar, IconButton, Divider } from '@mui/material';
+import { Grid, Box} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
+import Trans from 'next-translate/Trans';
 
 const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
@@ -29,21 +25,24 @@ const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
             <Grid container gap={4} sx={{ justifyContent: 'center' }}>
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
-                  <Typography>✓ {t('lbl1BQ')}</Typography>
-                  <Typography>✓ {t('lbl2BQ')}</Typography>
-                  <Typography>✓ {t('lbl3BQ')}</Typography>
-                  <Typography>✓ {t('lbl4BQ')}</Typography>
-                  <Typography>✓ {t('lbl5BQ')}</Typography>
+                  <Trans i18nKey='spinardi:lbl1BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl2BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl3BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl4BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl5BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+
+                  <Trans i18nKey='spinardi:lbl6BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
                 </Stack>
               </Grid>
 
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
-                  <Typography>✓ {t('lbl6BQ')}</Typography>
-                  <Typography>✓ {t('lbl7BQ')}</Typography>
-                  <Typography>✓ {t('lbl8BQ')}</Typography>
+                  <Trans i18nKey='spinardi:lbl7BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl8BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+
                   <Typography>✓ {t('lbl9BQ')}</Typography>
-                  <Typography>✓ {t('lbl10BQ')}</Typography>
+                  <Trans i18nKey='spinardi:lbl10BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+
                 </Stack>
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
