@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import {prisma} from '@/src/lib/prisma';
 
 export default async function handler(
   req: NextApiRequest,
