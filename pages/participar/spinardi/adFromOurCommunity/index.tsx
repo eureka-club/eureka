@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import { Grid, Box, Card, CardContent, CardHeader, Avatar, IconButton, Divider } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import BuyButton from 'pages/participar/components/BuyButton';
@@ -9,7 +8,7 @@ import { FC } from 'react';
 
 const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
-  const{data:cycle}=useCycleSumary(cycleId);
+  const{data:cycle}=useCycleSumary(cycleId);debugger;
   return (
     <>
       <div>

@@ -38,7 +38,6 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
         }
       `}</style>
      
-     
       <Stack sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} alignItems={'center'} paddingX={2}  
            >
           <Stack gap={5} paddingTop={0} paddingBottom={5}>
@@ -73,7 +72,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             paddingRight={2}
           >
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <WhyBePartOf />
+                <WhyBePartOf /> 
               </Box>
             </Box>
           </Stack>
@@ -86,7 +85,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             paddingRight={2}
           >
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <AdFromOurCommunity cycleId={0} />
+              <AdFromOurCommunity cycleId={cycleId} />
               </Box>
             </Box>
           </Stack>
@@ -112,7 +111,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               paddingRight={2}
             >
               <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <SubscriptionForm />
+                <SubscriptionForm cycleId={cycleId} />
               </Box>
             </Box>
           </Stack>
@@ -125,7 +124,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               paddingRight={2}
             >
               <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' },paddingX:2 }}>
-                <InvestInYourself cycleId={0} />
+                <InvestInYourself cycleId={cycleId} />
               </Box>
             </Box>
           </Stack>
@@ -168,7 +167,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             paddingRight={2}
           >
             <Box  >
-              <WhatAreYouAaitingFor cycleId={0} />
+              <WhatAreYouAaitingFor cycleId={cycleId} />
             </Box>
           </Box>
         </Stack>

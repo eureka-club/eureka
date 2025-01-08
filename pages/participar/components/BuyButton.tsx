@@ -32,7 +32,7 @@ const BuyButton:FC<Props> = ({label,price,product_id,cycleId}) => {
     }
   },[router.query,session]);
   
-  const doAction = async ()=>{
+  const doAction = async ()=>{debugger;
     const fr = await fetch('/api/stripe/checkout_sessions',{
       method:'POST',
       body:JSON.stringify({
