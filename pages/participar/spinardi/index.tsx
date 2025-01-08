@@ -34,26 +34,35 @@ const Spinardi: NextPage<Props> = ({session}) => {
           background-color: white !important;
         }
       `}</style>
-      <SimpleLayout fullWidth title={t('title page')}>
      
-      <Stack sx={{ justifyContent: 'center' }} alignItems={'center'} paddingX={2}>
-          <Stack gap={5} paddingTop={2} paddingBottom={5}>
+     
+      <Stack sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} alignItems={'center'} paddingX={2}  
+           >
+          <Stack gap={5} paddingTop={0} paddingBottom={5}>
             <Box
               sx={{ display: 'flex', justifyContent: 'center' }}
               alignItems={'center'}
               paddingLeft={2}
               paddingRight={2}
             >
+
+              <Box paddingTop={5} alignItems={'left'} alignContent={'left'}>
+              
+              </Box>
              
             </Box>
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+
+           
                 <Header />
+
+
               </Box>
           </Stack>
         </Stack>
 
 
-        <Stack paddingBottom={5} sx={{ backgroundColor: "#ecf0f1" }}>
+        <Stack paddingBottom={5} >
           <Box
             sx={{ display: 'flex', justifyContent: 'center' }}
             alignItems={'center'}
@@ -65,6 +74,20 @@ const Spinardi: NextPage<Props> = ({session}) => {
               </Box>
             </Box>
           </Stack>
+
+          <Stack paddingBottom={5} sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} >
+          <Box
+            sx={{ display: 'flex', justifyContent: 'center' }}
+            alignItems={'center'}
+            paddingLeft={2}
+            paddingRight={2}
+          >
+            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+                <AdFromOurCommunity />
+              </Box>
+            </Box>
+          </Stack>
+
 
           <Stack gap={5} paddingTop={1} paddingBottom={5}>
             <Box
@@ -78,7 +101,7 @@ const Spinardi: NextPage<Props> = ({session}) => {
               </Box>
             </Box>
           </Stack>
-          <Stack paddingBottom={5} sx={{ backgroundColor: "#ecf0f1" }} gap={5} >
+          <Stack gap={5} paddingTop={1} paddingBottom={5}>
             <Box
               sx={{ display: 'flex', justifyContent: 'center' }}
               alignItems={'center'}
@@ -86,6 +109,19 @@ const Spinardi: NextPage<Props> = ({session}) => {
               paddingRight={2}
             >
               <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+                <SubscriptionForm />
+              </Box>
+            </Box>
+          </Stack>
+
+          <Stack paddingBottom={5} sx={{ backgroundColor: "#00cec9" }} gap={5} >
+            <Box
+              sx={{ display: 'flex', justifyContent: 'center' }}
+              alignItems={'center'}
+              paddingLeft={2}
+              paddingRight={2}
+            >
+              <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' },paddingX:2 }}>
                 <InvestInYourself />
               </Box>
             </Box>
@@ -121,19 +157,19 @@ const Spinardi: NextPage<Props> = ({session}) => {
             </Box>
           </Box>
         </Stack>
-        <Stack paddingBottom={5} sx={{ backgroundColor: '#00cec9' }}>
-          <Box
+        <Stack paddingBottom={5} sx={{background:"linear-gradient(90deg, white, rgb(21, 202, 202));" }}>
+          <Box 
             sx={{ display: 'flex', justifyContent: 'center' }}
             alignItems={'center'}
             paddingLeft={2}
             paddingRight={2}
           >
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+            <Box  >
               <WhatAreYouAaitingFor />
             </Box>
           </Box>
         </Stack>
-      </SimpleLayout>
+      
     </>
   );
 };

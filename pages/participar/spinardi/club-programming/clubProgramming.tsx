@@ -20,43 +20,7 @@ const ClubProgramming = () => {
         paddingLeft={2}
         paddingRight={2}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
-          <Typography textAlign={'center'} alignItems={'center'} padding={2} variant="h4">
-            <b> {t('sub title club Schedule')}</b>
-          </Typography>
-        </Box>
-
-        <Box sx={{ position: 'relative' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} paddingY={1}>
-            <Box sx={{ width: { xs: '90dvw', md: '85dvw' } }}>
-              <AnimatedIMGCarousel
-                imgsSrc={[
-                  '/img/register/carousel2/1-min.webp',
-                  '/img/register/carousel2/2-min.webp',
-                  '/img/register/carousel2/3-min.webp',
-                  '/img/register/carousel2/4-min.webp',
-                  '/img/register/carousel2/5-min.webp',
-                  '/img/register/carousel2/6-min.webp',
-                  '/img/register/carousel2/7-min.webp',
-                  '/img/register/carousel2/8-min.webp',
-                  '/img/register/carousel2/9-min.webp',
-                  '/img/register/carousel2/10-min.webp',
-                  '/img/register/carousel2/11-min.webp',
-                ]}
-              />
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>
-            <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
-              <BuySubscriptionButton label={t('btn to sign up')} price={''} product_id={''} cycleId={0} />
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingTop={4}>
-            <Typography textAlign={'center'} alignItems={'center'} padding={2} variant="h4">
-              <b> {t('sub title join people')}</b>
-            </Typography> 
-          </Box>
-        </Box>
+        
         <Stack id="asUl" direction={{ xs: 'column' }} gap={2}>
           
 
@@ -170,10 +134,6 @@ const ClubProgramming = () => {
               </Card>
             </Grid>
           </Grid>
-
-          
-          
-
         </Stack>
       </Stack>
       </div>

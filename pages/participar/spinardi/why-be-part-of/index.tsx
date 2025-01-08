@@ -65,8 +65,7 @@ const WhyBePartOf = () => {
              maxWidth:900, transition: "0.2s",
               "&:hover": {
                 transform: "scale(1.03)"
-              },
-              backgroundColor: "#ecf0f1"
+              }
             }} >
               <CardContent>
                 <Stack direction={{ xs: 'column', sm: 'row' }}
@@ -104,8 +103,7 @@ const WhyBePartOf = () => {
               maxWidth:900, transition: "0.2s",
               "&:hover": {
                 transform: "scale(1.03)"
-              },
-              backgroundColor: "#ecf0f1"
+              }
             }} >
 
               <CardContent>
@@ -141,8 +139,7 @@ const WhyBePartOf = () => {
                transition: "0.2s",
               "&:hover": {
                 transform: "scale(1.03)"
-              },
-              backgroundColor: "#ecf0f1"
+              }
             }} >
 
               <CardContent>
@@ -177,8 +174,7 @@ const WhyBePartOf = () => {
             maxWidth:900, transition: "0.2s",
               "&:hover": {
                 transform: "scale(1.03)"
-              },
-              backgroundColor: "#ecf0f1"
+              }
             }} >
 
               <CardContent>
@@ -206,49 +202,7 @@ const WhyBePartOf = () => {
           </Grid>
           
          
-        </Grid>
-
-        <Grid container justifyContent={'center'} alignItems={'center'}>
-          <Grid item xs={12} sm={12} padding={2}>
-            <Card elevation={0} sx={{
-             maxWidth:900, transition: "0.2s",
-              "&:hover": {
-                transform: "scale(1.03)"
-              },
-              backgroundColor: "#ecf0f1"
-            }} >
-
-              <CardContent>
-                <Stack direction={{ xs: 'column', sm: 'row' }}
-                  spacing={{ xs: 1, sm: 2, md: 3 }} fontSize="20"  >
-                  <Box  borderRight={3} borderColor={"#504788"} padding={2} sx={{borderColor:"#504788", 
-                                             
-                                             borderRight: { xs: 'none', sm: 'solid .2rem ', md: 'solid .2rem ', color:"#504788" }
-                                         }}>
-                    <em></em>
-
-                  </Box>
-
-                  <Box>
-                    <Typography paddingLeft={0}  variant="h5">{t('lbl5H')}</Typography>
-                    <br></br>
-                    <Typography paddingLeft={0} textAlign={"justify"} variant="body2"  fontSize={17}>
-                    {t('lbl5B')}
-                    </Typography>
-                  </Box>
-                 
-                </Stack>
-                
-              </CardContent>
-
-            </Card>
-            
-            
-               
-          </Grid>
-         
-         
-        </Grid>
+        </Grid>        
 
     </Stack>
    
