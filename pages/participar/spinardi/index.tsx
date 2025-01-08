@@ -174,7 +174,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
-  const cycleId=30;
+  const cycleId=36;
 
   const cycle = getCycleSumary(cycleId);
   const qc = new QueryClient();

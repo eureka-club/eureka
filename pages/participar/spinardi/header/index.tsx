@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import Image from 'next/image';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
@@ -29,7 +28,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
       <Stack gap={2} paddingTop={0} paddingBottom={0}>
         <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
           <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-            <Stack direction={{xs:'column',md:'row'}}  paddingX={2}>
+            <Stack direction={{xs:'column',md:'row'}} alignItems={'flex-end'}>
                 <Box sx={{
                   width:{xs:'100%',md:'30%'}
                 }}>
@@ -52,6 +51,17 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                           components={[<p key={1}></p>,<b key={2}/>]}
                         />
                       </Typography>
+                      <Box paddingBottom={6}>
+                        <BuyButton
+                          label={t('btn exclusive club')}
+                          price={cycle?.price!}
+                          product_id={cycle?.product_id!}
+                          cycleId={cycle?.id!}
+                        />
+                        <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                          <i>{t('written text')}</i>
+                        </Typography>
+                      </Box>
                     </Box>
                 <Box 
                   sx={{
