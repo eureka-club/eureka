@@ -772,3 +772,6 @@ a{
 .MuiAvatar-root.MuiAvatar-circular:has(img){
   font-size: inherit!important;
 }
+b.text-shadow {
+  text-shadow: 1px 1px .1px lightgray;
+}

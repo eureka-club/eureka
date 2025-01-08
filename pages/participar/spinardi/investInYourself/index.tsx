@@ -20,7 +20,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
             paddingLeft={2}
             paddingRight={2}
           >
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+            <Box sx={{ maxWidth: { lg: '200dvw', sm: '100dvw', xs: '100dvw' } }}>
               <Typography fontSize={30} textAlign="center">
                 <b> {t('lblHV')}</b>
               </Typography>
@@ -30,7 +30,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
 
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
-              <Box sx={{ maxWidth: { lg: '30dvw', sm: '60dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '45dvw', sm: '75dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center"  variant="body2">
                 {t('lblB1V')}
                 </Typography>
@@ -54,7 +54,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           </Grid>
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
-              <Box sx={{ maxWidth: { lg: '43dvw', sm: '100dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '50dvw', sm: '100dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
                   {t('lblB2V')}
                 </Typography>
@@ -63,7 +63,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           </Grid>
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
-              <Box sx={{ maxWidth: { lg: '43dvw', sm: '70dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="left" variant="body2">
                   ✅<b>{t('lblB3V')}</b>
                 </Typography>
@@ -72,7 +72,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           </Grid>
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
-              <Box sx={{ maxWidth: { lg: '43dvw', sm: '70dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="left"  variant="body2">
                   ✅<b>{t('lblB4V')}</b>
                 </Typography>
@@ -81,7 +81,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           </Grid>
           <Grid>
           <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
-              <Box sx={{ maxWidth: { lg: '43dvw', sm: '70dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="left"  variant="body2">
                   ✅<b>{t('lblB5V')}</b>
                 </Typography>
@@ -90,7 +90,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           </Grid>
           <Grid>
           <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
-              <Box sx={{ maxWidth: { lg: '43dvw', sm: '70dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="left"  variant="body2">
                 ✅<b>{t('lblB6V')}</b> 
                 </Typography>

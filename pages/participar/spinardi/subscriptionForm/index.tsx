@@ -25,23 +25,23 @@ const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
             <Grid container gap={4} sx={{ justifyContent: 'center' }}>
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
-                  <Trans i18nKey='spinardi:lbl1BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl2BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl3BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl4BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl5BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl1BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl2BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl3BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl4BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl5BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
 
-                  <Trans i18nKey='spinardi:lbl6BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl6BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
                 </Stack>
               </Grid>
 
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
-                  <Trans i18nKey='spinardi:lbl7BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl8BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl7BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl8BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
 
                   <Typography>✓ {t('lbl9BQ')}</Typography>
-                  <Trans i18nKey='spinardi:lbl10BQ' components={[<p/>,<b style={{textShadow: "1px 1px .1px lightgray"}}/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl10BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
 
                 </Stack>
               </Grid>
