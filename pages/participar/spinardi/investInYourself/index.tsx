@@ -41,13 +41,13 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} alignContent={'center'}>
               <Box sx={{ maxWidth: { lg: '43dvw', sm: '60dvw', xs: '100dvw' },display: 'flex' }} alignItems={'center'} alignContent={'center'}>
               <Typography   fontSize={30}>
-                  <b>$R</b>
+                  <b>R$</b>
                 </Typography>
-                <Typography textAlign="center" paddingBlockEnd={2} fontSize={60} paddingX={1}>
+                <Typography textAlign="center" paddingBlockEnd={2} fontSize={60} paddingLeft={1}>
                   <b>199</b>
                 </Typography>
-                <Typography textAlign="center"  fontSize={30}>
-                  <b>.00</b>
+                <Typography textAlign="left"  fontSize={30}>
+                  <b>,00</b>
                 </Typography>
               </Box>
             </Box>
