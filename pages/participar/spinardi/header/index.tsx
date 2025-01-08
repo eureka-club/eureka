@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import Image from 'next/image';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
@@ -52,7 +51,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                           components={[<p key={1}></p>,<b key={2}/>]}
                         />
                       </Typography>
-                      <Box paddingBottom={6}>
+                      <Box paddingBottom={6} paddingRight={2} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
                         <BuyButton
                           label={t('btn exclusive club')}
                           price={cycle?.price!}

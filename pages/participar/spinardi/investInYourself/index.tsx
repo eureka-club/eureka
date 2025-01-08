@@ -106,7 +106,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
               paddingRight={4}
               paddingTop={2}
             >
-              <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '100dvw' } }}>
+              <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
               <BuyButton 
                 label={t('btn exclusive club')} 
                 price={cycle?.price!}
