@@ -51,7 +51,7 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
                           {/* {t('lbl2BCS')} */}
                           <Trans
                             i18nKey={'spinardi:lbl2BCS'}
-                            components={[<p></p>,<b/>]}
+                            components={[<p key={1}></p>,<b key={2}/>]}
                           />
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">

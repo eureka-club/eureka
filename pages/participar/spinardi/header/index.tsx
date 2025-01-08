@@ -49,7 +49,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                         {/* {t('fully written')} */}
                         <Trans
                           i18nKey={'spinardi:fully written'}
-                          components={[<p></p>,<b/>]}
+                          components={[<p key={1}></p>,<b key={2}/>]}
                         />
                       </Typography>
                     </Box>

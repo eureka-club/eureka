@@ -9,7 +9,7 @@ import Trans from 'next-translate/Trans';
 const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
   const{data:cycle}=useCycleSumary(cycleId);
-
+  const bolderComponents = ()=>[<p key={1}/>,<b className='text-shadow' key={2}/>,<>✓ </>]
   return (
     <div>
       <Stack gap={5} paddingTop={5} paddingBottom={5} >
@@ -25,23 +25,23 @@ const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
             <Grid container gap={4} sx={{ justifyContent: 'center' }}>
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
-                  <Trans i18nKey='spinardi:lbl1BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl2BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl3BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl4BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl5BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl1BQ' components={bolderComponents()}/>
+                  <Trans i18nKey='spinardi:lbl2BQ' components={bolderComponents()}/>
+                  <Trans i18nKey='spinardi:lbl3BQ' components={bolderComponents()}/>
+                  <Trans i18nKey='spinardi:lbl4BQ' components={bolderComponents()}/>
+                  <Trans i18nKey='spinardi:lbl5BQ' components={bolderComponents()}/>
 
-                  <Trans i18nKey='spinardi:lbl6BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl6BQ' components={bolderComponents()}/>
                 </Stack>
               </Grid>
 
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
-                  <Trans i18nKey='spinardi:lbl7BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
-                  <Trans i18nKey='spinardi:lbl8BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl7BQ' components={bolderComponents()}/>
+                  <Trans i18nKey='spinardi:lbl8BQ' components={bolderComponents()}/>
 
                   <Typography>✓ {t('lbl9BQ')}</Typography>
-                  <Trans i18nKey='spinardi:lbl10BQ' components={[<p/>,<b className='text-shadow'/>,<>✓ </>]}/>
+                  <Trans i18nKey='spinardi:lbl10BQ' components={bolderComponents()}/>
 
                 </Stack>
               </Grid>
