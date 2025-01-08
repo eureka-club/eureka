@@ -38,10 +38,9 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
         }
       `}</style>
      
-      <Stack sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} alignItems={'center'} paddingX={2}  
-           >
+      <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
           <Stack gap={5} paddingTop={0} paddingBottom={5}>
-            <Box
+            {/* <Box
               sx={{ display: 'flex', justifyContent: 'center' }}
               alignItems={'center'}
               paddingLeft={2}
@@ -52,14 +51,12 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               
               </Box>
              
-            </Box>
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-
+            </Box> */}
+            {/* <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}> */}
            
                 <Header cycleId={cycleId}/>
 
-
-              </Box>
+              {/* </Box> */}
           </Stack>
         </Stack>
 
@@ -176,8 +173,8 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession(ctx);debugger;
-  const cycleId=36;
+  const session = await getSession(ctx);
+  const cycleId=30;
 
   const cycle = getCycleSumary(cycleId);
   const qc = new QueryClient();

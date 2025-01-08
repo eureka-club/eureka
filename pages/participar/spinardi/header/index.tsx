@@ -1,12 +1,11 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import Countdown from 'pages/participar/components/Countdown';
 import Image from 'next/image';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
+import Trans from 'next-translate/Trans';
 
 const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
@@ -14,7 +13,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { data: cycle } = useCycleSumary(cycleId);
 
   return (
-    <>
+    <Box sx={{backgroundColor: "#ecf0f1"}} paddingTop={6}>
       <Stack gap={2} paddingTop={0} paddingBottom={1} paddingLeft={2}>
         <aside className="d-flex  align-items-left aligg-content-left">
           {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
@@ -27,11 +26,44 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
           </section>
         </aside>
       </Stack>
-      <Stack gap={2} paddingTop={0} paddingBottom={1}>
-        <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'} paddingRight={2}>
+      <Stack gap={2} paddingTop={0} paddingBottom={0}>
+        <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
           <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-            <Grid container gap={2} sx={{ justifyContent: 'left', alignItems: 'left' }}>
+            <Stack direction={{xs:'column',md:'row'}}>
+                <Box sx={{
+                  width:{xs:'100%',md:'30%'}
+                }}>
+                  <img src="/img/spinardi/muchachoh.png" width={'100%'}/>
+                </Box>
+                <Box sx={{
+                  width:{xs:'100%',md:'40%'}
+                }}>
+                    <Typography textAlign="center" paddingTop={2} variant="h4">
+                        <b> {t('club title')}</b>
+                      </Typography>
+
+                      <Typography paddingBlockEnd={2} textAlign="center" fontSize={20} paddingTop={2}>
+                        <b>{t('club dates')}</b>
+                      </Typography>
+                      <Typography textAlign="center" variant="subtitle1">
+                        {/* {t('fully written')} */}
+                        <Trans
+                          i18nKey={'spinardi:fully written'}
+                          components={[<p></p>,<b/>]}
+                        />
+                      </Typography>
+                    </Box>
+                <Box 
+                  sx={{
+                    width:{xs:'100%',md:'30%'},
+                    display:{md:'inherit',xs:'none'}
+                  }}>
+                  <img src="/img/spinardi/libros.webp" width={'100%'}/>
+                </Box>
+              </Stack>
+            {/* <Grid container gap={2} sx={{ justifyContent: 'left', alignItems: 'left' }}>
               <Grid item xs={12} sm={6} md={6} lg={4}>
+                
                 <Stack gap={2}>
                   <Box
                     sx={{
@@ -47,7 +79,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                     paddingTop={0}
                     paddingRight={0}
                   >
-                    <Image src="/img/spinardi/muchachoh.webp" width={740} height={740}></Image>
+                    <Image src="/img/spinardi/muchachoh.png" width={740} height={740}></Image>
                   </Box>
                 </Stack>
               </Grid>
@@ -64,7 +96,10 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                         <b>{t('club dates')}</b>
                       </Typography>
                       <Typography textAlign="center" variant="subtitle1">
-                        {t('fully written')}
+                        <Trans
+                          i18nKey={'spinardi:fully written'}
+                          components={[<p></p>,<b/>]}
+                        />
                       </Typography>
                     </Box>
                   </Box>
@@ -108,11 +143,11 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                   </Box>
                 </Stack>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Box>
       </Stack>
-    </>
+    </Box>
   );
 };
 export default Header;

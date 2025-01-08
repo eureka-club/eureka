@@ -5,6 +5,7 @@ import Image from 'next/image';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
+import Trans from 'next-translate/Trans';
 
 const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
@@ -47,7 +48,11 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
                           {t('lbl1BCS')}
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
-                          {t('lbl2BCS')}
+                          {/* {t('lbl2BCS')} */}
+                          <Trans
+                            i18nKey={'spinardi:lbl2BCS'}
+                            components={[<p></p>,<b/>]}
+                          />
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
                           {t('lbl3BCS')}
