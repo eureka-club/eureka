@@ -52,6 +52,17 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                           components={[<p key={1}></p>,<b key={2}/>]}
                         />
                       </Typography>
+                      <Box paddingBottom={6}>
+                        <BuyButton
+                          label={t('btn exclusive club')}
+                          price={cycle?.price!}
+                          product_id={cycle?.product_id!}
+                          cycleId={cycle?.id!}
+                        />
+                        <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                          <i>{t('written text')}</i>
+                        </Typography>
+                      </Box>
                     </Box>
                 <Box 
                   sx={{
