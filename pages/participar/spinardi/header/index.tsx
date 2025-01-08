@@ -5,9 +5,14 @@ import Image from 'next/image';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
+import useCycleSumary from '@/src/useCycleSumary';
+import { FC } from 'react';
 
-const Header = () => {
+const Header:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
+
+  const{data:cycle}=useCycleSumary(cycleId);
+
   return (
     <>
       <Stack gap={2} paddingTop={0} paddingBottom={1}>
@@ -45,9 +50,9 @@ const Header = () => {
                     <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
                       <BuyButton
                         label={t('btn exclusive club')}
-                        price="price_1QelFrLbVcSeBXdQ2NJ8LHxS"
-                        product_id="prod_RTLCazmGCcyKKH"
-                        cycleId={30}
+                        price={cycle?.price!}
+                        product_id={cycle?.product_id!}
+                        cycleId={cycle?.id!} 
                       />
                       <Countdown startDate={new Date('2025-03-10')} />
 

@@ -3,10 +3,14 @@ import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionBu
 import { Grid, Box, Card, CardContent, CardHeader,Avatar, IconButton, Divider} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
+import useCycleSumary from '@/src/useCycleSumary';
+import { FC } from 'react';
 
 
-const InvestInYourself = () => {
+const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
+  const{data:cycle}=useCycleSumary(cycleId);
+
   return (
     <>
     <div>
@@ -121,9 +125,9 @@ const InvestInYourself = () => {
           <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
               <BuyButton 
                 label={t('lbl button cost and payment')} 
-                price="price_1QelFrLbVcSeBXdQ2NJ8LHxS"
-                product_id="prod_RTLCazmGCcyKKH"
-                cycleId={30} 
+                price={cycle?.price!}
+                product_id={cycle?.product_id!}
+                cycleId={cycle?.id!} 
               />
             </Box>
           </Box>

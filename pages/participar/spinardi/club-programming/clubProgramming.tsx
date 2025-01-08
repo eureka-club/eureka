@@ -7,9 +7,12 @@ import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 import Stars from 'pages/about/components/Stars';
 import BuyButton from 'pages/participar/components/BuyButton';
+import useCycleSumary from '@/src/useCycleSumary';
+import { FC } from 'react';
 
-const ClubProgramming = () => {
+const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
+  const{data:cycle}=useCycleSumary(cycleId);
   return (
     <>
       <div>
@@ -51,9 +54,9 @@ const ClubProgramming = () => {
             <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
               <BuyButton 
                 label={t('btn to sign up')} 
-                price="price_1QelFrLbVcSeBXdQ2NJ8LHxS"
-                product_id="prod_RTLCazmGCcyKKH"
-                cycleId={30} 
+                price={cycle?.price!}
+                product_id={cycle?.product_id!}
+                cycleId={cycle?.id!} 
               />
             </Box>
           </Box>
