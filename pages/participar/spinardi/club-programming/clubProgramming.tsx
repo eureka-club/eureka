@@ -6,9 +6,13 @@ import AnimatedIMGCarousel from 'pages/about/components/AnimatedIMGCarousel';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 import Stars from 'pages/about/components/Stars';
+import BuyButton from 'pages/participar/components/BuyButton';
+import useCycleSumary from '@/src/useCycleSumary';
+import { FC } from 'react';
 
-const ClubProgramming = () => {
+const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
+  const{data:cycle}=useCycleSumary(cycleId);
   return (
     <>
       <div>
@@ -21,6 +25,8 @@ const ClubProgramming = () => {
         paddingRight={2}
       >
         
+        
+      
         <Stack id="asUl" direction={{ xs: 'column' }} gap={2}>
           
 

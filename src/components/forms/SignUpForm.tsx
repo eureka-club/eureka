@@ -84,8 +84,8 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-
-    signIn('google');
+    let callbackUrl = localStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`
+    signIn('google',{callbackUrl});
   };
 
   const userRegistered = async (email: string) => {

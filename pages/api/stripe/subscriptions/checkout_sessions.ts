@@ -8,7 +8,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-      let { price, product_id, customer_email,cycleId,cycleTitle,userId,userName} = req.body;
+      let { price, product_id, customer_email,cycleId,cycleTitle,userId,userName,iterations:it} = req.body;
+      let iterations = +it;
       if(!userId){
         res.status(405).end(UNAUTHORIZED);
         return;
@@ -48,12 +49,12 @@ export default async function handler(
           
         const session = await stripe.checkout.sessions.create({
           client_reference_id:userId,
-          metadata:{price,product_id,cycleId,cycleTitle,userId,userName},  
+          metadata:{price,product_id,cycleId,cycleTitle,userId,userName,iterations},  
           // payment_intent_data:{
           //   metadata:{price,product_id,cycleId,client_reference_id}
           // },
           subscription_data: {
-            metadata:{price,product_id,cycleId,cycleTitle,userId,userName},  
+            metadata:{price,product_id,cycleId,cycleTitle,userId,userName,iterations},  
           },
           line_items: [
             {

@@ -13,7 +13,7 @@ const SubscriptionForm = () => {
     <div>
       <Stack gap={5} paddingTop={5} paddingBottom={5} >
         <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingLeft={2} paddingRight={2}>
-          <Box sx={{ maxWidth: { lg: '30dvw', sm: '90dvw', xs: '100dvw' } }}>
+          <Box sx={{ maxWidth: { lg: '40dvw', sm: '90dvw', xs: '100dvw' } }}>
             <Typography fontSize={30} textAlign="center">
               {t('lbl1HQ')}
             </Typography>
@@ -49,8 +49,7 @@ const SubscriptionForm = () => {
                         label={t('btn exclusive club')}
                         price="price_1QaOWZLbVcSeBXdQ7Nt4wPOr"
                         product_id="prod_RTLCazmGCcyKKH"
-                        cycleId={30}
-                      />
+                        cycleId={30} iterations={0}                      />
                       
 
                       

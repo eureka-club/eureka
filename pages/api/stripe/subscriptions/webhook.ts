@@ -4,6 +4,9 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 import {prisma} from '@/src/lib/prisma';
 import { sendMail} from "@/src/facades/mail"; 
+import items from "pages/api/cycle/[id]/items";
+import { start } from "repl";
+import { PinRounded } from "@mui/icons-material";
 
 const buffer = (req:any) => {
   return new Promise((resolve, reject) => {
@@ -31,9 +34,23 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  let event;
+  const setSubscriptionOnEureka = async (cycleId:number,userId:number,customerId:string,status:string)=>{
+    
+    await prisma.subscription.updateMany({
+      where:{
+          cycleId,
+          userId,
+          customerId
+      },
+      data:{
+        status,
+      }
+    });
+  }
   try{
     if (req.method === 'POST') {
-      let event = req.body;
+      event = req.body;
   
       const body = await buffer(req);
       if (endpointSecret) {
@@ -61,21 +78,47 @@ export default async function handler(
         let productId;
         let customerId;
         let status;
-        let obj;
         let invoice;
         let subscription;
         
         switch (event.type) {
           case 'checkout.session.completed':
-            obj = event.data.object;
-            cycleId = +obj.metadata.cycleId;
-            cycleTitle = obj.metadata.cycleTitle;
-            userId = +obj.metadata.userId;
-            userName = obj.metadata.userName;
-            customerId = obj.customer;
-            email = obj.customer_email;
-            productId = obj.metadata.product_id;
-            status = obj.payment_status;
+            let session = event.data.object;
+            cycleId = +session.metadata.cycleId;
+            cycleTitle = session.metadata.cycleTitle;
+            userId = +session.metadata.userId;
+            userName = session.metadata.userName;
+            customerId = session.customer;
+            email = session.customer_details.email;
+            productId = session.metadata.product_id;
+            status = session.payment_status;
+            subscription = session.subscription;
+            let iterations = +session.metadata.iterations;
+
+            let schedule = await stripe.subscriptionSchedules.create({
+              from_subscription:subscription
+            });
+            let phases = schedule.phases.map((p:any)=>({
+              start_date:p.start_date,
+              end_date:p.end_date,
+              items:p.items
+            }));
+            schedule = await stripe.subscriptionSchedules.update(schedule.id,{
+              end_behavior:'cancel',
+              phases:[
+                ...phases,
+                {
+                  items:[
+                    {
+                      price:session.metadata.price,
+                      quantity:1
+                    },
+                  ],
+                  iterations:iterations-1,
+                  proration_behavior:'none'
+                }
+              ]
+            });
   
             await prisma.subscription.create({
               data:{
@@ -96,38 +139,42 @@ export default async function handler(
               `
             });
             break;
-          case 'invoice.paid':
-            obj = event.data.object.subscription_details;
-            cycleId = +obj.metadata.cycleId;
-            userId = +obj.metadata.userId;
-            customerId = obj.customer;
-            email = obj.customer_email;
-            productId = obj.metadata.product_id;
-            status = obj.payment_status;
+          // case 'invoice.created':
+          //   let {customer_email,hosted_invoice_url,subscription_details:{metadata}} = event.data.object;
+          //   await sendMail({
+          //     from:process.env.EMAILING_FROM!,
+          //     to:[{email:customer_email}],
+          //     subject:`Fatura da Assinatura no clube "${metadata.cycleTitle}"`,
+          //     html:`
+          //       <p><a href="${hosted_invoice_url}">Fatura em PDF </a></p>
+          //     `
+          //   });
+          //   break;
+          // case 'invoice.paid':
+          //   subscription = event.data.object.subscription_details;
+          //   cycleId = +subscription.metadata.cycleId;
+          //   userId = +subscription.metadata.userId;
+          //   cycleTitle = subscription.metadata.cycleTitle;
+          //   customerId = event.data.object.customer;
+          //   email = event.data.object.customer_email;
+          //   productId = subscription.metadata.product_id;
+          //   status = event.data.object.status;
             
-            await sendMail({
-              from:process.env.EMAILING_FROM!,
-              to:[{email:event.data.object.customer_email}],
-              subject:`Pagamento da conta da assinatura no clube "${cycleTitle}", concluída com sucesso`,
-              html:`
-                <p><a href="${event.data.object.invoice_pdf}">Fatura em PDF</a></p>
-              `
-            });
-  
-            await prisma.subscription.update({
-              where:{
-                cycleId_userId_customerId:{
-                  cycleId,
-                  userId,
-                  customerId
-                }
-              },
-              data:{
-                status:'paid',
-              }
-            });
-            
-            break;
+          //   await sendMail({
+          //     from:process.env.EMAILING_FROM!,
+          //     to:[{email}],
+          //     subject:`Pagamento da conta da assinatura no clube "${cycleTitle}", concluída com sucesso`,
+          //     html:`
+          //       <p><a href="${event.data.object.invoice_pdf}">Fatura em PDF</a></p>
+          //     `
+          //   });
+          // setSubscriptionOnEureka(
+          //   cycleId,
+          //   userId,
+          //   customerId,
+          //   status
+          // );
+          //   break;
           case 'invoice.payment_failed':
             invoice = event.data.object;
             subscription = invoice.subscription_details;
@@ -144,45 +191,34 @@ export default async function handler(
               `
             });
   
-            await prisma.subscription.update({
-              where:{
-                cycleId_userId_customerId:{
-                  cycleId:+subscription.metadata.cycleId,
-                  userId:+subscription.metadata.userId,
-                  customerId
-                }
-              },
-              data:{
-                status,
-              }
-            });
+            setSubscriptionOnEureka(
+              +subscription.metadata.cycleId,
+              +subscription.metadata.userId,
+              customerId,
+              status
+            );
   
             break;
-          case 'customer.subscription.deleted':
+          case 'customer.subscription.update':
             subscription = event.data.object;
             status = subscription.status;
   
             await sendMail({
               from:process.env.EMAILING_FROM!,
               to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
-              subject:`customer.subscription.deleted (${subscription.customer}|${subscription.id})`,
+              subject:`customer.subscription.update (${subscription.customer}|${subscription.id})`,
               html:`
                 <p>user: ${subscription.metadata.userId}, cycle: ${subscription.metadata.cycleId}</code>
               `
             });
   
-            await prisma.subscription.update({
-              where:{
-                cycleId_userId_customerId:{
-                  cycleId:+subscription.metadata.cycleId,
-                  userId:+subscription.metadata.userId,
-                  customerId:subscription.customer
-                }
-              },
-              data:{
-                status,
-              }
-            });
+            setSubscriptionOnEureka(
+              +subscription.metadata.cycleId,
+              +subscription.metadata.userId,
+              subscription.customer,
+              status
+            );
+            
             break;
           
             default:
@@ -200,13 +236,13 @@ export default async function handler(
     }
   }
   catch(e){
-    console.log(e);
+    console.log(event?.type,e);
     await sendMail({
       from:process.env.EMAILING_FROM!,
       to:[{email:process.env.DEV_EMAIL!}],
       subject:`stripe subscription webhook error`,
       html:`
-        <code>${JSON.stringify(e)}</code>
+        <code> ${event?.type} | ${JSON.stringify(e)}</code>
       `
     });
     res.status(405).send('stripe subscription webhook error');

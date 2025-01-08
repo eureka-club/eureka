@@ -1,28 +1,25 @@
 import useCycleSumary from "@/src/useCycleSumary";
 import { Button, CircularProgress } from "@mui/material";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import useTranslation from "next-translate/useTranslation";
-import { FC, useEffect, useState } from "react";
-import {Grid, Stack} from '@mui/material'
+import React, { FC, useEffect, useState } from "react";
+import {Stack} from '@mui/material'
 import toast from "react-hot-toast";
 import { useModalContext } from "@/src/hooks/useModal";
 import SignInForm from "@/src/components/forms/SignInForm";
-import { set } from "lodash";
 import { useRouter } from "next/router";
 
 interface Props {
-    label:string;
+    label:string|React.ReactNode;
     price:string;
     product_id:string;
-    iterations:number;
     cycleId:number;
-    next?:string;
 }   
-const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,iterations}) => { 
+const BuyButton:FC<Props> = ({label,price,product_id,cycleId}) => { 
   const {data:session}=useSession();
   const router=useRouter();
   const {t}=useTranslation('common');
-  const {data:cycle}=useCycleSumary(cycleId);
+  
   const {show} = useModalContext();
   const[isLoading,setIsLoading] = useState(false);
       
@@ -36,24 +33,21 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,iterati
   },[router.query,session]);
   
   const doAction = async ()=>{
-    const fr = await fetch('/api/stripe/subscriptions/checkout_sessions',{
+    const fr = await fetch('/api/stripe/checkout_sessions',{
       method:'POST',
       body:JSON.stringify({
-        product_id,
         price,
+        product_id,
+        client_reference_id:session?.user.id,
         customer_email: session?.user.email,
         cycleId,
-        cycleTitle:cycle?.title,
-        userId:session?.user.id,
-        userName:session?.user.name,
-        iterations
       }),
       headers:{
         'Content-Type':'application/json'
       }
     });
-    const {stripe_session_url,subscription_already_exist} = await fr.json();
-    if(subscription_already_exist){ 
+    const {stripe_session_url,participant_already_exist} = await fr.json();
+    if(participant_already_exist){ 
       return toast.error(t('Você já está inscrito no clube.'));
     }
     window.location.href = stripe_session_url;
@@ -85,10 +79,10 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,iterati
           disabled={isLoading}
 
       >
-          {label} <CircularProgress size={'2rem'} color="inherit" style={{display: isLoading ? 'block' : 'none'}}/>
+      {label} <CircularProgress size={'2rem'} color="inherit" style={{display: isLoading ? 'block' : 'none'}}/>
       </Button>
       </Stack>
       </>
   );
 }
-export default BuySubscriptionButton;
+export default BuyButton;

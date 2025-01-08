@@ -14,15 +14,18 @@ import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
-import { Stack, Box, Container, Typography } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { getCycleSumary } from '@/src/useCycleSumary';
 import { dehydrate, QueryClient } from 'react-query';
 interface Props {
   session: Session;
+  cycleId:number;
 }
-const Spinardi: NextPage<Props> = ({session}) => {
+
+const Spinardi: NextPage<Props> = ({session,cycleId}) => {
   const { t } = useTranslation('spinardi');
+  
   return (
     <>
       <Head>
@@ -54,7 +57,7 @@ const Spinardi: NextPage<Props> = ({session}) => {
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
 
            
-                <Header />
+                <Header cycleId={cycleId}/>
 
 
               </Box>
@@ -83,7 +86,7 @@ const Spinardi: NextPage<Props> = ({session}) => {
             paddingRight={2}
           >
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <AdFromOurCommunity />
+                <AdFromOurCommunity cycleId={0} />
               </Box>
             </Box>
           </Stack>
@@ -97,7 +100,7 @@ const Spinardi: NextPage<Props> = ({session}) => {
               paddingRight={2}
             >
               <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <ClubProgramming />
+                <ClubProgramming cycleId={cycleId}/>
               </Box>
             </Box>
           </Stack>
@@ -122,7 +125,7 @@ const Spinardi: NextPage<Props> = ({session}) => {
               paddingRight={2}
             >
               <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' },paddingX:2 }}>
-                <InvestInYourself />
+                <InvestInYourself cycleId={0} />
               </Box>
             </Box>
           </Stack>
@@ -165,7 +168,7 @@ const Spinardi: NextPage<Props> = ({session}) => {
             paddingRight={2}
           >
             <Box  >
-              <WhatAreYouAaitingFor />
+              <WhatAreYouAaitingFor cycleId={0} />
             </Box>
           </Box>
         </Stack>
@@ -175,15 +178,18 @@ const Spinardi: NextPage<Props> = ({session}) => {
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
-  const cycle = getCycleSumary(30);
+  const cycleId=30;
+
+  const cycle = getCycleSumary(cycleId);
   const qc = new QueryClient();
   await qc.prefetchQuery({
-    queryKey:['CYCLE',`${30}`,'SUMARY'],
+    queryKey:['CYCLE',`${cycleId}`,'SUMARY'],
     queryFn:()=>cycle
-  })
+  });
   return {
     props: {
       session,
+      cycleId,
       dehydratedState: dehydrate(qc),      
     },
   };
