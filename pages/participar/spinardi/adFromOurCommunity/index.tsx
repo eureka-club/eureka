@@ -9,7 +9,8 @@ import Trans from 'next-translate/Trans';
 
 const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
-  const{data:cycle}=useCycleSumary(cycleId);debugger;
+  const { data: cycle } = useCycleSumary(cycleId);
+  debugger;
   return (
     <>
       <div>
@@ -36,7 +37,14 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
               <Grid container gap={4} sx={{ justifyContent: 'center' }}>
                 <Grid item xs={12} sm={6}>
                   <Stack gap={4}>
-                    <Image src="/img/spinardi/com amorspinardi.webp" width={300} height={450}></Image>
+                    <Box
+                      sx={{
+                        width: { xs: '100%', md: '80%', sm: '80%', lg: '80%' },
+                        display: { md: 'inherit', xs: 'inherit' },
+                      }}
+                    >
+                      <img src="/img/spinardi/com amorspinardi.webp" width={'100%'} />
+                    </Box>
                   </Stack>
                 </Grid>
 
@@ -49,10 +57,7 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
                           {/* {t('lbl2BCS')} */}
-                          <Trans
-                            i18nKey={'spinardi:lbl2BCS'}
-                            components={[<p key={1}></p>,<b key={2}/>]}
-                          />
+                          <Trans i18nKey={'spinardi:lbl2BCS'} components={[<p key={1}></p>, <b key={2} />]} />
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
                           {t('lbl3BCS')}
