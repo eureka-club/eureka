@@ -41,18 +41,19 @@ const StripePaymentCancelPage: NextPage = () => {
               backgroundRepeat: 'no-repeat',
               backgroundSize: { sm: `100% auto` },
               height: { xs: '500px', md: '450px' }, //lg:'500px'
+              
             }}
           >
-            <Grid container direction="row" justifyContent="center" alignItems="center" paddingTop={5}>
+            <Grid container direction="row" justifyContent="center" alignItems="center" paddingTop={2} >
               <Stack direction="column" justifyContent="center" alignItems="center" alignContent={'center'}>
-                <Box >
+                <Box paddingX={1} sx={{ maxWidth: { lg: '60dvw', sm: '80dvw', xs: '80dvw',md:'60dvw' } }} justifyContent="center" alignItems="left" textAlign={'left'}>
                   <Grid>
-                    <h1 className="text-primary text-center mb-5">
+                    <h1 className="text-primary text-center mb-4">
                       <b>{t('cancelText')}</b>
                     </h1>
                   </Grid>
                   <Grid>
-                    <h1 className="text-primary text-center mb-5">
+                    <h1 className="text-primary text-center mb-4">
                       <b>{t('cancelExtraText')}</b>
                     </h1>
                   </Grid>
@@ -66,7 +67,7 @@ const StripePaymentCancelPage: NextPage = () => {
             </Grid>
           </Box>
         </Box>
-        <Footer />
+      {/*<Footer />*/}  
       </>
     </SimpleLayout>
   );
