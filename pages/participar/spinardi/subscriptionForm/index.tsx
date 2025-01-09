@@ -48,7 +48,7 @@ const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
               <Grid item xs={12} sm={6} md={4}>
                 <Stack gap={4}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingRight={4} paddingTop={2}>
-                    <Box sx={{ maxWidth: { lg: '90dvw', sm: '95dvw', xs: '100dvw' } }}>
+                    <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
                         <BuyButton 
                           label={t('btn exclusive club')} 
                           price={cycle?.price!}

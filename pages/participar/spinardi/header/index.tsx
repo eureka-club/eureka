@@ -28,7 +28,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
       <Stack gap={2} paddingTop={0} paddingBottom={0}>
         <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
           <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-            <Stack direction={{xs:'column',md:'row'}} alignItems={'flex-end'}>
+            <Stack direction={{xs:'column',md:'row'}} paddingX={2} alignItems={'flex-end'}>
                 <Box sx={{
                   width:{xs:'100%',md:'30%'}
                 }}>
@@ -51,7 +51,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                           components={[<p key={1}></p>,<b key={2}/>]}
                         />
                       </Typography>
-                      <Box paddingBottom={6}>
+                      <Box paddingBottom={6} paddingRight={2} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
                         <BuyButton
                           label={t('btn exclusive club')}
                           price={cycle?.price!}
