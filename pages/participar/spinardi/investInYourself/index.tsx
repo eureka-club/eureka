@@ -5,6 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
+import Link from 'next/link';
 
 const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
@@ -13,20 +14,21 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
   return (
     <>
       <div>
-        <Stack gap={5} paddingTop={5} paddingBottom={1}>
+        <Stack gap={3} paddingTop={5} paddingBottom={1}>
+          <Grid>
           <Box
             sx={{ display: 'flex', justifyContent: 'center' }}
             alignItems={'center'}
             paddingLeft={2}
             paddingRight={2}
           >
-            <Box sx={{ maxWidth: { lg: '200dvw', sm: '100dvw', xs: '100dvw' } }}>
+            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
               <Typography fontSize={30} textAlign="center">
                 <b> {t('lblHV')}</b>
               </Typography>
             </Box>
           </Box>
-      
+          </Grid>
 
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
@@ -43,7 +45,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
               <Typography   fontSize={30}>
                   <b>R$</b>
                 </Typography>
-                <Typography textAlign="center" paddingBlockEnd={2} fontSize={60} paddingLeft={1}>
+                <Typography textAlign="center" paddingBlockEnd={0} fontSize={60} paddingLeft={1}>
                   <b>199</b>
                 </Typography>
                 <Typography textAlign="left"  fontSize={30}>
@@ -54,44 +56,44 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           </Grid>
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
-              <Box sx={{ maxWidth: { lg: '50dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
+              <Box sx={{ maxWidth: { lg: '60dvw', sm: '100dvw', xs: '100dvw' } }}>
+                <Typography textAlign="center"  variant="body2">
                   {t('lblB2V')}
                 </Typography>
               </Box>
             </Box>
           </Grid>
           <Grid>
-            <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
+            <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
-                <Typography textAlign="left" variant="body2">
+                <Typography textAlign="center" variant="body2">
                   ✅<b>{t('lblB3V')}</b>
                 </Typography>
               </Box>
             </Box>
           </Grid>
           <Grid>
-            <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
+            <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
-                <Typography textAlign="left"  variant="body2">
+                <Typography textAlign="center"  variant="body2">
                   ✅<b>{t('lblB4V')}</b>
                 </Typography>
               </Box>
             </Box>
           </Grid>
           <Grid>
-          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
+          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
-                <Typography textAlign="left"  variant="body2">
+                <Typography textAlign="center"  variant="body2">
                   ✅<b>{t('lblB5V')}</b>
                 </Typography>
               </Box>
             </Box>
           </Grid>
           <Grid>
-          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
+          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
-                <Typography textAlign="left"  variant="body2">
+                <Typography textAlign="center"  variant="body2">
                 ✅<b>{t('lblB6V')}</b> 
                 </Typography>
               </Box>
@@ -104,7 +106,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
               sx={{ display: 'flex', justifyContent: 'center' }}
               alignItems={'center'}
               paddingRight={4}
-              paddingTop={2}
+              paddingTop={0}
             >
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
               <BuyButton 
@@ -119,8 +121,15 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
-                <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
+                <Typography textAlign="center"  variant="body2" paddingBlockEnd={1}>
                   {t('lblB7V')}
+                </Typography>
+              </Box>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
+              <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
+                <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
+                  {t('lblB8V')}<Link  href={'http://bit.ly/bolsa-com-amor'}><span style={{ color: 'white', cursor: 'pointer', textDecoration: 'underline' }}>bit.ly/bolsa-com-amor</span></Link>
                 </Typography>
               </Box>
             </Box>
