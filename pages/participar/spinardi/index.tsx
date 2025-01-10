@@ -18,6 +18,7 @@ import { Stack, Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { getCycleSumary } from '@/src/useCycleSumary';
 import { dehydrate, QueryClient } from 'react-query';
+import Script from 'next/script';
 interface Props {
   session: Session;
   cycleId:number;
@@ -31,6 +32,19 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
       <Head>
         <meta name="title" content={t('title page')}></meta>
         <meta name="description" content={t('title page')}></meta>
+        <Script
+                    id="gtag-base"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                      __html: `
+                        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                        })(window,document,'script','dataLayer', 'GTM-PNQQBFG3');
+                      `,
+                    }}
+                  />
       </Head>
       <style jsx global>{`
         body {
@@ -168,13 +182,20 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             </Box>
           </Box>
         </Stack>
-      
+        <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=GTM-PNQQBFG3`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+        </noscript>
     </>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
-  const cycleId=36;
+  const cycleId=30;
 
   const cycle = getCycleSumary(cycleId);
   const qc = new QueryClient();

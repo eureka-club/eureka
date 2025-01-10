@@ -10,7 +10,6 @@ import Trans from 'next-translate/Trans';
 const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
   const { data: cycle } = useCycleSumary(cycleId);
-  debugger;
   return (
     <>
       <div>
