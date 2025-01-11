@@ -6,6 +6,8 @@ import { PostSumarySpec } from './post';
 export interface EditUserClientPayload {
   name?: string;
   email?: string;
+  password?:string;
+  passwordConfirmation?:string;
   image?: string;
   countryOfOrigin?: string | null;
   aboutMe?: string;

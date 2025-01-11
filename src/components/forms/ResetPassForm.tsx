@@ -87,7 +87,7 @@ const ResetPassForm: FunctionComponent<Props> = ({userId,email}) => {
           if(res && r.error)
             toast.error( t('Invalid session'))
           else{
-            router.push(localStorage.getItem('loginRedirect') || '/')
+            router.push(sessionStorage.getItem('loginRedirect') || '/')
           }
             
         })

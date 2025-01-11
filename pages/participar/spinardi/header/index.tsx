@@ -52,12 +52,14 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                         />
                       </Typography>
                       <Box paddingBottom={6} paddingRight={2} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-                        <BuyButton
+                        {/* <BuyButton
                           label={t('btn exclusive club')}
                           price={cycle?.price!}
                           product_id={cycle?.product_id!}
                           cycleId={cycle?.id!}
-                        />
+                        /> */}
+                        <a href='#subscription-form'>{t('btn exclusive club')}</a>
+
                         <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
                           <i>{t('written text')}</i>
                         </Typography>

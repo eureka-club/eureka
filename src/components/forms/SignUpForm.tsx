@@ -84,7 +84,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
 
   const handleSignUpGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
-    let callbackUrl = localStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`
+    let callbackUrl = sessionStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`
     signIn('google',{callbackUrl});
   };
 
@@ -112,7 +112,7 @@ const SignUpForm: FunctionComponent<Props> = ({ noModal = false }) => {
     });
     if (res.ok) {
       const data = await res.json();
-      const urlRedirect = localStorage.getItem('loginRedirect')??`/${lang}${router.asPath}`;
+      const urlRedirect = sessionStorage.getItem('loginRedirect')??`/${lang}${router.asPath}`;
       signIn('email', { email: identifier, callbackUrl:urlRedirect });
       // return data;
     } else {

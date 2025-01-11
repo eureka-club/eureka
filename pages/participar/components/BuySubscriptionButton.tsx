@@ -27,7 +27,7 @@ const BuySubscriptionButton:FC<Props> = ({label,price,product_id,cycleId,iterati
   const[isLoading,setIsLoading] = useState(false);
       
   useEffect(()=>{
-    localStorage.setItem('loginRedirect', `/${router.locale}${router.asPath}?doAction=1`)
+    sessionStorage.setItem('loginRedirect', `/${router.locale}${router.asPath}?doAction=1`)
   },[]);
   useEffect(()=>{
     if(router.query.doAction && session?.user){

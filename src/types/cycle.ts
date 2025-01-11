@@ -81,6 +81,7 @@ export const CycleSumarySpec = {
     // tags:true,
     product_id:true,
     price:true,
+    priceInPlots:true,
     // topics:true,
     countryOfOrigin:true,
     startDate:true,

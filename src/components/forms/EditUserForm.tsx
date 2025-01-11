@@ -110,7 +110,7 @@ const EditUserForm: FunctionComponent = () => {
   const [countrySearchResults, setCountrySearchResults] = useState<{ id: number; code: string; label: string }[]>([]);
   const [countryOrigin, setCountryOrigin] = useState<string>();
 
-  const { locale } = useRouter();
+  const { query,locale } = useRouter();
   const [namespace, setNamespace] = useState<Record<string, string>>();
   
   useEffect(() => {
@@ -136,7 +136,8 @@ const EditUserForm: FunctionComponent = () => {
     isLoading: isLoadingUser,
     isSuccess,
   } = useMutation(
-    async (payload: EditUserClientPayload) => {
+    async (payload: EditUserClientPayload) => {debugger;
+  
       const fd = new FormData();
       Object.entries(payload).forEach(([key,value])=>{
         if(value)
@@ -148,7 +149,11 @@ const EditUserForm: FunctionComponent = () => {
         body: fd,
       });
       if(res.ok){
-          toast.success( t('ProfileSaved'))
+          toast.success( t('ProfileSaved'));
+          if(query.next){
+            router.push(decodeURIComponent(query.next.toString()!));
+            return;
+          }
           router.push(`/mediatheque/${id}`);
          // return res.json();
       }    
@@ -202,10 +207,15 @@ const EditUserForm: FunctionComponent = () => {
     //   return;
     // }
 
-    const form = ev.currentTarget;
+    const form = ev.currentTarget;debugger;
+    if(form.password.value && form.password.value!=form.passwordConfirmation.value){
+      toast.error('As senhas não correspondem');
+      return;
+    }
     const payload: EditUserClientPayload = {
       name: userName,
       email: form.email.value,
+      ... form.password.value && {password: form.password.value},
      // image: form.image.value,
       countryOfOrigin: countryOrigin,
       aboutMe: form.aboutMe.value,
@@ -366,6 +376,19 @@ const EditUserForm: FunctionComponent = () => {
                 </Col>
               </Row>
               <Row>
+              <Col>
+                  <FormGroup controlId="password" className="mb-4">
+                    <FormLabel>*{t('Password')}</FormLabel>
+                    <FormControl type="password" defaultValue={''} />
+                  </FormGroup>
+                </Col><Col>
+                  <FormGroup controlId="passwordConfirmation" className="mb-4">
+                    <FormLabel>*{t('Password confirmation')}</FormLabel>
+                    <FormControl type="password" defaultValue={''} />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
                 <Col>
                   <FormGroup controlId="countryOfOrigin1" className="mb-4">
                     <FormLabel>{t('countryFieldLabel')}</FormLabel>
@@ -506,15 +529,15 @@ const EditUserForm: FunctionComponent = () => {
 
             <Container className="mt-4 p-0 py-4 d-flex justify-content-end">
               <Button  disabled={isLoadingUser} type="submit" className="btn-eureka">
-                <>
+                <div>
                   {t('Edit')}
                   {isLoadingUser ? (
                     <Spinner animation="grow" variant="info" size="sm" className="ms-1" />
                   ) : (
                     <span className={styles.placeholder} />
                   )}
-                  {isError && editUserError}
-                </>
+                  {isError && <>{`${editUserError}`}</> }
+                </div>
               </Button>
             </Container>
         </Form>

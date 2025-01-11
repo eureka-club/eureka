@@ -11,6 +11,8 @@ import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { UserDetail } from '@/src/types/user';
 import { Notification } from '@prisma/client';
+const bcrypt = require('bcryptjs');
+
 
 export const config = {
   api: {
@@ -71,7 +73,11 @@ export default getApiHandler()
         }
         prev = {...prev, [`${k}`]: val};
         return prev;
-      },{});
+      },{});debugger;
+      if(data.password){
+        const password = await bcrypt.hash(data.password, 8);
+        data.password = password;
+      }
       
       if(files.photo && files.photo[0]){
         const user = await find({where:{id:idNum}}) as UserDetail;

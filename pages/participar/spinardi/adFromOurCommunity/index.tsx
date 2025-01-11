@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
@@ -78,12 +78,13 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-                <BuyButton
+                {/* <BuyButton
                   label={t('btn exclusive club')}
                   price={cycle?.price!}
                   product_id={cycle?.product_id!}
                   cycleId={cycle?.id!}
-                />
+                /> */}
+                <a href='#subscription-form'>{t('btn exclusive club')}</a>
               </Box>
             </Box>
           </Grid>

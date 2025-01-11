@@ -319,7 +319,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           email: { label: 'User name', type: 'text', placeholder: 'User name' },
           password: { label: 'Password', type: 'password', placeholder: 'Password' },
         },
-        async authorize(credentials, req) {
+        async authorize(credentials, req) {debugger;
           const user = await prisma.user.findFirst({
             where: {
               email: credentials?.email,

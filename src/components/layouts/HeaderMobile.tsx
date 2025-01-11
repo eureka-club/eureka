@@ -29,7 +29,7 @@ const Header: FunctionComponent<Props> = ({ show: s = false }) => {
   }, [session]);
 
  const handlerLogin = ()=>{
-    localStorage.setItem('loginRedirect',router.asPath)
+  sessionStorage.setItem('loginRedirect',router.asPath)
     router.push('/')
   }
 

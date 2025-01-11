@@ -16,9 +16,10 @@ import Head from 'next/head';
 import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { Stack, Box, Typography } from '@mui/material';
 import Image from 'next/image';
-import { getCycleSumary } from '@/src/useCycleSumary';
+import useCycleSumary, { getCycleSumary } from '@/src/useCycleSumary';
 import { dehydrate, QueryClient } from 'react-query';
 import Script from 'next/script';
+import PaymentOptionForm from './PaymentOptionForm';
 interface Props {
   session: Session;
   cycleId:number;
@@ -26,6 +27,7 @@ interface Props {
 
 const Spinardi: NextPage<Props> = ({session,cycleId}) => {
   const { t } = useTranslation('spinardi');
+  const { data: cycle } = useCycleSumary(cycleId);
   
   return (
     <>
@@ -181,6 +183,12 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               <WhatAreYouAaitingFor cycleId={cycleId} />
             </Box>
           </Box>
+          <PaymentOptionForm
+            price={cycle?.price!}
+            priceInPlots={cycle?.priceInPlots!}
+            product_id={cycle?.product_id!}
+            cycleId={cycleId}
+          />
         </Stack>
         <noscript>
             <iframe

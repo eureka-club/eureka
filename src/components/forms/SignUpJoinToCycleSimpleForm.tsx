@@ -243,9 +243,9 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
           setLoading(false)
         }
         else {
-          let callbackUrl = localStorage.getItem('loginRedirect')?.toString() || '/';;
+          let callbackUrl = sessionStorage.getItem('loginRedirect')?.toString() || '/';;
           // ? `/cycle/${joinToCycle}`
-          // : localStorage.getItem('loginRedirect')?.toString() || '/';
+          // : sessionStorage.getItem('loginRedirect')?.toString() || '/';
 
           if (!!joinToCycle && joinToCycle > 0) {
 
@@ -274,9 +274,9 @@ const SignUpJoinToCycleSimpleForm: FunctionComponent<Props> = ({ noModal = false
               }
               else {
                 close()
-                localStorage.setItem('loginRedirect', router.asPath)
-                router.push(localStorage.getItem('loginRedirect') || '/').then(() => {
-                  localStorage.setItem('loginRedirect', '')
+                sessionStorage.setItem('loginRedirect', router.asPath)
+                router.push(sessionStorage.getItem('loginRedirect') || '/').then(() => {
+                  sessionStorage.setItem('loginRedirect', '')
                 })
               }
             })

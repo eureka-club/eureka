@@ -45,10 +45,10 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
   const handleSignInGoogle = (ev: MouseEvent<HTMLButtonElement>) => {
     ev.preventDefault();
     // if(!noModal)
-    //   localStorage.setItem('loginRedirect', `/${lang}${router.asPath}`)
+    //   sessionStorage.setItem('loginRedirect', `/${lang}${router.asPath}`)
     let callbackUrl = !!joinToCycle&&joinToCycle!=-1 
        ? `/${lang}/cycle/${joinToCycle}?join=true`
-       : localStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`;
+       : sessionStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`;
     signIn('google',{ callbackUrl });
   };
 
@@ -78,56 +78,55 @@ const SignInForm: FunctionComponent<Props> = ({ joinToCycle, noModal = false,log
     }
     if(form){
       const ur = await userRegistered(form.email.value);
-          if(!ur){
-            toast.error('Error');
-            setLoading(false)
+      if(!ur){
+        toast.error('Error');
+        setLoading(false)
 
-            return;
-          }
-          if(ur.isUser){
-           if(!ur.provider && !ur.hasPassword){
-                toast.error(t('RegisterAlert'))
-                    setLoading(false)
-           }
-           else if(ur.provider=='google'){
-            toast.error(t('RegisteredUsingGoogleProvider'))
-            setLoading(false)
-           }
-           else {
-            // localStorage.setItem('loginRedirect',`/${lang}${router.asPath}`)
-
-            let callbackUrl = !!joinToCycle&&joinToCycle>0 
-            ? `/${lang}/cycle/${joinToCycle}?join=true`
-            : localStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`;
-
-            signIn('credentials' ,{
-              callbackUrl,
-              email:form.email.value,
-              password:form.password.value
-            })
-            .then(res=>{
-              const r = res as unknown as {error:string}
-              if(res && r.error){
-                toast.error(t('InvalidSesion'))
-                setLoading(false)
-              }
-              else{
-                close();
-                router.push(localStorage.getItem('loginRedirect') || `/${lang}${router.asPath}`).then(()=>{
-                  localStorage.setItem('loginRedirect','')
-                })
-              }
-            })
-          }
-          }
-          else{
-            toast.error(t('isNotUser'))
-            setLoading(false)
-
-          }
-        }
-
+        return;
       }
+      if(ur.isUser){
+        if(!ur.provider && !ur.hasPassword){
+            toast.error(t('RegisterAlert'))
+                setLoading(false)
+        }
+        else if(ur.provider=='google'){
+          toast.error(t('RegisteredUsingGoogleProvider'))
+          setLoading(false)
+        }
+        else {
+          // sessionStorage.setItem('loginRedirect',`/${lang}${router.asPath}`)
+
+          let callbackUrl = !!joinToCycle&&joinToCycle>0 
+          ? `/${lang}/cycle/${joinToCycle}?join=true`
+          : sessionStorage.getItem('loginRedirect')?.toString()||`/${lang}${router.asPath}`;
+
+          signIn('credentials' ,{
+            callbackUrl,
+            email:form.email.value,
+            password:form.password.value
+          })
+          .then(res=>{
+            const r = res as unknown as {error:string}
+            if(res && r.error){
+              toast.error(t('InvalidSesion'))
+              setLoading(false)
+            }
+            else{
+              close();
+              router.push(sessionStorage.getItem('loginRedirect') || `/${lang}${router.asPath}`).then(()=>{
+                sessionStorage.setItem('loginRedirect','')
+              })
+            }
+          });
+        }
+        }
+        else{
+          toast.error(t('isNotUser'))
+          setLoading(false)
+        }
+      }
+
+    }
       
 const handlerJoinLink = ()=>{
   close()

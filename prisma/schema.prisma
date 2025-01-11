@@ -166,6 +166,7 @@ model Cycle {
   //required when access -> 4
   product_id String @default("")
   price String @default("")
+  priceInPlots String @default("")
 
   localImages            LocalImage[]
   complementaryMaterials CycleComplementaryMaterial[]

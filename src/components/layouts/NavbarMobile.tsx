@@ -69,7 +69,7 @@ const NavBar: FunctionComponent = () => {
   };
 
   const handlerLogin = () => {
-    localStorage.setItem('loginRedirect', router.asPath);
+    sessionStorage.setItem('loginRedirect', router.asPath);
     router.push("/login")
 
     /*     localStorage.setItem('loginRedirect', router.asPath);
