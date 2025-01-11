@@ -31,7 +31,7 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
         userId:user.id,
         cycleId,
         customerId:customerId!,
-        productId,
+        productId
       }
     });
 

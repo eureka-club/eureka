@@ -598,7 +598,7 @@ model Subscription {
   productId String? 
   status  String?
 
-  @@id([cycleId,userId,customerId])
+  @@id([cycleId,userId])
 
   createdAt        DateTime  @default(now()) @map(name: "created_at")
   updatedAt        DateTime  @updatedAt @map(name: "updated_at")
