@@ -205,6 +205,9 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             priceInPlots={cycle?.priceInPlots!}
             product_id={cycle?.product_id!}
             cycleId={cycleId}
+            cycleTitle={cycle?.title!}
+            iterations={3}
+            
           />
         </Stack>
         <noscript>

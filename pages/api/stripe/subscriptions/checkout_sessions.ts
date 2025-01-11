@@ -6,49 +6,53 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+) {debugger;
   if (req.method === 'POST') {
-      let { price, product_id, customer_email,cycleId,cycleTitle,userId,userName,iterations:it} = req.body;
+      let { price, product_id, customer_email,cycleId,cycleTitle,client_reference_id,userName,iterations:it} = req.body;
+      let userId=client_reference_id? +client_reference_id:undefined;
       let iterations = +it;
-      if(!userId){
-        res.status(405).end(UNAUTHORIZED);
-        return;
-      }
+      // if(!userId){
+      //   res.status(405).end(UNAUTHORIZED);
+      //   return;
+      // }
       if(!product_id){
         res.status(405).end(MISSING_FIELD('product_id'));
         return;
       }
 
       try {
-        
-        const sub = await prisma?.subscription.findFirst({
-          where:{
-              cycleId:+cycleId,
-              userId:+userId,
-          }
-        });
-        if(sub && sub.status !== 'cancelled'){
-          res.json({stripe_session_url:null,subscription_already_exist:true});
-          return;
+        if(userId){
+            const sub = await prisma?.subscription.findFirst({
+              where:{
+                  cycleId:+cycleId,
+                  userId:+userId,
+              }
+            });
+            if(sub && sub.status !== 'cancelled'){
+              res.json({stripe_session_url:null,subscription_already_exist:true});
+              return;
+            }
         }
-        
-        const {data:customers} = await stripe.customers.search({
-          query: `email:\'${customer_email}\' OR metadata[\'userId\']:\'${userId}\'`,
-        });
         let customer;
-        if(customers.length>0){
-          customer = customers[0];
-        }
-        else{
-          customer = await stripe.customers.create({
-            name: userName,
-            email: customer_email,
-            metadata:{userId},
-          });
+
+        if(customer_email && userId){
+            const {data:customers} = await stripe.customers.search({
+              query: `email:\'${customer_email}\' OR metadata[\'userId\']:\'${userId}\'`,
+            });
+            if(customers.length>0){
+              customer = customers[0];
+            }
+            else{
+              customer = await stripe.customers.create({
+                name: userName,
+                email: customer_email,
+                metadata:{userId},
+              });
+            }
         }
           
         const session = await stripe.checkout.sessions.create({
-          client_reference_id:userId,
+          ... userId && {client_reference_id:userId},
           metadata:{price,product_id,cycleId,cycleTitle,userId,userName,iterations},  
           // payment_intent_data:{
           //   metadata:{price,product_id,cycleId,client_reference_id}
@@ -62,7 +66,7 @@ export default async function handler(
               quantity: 1,
             },
           ],
-          customer: customer.id,
+          ... customer?.id && {customer:customer?.id},
           billing_address_collection: 'auto',
           mode: 'subscription',
           // discounts: [{

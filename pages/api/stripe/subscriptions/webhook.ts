@@ -4,6 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 import {prisma} from '@/src/lib/prisma';
 import { sendMail} from "@/src/facades/mail"; 
+import { OncheckoutSessionCompleted } from "../OncheckoutSessionCompleted";
 
 const buffer = (req:any) => {
   return new Promise((resolve, reject) => {
@@ -116,25 +117,17 @@ export default async function handler(
                 }
               ]
             });
-  
-            await prisma.subscription.create({
-              data:{
-                status,
-                userId,
-                cycleId,
-                customerId,
-                productId,
-              }
-            });
-            await addParticipant(cycleId,userId);
-            await sendMail({
-              from:process.env.EMAILING_FROM!,
-              to:[{email}],
-              subject:`Assinatura no clube "${cycleTitle}", concluída com sucesso`,
-              html:`
-                <h5>${userName}, sua assinatura no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>, foi concluída com sucesso.</h5>
-              `
-            });
+
+            await OncheckoutSessionCompleted(email,userName,cycleId,cycleTitle,customerId,productId);
+            // await addParticipant(cycleId,userId);
+            // await sendMail({
+            //   from:process.env.EMAILING_FROM!,
+            //   to:[{email}],
+            //   subject:`Assinatura no clube "${cycleTitle}", concluída com sucesso`,
+            //   html:`
+            //     <h5>${userName}, sua assinatura no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>, foi concluída com sucesso.</h5>
+            //   `
+            // });
             break;
           // case 'invoice.created':
           //   let {customer_email,hosted_invoice_url,subscription_details:{metadata}} = event.data.object;

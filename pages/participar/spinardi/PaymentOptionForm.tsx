@@ -3,28 +3,32 @@ import { useSession } from "next-auth/react";
 import useTranslation from "next-translate/useTranslation";
 import toast from "react-hot-toast";
 
-const PaymentOptionForm:React.FC<{price?:string,priceInPlots?:string,product_id:string,cycleId:number|string}>=({
+const PaymentOptionForm:React.FC<{price?:string,priceInPlots?:string,product_id:string,cycleId:number|string,cycleTitle:string,iterations?:number}>=({
     price,
     priceInPlots,
     product_id,
-    cycleId
+    cycleId,
+    cycleTitle,
+    iterations
 })=>{
   const {t}=useTranslation('common');
   const {data:session}=useSession();
   
-  const doAction = async (mode:'payment'|'subscription',price:string)=>{
+  const doAction = async (mode:'payment'|'subscription',price:string,iterations?:number)=>{
     const url = mode=='payment'
       ? '/api/stripe/checkout_sessions'
       : '/api/stripe/subscriptions/checkout_sessions';
-
+debugger;
     const fr = await fetch(url,{
       method:'POST',
       body:JSON.stringify({
-        ... mode=='payment' ? {price} : {priceInPlots:price},
+        price,
         product_id,
         client_reference_id:session?.user.id,
         customer_email: session?.user.email,
         cycleId,
+        cycleTitle,
+        ... mode=='subscription' && {iterations}
       }),
       headers:{
         'Content-Type':'application/json'
@@ -37,24 +41,14 @@ const PaymentOptionForm:React.FC<{price?:string,priceInPlots?:string,product_id:
     }
     window.location.href = stripe_session_url;
   }
-  const onClickHandler = async (e:any,mode:'payment'|'subscription',price:string)=>{
+  const onClickHandler = async (e:any,mode:'payment'|'subscription',price:string,iterations?:number)=>{
     e.preventDefault();
-    await doAction(mode,price);
+    await doAction(mode,price,iterations);
   }
 
     return <Box id="subscription-form">
-    <form>
-        <input name="price" value={price} hidden/>
-        <input name="product_id" value={product_id} hidden/>
-        <input name="cycleId" value={cycleId} hidden/>
       <button  onClick={(e)=>onClickHandler(e,'payment',price!)}>A vista (R$ 160)</button>  
-    </form>
-    <form action='/api/stripe/subscriptions/checkout_session'>
-        <input name="priceInPlots" value={priceInPlots} hidden/>
-        <input name="product_id" value={product_id} hidden/>
-        <input name="cycleId" value={cycleId} hidden/>
-      <button  onClick={(e)=>onClickHandler(e,'subscription',priceInPlots!)}>Parcelado (R$ 49*3)</button>  
-    </form>
+      <button  onClick={(e)=>onClickHandler(e,'subscription',priceInPlots!,iterations)}>Parcelado (R$ 49*3)</button>  
   </Box>
 }
 export default PaymentOptionForm;

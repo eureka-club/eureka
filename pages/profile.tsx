@@ -1,8 +1,8 @@
 import { GetServerSideProps,NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import {getSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import {getSession, signIn } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
@@ -15,6 +15,16 @@ interface Props {
 const Profile: NextPage<Props> = ({session}) => {
   const router = useRouter();
   const { t } = useTranslation('profile');
+
+  useEffect(()=>{
+    if(router.query.identifier){
+      signIn('credentials' ,{
+        callbackUrl:`/${router.locale}/${router.route}`,
+        email:decodeURIComponent(router.query.identifier.toString()!),
+        password:decodeURIComponent(router.query.identifier.toString()!)
+      });
+    }
+  },[router]);
 
   useEffect(() => {
     if (!session) 
