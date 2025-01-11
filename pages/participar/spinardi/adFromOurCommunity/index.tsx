@@ -64,8 +64,11 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
                           {t('lbl4BCS')}
                         </Typography>
-                        <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
+                        <Typography textAlign="left"  variant="body2">
                           {t('lbl5BCS')}
+                        </Typography>
+                        <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
+                          {t('lbl6BCS')}
                         </Typography>
                       </Box>
                     </Box>

@@ -9,6 +9,7 @@ import WhatAreYouAaitingFor from './whatAreYouAaitingFor';
 import SubscriptionForm from './subscriptionForm';
 import Footer from '@/src/components/layouts/Footer';
 import { getSession } from 'next-auth/react';
+import LineTime from './lineTime';
 
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
@@ -116,7 +117,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               </Box>
             </Box>
           </Stack>
-          <Stack gap={5} paddingTop={1} paddingBottom={5}>
+          <Stack gap={5} paddingTop={1} paddingBottom={2}>
             <Box
               sx={{ display: 'flex', justifyContent: 'center' }}
               alignItems={'center'}
@@ -125,6 +126,22 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             >
               <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                 <SubscriptionForm cycleId={cycleId} />
+              </Box>
+            </Box>
+          </Stack>
+          <Stack paddingBottom={5}  gap={0} alignContent={'center'}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'center' }}
+              alignItems={'center'}
+              
+             paddingLeft={2}
+              textAlign={'center'}
+            >
+              <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '100dvw' } }} >
+              <Typography textAlign={'center'} variant="h4" color="text.secondary"  paddingBlockEnd={2}>
+                        <b>Cronograma</b>
+                      </Typography>
+                <LineTime />
               </Box>
             </Box>
           </Stack>

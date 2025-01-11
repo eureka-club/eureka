@@ -139,6 +139,7 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                 </CardContent>
               </Card>
             </Grid>
+            
           </Grid>
         </Stack>
       </Stack>

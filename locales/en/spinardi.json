@@ -18,7 +18,8 @@
     "lbl2BCS":"<0>Sou o Spinardi, um artista que sempre acreditou que <1>o amor é a força que move o mundo</1>. Seja no rap, na literatura, no cinema ou na vida, é o amor que nos conecta, nos transforma e dá sentido às nossas histórias. Quando pensei nesse clube, imaginei um <1>espaço onde a gente pudesse trocar ideias, se inspirar e olhar para o amor de um jeito diferente</1> sem estereótipos, sem medo, só com verdade e olhos no olhos.</0>",
     "lbl3BCS":"Minhas músicas sempre foram um reflexo do que sinto e vejo, e quero que a gente converse sobre rimas e beats, mas também sobre muito mais. Vamos explorar juntos como o amor pode ser revolucionário, como pode mudar com o tempo e como pode nos ajudar a construir futuros mais afetuosos e inclusivos. É uma jornada que quero dividir com vocês de coração aberto e mente livre.",
     "lbl4BCS":"Como diria Mano Brown: “Não existe poeta que não saiba falar sobre amor”. ",
-    "lbl5BCS":"Com amor,Spinardi",
+    "lbl5BCS":"Com amor,",
+    "lbl6BCS":"Spinardi",
     "lblHV":"Tenha acesso completo ao Clube!",
     "lblB1V":"É hora de se conectar, refletir e crescer junto! Tenha acesso completo ao Clube de Leitura, Cinema e Música ‘Com amor, Spinardi’ por apenas:",
     "lblB2V":"Apenas R$ 49,90 por mês, durante os 4 meses do Clube",
@@ -27,7 +28,7 @@
     "lblB5V":" Cronogramas personalizados, resumos em texto e áudio, e materiais de apoio para acompanhar sua jornada.",
     "lblB6V":" Funcionalidades exclusivas com IA para transformar suas reflexões em momentos únicos.",
     "lblB7V":" Nota: Os livros e filmes não estão incluídos no valor da inscrição.",
-    "lblB8V":" “Não consegue pagar o valor total? Você pode se candidatar para obter uma bolsa: ",
+    "lblB8V":" Não consegue pagar o valor total? Você pode se candidatar para obter uma bolsa: ",
     "lbl1HQ":"Para Quem é o Clube de Leitura, Cinema e Música 'Com amor, Spinardi’?",
     "lbl1BQ":"<0><2/>Para quem é <1>fã do Spinardi e quer se conectar com sua visão única sobre o amor.</1></0>",
     "lbl2BQ":"<0><2/>Para quem busca uma <1>curadoria cultural exclusiva que combina literatura, cinema e música.</1></0>",
@@ -76,5 +77,6 @@
     "footer Club title":"Está esperando o quê?",
     "footer Club sub title 1":"É hora de se conectar, refletir e crescer junto com uma comunidade inspiradora! O clube de leitura ‘Com amor, Spinardi’ começa em:",
     "footer Club sub title 2":"O Clube de Leitura e Cinema “Com Amor, Spinardi” começa em:",
-    "footer Club sub title 3":"Eureka é o primeiro clube de leitura e cinema por justiça social da América Latina! Durante a duração do Clube, você recebe dicas de livros e filmes incríveis sobre o tema do Clube, perfeitos para aprender, refletir e debater na nossa comunidade exclusiva." 
+    "footer Club sub title 3":"Eureka é o primeiro clube de leitura e cinema por justiça social da América Latina! Durante a duração do Clube, você recebe dicas de livros e filmes incríveis sobre o tema do Clube, perfeitos para aprender, refletir e debater na nossa comunidade exclusiva."
+   
 }
