@@ -57,6 +57,7 @@ export default async function handler(
         let session=event.data.object;
         let {email,name}=session.customer_details;
         let {customer,metadata:{cycleId,cycleTitle,product_id}}=session;
+        console.log(`checkout.session.completed for ${email} was successful!`,session);
         await OncheckoutSessionCompleted(email,name,+cycleId,cycleTitle,customer,product_id);
         break;
       case 'payment_intent.succeeded':

@@ -5,6 +5,14 @@ import { addParticipant } from "@/src/facades/cycle";
 import { sendMail} from "@/src/facades/mail";
 
 export const OncheckoutSessionCompleted=async (email:string,userName:string,cycleId:number,cycleTitle:string,customerId?:string,productId?:string)=>{
+  console.log(`OncheckoutSessionCompleted: `,{
+    email,
+    userName,
+    cycleId,
+    cycleTitle,
+    customerId,
+    productId
+  });
     let user=await prisma.user.findFirst({where:{email}});
     let newUser=false;
     if(!user){
