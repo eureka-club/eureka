@@ -27,7 +27,6 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
     }
     await prisma.subscription.create({
       data:{
-        customerId:customerId!,
         productId,
         status: "paid",
         cycle: {

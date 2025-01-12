@@ -594,7 +594,6 @@ model Subscription {
   user   User @relation(fields: [userId], references: [id])
   userId Int
   
-  customerId String 
   productId String? 
   status  String?
 

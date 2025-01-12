@@ -39,7 +39,6 @@ export default async function handler(
       where:{
           cycleId,
           userId,
-          customerId
       },
       data:{
         status,
