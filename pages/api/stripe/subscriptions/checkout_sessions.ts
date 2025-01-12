@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) {debugger;
+) {
   if (req.method === 'POST') {
       let { price, product_id, customer_email,cycleId,cycleTitle,client_reference_id,userName,iterations:it} = req.body;
       let userId=client_reference_id? +client_reference_id:undefined;

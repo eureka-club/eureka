@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'POST') {debugger;
+  if (req.method === 'POST') {
     //let {price,code,client_reference_id,customer_email,id:product_id} = req.body;
     let { price, product_id, client_reference_id:crid, customer_email,cycleId,cycleTitle} = req.body;
     let client_reference_id = crid;

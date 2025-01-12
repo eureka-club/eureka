@@ -2,7 +2,7 @@ import { WEBAPP_URL } from "@/src/constants";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-    if(req.method=='POST'){debugger;
+    if(req.method=='POST'){
         const{email,password}=req.body;
     
         const authUrl = `${WEBAPP_URL}/api/auth/signin`

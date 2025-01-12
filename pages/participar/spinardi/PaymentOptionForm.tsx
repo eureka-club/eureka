@@ -18,7 +18,7 @@ const PaymentOptionForm:React.FC<{price?:string,priceInPlots?:string,product_id:
     const url = mode=='payment'
       ? '/api/stripe/checkout_sessions'
       : '/api/stripe/subscriptions/checkout_sessions';
-debugger;
+
     const fr = await fetch(url,{
       method:'POST',
       body:JSON.stringify({

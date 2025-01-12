@@ -136,7 +136,7 @@ const EditUserForm: FunctionComponent = () => {
     isLoading: isLoadingUser,
     isSuccess,
   } = useMutation(
-    async (payload: EditUserClientPayload) => {debugger;
+    async (payload: EditUserClientPayload) => {
   
       const fd = new FormData();
       Object.entries(payload).forEach(([key,value])=>{
@@ -207,7 +207,7 @@ const EditUserForm: FunctionComponent = () => {
     //   return;
     // }
 
-    const form = ev.currentTarget;debugger;
+    const form = ev.currentTarget;
     if(form.password.value && form.password.value!=form.passwordConfirmation.value){
       toast.error('As senhas não correspondem');
       return;

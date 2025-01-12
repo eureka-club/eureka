@@ -73,7 +73,7 @@ export default getApiHandler()
         }
         prev = {...prev, [`${k}`]: val};
         return prev;
-      },{});debugger;
+      },{});
       if(data.password){
         const password = await bcrypt.hash(data.password, 8);
         data.password = password;
