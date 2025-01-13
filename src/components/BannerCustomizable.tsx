@@ -28,7 +28,7 @@ const BannerCustomizable: FunctionComponent = ({
     }
   },[idxActive]);
   
-  const imgBaseUrl=`https://${AZURE_CDN_ENDPOINT}.azureedge.net/${AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
+  const imgBaseUrl=`${AZURE_CDN_ENDPOINT}/${AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/backoffice/`;
   
   if(!bo?.sliders.length)return <></>;
   return <Box sx={{backgroundColor:'var(--eureka-green)'}}>

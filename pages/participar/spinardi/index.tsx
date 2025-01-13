@@ -138,7 +138,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               textAlign={'center'}
             >
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '100dvw' } }} >
-              <Typography textAlign={'center'} variant="h4" color="text.secondary"  paddingBlockEnd={2}>
+              <Typography textAlign={'center'} variant="h4"  paddingBlockEnd={2}>
                         <b>Cronograma</b>
                       </Typography>
                 <LineTime />
