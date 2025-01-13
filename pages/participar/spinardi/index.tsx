@@ -30,7 +30,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
   
   return (
     <>
-      <Script
+      {/* <Script
                   id="gtag-base"
                   strategy="afterInteractive"
                   dangerouslySetInnerHTML={{
@@ -42,7 +42,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
                       })(window,document,'script','dataLayer', 'GTM-PNQQBFG3');
                     `,
                   }}
-                />
+                /> */}
       <Head>
         <meta name="title" content={t('title page')}></meta>
         <meta name="description" content={t('title page')}></meta>
@@ -199,14 +199,14 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             </Box>
           </Box>
         </Stack>
-        <noscript>
+        {/* <noscript>
             <iframe
               src={`https://www.googletagmanager.com/ns.html?id=GTM-PNQQBFG3`}
               height="0"
               width="0"
               style={{ display: 'none', visibility: 'hidden' }}
             />
-        </noscript>
+        </noscript> */}
     </>
   );
 };
