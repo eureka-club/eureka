@@ -83,6 +83,7 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     if(!session){
       if(cycle.access==4 && price!=-1){
         return <Button variant='contained' onClick={(e)=>{
+          e.preventDefault();
           router.push(`/${router.locale}/payment-options/${cycleId}`)
         }}>
           <>
@@ -131,6 +132,7 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     if(cycle?.participants.findIndex(p=>p.id==session?.user.id)<0){
       if(cycle.access==4 && price!=-1){
         return <Button variant='contained' onClick={(e)=>{
+          e.preventDefault();
           router.push(`/${router.locale}/payment-options/${cycleId}`)
         }}>
           <>

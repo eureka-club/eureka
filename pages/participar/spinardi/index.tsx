@@ -57,167 +57,142 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
      
       <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
           <Stack gap={5} paddingTop={0} paddingBottom={5}>
-            {/* <Box
-              sx={{ display: 'flex', justifyContent: 'center' }}
-              alignItems={'center'}
-              paddingLeft={2}
-              paddingRight={2}
-            >
-
-              <Box paddingTop={5} alignItems={'left'} alignContent={'left'}>
-              
-              </Box>
-             
-            </Box> */}
-            {/* <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}> */}
-           
                 <Header cycleId={cycleId}/>
-
-              {/* </Box> */}
           </Stack>
-        </Stack>
+      </Stack>
 
 
-        <Stack paddingBottom={5} >
-          <Box
-            sx={{ display: 'flex', justifyContent: 'center' }}
-            alignItems={'center'}
-            paddingLeft={2}
-            paddingRight={2}
-          >
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <WhyBePartOf /> 
-              </Box>
-            </Box>
-          </Stack>
-
-          <Stack paddingBottom={5} sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} >
-          <Box
-            sx={{ display: 'flex', justifyContent: 'center' }}
-            alignItems={'center'}
-            paddingLeft={2}
-            paddingRight={2}
-          >
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-              <AdFromOurCommunity cycleId={cycleId} />
-              </Box>
-            </Box>
-          </Stack>
-
-
-          <Stack gap={5} paddingTop={1} paddingBottom={5}>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'center' }}
-              alignItems={'center'}
-              paddingLeft={2}
-              paddingRight={2}
-            >
-              <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <ClubProgramming cycleId={cycleId}/>
-              </Box>
-            </Box>
-          </Stack>
-          <Stack gap={5} paddingTop={1} paddingBottom={2}>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'center' }}
-              alignItems={'center'}
-              paddingLeft={2}
-              paddingRight={2}
-            >
-              <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <SubscriptionForm cycleId={cycleId} />
-              </Box>
-            </Box>
-          </Stack>
-          <Stack paddingBottom={5}  gap={0} alignContent={'center'}>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'center' }}
-              alignItems={'center'}
-              
-             paddingLeft={2}
-              textAlign={'center'}
-            >
-              <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '100dvw' } }} >
-              <Typography textAlign={'center'} variant="h4"  paddingBlockEnd={2}>
-                        <b>Cronograma</b>
-                      </Typography>
-                <LineTime />
-              </Box>
-            </Box>
-          </Stack>
-
-          <Stack paddingBottom={5} sx={{ backgroundColor: "#00cec9" }} gap={5} >
-            <Box
-              sx={{ display: 'flex', justifyContent: 'center' }}
-              alignItems={'center'}
-              paddingLeft={2}
-              paddingRight={2}
-            >
-              <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' },paddingX:2 }}>
-                <InvestInYourself cycleId={cycleId} />
-              </Box>
-            </Box>
-          </Stack>
-        <Stack gap={5} paddingTop={5} paddingBottom={5}>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
-            <Box sx={{ maxWidth: { lg: '95dvw', sm: '95dvw', xs: '100dvw' } }}>
-              <Typography fontSize={30} textAlign="center">
-                <b> {t('club description')}</b>
-              </Typography>
+      <Stack paddingBottom={5} >
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          paddingLeft={2}
+          paddingRight={2}
+        >
+          <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+              <WhyBePartOf /> 
             </Box>
           </Box>
+      </Stack>
 
+      <Stack paddingBottom={5} sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} >
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center' }}
+        alignItems={'center'}
+        paddingLeft={2}
+        paddingRight={2}
+      >
+        <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+          <AdFromOurCommunity cycleId={cycleId} />
+          </Box>
+        </Box>
+      </Stack>
+
+
+      <Stack gap={5} paddingTop={1} paddingBottom={5}>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          paddingLeft={2}
+          paddingRight={2}
+        >
+          <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+            <ClubProgramming cycleId={cycleId}/>
+          </Box>
+        </Box>
+      </Stack>
+      <Stack gap={5} paddingTop={1} paddingBottom={2}>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          paddingLeft={2}
+          paddingRight={2}
+        >
+          <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+            <SubscriptionForm cycleId={cycleId} />
+          </Box>
+        </Box>
+      </Stack>
+      <Stack paddingBottom={5}  gap={0} alignContent={'center'}>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          
+          paddingLeft={2}
+          textAlign={'center'}
+        >
+          <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '100dvw' } }} >
+          <Typography textAlign={'center'} variant="h4"  paddingBlockEnd={2}>
+                    <b>Cronograma</b>
+                  </Typography>
+            <LineTime />
+          </Box>
+        </Box>
+      </Stack>
+      <Stack paddingBottom={5} sx={{ backgroundColor: "#00cec9" }} gap={5} >
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          paddingLeft={2}
+          paddingRight={2}
+        >
+          <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' },paddingX:2 }}>
+            <InvestInYourself cycleId={cycleId} />
+          </Box>
+        </Box>
+      </Stack>
+      <Stack gap={5} paddingTop={5} paddingBottom={5}>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
+          <Box sx={{ maxWidth: { lg: '95dvw', sm: '95dvw', xs: '100dvw' } }}>
+            <Typography fontSize={30} textAlign="center">
+              <b> {t('club description')}</b>
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box
+          sx={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          paddingLeft={1}
+          paddingRight={1}
+        >
           <Box
-            sx={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
-            alignItems={'center'}
-            paddingLeft={1}
-            paddingRight={1}
+            sx={{
+              position: 'absolute',
+              zIndex: 1,
+              bottom: '0',
+              right: '0',
+              display: { xs: 'none', lg: 'block' },
+            }}
           >
-            <Box
-              sx={{
-                position: 'absolute',
-                zIndex: 1,
-                bottom: '0',
-                right: '0',
-                display: { xs: 'none', lg: 'block' },
-              }}
-            >
-              <Image src="/img/imgctry.webp" width={200} height={200} />
-            </Box>
-            <Box sx={{ maxWidth: { lg: '70dvw', sm: '95dvw', xs: '100dvw' } }}>
-              <FAQ />
-            </Box>
+            <Image src="/img/imgctry.webp" width={200} height={200} />
           </Box>
-        </Stack>
-        <Stack paddingBottom={5} sx={{background:"linear-gradient(90deg, white, rgb(21, 202, 202));" }}>
-          <Box 
-            sx={{ display: 'flex', justifyContent: 'center' }}
-            alignItems={'center'}
-            paddingLeft={2}
-            paddingRight={2}
-          >
-            <Box  >
-              <WhatAreYouAaitingFor cycleId={cycleId} />
-            </Box>
+          <Box sx={{ maxWidth: { lg: '70dvw', sm: '95dvw', xs: '100dvw' } }}>
+            <FAQ />
           </Box>
-          <PaymentOptionForm
-            price={cycle?.price!}
-            priceInPlots={cycle?.priceInPlots!}
-            product_id={cycle?.product_id!}
-            cycleId={cycleId}
-            cycleTitle={cycle?.title!}
-            iterations={3}
-            
-          />
-        </Stack>
-        {/* <noscript>
-            <iframe
-              src={`https://www.googletagmanager.com/ns.html?id=GTM-PNQQBFG3`}
-              height="0"
-              width="0"
-              style={{ display: 'none', visibility: 'hidden' }}
-            />
-        </noscript> */}
+        </Box>
+      </Stack>
+      <Stack paddingBottom={5} sx={{background:"linear-gradient(90deg, white, rgb(21, 202, 202));" }}>
+        <Box 
+          sx={{ display: 'flex', justifyContent: 'center' }}
+          alignItems={'center'}
+          paddingLeft={2}
+          paddingRight={2}
+        >
+          <Box  >
+            <WhatAreYouAaitingFor cycleId={cycleId} />
+          </Box>
+        </Box>
+        <PaymentOptionForm
+          price={cycle?.price!}
+          priceInPlots={cycle?.priceInPlots!}
+          product_id={cycle?.product_id!}
+          cycleId={cycleId}
+          cycleTitle={cycle?.title!}
+          iterations={3}
+          
+        />
+      </Stack>
     </>
   );
 };
