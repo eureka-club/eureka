@@ -27,5 +27,6 @@ module.exports = {
     'rgx:^/cycle/\\[id\\]': ['cycleDetail', 'countries'],
     'rgx:^/work/\\[id\\]': ['common','workDetail', 'countries', 'cycleDetail'],
     '/participar/spinardi': ['spinardi'],
+    '/payment_options':['spinardi']
   },
 };

@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Footer from '@/components/layouts/Footer';
 //import Button from 'react-bootstrap/Button';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import Link from 'next/link';
 //import {Col,Row} from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
@@ -39,7 +39,7 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
         <Box padding={3}>
          
               <Grid container >
-                <Link href="/" replace >
+                <Link href="/" replace style={{cursor:'pointer'}}>
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
@@ -61,21 +61,26 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
                 }}
               >
                 <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
-                  <Box padding={3}>
-                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'}><h1 className='text-primary text-center  mb-5'><b>{t('successText')}</b></h1></Grid>
-                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'} ><h1 className='text-primary text-center   mb-5'><b>{t('successExtraText')}</b></h1></Grid>
-                    <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
+                  <Box padding={3} width={'80dvw'} justifyContent="center" alignItems="center" alignContent={'center'}>
+                      <h1 className='text-primary text-center  mb-5'><b>🎉 Agora você faz parte do nosso Clube!</b></h1>
+                    <Stack>
+                      <p><b>Para acessar todo o conteúdo exclusivo do Clube, verifique o seu e-mail e siga as instruções para completar o registro.</b></p>
+                      <p>Isso levará apenas 2 minutinhos! Caso não encontre o e-mail na sua caixa de entrada, não esqueça de conferir na pasta de spam ou promoções.</p>
+                    </Stack>
+
+                    {/* <Grid container justifyContent="center" alignItems="center" alignContent={'center'} ><h1 className='text-primary text-center   mb-5'><b>{t('successExtraText')}</b></h1></Grid> */}
+                    {/* <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
                       <Button variant="contained" size="large"  onClick={() => router.push(`/cycle/${cycleId}`)} sx={{textTransform: 'none'}}>
                         <b>{t('successButtomText')}</b>
                       </Button>
-                    </Grid>
+                    </Grid> */}
                   </Box>
                 </Grid>
               </Box>
             
          
         </Box>
-        <Footer />
+        {/* <Footer /> */}
       </>
     </SimpleLayout>
   );
