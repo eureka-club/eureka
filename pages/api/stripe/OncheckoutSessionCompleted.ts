@@ -44,8 +44,27 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
     
     const html = newUser
       ? `
-        <h5>${userName}, sua assinatura no clube ${cycleTitle}, foi concluída com sucesso.</h5>
-        <a href="${WEBAPP_URL}/profile?next=${next}&identifier=${identifier}" style="ext-decoration: underline;color: orange;">Você deve completar seu registro para acessar o clube.</a>
+        <h5>Agora você faz parte do Clube "Com Amor, Spinardi"!🌟</h5>
+        <p>
+          Olá, [nome]!
+          <br/>
+          Sua assinatura no Clube de Leitura, Cinema e Música "Com Amor, Spinardi" foi concluída com sucesso! 🎉
+        </p>
+        <p>
+          Para começar a aproveitar todos os benefícios do Clube é só completar o seu registro na plataforma Eureka clicando no botão abaixo:
+          <br/>
+          <a href="${WEBAPP_URL}/profile?next=${next}&identifier=${identifier}" style="ext-decoration: underline">👉 Completar Registro</a>
+        </p>
+        <p>
+          É rapidinho! Esse passo é necessário para acessar os materiais, e-mails, fórum de discussão etc. 
+          <br/>
+          Estamos muito felizes em ter você com a gente! Qualquer dúvida, estamos por aqui.
+          <br/>
+          <br/>
+          Com carinho,
+          <br/>
+          Equipe Eureka
+        </p>
       `
       : `<h5>${userName}, sua assinatura no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>, foi concluída com sucesso.</h5>`;
 
