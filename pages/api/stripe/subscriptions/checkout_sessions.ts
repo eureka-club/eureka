@@ -22,16 +22,33 @@ export default async function handler(
 
       try {
         if(userId){
-            const sub = await prisma?.subscription.findFirst({
-              where:{
-                  cycleId:+cycleId,
-                  userId:+userId,
+
+          const cycle = await prisma?.cycle.findFirst({
+            select:{
+              participants:{
+                where:{id:+userId}
               }
-            });
-            if(sub && sub.status !== 'cancelled'){
-              res.json({stripe_session_url:null,subscription_already_exist:true});
-              return;
+            },
+            where:{
+                id:+cycleId,
             }
+          });
+          
+          if(cycle?.participants?.length/* && cycle.participants.findIndex(p=>p.id==client_reference_id)>=0*/){
+            res.json({stripe_session_url:null,subscription_already_exist:true});
+            return;
+          }
+
+            // const sub = await prisma?.subscription.findFirst({
+            //   where:{
+            //       cycleId:+cycleId,
+            //       userId:+userId,
+            //   }
+            // });
+            // if(sub && sub.status !== 'cancelled'){
+            //   res.json({stripe_session_url:null,subscription_already_exist:true});
+            //   return;
+            // }
         }
         let customer;
 

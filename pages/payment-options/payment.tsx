@@ -8,10 +8,10 @@ import {
   CardContent,
   CardHeader,
   Button,
+  
 } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import Link from 'next/link';
 import { FC } from 'react';
 import toast from 'react-hot-toast';
 
@@ -240,11 +240,6 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
                   <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
                     <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
                       {t('lblpayment 5')}
-                      <Link href={'http://bit.ly/bolsa-com-amor'}>
-                        <span style={{ color: 'black', cursor: 'pointer', textDecoration: 'underline' }}>
-                          bit.ly/bolsa-com-amor
-                        </span>
-                      </Link>
                     </Typography>
                   </Box>
                 </Box>
