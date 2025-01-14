@@ -92,8 +92,6 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
           </>
         </Button>;
         // return <BuyButton
-        //   price={cycle?.price}
-        //   product_id={cycle.product_id}
         //   cycleId={cycle.id}
         //   label={
         //     <>
@@ -141,8 +139,6 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
           </>
         </Button>;
         // return <BuyButton
-        //   price={cycle?.price}
-        //   product_id={cycle.product_id}
         //   cycleId={cycle.id}
         //   label={
         //     <>

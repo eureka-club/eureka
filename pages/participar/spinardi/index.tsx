@@ -7,20 +7,15 @@ import InvestInYourself from './investInYourself';
 import FAQ from '../components/faq';
 import WhatAreYouAaitingFor from './whatAreYouAaitingFor';
 import SubscriptionForm from './subscriptionForm';
-import Footer from '@/src/components/layouts/Footer';
 import { getSession } from 'next-auth/react';
 import LineTime from './lineTime';
-
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import SimpleLayout from '@/components/layouts/SimpleLayout';
 import { Stack, Box, Typography } from '@mui/material';
 import Image from 'next/image';
-import useCycleSumary, { getCycleSumary } from '@/src/useCycleSumary';
+import { getCycleSumary } from '@/src/useCycleSumary';
 import { dehydrate, QueryClient } from 'react-query';
-import Script from 'next/script';
-import PaymentOptionForm from './PaymentOptionForm';
 interface Props {
   session: Session;
   cycleId:number;
@@ -28,23 +23,9 @@ interface Props {
 
 const Spinardi: NextPage<Props> = ({session,cycleId}) => {
   const { t } = useTranslation('spinardi');
-  const { data: cycle } = useCycleSumary(cycleId);
   
   return (
     <>
-      {/* <Script
-                  id="gtag-base"
-                  strategy="afterInteractive"
-                  dangerouslySetInnerHTML={{
-                    __html: `
-                      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                      })(window,document,'script','dataLayer', 'GTM-PNQQBFG3');
-                    `,
-                  }}
-                /> */}
       <Head>
         <meta name="title" content={t('title page')}></meta>
         <meta name="description" content={t('title page')}></meta>
@@ -183,7 +164,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             <WhatAreYouAaitingFor cycleId={cycleId} />
           </Box>
         </Box>
-        <PaymentOptionForm
+        {/* <PaymentOptionForm
           price={cycle?.price!}
           priceInPlots={cycle?.priceInPlots!}
           product_id={cycle?.product_id!}
@@ -191,7 +172,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
           cycleTitle={cycle?.title!}
           iterations={3}
           
-        />
+        /> */}
       </Stack>
     </>
   );

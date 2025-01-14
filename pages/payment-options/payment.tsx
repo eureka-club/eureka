@@ -54,11 +54,15 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
   }
 
   if(isLoading||isLoadingPrices)return <>
-    <Skeleton variant="rectangular" width={'80dvw'} height={60} />
-    <Skeleton variant="circular" width={40} height={40} style={{margin:'1rem 0'}} />
-    <Skeleton variant="rectangular" width={'80dvw'} height={60} />
-    <br/>
-    <Skeleton variant="rounded" width={'80dvw'} height={160} />
+    <Skeleton variant="text" sx={{ fontSize: '1rem' }} /><br/>
+    <Stack direction={{xs:'column',sm:'row'}} gap={3} sx={{width:'80dvw'}} justifyContent={'center'}>
+      <Skeleton variant="rectangular" width={325} height={243} />
+      <Skeleton variant="rectangular" width={325} height={243} />
+    </Stack>
+    <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+    <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+    <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+    <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
   </>;
   if(!isLoading && !cycle || !prices)return <Alert variant='outlined' color='info'>{t('common:Not Found')}</Alert>
 

@@ -69,8 +69,6 @@ const WhatAreYouAaitingFor: FC<{ cycleId: number }> = ({ cycleId }) => {
                       <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }} paddingX={0}>
                         <BuyButton
                           label={t('btn exclusive club')}
-                          price={cycle?.price!}
-                          product_id={cycle?.product_id!}
                           cycleId={cycle?.id!}
                         />
                         <Typography textAlign="center" paddingY={2} variant="body2">
