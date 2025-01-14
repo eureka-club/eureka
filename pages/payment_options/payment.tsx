@@ -1,23 +1,15 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
 import {
   Grid,
   Box,
   Card,
   CardContent,
   CardHeader,
-  Avatar,
-  IconButton,
-  Divider,
-  Chip,
   Button,
-  CardActions,
+  
 } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
-import Link from 'next/link';
+
 
 const Payment = ({}) => {
   const { t } = useTranslation('spinardi');
@@ -196,11 +188,6 @@ const Payment = ({}) => {
                   <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
                     <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
                       {t('lblpayment 5')}
-                      <Link href={'http://bit.ly/bolsa-com-amor'}>
-                        <span style={{ color: 'black', cursor: 'pointer', textDecoration: 'underline' }}>
-                          bit.ly/bolsa-com-amor
-                        </span>
-                      </Link>
                     </Typography>
                   </Box>
                 </Box>
