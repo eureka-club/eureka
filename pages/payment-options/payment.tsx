@@ -1,26 +1,66 @@
-import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
+import { useCycleStripePrice } from '@/src/hooks/useCycleStripePrices';
+import useCycleSumary from '@/src/useCycleSumary';
+import { Alert, Skeleton, Stack, Typography } from '@mui/material';
 import {
   Grid,
   Box,
   Card,
   CardContent,
   CardHeader,
-  Avatar,
-  IconButton,
-  Divider,
-  Chip,
   Button,
-  CardActions,
 } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
 import Link from 'next/link';
+import { FC } from 'react';
+import toast from 'react-hot-toast';
 
-const Payment = ({}) => {
+const Payment:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
+  const{data:session}=useSession();
+  const{data:cycle,isLoading}=useCycleSumary(cycleId);
+  const {data:prices,isLoading:isLoadingPrices}=useCycleStripePrice(cycle?.product_id!);
+
+  const doAction = async (mode:'payment'|'subscription',price:string,iterations?:number)=>{
+    const url = mode=='payment'
+      ? '/api/stripe/checkout_sessions'
+      : '/api/stripe/subscriptions/checkout_sessions';
+
+    const fr = await fetch(url,{
+      method:'POST',
+      body:JSON.stringify({
+        price,
+        product_id:cycle?.product_id,
+        client_reference_id:session?.user.id,
+        customer_email: session?.user.email,
+        cycleId,
+        cycleTitle:cycle?.title,
+        ... mode=='subscription' && {iterations}
+      }),
+      headers:{
+        'Content-Type':'application/json'
+      }
+    });
+
+    const {stripe_session_url,participant_already_exist} = await fr.json();
+    if(participant_already_exist){ 
+      return toast.error(t('Você já está inscrito no clube.'));
+    }
+    window.location.href = stripe_session_url;
+  }
+  const onClickHandler = async (e:any,mode:'payment'|'subscription',price:string,iterations?:number)=>{
+    e.preventDefault();
+    await doAction(mode,price,iterations);
+  }
+
+  if(isLoading||isLoadingPrices)return <>
+    <Skeleton variant="rectangular" width={'80dvw'} height={60} />
+    <Skeleton variant="circular" width={40} height={40} style={{margin:'1rem 0'}} />
+    <Skeleton variant="rectangular" width={'80dvw'} height={60} />
+    <br/>
+    <Skeleton variant="rounded" width={'80dvw'} height={160} />
+  </>;
+  if(!isLoading && !cycle || !prices)return <Alert variant='outlined' color='info'>{t('common:Not Found')}</Alert>
 
   return (
     <>
@@ -81,18 +121,18 @@ const Payment = ({}) => {
                     paddingLeft={6}
                   >
                     <Typography fontSize={40} paddingLeft={1} paddingRight={1}>
-                      <b>R$</b>
+                      <b>{prices.one_time.currency.toUpperCase()}</b>
                     </Typography>
                     <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={1}>
-                      <b>199</b>
+                      <b>{prices.one_time.amount}</b>
                     </Typography>
-                    <Typography textAlign="center" fontSize={40}>
+                    {/* <Typography textAlign="center" fontSize={40}>
                       <b>,00</b>
-                    </Typography>
+                    </Typography> */}
                   </Box>
 
                   <Typography textAlign={'center'} paddingLeft={2} paddingTop={2}>
-                    <Button variant="contained" size="large">
+                    <Button variant="contained" size="large" onClick={(e)=>onClickHandler(e,'payment',cycle?.price!)}>
                       {t('lblpayment button 1')}
                     </Button>
                   </Typography>
@@ -135,18 +175,18 @@ const Payment = ({}) => {
                     paddingLeft={6}
                   >
                     <Typography fontSize={40}>
-                      <b>4 x R$</b>
+                      <b>{cycle?.iterations} x {prices.recurring.currency.toUpperCase()}</b>
                     </Typography>
                     <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={2}>
-                      <b>49</b>
+                      <b>{prices.recurring.amount}</b>
                     </Typography>
-                    <Typography textAlign="center" fontSize={40}>
+                    {/* <Typography textAlign="center" fontSize={40}>
                       <b>,90</b>
-                    </Typography>
+                    </Typography> */}
                   </Box>
 
                   <Typography textAlign={'center'} paddingLeft={2} paddingTop={2}>
-                    <Button variant="contained" size="large">
+                    <Button variant="contained" size="large" onClick={(e)=>onClickHandler(e,'subscription',cycle?.priceInPlots!)}>
                       {t('lblpayment button 2')}
                     </Button>
                   </Typography>

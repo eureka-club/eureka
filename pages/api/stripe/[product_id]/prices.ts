@@ -17,6 +17,7 @@ export default async function handler(
       const err = e as {message:string};
       res.statusMessage = err.message;
       console.error(err.message)
+      res.json({error:err.message});
     }
   } else {
     res.setHeader('Allow', 'POST');

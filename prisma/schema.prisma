@@ -167,6 +167,7 @@ model Cycle {
   product_id String @default("")
   price String @default("")
   priceInPlots String @default("")
+  iterations Int @default(0)
 
   localImages            LocalImage[]
   complementaryMaterials CycleComplementaryMaterial[]

@@ -81,18 +81,27 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     
   if (cycle && !isLoadingSession ){
     if(!session){
-      if(cycle.access==4 && price!=-1)
-        return <BuyButton
-          price={cycle?.price}
-          product_id={cycle.product_id}
-          cycleId={cycle.id}
-          label={
-            <>
-              {t('joinCycleLabel')}
-              <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
-            </>
-          }
-        />
+      if(cycle.access==4 && price!=-1){
+        return <Button variant='contained' onClick={(e)=>{
+          router.push(`/${router.locale}/payment-options/${cycleId}`)
+        }}>
+          <>
+            {t('joinCycleLabel')}
+            <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+          </>
+        </Button>;
+        // return <BuyButton
+        //   price={cycle?.price}
+        //   product_id={cycle.product_id}
+        //   cycleId={cycle.id}
+        //   label={
+        //     <>
+        //       {t('joinCycleLabel')}
+        //       <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+        //     </>
+        //   }
+        // />
+      }
       return <Button disabled={isPending()} variant='contained' onClick={handleJoinCycleClick}>
           {t('joinCycleLabel')}
           {/* {
@@ -120,18 +129,27 @@ export const JoinLeaveCycleBtn = ({cycleId,size}:Props)=>{
     }
     
     if(cycle?.participants.findIndex(p=>p.id==session?.user.id)<0){
-      if(cycle.access==4 && price!=-1)
-        return <BuyButton
-          price={cycle?.price}
-          product_id={cycle.product_id}
-          cycleId={cycle.id}
-          label={
-            <>
-              {t('joinCycleLabel')}
-              <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
-            </>
-          }
-        />
+      if(cycle.access==4 && price!=-1){
+        return <Button variant='contained' onClick={(e)=>{
+          router.push(`/${router.locale}/payment-options/${cycleId}`)
+        }}>
+          <>
+            {t('joinCycleLabel')}
+            <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+          </>
+        </Button>;
+        // return <BuyButton
+        //   price={cycle?.price}
+        //   product_id={cycle.product_id}
+        //   cycleId={cycle.id}
+        //   label={
+        //     <>
+        //       {t('joinCycleLabel')}
+        //       <span className="mx-1 fw-bolder">{`$${price} ${currency}`}</span>
+        //     </>
+        //   }
+        // />
+      }
       return <Button disabled={isPending()} variant='contained' onClick={handleJoinCycleClick}>
         <Stack gap={1} direction={'row'} alignItems={'center'}>
           {isPending() ? <CircularProgress color="inherit" size={'1rem'}/> : <></>}

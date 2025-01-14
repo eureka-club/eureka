@@ -1,27 +1,14 @@
 import useTranslation from 'next-translate/useTranslation';
-
 import { Stack, Box, Typography } from '@mui/material';
-
 import Payment from './payment';
 import Head from 'next/head';
-import { GetServerSideProps, NextPage } from 'next';
-import { Session } from '@/src/types';
-
-import { getSession } from 'next-auth/react';
-
-import Image from 'next/image';
-import { getCycleSumary } from '@/src/useCycleSumary';
-import { dehydrate, QueryClient } from 'react-query';
-import Script from 'next/script';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
-
-
-interface Props {
-  cycleId: number;
-}
+import { useRouter } from 'next/router';
 
 const PaymenOption = () => {
   const { t } = useTranslation('spinardi');
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -66,7 +53,7 @@ const PaymenOption = () => {
       <Stack gap={5} paddingTop={0} paddingBottom={5}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingLeft={3} paddingRight={2}>
           <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-            <Payment />
+            <Payment cycleId={+router?.query.cycleId?.toString()!}/>
           </Box>
         </Box>
       </Stack>
