@@ -44,6 +44,19 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
           }
         }
       });
+    else{
+      await sendMail({
+        from:process.env.EMAILING_FROM!,
+        to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
+        subject:`User: ${user?.id} has paid once again for the subscription on clube: "${cycleTitle}"`,
+        html:`
+          <p>Customer: ${customerId}</p>
+          <p>Email: ${email}</p>
+          <p>Product: ${productId}</p>
+          <p>Cycle: ${cycleId}</p>
+        `
+      });
+    }
 
     await addParticipant(cycleId,user?.id);
     const next=encodeURIComponent(`/cycle/${cycleId}`);
