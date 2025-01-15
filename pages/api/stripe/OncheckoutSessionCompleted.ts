@@ -25,18 +25,25 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
       });
       newUser=true;
     }
-    await prisma.subscription.create({
-      data:{
-        productId,
-        status: "paid",
-        cycle: {
-          connect: {id:cycleId}
-        },
-        user:{
-          connect:{id:user.id}
-        }
+    let subscription = await prisma.subscription.findFirst({
+      where:{
+        cycle:{id:cycleId},
+        user:{id:user?.id}
       }
-    })
+    });
+    if(!subscription)
+      await prisma.subscription.create({
+        data:{
+          productId,
+          status: "paid",
+          cycle: {
+            connect: {id:cycleId}
+          },
+          user:{
+            connect:{id:user.id}
+          }
+        }
+      });
 
     await addParticipant(cycleId,user?.id);
     const next=encodeURIComponent(`/cycle/${cycleId}`);
