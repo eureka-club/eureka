@@ -20,7 +20,9 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
   const{data:session}=useSession();
   const{data:cycle,isLoading}=useCycleSumary(cycleId);
   const {data:prices,isLoading:isLoadingPrices}=useCycleStripePrice(cycle?.product_id!);
-
+  const currencies:Record<string,string>={
+    brl:'R$'
+  }
   const doAction = async (mode:'payment'|'subscription',price:string,iterations?:number)=>{
     const url = mode=='payment'
       ? '/api/stripe/checkout_sessions'
@@ -130,7 +132,7 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
                     paddingLeft={6}
                   >
                     <Typography fontSize={40} paddingLeft={1} paddingRight={1}>
-                      <b>{prices.one_time.currency.toUpperCase()}</b>
+                      <b>{currencies[prices.one_time.currency]}</b>
                     </Typography>
                     <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={1}>
                       <b>{prices.one_time.amount}</b>
@@ -184,7 +186,7 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
                     paddingLeft={6}
                   >
                     <Typography fontSize={40}>
-                      <b>{cycle?.iterations} x {prices.recurring.currency.toUpperCase()}</b>
+                      <b>{cycle?.iterations} x {currencies[prices.one_time.currency]}</b>
                     </Typography>
                     <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={2}>
                       <b>{prices.recurring.amount}</b>
