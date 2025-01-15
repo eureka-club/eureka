@@ -129,14 +129,15 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
                     sx={{ maxWidth: { lg: '43dvw', sm: '60dvw', xs: '100dvw' }, display: 'flex' }}
                     alignItems={'center'}
                     alignContent={'center'}
-                    paddingLeft={6}
+                    justifyContent={'center'}
+                    // paddingLeft={6}
                   >
                     <Typography fontSize={40} paddingLeft={1} paddingRight={1}>
                       <b>{currencies[prices.one_time.currency]}</b>
-                    </Typography>
-                    <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={1}>
                       <b>{prices.one_time.amount}</b>
                     </Typography>
+                    {/* <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={1}>
+                    </Typography> */}
                     {/* <Typography textAlign="center" fontSize={40}>
                       <b>,00</b>
                     </Typography> */}
@@ -183,14 +184,15 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
                     sx={{ maxWidth: { lg: '43dvw', sm: '60dvw', xs: '100dvw' }, display: 'flex' }}
                     alignItems={'center'}
                     alignContent={'center'}
-                    paddingLeft={6}
+                    justifyContent={'center'}
+                    // paddingLeft={6}
                   >
                     <Typography fontSize={40}>
                       <b>{cycle?.iterations} x {currencies[prices.one_time.currency]}</b>
-                    </Typography>
-                    <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={2}>
                       <b>{prices.recurring.amount}</b>
                     </Typography>
+                    {/* <Typography textAlign="center" paddingBlockEnd={0} fontSize={40} paddingLeft={2}>
+                    </Typography> */}
                     {/* <Typography textAlign="center" fontSize={40}>
                       <b>,90</b>
                     </Typography> */}

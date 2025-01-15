@@ -64,7 +64,7 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
     
     const html = newUser
       ? `
-        <h5>Agora você faz parte do Clube "Com Amor, Spinardi"!🌟</h5>
+        <p>Agora você faz parte do Clube "Com Amor, Spinardi"!🌟</p>
         <p>
           Olá, ${user?.name??email}!
           <br/>
@@ -87,10 +87,12 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
         </p>
       `
       : `
-      <h5>${user?.name??email}, sua assinatura no Clube de Leitura, ${cycleTitle}, foi concluída com sucesso.</h5>
+      <p>${user?.name??email}, sua assinatura no Clube de Leitura, ${cycleTitle}, foi concluída com sucesso.</p>
       <p>
         👉 Para acessar o Clube, é só clicar aqui: <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>
-        <br/>  
+        <br/>
+        Lembre que você precisa fazer login na sua conta da Eureka para acessar o conteúdo 🙂  
+        <br/>
         Qualquer dúvida estamos por aqui.
         <br/>
         Com carinho,
