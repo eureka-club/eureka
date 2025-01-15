@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation';
-import { Stack, Box, Typography } from '@mui/material';
-import Payment from './payment';
+import { Stack, Box } from '@mui/material';
+import Payment from './components/Payment';
 import Head from 'next/head';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import { useRouter } from 'next/router';
@@ -41,11 +41,7 @@ const PaymenOption = () => {
             <ButtonsTopActions />
             
           </Box>
-          <Box sx={{ maxWidth: { lg: '100dvw', sm: '80dvw', xs: '80dvw' , md:'80dvw'} }}>
-          <Typography textAlign={'center'} variant="h5" paddingTop={0}>
-              {t('lblpayment title')}
-            </Typography>
-          </Box>
+          
         </Box>
        
         

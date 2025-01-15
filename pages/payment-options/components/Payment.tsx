@@ -16,7 +16,7 @@ import { FC } from 'react';
 import toast from 'react-hot-toast';
 
 const Payment:FC<{cycleId:number}> = ({cycleId}) => {
-  const { t } = useTranslation('spinardi');
+  const { t } = useTranslation('payment-options');
   const{data:session}=useSession();
   const{data:cycle,isLoading}=useCycleSumary(cycleId);
   const {data:prices,isLoading:isLoadingPrices}=useCycleStripePrice(cycle?.product_id!);
@@ -54,7 +54,7 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
   }
 
   if(isLoading||isLoadingPrices)return <>
-    <Skeleton variant="text" sx={{ fontSize: '1rem' }} /><br/>
+    <Skeleton variant="text" sx={{ fontSize: '2rem' }} /><br/>
     <Stack direction={{xs:'column',sm:'row'}} gap={3} sx={{width:'80dvw'}} justifyContent={'center'}>
       <Skeleton variant="rectangular" width={325} height={243} />
       <Skeleton variant="rectangular" width={325} height={243} />
@@ -70,13 +70,18 @@ const Payment:FC<{cycleId:number}> = ({cycleId}) => {
     <>
       <div>
         <Stack
-          gap={0}
+          gap={4}
           paddingTop={0}
           sx={{ backgroundColor: 'white' }}
           paddingLeft={0.5}
           alignContent={'center'}
           alignItems={'center'}
         >
+          <Box sx={{ maxWidth: { lg: '100dvw', sm: '80dvw', xs: '80dvw' , md:'80dvw'} }}>
+          <Typography textAlign={'center'} variant="h5" paddingTop={0}>
+              {t('lblpayment title')}
+            </Typography>
+          </Box>
           <Stack direction={{ xs: 'column' }} gap={4} alignContent={'center'} alignItems={'center'}>
             <Grid
               container

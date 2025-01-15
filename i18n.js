@@ -21,6 +21,7 @@ module.exports = {
     '/manifest': ['manifest'],
     '/policy': ['termsAndPolicy'],
     '/participar/spinardi': ['spinardi'],
+    'rgx:^/payment-options/\\[cycleId\\]':['payment-options'],
     '/back-office': ['backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': ['mediatheque', 'countries'],
     'rgx:^/user/\\[slug\\]/my-read-or-watched': ['mediatheque','countries','countries-abbr'],
