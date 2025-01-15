@@ -46,7 +46,7 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
       ? `
         <h5>Agora você faz parte do Clube "Com Amor, Spinardi"!🌟</h5>
         <p>
-          Olá, [nome]!
+          Olá, ${user?.name??email}!
           <br/>
           Sua assinatura no Clube de Leitura, Cinema e Música "Com Amor, Spinardi" foi concluída com sucesso! 🎉
         </p>
@@ -66,7 +66,19 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
           Equipe Eureka
         </p>
       `
-      : `<h5>${userName}, sua assinatura no clube <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>, foi concluída com sucesso.</h5>`;
+      : `
+      <h5>${user?.name??email}, sua assinatura no Clube de Leitura, ${cycleTitle}, foi concluída com sucesso.</h5>
+      <p>
+        👉 Para acessar o Clube, é só clicar aqui: <a href="${process.env.NEXTAUTH_URL}/cycle/${cycleId}">${cycleTitle}</a>
+        <br/>  
+        Qualquer dúvida estamos por aqui.
+        <br/>
+        Com carinho,
+        <br/>
+        <br/>
+        Equipe Eureka
+      </p>
+      `;
 
     await sendMail({
       from:process.env.EMAILING_FROM!,

@@ -6,6 +6,7 @@ import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
 import Trans from 'next-translate/Trans';
+import Link from 'next/link';
 
 const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
@@ -81,11 +82,11 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-                <BuyButton
-                  label={t('btn exclusive club')}
-                  cycleId={cycle?.id!}
-                />
-                {/* <a href='#subscription-form'>{t('btn exclusive club')}</a> */}
+                <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                  <Link href="#price-info">
+                    <Button variant='contained'>{t('btn exclusive club')}</Button>
+                  </Link>
+                </Typography>
               </Box>
             </Box>
           </Grid>

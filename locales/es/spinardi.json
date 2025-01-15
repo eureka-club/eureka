@@ -28,7 +28,8 @@
     "lblB5V":" Cronogramas personalizados, resumos em texto e áudio, e materiais de apoio para acompanhar sua jornada.",
     "lblB6V":" Funcionalidades exclusivas com IA para transformar suas reflexões em momentos únicos.",
     "lblB7V":" Nota: Os livros e filmes não estão incluídos no valor da inscrição.",
-    "lblB8V":" Não consegue pagar o valor total? Você pode se candidatar para obter uma bolsa: ",
+    "lblB8V-Heading":"Não consegue pagar o valor total?",
+    "lblB8V-Detail":"<0>Nós podemos ajudar! 🎓 Você pode se candidatar para uma bolsa. Escreva para <1>{{email}}</1> e solicite o formulário de candidatura.</0>",
     "lbl1HQ":"Para Quem é o Clube de Leitura, Cinema e Música 'Com amor, Spinardi’?",
     "lbl1BQ":"<0><2/>Para quem é <1>fã do Spinardi e quer se conectar com sua visão única sobre o amor.</1></0>",
     "lbl2BQ":"<0><2/>Para quem busca uma <1>curadoria cultural exclusiva que combina literatura, cinema e música.</1></0>",
@@ -77,5 +78,15 @@
     "footer Club title":"Está esperando o quê?",
     "footer Club sub title 1":"É hora de se conectar, refletir e crescer junto com uma comunidade inspiradora! O clube de leitura ‘Com amor, Spinardi’ começa em:",
     "footer Club sub title 2":"O Clube de Leitura e Cinema “Com Amor, Spinardi” começa em:",
-    "footer Club sub title 3":"Eureka é o primeiro clube de leitura e cinema por justiça social da América Latina! Durante a duração do Clube, você recebe dicas de livros e filmes incríveis sobre o tema do Clube, perfeitos para aprender, refletir e debater na nossa comunidade exclusiva."
+    "footer Club sub title 3":"Eureka é o primeiro clube de leitura e cinema por justiça social da América Latina! Durante a duração do Clube, você recebe dicas de livros e filmes incríveis sobre o tema do Clube, perfeitos para aprender, refletir e debater na nossa comunidade exclusiva.",
+    "lblpayment title":"Escolha a melhor forma de pagamento para você:",
+    "lblpayment 1":"Curadoria exclusiva de livros, filmes e músicas.",
+    "lblpayment 2":"Encontros exclusivos",
+    "lblpayment 3":"Cronogramas personalizados, resumos em texto e áudio, e materiais de apoio.",
+    "lblpayment 4":"Ferramentas de IA exclusivas.",
+    "lblpayment 5":"*Não inclui livros e filmes.",
+    "lblpayment button 1":"PAGAR À VISTA",
+    "lblpayment button 2":"PARCELAR EM 4x",
+    "payment-opt-btn":"Comece hoje mesmo!"
+
 }

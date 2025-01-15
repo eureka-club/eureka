@@ -7,6 +7,7 @@ import AccordionGroup from '@mui/material/Accordion'
 import { Typography } from '@mui/material';
 import { Grid, Box, } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
+import Trans from "next-translate/Trans";
 
 
 const FAQ = () => {
@@ -69,9 +70,18 @@ const FAQ = () => {
       secondaryHeading: "",
       details: t('acd dates of Club 8')
     },
-
+    {
+      id:"Panel 9",
+      heading:t('lblB8V-Heading'),
+      secondaryHeading:"",
+      details:<Trans i18nKey="spinardi:lblB8V-Detail" components={[
+        <p key="lblB8V-root"/>,
+        <a key="lblB8V-a" href="mailto:hola@eureka.club" target="__blank"/>
+      ]}
+      values={{email:'hola@eureka.club'}}
+      />
+    }
     
-
   ];
  
  

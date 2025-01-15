@@ -22,7 +22,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
             paddingLeft={2}
             paddingRight={2}
           >
-            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+            <Box id="price-info" sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
               <Typography fontSize={30} textAlign="center">
                 <b> {t('lblHV')}</b>
               </Typography>
@@ -109,10 +109,10 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
               paddingTop={0}
             >
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-              <BuyButton 
-                label={t('btn exclusive club')} 
-                cycleId={cycle?.id!} 
-              />
+                <BuyButton 
+                  label={t('payment-opt-btn')} 
+                  cycleId={cycle?.id!} 
+                />
               </Box>
             </Box>
           </Grid>
@@ -124,13 +124,7 @@ const InvestInYourself:FC<{cycleId:number}> = ({cycleId}) => {
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
-              <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
-                <Typography textAlign="center" paddingBlockEnd={1} variant="body2">
-                  {t('lblB8V')}<Link  href={'http://bit.ly/bolsa-com-amor'}><span style={{ color: 'white', cursor: 'pointer', textDecoration: 'underline' }}>bit.ly/bolsa-com-amor</span></Link>
-                </Typography>
-              </Box>
-            </Box>
+            
           </Grid>
         </Stack>
       </div>

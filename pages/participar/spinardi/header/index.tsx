@@ -1,10 +1,11 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
 import Trans from 'next-translate/Trans';
+import Link from 'next/link';
 
 const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
@@ -52,11 +53,11 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                         />
                       </Typography>
                       <Box paddingBottom={6} paddingRight={2} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-                        <BuyButton
-                          label={t('btn exclusive club')}
-                          cycleId={cycle?.id!}
-                        />
-                        {/* <a href='#subscription-form'>{t('btn exclusive club')}</a> */}
+                        <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                          <Link href="#price-info">
+                            <Button variant='contained'>{t('btn exclusive club')}</Button>
+                          </Link>
+                        </Typography>
 
                         <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
                           <i>{t('written text')}</i>

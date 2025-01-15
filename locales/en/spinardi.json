@@ -28,7 +28,8 @@
     "lblB5V":" Cronogramas personalizados, resumos em texto e áudio, e materiais de apoio para acompanhar sua jornada.",
     "lblB6V":" Funcionalidades exclusivas com IA para transformar suas reflexões em momentos únicos.",
     "lblB7V":" Nota: Os livros e filmes não estão incluídos no valor da inscrição.",
-    "lblB8V":" Não consegue pagar o valor total? Você pode se candidatar para obter uma bolsa: ",
+    "lblB8V-Heading":"Não consegue pagar o valor total?",
+    "lblB8V-Detail":"<0>Nós podemos ajudar! 🎓 Você pode se candidatar para uma bolsa. Escreva para <1>{{email}}</1> e solicite o formulário de candidatura.</0>",
     "lbl1HQ":"Para Quem é o Clube de Leitura, Cinema e Música 'Com amor, Spinardi’?",
     "lbl1BQ":"<0><2/>Para quem é <1>fã do Spinardi e quer se conectar com sua visão única sobre o amor.</1></0>",
     "lbl2BQ":"<0><2/>Para quem busca uma <1>curadoria cultural exclusiva que combina literatura, cinema e música.</1></0>",
@@ -85,6 +86,7 @@
     "lblpayment 4":"Ferramentas de IA exclusivas.",
     "lblpayment 5":"*Não inclui livros e filmes.",
     "lblpayment button 1":"PAGAR À VISTA",
-    "lblpayment button 2":"PARCELAR EM 4x"
+    "lblpayment button 2":"PARCELAR EM 4x",
+    "payment-opt-btn":"Comece hoje mesmo!"
 
 }

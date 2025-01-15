@@ -27,10 +27,10 @@ const BuyButton:FC<Props> = ({label,cycleId}) => {
         justifyContent={'center'}
         justifyItems={'center'}>
     <Button
-          variant="contained"
+          variant="outlined"
           color="primary"
           size="large"
-          style={{color: 'white!important'}}
+          style={{color:'black',borderColor:'black',backgroundColor:'#8DFAF3',display:'block',width:'350px'}}
           type="submit"
           onClick={onClickHandle}
           disabled={isLoading}

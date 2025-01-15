@@ -1,16 +1,17 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import Countdown from 'pages/participar/components/Countdown';
-import { Grid, Box, Card, CardContent, CardHeader, Avatar, IconButton, Divider } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import BuyButton from 'pages/participar/components/BuyButton';
+// import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
+// import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
+import Link from 'next/link';
 
 const WhatAreYouAaitingFor: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { t } = useTranslation('spinardi');
-  const { data: cycle } = useCycleSumary(cycleId);
+  // const { data: cycle } = useCycleSumary(cycleId);
 
   return (
     <>
@@ -67,10 +68,15 @@ const WhatAreYouAaitingFor: FC<{ cycleId: number }> = ({ cycleId }) => {
                       paddingTop={2}
                     >
                       <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }} paddingX={0}>
-                        <BuyButton
+                        {/* <BuyButton
                           label={t('btn exclusive club')}
                           cycleId={cycle?.id!}
-                        />
+                        /> */}
+                        <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                          <Link href="#price-info">
+                            <Button variant='contained'>{t('btn exclusive club')}</Button>
+                          </Link>
+                        </Typography>
                         <Typography textAlign="center" paddingY={2} variant="body2">
                           {t('footer Club sub title 3')}
                         </Typography>

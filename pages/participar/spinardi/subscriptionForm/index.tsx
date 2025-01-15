@@ -1,14 +1,15 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { Grid, Box} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
+// import BuyButton from 'pages/participar/components/BuyButton';
+// import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
 import Trans from 'next-translate/Trans';
+import Link from 'next/link';
 
 const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
-  const{data:cycle}=useCycleSumary(cycleId);
+  // const{data:cycle}=useCycleSumary(cycleId);
   const bolderComponents = ()=>[<p key={1}/>,<b className='text-shadow' key={2}/>,<>✓ </>]
   return (
     <div>
@@ -49,10 +50,11 @@ const SubscriptionForm:FC<{cycleId:number}> = ({cycleId}) => {
                 <Stack gap={4}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'} paddingRight={4} paddingTop={2}>
                     <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-                        <BuyButton 
-                          label={t('btn exclusive club')} 
-                          cycleId={cycle?.id!} 
-                        />
+                      <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                          <Link href="#price-info">
+                            <Button variant='contained'>{t('btn exclusive club')}</Button>
+                          </Link>
+                        </Typography>
                     </Box>
                   </Box>
                 </Stack>
