@@ -31,7 +31,7 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
         user:{id:user?.id}
       }
     });
-    if(!subscription)
+    if(!subscription){
       await prisma.subscription.create({
         data:{
           productId,
@@ -44,21 +44,7 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
           }
         }
       });
-    else{
-      await sendMail({
-        from:process.env.EMAILING_FROM!,
-        to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
-        subject:`User: ${user?.id} has paid once again for the subscription on clube: "${cycleTitle}"`,
-        html:`
-          <p>Customer: ${customerId}</p>
-          <p>Email: ${email}</p>
-          <p>Product: ${productId}</p>
-          <p>Cycle: ${cycleId}</p>
-        `
-      });
-    }
-
-    await addParticipant(cycleId,user?.id);
+      await addParticipant(cycleId,user?.id);
     const next=encodeURIComponent(`/cycle/${cycleId}`);
     const identifier=encodeURIComponent(`${email}`);
     
@@ -102,10 +88,25 @@ export const OncheckoutSessionCompleted=async (email:string,userName:string,cycl
       </p>
       `;
 
-    await sendMail({
-      from:process.env.EMAILING_FROM!,
-      to:[{email}],
-      subject:`Assinatura no clube "${cycleTitle}", concluída com sucesso`,
-      html
-    });
+      await sendMail({
+        from:process.env.EMAILING_FROM!,
+        to:[{email}],
+        subject:`Assinatura no clube "${cycleTitle}", concluída com sucesso`,
+        html
+      });
+
+    }
+    else{
+      await sendMail({
+        from:process.env.EMAILING_FROM!,
+        to:[{email:process.env.DEV_EMAIL!},{email:process.env.EMAILING_FROM!}],
+        subject:`User: ${user?.id} has paid once again for the subscription on clube: "${cycleTitle}"`,
+        html:`
+          <p>Customer: ${customerId}</p>
+          <p>Email: ${email}</p>
+          <p>Product: ${productId}</p>
+          <p>Cycle: ${cycleId}</p>
+        `
+      });
+    }
   }
