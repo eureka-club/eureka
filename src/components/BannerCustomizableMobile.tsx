@@ -52,7 +52,7 @@ const BannerCustomizableMobile: FunctionComponent = ({
                       <div className="p-0 mx-1 text-wrap fs-6" dangerouslySetInnerHTML={{ __html: s?.text??'' }}/>
                       <div className="d-flex  mt-2"> 
                       {(!isLoadingSession && !session) 
-                            ? <Button variant="primary" className='text-white' onClick={() => router.push("/")} >{t('JoinEureka')}</Button> 
+                            ? <Button variant="primary" className='text-white' onClick={() => router.push(s.url)} >{t('JoinEureka')}</Button> 
                             : ''
                           }
                       </div>
