@@ -31,6 +31,7 @@ type backOfficeModel = {
       images:true,
       publishedFrom:true,
       publishedTo:true,
+      url:true
     }}
     // sliders:{
     //   include:{

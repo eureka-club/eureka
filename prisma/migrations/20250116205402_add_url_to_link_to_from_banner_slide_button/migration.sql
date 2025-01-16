@@ -1,0 +1,19 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[backOfficeSettingsSliders] ADD [url] NVARCHAR(1000) NOT NULL CONSTRAINT [backOfficeSettingsSliders_url_df] DEFAULT '/register';
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

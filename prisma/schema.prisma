@@ -518,6 +518,7 @@ model BackOfficeSettingsSliders {
   images                LocalImage[]
   publishedFrom         DateTime        @default(now())
   publishedTo           DateTime?
+  url                   String @default("/registerd")
 
   backOfficeSetting     BackOfficeSettings @relation(fields: [backOfficeSettingId], references: [id])
   backOfficeSettingId   Int

@@ -91,7 +91,7 @@ const BannerCustomizable: FunctionComponent = ({
                         {
                           !isLoadingSession && !session
                           ? <Box sx={{paddingTop:".5rem"}} >
-                              <Button  style={{textTransform: 'none'}} className="btn-eureka" onClick={() => router.push('/register')}>
+                              <Button  style={{textTransform: 'none'}} className="btn-eureka" onClick={() => router.push(s.url)}>
                                 {t('JoinEureka')} 
                               </Button>
                             </Box>
