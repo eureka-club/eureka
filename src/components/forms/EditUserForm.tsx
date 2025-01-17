@@ -208,7 +208,7 @@ const EditUserForm: FunctionComponent = () => {
     // }
 
     const form = ev.currentTarget;
-    if(router.query.newUser?.toString()=="1"){
+    if(router.query.newUser?.toString()=="1" && !form.password.value){
       toast.error('Deve especificar uma nova senha');
       return;
     }
