@@ -19,7 +19,7 @@ const Profile: NextPage<Props> = ({session}) => {
   useEffect(()=>{
     if(router && router?.query.identifier){
       signIn('credentials' ,{
-        callbackUrl:`/${router.locale}${router.route}?next=${encodeURIComponent(router.query.next?.toString()!)}`,
+        callbackUrl:`/${router.locale}${router.route}?newUser=1&next=${encodeURIComponent(router.query.next?.toString()!)}`,
         email:decodeURIComponent(router.query.identifier.toString()!),
         password:decodeURIComponent(router.query.identifier.toString()!)
       });

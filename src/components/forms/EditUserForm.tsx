@@ -208,6 +208,10 @@ const EditUserForm: FunctionComponent = () => {
     // }
 
     const form = ev.currentTarget;
+    if(router.query.newUser?.toString()=="1"){
+      toast.error('Deve especificar uma nova senha');
+      return;
+    }
     if(form.password.value && form.password.value!=form.passwordConfirmation.value){
       toast.error('As senhas não correspondem');
       return;
