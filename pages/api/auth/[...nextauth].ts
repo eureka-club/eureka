@@ -129,7 +129,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
       session: async ({ session }) => {
         const u = await prisma.user.findFirst({
           where: { email: session.user.email! },
-          include: { photos: true },
+          include: { photos: true, accounts:{select:{type:true}} },
         });
         if (u) {
           const s = session;
@@ -138,6 +138,7 @@ const res = (req: NextApiRequest, res: NextApiResponse): void | Promise<void> =>
           s.user.name = u.name; // eslint-disable-line no-param-reassign
           s.user.photos = u.photos || [];
           s.user.language = u.language;
+          s.user.type = u.accounts?.length ? u.accounts[0].type : 'credentials';
         }
         return Promise.resolve(session);
       },

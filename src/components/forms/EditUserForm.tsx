@@ -219,7 +219,7 @@ const EditUserForm: FunctionComponent = () => {
     const payload: EditUserClientPayload = {
       name: userName,
       email: form.email.value,
-      ... form.password.value && {password: form.password.value},
+      ... session?.user.type == 'credentials' && session?.user.type == 'credentials' && form.password.value && {password: form.password.value},
      // image: form.image.value,
       countryOfOrigin: countryOrigin,
       aboutMe: form.aboutMe.value,
@@ -379,19 +379,24 @@ const EditUserForm: FunctionComponent = () => {
                   </FormGroup>
                 </Col>
               </Row>
-              <Row>
-              <Col>
-                  <FormGroup controlId="password" className="mb-4">
-                    <FormLabel>*{t('Password')}</FormLabel>
-                    <FormControl type="password" defaultValue={''} />
-                  </FormGroup>
-                </Col><Col>
-                  <FormGroup controlId="passwordConfirmation" className="mb-4">
-                    <FormLabel>*{t('Password confirmation')}</FormLabel>
-                    <FormControl type="password" defaultValue={''} />
-                  </FormGroup>
-                </Col>
-              </Row>
+              {
+                session?.user.type == 'credentials' 
+                  ? <Row>
+                  <Col>
+                      <FormGroup controlId="password" className="mb-4">
+                        <FormLabel>*{t('Password')}</FormLabel>
+                        <FormControl type="password" defaultValue={''} />
+                      </FormGroup>
+                    </Col><Col>
+                      <FormGroup controlId="passwordConfirmation" className="mb-4">
+                        <FormLabel>*{t('Password confirmation')}</FormLabel>
+                        <FormControl type="password" defaultValue={''} />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  : <></>
+              }
+              
               <Row>
                 <Col>
                   <FormGroup controlId="countryOfOrigin1" className="mb-4">
