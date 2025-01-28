@@ -13,8 +13,8 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
   const { data: cycle } = useCycleSumary(cycleId);
 
   return (
-    <Box sx={{backgroundColor: "#ecf0f1"}} paddingTop={6}>
-      <Stack gap={2} paddingTop={0} paddingBottom={1} paddingLeft={2}>
+    <Box sx={{backgroundColor: "#ecf0f1",paddingTop:{xs:0,md:6, sm:6,lg:6}, gap:{xs:0}}}   >
+      <Stack gap={0} paddingTop={0} paddingBottom={0} paddingLeft={2} sx={{display: { xs: 'none', lg: 'block', sm: 'block', md: 'block',paddingTop:{xs:0}, gap:{xs:0}}}}>
         <aside className="d-flex  align-items-left aligg-content-left">
           {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
           <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
@@ -33,7 +33,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                 <Box sx={{
                   width:{xs:'100%',md:'30%'}
                 }}>
-                  <img src="/img/spinardi/muchachoh.png" width={'100%'}/>
+                  <img src="/img/spinardi/muchachoh.webp" width={'100%'}/>
                 </Box>
                 <Box sx={{
                   width:{xs:'100%',md:'40%'}
@@ -42,7 +42,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                         <b> {t('club title')}</b>
                       </Typography>
 
-                      <Typography paddingBlockEnd={2} textAlign="center" fontSize={20} paddingTop={2}>
+                      <Typography paddingBlockEnd={1} textAlign="center" fontSize={20} paddingTop={2}>
                         <b>{t('club dates')}</b>
                       </Typography>
                       <Typography textAlign="center" variant="subtitle1">
@@ -53,7 +53,7 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                         />
                       </Typography>
                       <Box paddingBottom={6} paddingRight={2} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
-                        <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                        <Typography paddingBlockStart={0} paddingLeft={1} textAlign="center" variant="subtitle2">
                           <Link href="#price-info">
                             <Button variant='contained'>{t('btn exclusive club')}</Button>
                           </Link>

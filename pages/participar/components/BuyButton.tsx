@@ -30,7 +30,7 @@ const BuyButton:FC<Props> = ({label,cycleId}) => {
           variant="outlined"
           color="primary"
           size="large"
-          style={{color:'black',borderColor:'black',backgroundColor:'#8DFAF3',display:'block',width:'350px'}}
+          style={{color:'black',borderColor:'black',backgroundColor:'#8DFAF3',display:'block',width:'250px'}}
           type="submit"
           onClick={onClickHandle}
           disabled={isLoading}

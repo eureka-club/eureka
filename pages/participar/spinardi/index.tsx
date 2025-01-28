@@ -37,7 +37,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
       `}</style>
      
       <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
-          <Stack gap={5} paddingTop={0} paddingBottom={5}>
+          <Stack gap={1} paddingTop={0} paddingBottom={1}>
                 <Header cycleId={cycleId}/>
           </Stack>
       </Stack>
