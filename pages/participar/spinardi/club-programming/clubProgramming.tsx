@@ -47,7 +47,7 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
               >
                 <CardHeader
                   sx={{ justifyContent: 'left' }}
-                  avatar={<Avatar src="/img/spinardi/catherine d'ignazio.webp" aria-label="recipe"></Avatar>}
+                  avatar={<Avatar src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/catherine d'ignazio.webp`} aria-label="recipe"></Avatar>}
                   action={
                     <IconButton aria-label="settings">
                       <Stars />
@@ -83,7 +83,7 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
               >
                 <CardHeader
                   sx={{ justifyContent: 'left' }}
-                  avatar={<Avatar src="/img/Anna.webp" aria-label="recipe"></Avatar>}
+                  avatar={<Avatar src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/Anna.webp`} aria-label="recipe"></Avatar>}
                   action={
                     <IconButton aria-label="settings">
                       <Stars />
@@ -119,7 +119,7 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
               >
                 <CardHeader
                   sx={{ justifyContent: 'left' }}
-                  avatar={<Avatar src="/img/spinardi/alejandro_noriega.webp" aria-label="recipe"></Avatar>}
+                  avatar={<Avatar src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/alejandro_noriega.webp`} aria-label="recipe"></Avatar>}
                   action={
                     <IconButton aria-label="settings">
                       <Stars />

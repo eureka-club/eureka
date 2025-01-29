@@ -55,7 +55,7 @@ const WhyBePartOf = () => {
                       marginTop:165,
                         display:{xs:'none',lg:'block'}
                     }}>
-                        <Image src='/img/imgctrx.webp'
+                        <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/imgctrx.webp`}
                             width={220}
                             height={220}
                         />

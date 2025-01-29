@@ -146,7 +146,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               display: { xs: 'none', lg: 'block' },
             }}
           >
-            <Image src="/img/imgctry.webp" width={200} height={200} />
+            <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/imgctry.webp`} width={200} height={200} />
           </Box>
           <Box sx={{ maxWidth: { lg: '70dvw', sm: '95dvw', xs: '100dvw' } }}>
             <FAQ />

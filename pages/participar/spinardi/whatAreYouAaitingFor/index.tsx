@@ -38,7 +38,7 @@ const WhatAreYouAaitingFor: FC<{ cycleId: number }> = ({ cycleId }) => {
                       paddingRight={0}
                       paddingBlockEnd={0}
                     >
-                      <Image src="/img/spinardi/footer_background.webp" width={740} height={740}></Image>
+                      <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/footer_background.webp`} width={740} height={740}></Image>
                     </Box>
                   </Stack>
                 </Grid>

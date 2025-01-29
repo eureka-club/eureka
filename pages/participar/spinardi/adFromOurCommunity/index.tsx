@@ -43,7 +43,7 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
                         display: { md: 'inherit', xs: 'inherit' },
                       }}
                     >
-                      <img src="/img/spinardi/com amorspinardi.webp" width={'100%'} />
+                      <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/com amorspinardi.webp`} width={'100%'} />
                     </Box>
                   </Stack>
                 </Grid>
