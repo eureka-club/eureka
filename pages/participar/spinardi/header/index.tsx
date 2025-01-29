@@ -1,23 +1,19 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
 import Trans from 'next-translate/Trans';
 import Link from 'next/link';
+import Image from 'next/image';
 
-const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
+const Header = () => {
   const { t } = useTranslation('spinardi');
 
-  const { data: cycle } = useCycleSumary(cycleId);
-
   return (
-    <Box sx={{backgroundColor: "#ecf0f1",paddingTop:{xs:0,md:6, sm:6,lg:6}, gap:{xs:0}}}   >
+    <Box sx={{backgroundColor: "#ecf0f1",paddingTop:{xs:0,md:6, sm:6,lg:6}, gap:{xs:0}}}>
       <Stack gap={0} paddingTop={0} paddingBottom={0} paddingLeft={2} sx={{display: { xs: 'none', lg: 'block', sm: 'block', md: 'block',paddingTop:{xs:0}, gap:{xs:0}}}}>
         <aside className="d-flex  align-items-left aligg-content-left">
           {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
-          <img className="eurekaLogo" src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/logo.svg`} alt="Project logo" />
+          <img className="eurekaLogo" src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/logo.svg`} alt="Project logo" width={343} height={268} />
           <section>
             <div className={`text-secondary ms-3 h4 mb-0 `}>Eureka</div>
             <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>
@@ -69,7 +65,8 @@ const Header: FC<{ cycleId: number }> = ({ cycleId }) => {
                     width:{xs:'100%',md:'30%'},
                     display:{md:'inherit',xs:'none'}
                   }}>
-                  <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/libros.webp`} width={'100%'}/>
+                  {/* <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/libros.webp`} width={'100%'}/> */}
+                  <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/libros.webp`} width={371} height={350}/>
                 </Box>
               </Stack>
             {/* <Grid container gap={2} sx={{ justifyContent: 'left', alignItems: 'left' }}>

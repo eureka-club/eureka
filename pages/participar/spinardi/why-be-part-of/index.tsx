@@ -1,23 +1,14 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import Countdown from 'pages/participar/components/Countdown';
-
 import Image from 'next/image';
-import { Container } from '@mui/system';
-import { Grid, Box, Card, CardContent, CardHeader,Avatar, IconButton, Divider} from '@mui/material';
+import { Grid, Box, Card, CardContent} from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 
-
- 
-
 const WhyBePartOf = () => {
- 
-    const { t } = useTranslation('spinardi');
+  const { t } = useTranslation('spinardi');
   return (
     <div>
      
       <Stack id="asUl" direction={{ xs: 'column',  sm: 'column'}} gap={2} justifyContent={'center'} alignItems={'center'} >
-     
         <style jsx global>{
               `
                   #asUl{
@@ -41,11 +32,8 @@ const WhyBePartOf = () => {
               `
               }
         </style>
-        
         <Typography justifyContent={'center'} alignItems={'center'} paddingLeft={2} paddingTop={6} variant="h4" ><b> {t('title question')}</b></Typography>
-        
         <Grid container justifyContent={'center'} alignItems={'center'}>
-
         <Box sx={{ 
                       position:'absolute',
                       zIndex:1,
@@ -57,7 +45,7 @@ const WhyBePartOf = () => {
                     }}>
                         <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/imgctrx.webp`}
                             width={220}
-                            height={220}
+                            height={195}
                         />
                     </Box>
           <Grid item xs={12} sm={12} padding={2}>

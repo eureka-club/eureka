@@ -1,16 +1,8 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import { Grid, Box, Card, CardContent, CardHeader, Avatar, IconButton, Divider, Chip } from '@mui/material';
+import { Grid, Card, CardContent, CardHeader, Divider, Chip } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
-import AnimatedIMGCarousel from 'pages/about/components/AnimatedIMGCarousel';
-import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
-import Stars from 'pages/about/components/Stars';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
 
 const LineTime = () => {
-  const { t } = useTranslation('spinardi');
 
   return (
     <>

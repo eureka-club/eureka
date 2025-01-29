@@ -3,15 +3,10 @@ import Countdown from 'pages/participar/components/Countdown';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
-// import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-// import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
 import Link from 'next/link';
 
-const WhatAreYouAaitingFor: FC<{ cycleId: number }> = ({ cycleId }) => {
+const WhatAreYouAaitingFor = () => {
   const { t } = useTranslation('spinardi');
-  // const { data: cycle } = useCycleSumary(cycleId);
 
   return (
     <>
@@ -38,7 +33,7 @@ const WhatAreYouAaitingFor: FC<{ cycleId: number }> = ({ cycleId }) => {
                       paddingRight={0}
                       paddingBlockEnd={0}
                     >
-                      <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/footer_background.webp`} width={740} height={740}></Image>
+                      <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/footer_background.webp`} width={413} height={413}></Image>
                     </Box>
                   </Stack>
                 </Grid>

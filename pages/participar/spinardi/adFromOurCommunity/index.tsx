@@ -1,16 +1,11 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Grid, Box } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
-import Image from 'next/image';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
 import Trans from 'next-translate/Trans';
 import Link from 'next/link';
 
-const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
+const AdFromOurCommunity = () => {
   const { t } = useTranslation('spinardi');
-  const { data: cycle } = useCycleSumary(cycleId);
   return (
     <>
       <div>
@@ -37,13 +32,11 @@ const AdFromOurCommunity: FC<{ cycleId: number }> = ({ cycleId }) => {
               <Grid container gap={4} sx={{ justifyContent: 'center' }}>
                 <Grid item xs={12} sm={6}>
                   <Stack gap={4}>
-                    <Box
-                      sx={{
-                        width: { xs: '100%', md: '80%', sm: '80%', lg: '80%' },
-                        display: { md: 'inherit', xs: 'inherit' },
-                      }}
-                    >
-                      <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/com amorspinardi.webp`} width={'100%'} />
+                    <Box sx={{display:{xs:'none',sm:'block'}}}>
+                      <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/com amorspinardi.webp`} width={482} />
+                    </Box>
+                    <Box sx={{display:{xs:'block',sm:'none'}}}>
+                      <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/com amorspinardi.webp`} width={365} />
                     </Box>
                   </Stack>
                 </Grid>

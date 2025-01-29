@@ -1,18 +1,11 @@
 import { Stack, Typography } from '@mui/material';
-import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
-import { Grid, Box, Card, CardContent, CardHeader, Avatar, IconButton, Divider } from '@mui/material';
+import { Grid, Card, CardContent, CardHeader, Avatar, IconButton, Divider } from '@mui/material';
 import useTranslation from 'next-translate/useTranslation';
-import AnimatedIMGCarousel from 'pages/about/components/AnimatedIMGCarousel';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
-
 import Stars from 'pages/about/components/Stars';
-import BuyButton from 'pages/participar/components/BuyButton';
-import useCycleSumary from '@/src/useCycleSumary';
-import { FC } from 'react';
 
-const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
+const ClubProgramming = () => {
   const { t } = useTranslation('spinardi');
-  const{data:cycle}=useCycleSumary(cycleId);
   return (
     <>
       <div>
@@ -24,12 +17,7 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
         paddingLeft={2}
         paddingRight={2}
       >
-        
-        
-      
         <Stack id="asUl" direction={{ xs: 'column' }} gap={2}>
-          
-
           <Grid container>
           <Grid item xs={12} sm={4} padding={2}>
               <Card
@@ -40,7 +28,6 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                   '&:hover': {
                     transform: 'scale(1.05)',
                   },
-
                   justifyContent: 'left',
                   alignItems: 'left',
                 }}
@@ -56,7 +43,6 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                   title='Catherine D’Ignazio'
                   subheader={t('card header 1')}
                 />
-
                 <Divider />
                 <CardContent>
                   <Typography textAlign={'justify'} variant="body2" color="text.secondary">
@@ -76,7 +62,6 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                   '&:hover': {
                     transform: 'scale(1.05)',
                   },
-
                   justifyContent: 'left',
                   alignItems: 'left',
                 }}
@@ -92,7 +77,6 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                   title="Anna Silva"
                   subheader={t('card header 2')}
                 />
-
                 <Divider />
                 <CardContent>
                   <Typography textAlign={'justify'} variant="body2" color="text.secondary">
@@ -128,7 +112,6 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                   title="Alejandro Noriega"
                   subheader={t('card header 3')}
                 />
-
                 <Divider />
                 <CardContent>
                   <Typography textAlign={'justify'} variant="body2" color="text.secondary">
@@ -139,7 +122,6 @@ const ClubProgramming:FC<{cycleId:number}> = ({cycleId}) => {
                 </CardContent>
               </Card>
             </Grid>
-            
           </Grid>
         </Stack>
       </Stack>

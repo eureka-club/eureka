@@ -12,10 +12,10 @@ import LineTime from './lineTime';
 import { Session } from '@/src/types';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
-import { Stack, Box, Typography } from '@mui/material';
-import Image from 'next/image';
+import { Stack, Box, Typography} from '@mui/material';
 import { getCycleSumary } from '@/src/useCycleSumary';
 import { dehydrate, QueryClient } from 'react-query';
+import Image from 'next/image';
 interface Props {
   session: Session;
   cycleId:number;
@@ -38,10 +38,9 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
      
       <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
           <Stack gap={1} paddingTop={0} paddingBottom={1}>
-                <Header cycleId={cycleId}/>
+                <Header />
           </Stack>
       </Stack>
-
 
       <Stack paddingBottom={5} >
         <Box
@@ -55,7 +54,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
             </Box>
           </Box>
       </Stack>
-
+ 
       <Stack paddingBottom={5} sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} >
       <Box
         sx={{ display: 'flex', justifyContent: 'center' }}
@@ -64,7 +63,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
         paddingRight={2}
       >
         <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-          <AdFromOurCommunity cycleId={cycleId} />
+          <AdFromOurCommunity />
           </Box>
         </Box>
       </Stack>
@@ -78,7 +77,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
           paddingRight={2}
         >
           <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-            <ClubProgramming cycleId={cycleId}/>
+            <ClubProgramming/>
           </Box>
         </Box>
       </Stack>
@@ -90,7 +89,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
           paddingRight={2}
         >
           <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-            <SubscriptionForm cycleId={cycleId} />
+            <SubscriptionForm />
           </Box>
         </Box>
       </Stack>
@@ -103,9 +102,9 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
           textAlign={'center'}
         >
           <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '100dvw' } }} >
-          <Typography textAlign={'center'} variant="h4"  paddingBlockEnd={2}>
+            <Typography textAlign={'center'} variant="h4"  paddingBlockEnd={2}>
                     <b>Cronograma</b>
-                  </Typography>
+            </Typography>
             <LineTime />
           </Box>
         </Box>
@@ -146,7 +145,7 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
               display: { xs: 'none', lg: 'block' },
             }}
           >
-            <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/imgctry.webp`} width={200} height={200} />
+            <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/imgctry.webp`} width={200} height={223} />
           </Box>
           <Box sx={{ maxWidth: { lg: '70dvw', sm: '95dvw', xs: '100dvw' } }}>
             <FAQ />
@@ -160,19 +159,10 @@ const Spinardi: NextPage<Props> = ({session,cycleId}) => {
           paddingLeft={2}
           paddingRight={2}
         >
-          <Box  >
-            <WhatAreYouAaitingFor cycleId={cycleId} />
+          <Box>
+            <WhatAreYouAaitingFor />
           </Box>
         </Box>
-        {/* <PaymentOptionForm
-          price={cycle?.price!}
-          priceInPlots={cycle?.priceInPlots!}
-          product_id={cycle?.product_id!}
-          cycleId={cycleId}
-          cycleTitle={cycle?.title!}
-          iterations={3}
-          
-        /> */}
       </Stack>
     </>
   );
