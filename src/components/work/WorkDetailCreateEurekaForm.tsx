@@ -313,7 +313,7 @@ const WorkDetailCreateEurekaForm: FunctionComponent<Props> = ({
         <Form.Group className="mt-4 mb-4">
           <FormControlLabel
             control={<Switch checked={useCrop} onChange={handleChangeUseCropSwith} />}
-            label={t('showCrop')}
+            label={t('createPostForm:showCrop')}
           />
         </Form.Group>
         {useCrop && (
