@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps,  NextPage } from 'next';
 import Header from './header';
 import WhyBePartOf from './why-be-part-of';
 import ClubProgramming from './club-programming/clubProgramming';
@@ -21,9 +21,9 @@ interface Props {
   cycleId:number;
 }
 
-const Spinardi: NextPage<Props> = ({session,cycleId}) => {
+const Spinardi:NextPage<Props>
+ = ({cycleId}) => {
   const { t } = useTranslation('spinardi');
-  
   return (
     <>
       <Head>

@@ -12,8 +12,7 @@ const Header = () => {
     <Box sx={{backgroundColor: "#ecf0f1",paddingTop:{xs:0,md:6, sm:6,lg:6}, gap:{xs:0}}}>
       <Stack gap={0} paddingTop={0} paddingBottom={0} paddingLeft={2} sx={{display: { xs: 'none', lg: 'block', sm: 'block', md: 'block',paddingTop:{xs:0}, gap:{xs:0}}}}>
         <aside className="d-flex  align-items-left aligg-content-left">
-          {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
-          <img className="eurekaLogo" src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/logo.svg`} alt="Project logo" width={343} height={268} />
+          <Image priority={true} src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/logo.svg`} width={45} height={52} alt="EUREKA" />
           <section>
             <div className={`text-secondary ms-3 h4 mb-0 `}>Eureka</div>
             <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>
@@ -29,7 +28,7 @@ const Header = () => {
                 <Box sx={{
                   width:{xs:'100%',md:'30%'}
                 }}>
-                  <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/muchachoh.webp`} width={'100%'}/>
+                  <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/muchachoh.webp`} width={371} height={291}/>
                 </Box>
                 <Box sx={{
                   width:{xs:'100%',md:'40%'}
@@ -65,8 +64,7 @@ const Header = () => {
                     width:{xs:'100%',md:'30%'},
                     display:{md:'inherit',xs:'none'}
                   }}>
-                  {/* <img src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/libros.webp`} width={'100%'}/> */}
-                  <Image src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/libros.webp`} width={371} height={350}/>
+                  <Image priority={true} src={`${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/public-assets/spinardi/libros.webp`} width={371} height={350}/>
                 </Box>
               </Stack>
             {/* <Grid container gap={2} sx={{ justifyContent: 'left', alignItems: 'left' }}>
