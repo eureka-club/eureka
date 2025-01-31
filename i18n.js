@@ -1,6 +1,6 @@
 
 const all = ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated','hyvortalk'];
-const header = ['common','navbar','topics','notification'];
+const header = ['common','navbar','topics','notification','signInForm'];
 module.exports = {
   // loader: false, // because we use babel plugins 😕
   // loadLocaleFrom: async (locale, namespace) => import(`./translations/${locale}/${namespace}`).then((m) => m.default),
@@ -21,6 +21,7 @@ module.exports = {
     '/profile': [...header, 'profile','createWorkForm', 'countries'],
     '/manifest': [...header,'manifest'],
     '/policy': [...header,'termsAndPolicy'],
+    '/register': ['signUpForm'],
     'rgx:^/payment-options/\\[cycleId\\]':['navbar','payment-options'],
     '/back-office': [...header,'backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': [...header,'mediatheque', 'countries'],
