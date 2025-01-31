@@ -1,11 +1,9 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Grid, Box } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
 import Trans from 'next-translate/Trans';
 import Link from 'next/link';
 
 const AdFromOurCommunity = () => {
-  const { t } = useTranslation('spinardi');
   return (
     <>
       <div>
@@ -18,7 +16,7 @@ const AdFromOurCommunity = () => {
           >
             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
               <Typography fontSize={30} textAlign="center">
-                <b> {t('lbl1HCS')}</b>
+                <b> Conduzido por Rafael Spinardi</b>
               </Typography>
             </Box>
           </Box>
@@ -46,23 +44,23 @@ const AdFromOurCommunity = () => {
                     <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
                       <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
-                          {t('lbl1BCS')}
+                        Salve, família! 
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
-                          {/* {t('lbl2BCS')} */}
-                          <Trans i18nKey={'spinardi:lbl2BCS'} components={[<p key={1}></p>, <b key={2} />]} />
+                        Sou o Spinardi, um artista que sempre acreditou que <b>o amor é a força que move o mundo</b>. Seja no rap, na literatura, no cinema ou na vida, é o amor que nos conecta, nos transforma e dá sentido às nossas histórias. Quando pensei nesse clube, imaginei um <b>espaço onde a gente pudesse trocar ideias, se inspirar e olhar para o amor de um jeito diferente</b> sem estereótipos, sem medo, só com verdade e olhos no olhos.
+                          {/* <Trans i18nKey={'spinardi:lbl2BCS'} components={[<p key={1}></p>, <b key={2} />]} /> */}
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
-                          {t('lbl3BCS')}
+                        Minhas músicas sempre foram um reflexo do que sinto e vejo, e quero que a gente converse sobre rimas e beats, mas também sobre muito mais. Vamos explorar juntos como o amor pode ser revolucionário, como pode mudar com o tempo e como pode nos ajudar a construir futuros mais afetuosos e inclusivos. É uma jornada que quero dividir com vocês de coração aberto e mente livre.
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
-                          {t('lbl4BCS')}
+                        Como diria Mano Brown: “Não existe poeta que não saiba falar sobre amor”. 
                         </Typography>
                         <Typography textAlign="left"  variant="body2">
-                          {t('lbl5BCS')}
+                        Com amor,
                         </Typography>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">
-                          {t('lbl6BCS')}
+                        Spinardi
                         </Typography>
                       </Box>
                     </Box>
@@ -77,7 +75,7 @@ const AdFromOurCommunity = () => {
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
                 <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
                   <Link href="#price-info">
-                    <Button variant='contained'>{t('btn exclusive club')}</Button>
+                    <Button variant='contained'>INSCREVA-SE NO CLUBE</Button>
                   </Link>
                 </Typography>
               </Box>

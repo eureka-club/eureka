@@ -1,12 +1,10 @@
 import { Button, Stack, Typography } from '@mui/material';
 import Countdown from 'pages/participar/components/Countdown';
 import { Grid, Box } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const WhatAreYouAaitingFor = () => {
-  const { t } = useTranslation('spinardi');
 
   return (
     <>
@@ -43,11 +41,10 @@ const WhatAreYouAaitingFor = () => {
                     <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
                       <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw', md: '100dvw' } }}>
                         <Typography textAlign="center" paddingTop={2} fontSize={30}>
-                          <b> {t('footer Club title')}</b>
+                          <b> Está esperando o quê?</b>
                         </Typography>
-
                         <Typography textAlign="center" paddingBlockEnd={2} fontSize={20} paddingTop={2}>
-                          {t('footer Club sub title 1')}
+                        É hora de se conectar, refletir e crescer junto com uma comunidade inspiradora! O clube de leitura ‘Com amor, Spinardi’ começa em:
                         </Typography>
                       </Box>
                     </Box>
@@ -63,17 +60,13 @@ const WhatAreYouAaitingFor = () => {
                       paddingTop={2}
                     >
                       <Box sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }} paddingX={0}>
-                        {/* <BuyButton
-                          label={t('btn exclusive club')}
-                          cycleId={cycle?.id!}
-                        /> */}
                         <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
                           <Link href="#price-info">
-                            <Button variant='contained'>{t('btn exclusive club')}</Button>
+                            <Button variant='contained'>INSCREVA-SE NO CLUBE</Button>
                           </Link>
                         </Typography>
                         <Typography textAlign="center" paddingY={2} variant="body2">
-                          {t('footer Club sub title 3')}
+                        Eureka é o primeiro clube de leitura e cinema por justiça social da América Latina! Durante a duração do Clube, você recebe dicas de livros e filmes incríveis sobre o tema do Clube, perfeitos para aprender, refletir e debater na nossa comunidade exclusiva.
                         </Typography>
                       </Box>
                     </Box>

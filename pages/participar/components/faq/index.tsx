@@ -6,12 +6,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionGroup from '@mui/material/Accordion'
 import { Typography } from '@mui/material';
 import { Grid, Box, } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
 import Trans from "next-translate/Trans";
 
 
 const FAQ = () => {
-  const { t } = useTranslation('spinardi');
   const [expanded, setExpanded] = React.useState<string|false>(false);
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -21,69 +19,59 @@ const FAQ = () => {
   const data = [
     {
       id: "Panel 1",
-      heading: t('acd title 1'),
+      heading: "Quanto tempo dura o Clube? ",
       secondaryHeading: "",
-      details: t('acd dates of Club 1')
+      details: "Este Clube acontecerá de março a junho de 2025, com encontros mensais e discussões contínuas."
     },
     {
       id: "Panel 2 ",
-      heading: t('acd title 2'),
+      heading: "Os livros recomendados estão disponíveis em português?",
       secondaryHeading: "",
-      details: t('acd dates of Club 2')
+      details: "Sim, todas as nossas recomendações de livros estão disponíveis em português, garantindo que todes possam participar das leituras e discussões."
     },
-
     {
       id: "Panel 3 ",
-      heading: t('acd title 3'),
+      heading: "Como faço para acessar os livros e filmes do clube?",
       secondaryHeading: "",
-      details: t('acd dates of Club 3')
+      details: "Recomendamos onde encontrar as obras selecionadas, mas cada pessoa é responsável por acessar e/ou comprar cada uma."
     },
     {
       id: "Panel 4 ",
-      heading: t('acd title 4'),
+      heading: "É necessário ter conhecimento prévio sobre o tema?",
       secondaryHeading: "",
-      details: t('acd dates of Club 4')
+      details: "Não é necessário ter conhecimento prévio. Nosso clube é aberto a qualquer pessoa deseja aprender e explorar estes temas, independentemente do seu nível de familiaridade com eles."
     },
     {
       id: "Panel 5 ",
-      heading: t('acd title 5'),
+      heading: "Quanto tempo devo dedicar à leitura e às discussões?",
       secondaryHeading: "",
-      details: t('acd dates of Club 5')
+      details: "Você pode dedicar o tempo que achar necessário. Nosso clube é flexível, permitindo que você participe conforme sua disponibilidade e ritmo de leitura. Para te ajudar a te organizar, todo mês compartilharemos um cronograma de leitura, resumos em texto e áudio, e materiais de acompanhamento."
     },
     {
       id: "Panel 6 ",
-      heading: t('acd title 6'),
+      heading: "Vou conhecer os criadores do Clube? Os encontros são online ou presenciais?",
       secondaryHeading: "",
-      details: t('acd dates of Club 6')
+      details: "Sim! Você poderá interagir com os criadores do Clube durante encontros virtuais ao vivo e, em alguns casos, presenciais em São Paulo."
     },
-
     {
       id: "Panel 7 ",
-      heading: t('acd title 7'),
+      heading: "Como posso acessar a comunidade e o fórum online?",
       secondaryHeading: "",
-      details: t('acd dates of Club 7')
+      details: "Após se inscrever no clube, você receberá um link por email para acessar nossa comunidade online. Lá, você poderá participar das discussões e interagir com outros membros."
     },
-
     {
       id: "Panel 8 ",
-      heading: t('acd title 8'),
+      heading: "Como posso entrar em contato para mais informações?",
       secondaryHeading: "",
-      details: t('acd dates of Club 8')
+      details: "Estamos disponíveis para ajudar! Entre em contato pelo e-mail hola@eureka.club e nossa equipe responderá rapidamente."
     },
     {
       id:"Panel 9",
-      heading:t('lblB8V-Heading'),
+      heading:"Não consegue pagar o valor total?",
       secondaryHeading:"",
-      details:<Trans i18nKey="spinardi:lblB8V-Detail" components={[
-        <p key="lblB8V-root"/>,
-        <a key="lblB8V-a" href="mailto:hola@eureka.club" target="__blank"/>
-      ]}
-      values={{email:'hola@eureka.club'}}
-      />
+      details:"Nós podemos ajudar! 🎓 Você pode se candidatar para uma bolsa. Escreva para hola@eureka.club e solicite o formulário de candidatura."
     }
-    
   ];
- 
  
   return (
     <>
@@ -99,7 +87,6 @@ const FAQ = () => {
                 expanded={expanded === id}
                 key={id}
                 onChange={handleChange(id)}
-
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}

@@ -10,7 +10,6 @@ import SubscriptionForm from './subscriptionForm';
 import { getSession } from 'next-auth/react';
 import LineTime from './lineTime';
 import { Session } from '@/src/types';
-import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import { Stack, Box, Typography} from '@mui/material';
 import { getCycleSumary } from '@/src/useCycleSumary';
@@ -23,12 +22,11 @@ interface Props {
 
 const Spinardi:NextPage<Props>
  = ({cycleId}) => {
-  const { t } = useTranslation('spinardi');
   return (
     <>
       <Head>
-        <meta name="title" content={t('title page')}></meta>
-        <meta name="description" content={t('title page')}></meta>
+        <meta name="title" content="Com amor, Spinardi"></meta>
+        <meta name="description" content="Um Clube de Leitura, Cinema e Música para para viver, refletir e celebrar o amor através da arte. Durante 4 meses, de março a junho, você terá acesso a uma curadoria especial de livros, filmes e músicas e encontros (presenciais e virtuais) com o Spinardi."></meta>
       </Head>
       <style jsx global>{`
         body {
@@ -36,13 +34,13 @@ const Spinardi:NextPage<Props>
         }
       `}</style>
      
-      <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
+       <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
           <Stack gap={1} paddingTop={0} paddingBottom={1}>
                 <Header />
           </Stack>
-      </Stack>
+      </Stack> 
 
-      <Stack paddingBottom={5} >
+       <Stack paddingBottom={5} >
         <Box
           sx={{ display: 'flex', justifyContent: 'center' }}
           alignItems={'center'}
@@ -54,7 +52,7 @@ const Spinardi:NextPage<Props>
             </Box>
           </Box>
       </Stack>
- 
+      
       <Stack paddingBottom={5} sx={{ justifyContent: 'center',backgroundColor: "#ecf0f1"}} >
       <Box
         sx={{ display: 'flex', justifyContent: 'center' }}
@@ -67,8 +65,6 @@ const Spinardi:NextPage<Props>
           </Box>
         </Box>
       </Stack>
-
-
       <Stack gap={5} paddingTop={1} paddingBottom={5}>
         <Box
           sx={{ display: 'flex', justifyContent: 'center' }}
@@ -81,7 +77,7 @@ const Spinardi:NextPage<Props>
           </Box>
         </Box>
       </Stack>
-      <Stack gap={5} paddingTop={1} paddingBottom={2}>
+     <Stack gap={5} paddingTop={1} paddingBottom={2}>
         <Box
           sx={{ display: 'flex', justifyContent: 'center' }}
           alignItems={'center'}
@@ -125,7 +121,7 @@ const Spinardi:NextPage<Props>
         <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
           <Box sx={{ maxWidth: { lg: '95dvw', sm: '95dvw', xs: '100dvw' } }}>
             <Typography fontSize={30} textAlign="center">
-              <b> {t('club description')}</b>
+              <b> Ainda tem dúvidas?</b>
             </Typography>
           </Box>
         </Box>

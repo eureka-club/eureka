@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material';
 import { Grid, Card, CardContent, CardHeader, Divider, Chip } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
 
 const LineTime = () => {
 

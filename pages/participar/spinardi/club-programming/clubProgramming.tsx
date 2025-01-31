@@ -1,11 +1,9 @@
 import { Stack, Typography } from '@mui/material';
 import { Grid, Card, CardContent, CardHeader, Avatar, IconButton, Divider } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 import Stars from 'pages/about/components/Stars';
 
 const ClubProgramming = () => {
-  const { t } = useTranslation('spinardi');
   return (
     <>
       <div>
@@ -41,13 +39,13 @@ const ClubProgramming = () => {
                     </IconButton>
                   }
                   title='Catherine D’Ignazio'
-                  subheader={t('card header 1')}
+                  subheader="Professora do MIT, Estados Unidos"
                 />
                 <Divider />
                 <CardContent>
                   <Typography textAlign={'justify'} variant="body2" color="text.secondary">
                     <FaQuoteLeft />
-                    {t('card content 1')}
+                    A Eureka promove um ambiente que incentiva tanto a reflexão quanto a ação coletiva para a mudança social.
                     <FaQuoteRight />
                   </Typography>
                 </CardContent>
@@ -75,13 +73,13 @@ const ClubProgramming = () => {
                     </IconButton>
                   }
                   title="Anna Silva"
-                  subheader={t('card header 2')}
+                  subheader="Marketing, Brasil"
                 />
                 <Divider />
                 <CardContent>
                   <Typography textAlign={'justify'} variant="body2" color="text.secondary">
                     <FaQuoteLeft />
-                    {t('card content 2')}
+                    Eureka me proporcionou uma jornada incrível de aprendizado e reflexão sobre justiça social. Participar do Clube me fez repensar minha visão de mundo. Recomendo a todos que desejam expandir seus horizontes e agir em prol da justiça.
                     <FaQuoteRight />
                   </Typography>
                 </CardContent>
@@ -110,13 +108,13 @@ const ClubProgramming = () => {
                     </IconButton>
                   }
                   title="Alejandro Noriega"
-                  subheader={t('card header 3')}
+                  subheader="Empreendedor Social, México"
                 />
                 <Divider />
                 <CardContent>
                   <Typography textAlign={'justify'} variant="body2" color="text.secondary">
                     <FaQuoteLeft />
-                    {t('card content 3')}
+                    Empreendedor Social, México O Clube me ajudou a entender os círculos viciosos que moldam nossa era: da maximização de lucros pelas big techs à polarização e degradação do processo político. Foi uma experiência transformadora para compreender as raízes da crise social e política.
                     <FaQuoteRight />
                   </Typography>
                 </CardContent>

@@ -1,12 +1,10 @@
 import { Stack, Typography } from '@mui/material';
 import { Grid, Box } from '@mui/material';
-import useTranslation from 'next-translate/useTranslation';
 import BuyButton from 'pages/participar/components/BuyButton';
 import useCycleSumary from '@/src/useCycleSumary';
 import { FC } from 'react';
 
 const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
-  const { t } = useTranslation('spinardi');
   const { data: cycle } = useCycleSumary(cycleId);
 
   return (
@@ -22,7 +20,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             >
               <Box id="price-info" sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                 <Typography fontSize={30} textAlign="center">
-                  <b> {t('lblHV')}</b>
+                  <b> Tenha acesso completo ao Clube!</b>
                 </Typography>
               </Box>
             </Box>
@@ -32,7 +30,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '45dvw', sm: '75dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
-                  {t('lblB1V')}
+                É hora de se conectar, refletir e crescer junto! Tenha acesso completo ao Clube de Leitura, Cinema e Música ‘Com amor, Spinardi’ por apenas:
                 </Typography>
               </Box>
             </Box>
@@ -61,7 +59,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '100dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
-                  {t('lblB2V')}
+                Ou R$ 199,00 à vista
                 </Typography>
               </Box>
             </Box>
@@ -70,7 +68,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
-                  ✅<b>{t('lblB3V')}</b>
+                  ✅<b> Acesso à curadoria exclusiva de livros, filmes e músicas durante os 4 meses do Clube.</b>
                 </Typography>
               </Box>
             </Box>
@@ -79,7 +77,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
-                  ✅<b>{t('lblB4V')}</b>
+                  ✅<b> Participação em encontros online (e alguns presenciais em São Paulo!) com Spinardi </b>
                 </Typography>
               </Box>
             </Box>
@@ -88,7 +86,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
-                  ✅<b>{t('lblB5V')}</b>
+                  ✅<b> Cronogramas personalizados, resumos em texto e áudio, e materiais de apoio para acompanhar sua jornada.</b>
                 </Typography>
               </Box>
             </Box>
@@ -97,7 +95,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '70dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
-                  ✅<b>{t('lblB6V')}</b>
+                  ✅<b> Funcionalidades exclusivas com IA para transformar suas reflexões em momentos únicos.</b>
                 </Typography>
               </Box>
             </Box>
@@ -111,7 +109,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
               paddingTop={0}
             >
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <BuyButton label={t('payment-opt-btn')} cycleId={cycle?.id!} />
+                <BuyButton label="Comece hoje mesmo!" cycleId={cycle?.id!} />
               </Box>
             </Box>
           </Grid>
@@ -119,7 +117,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2" paddingBlockEnd={1}>
-                  {t('lblB7V')}
+                Nota: Os livros e filmes não estão incluídos no valor da inscrição.
                 </Typography>
               </Box>
             </Box>
