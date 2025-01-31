@@ -26,7 +26,7 @@ module.exports = {
     'rgx:^/mediatheque/\\[slug\\]': [...header,'mediatheque', 'countries'],
     'rgx:^/user/\\[slug\\]/my-read-or-watched': [...header,'mediatheque','countries','countries-abbr'],
     'rgx:^/cycle/\\[id\\]': [...header,'cycleDetail', 'countries','hyvortalk','createPostForm'],
-    'rgx:^/work/\\[id\\]': [...header,'countries','workDetail','hyvortalk','createPostForm']
-    // '/participar/spinardi': ['spinardi'],
+    'rgx:^/work/\\[id\\]': [...header,'countries','workDetail','hyvortalk','createPostForm'],
+    '/participar/spinardi': ['spinardi'],
   },
 };
