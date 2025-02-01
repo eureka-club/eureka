@@ -34,7 +34,7 @@ const Spinardi:NextPage<Props>
         }
       `}</style>
      
-       <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
+      <Stack sx={{ justifyContent: 'center'}} alignItems={'center'}>
           <Stack gap={1} paddingTop={0} paddingBottom={1}>
                 <Header />
           </Stack>
@@ -65,6 +65,7 @@ const Spinardi:NextPage<Props>
           </Box>
         </Box>
       </Stack>
+      
       <Stack gap={5} paddingTop={1} paddingBottom={5}>
         <Box
           sx={{ display: 'flex', justifyContent: 'center' }}
@@ -76,7 +77,7 @@ const Spinardi:NextPage<Props>
             <ClubProgramming/>
           </Box>
         </Box>
-      </Stack>
+      </Stack> 
      <Stack gap={5} paddingTop={1} paddingBottom={2}>
         <Box
           sx={{ display: 'flex', justifyContent: 'center' }}
@@ -116,7 +117,7 @@ const Spinardi:NextPage<Props>
             <InvestInYourself cycleId={cycleId} />
           </Box>
         </Box>
-      </Stack>
+      </Stack> 
       <Stack gap={5} paddingTop={5} paddingBottom={5}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
           <Box sx={{ maxWidth: { lg: '95dvw', sm: '95dvw', xs: '100dvw' } }}>
