@@ -5,7 +5,7 @@ import { Grid, Box, Card, CardContent} from '@mui/material';
 const WhyBePartOf = () => {
   return (
     <div>
-      <Stack id="asUl" direction={{ xs: 'column',  sm: 'column'}} gap={2} justifyContent={'center'} alignItems={'center'} >
+      <Stack id="asUl" direction={{ xs: 'column',  sm: 'column'}}  justifyContent={'center'} alignItems={'center'} >
         <style jsx global>{
               `
                   #asUl{
@@ -46,7 +46,7 @@ const WhyBePartOf = () => {
                     height={195}
                 />
           </Box>
-          <Grid item xs={12} sm={12} padding={2}>
+          <Grid item xs={12} sm={12} paddingX={2}>
             <Card elevation={0} sx={{
               maxWidth:900, transition: "0.2s",
               "&:hover": {

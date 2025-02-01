@@ -40,7 +40,7 @@ const AdFromOurCommunity = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4}>
-                  <Stack gap={4}>
+                  <Stack gap={4} paddingX={4}>
                     <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'center'}>
                       <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
                         <Typography textAlign="left" paddingBlockEnd={2} variant="body2">

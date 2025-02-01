@@ -39,19 +39,19 @@ const Header = () => {
                       <Typography textAlign="center" variant="subtitle1">
                         Durante 4 meses, de março a junho, você terá acesso a uma <b>curadoria especial de livros, filmes e músicas e encontros (presenciais e virtuais) com o Spinardi.</b>
                       </Typography>
-                      <Box paddingBottom={6} paddingRight={2} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
+                      <Box paddingBottom={6} paddingRight={2} paddingTop={1} sx={{ maxWidth: { lg: '90dvw', sm: '90dvw', xs: '90dvw' } }}>
                         <Typography paddingBlockStart={0} paddingLeft={1} textAlign="center" variant="subtitle2">
                           <Link href="#price-info">
                             <Button variant='contained'>INSCREVA-SE NO CLUBE</Button>
                           </Link>
                         </Typography>
-                        <Typography paddingBlockStart={2} paddingLeft={1} textAlign="center" variant="subtitle2">
+                        <Typography paddingBlockStart={1} paddingLeft={1} textAlign="center" variant="subtitle2">
                           <i>Amar pode custar caro, mas refletir sobre o amor nunca foi tão acessível.</i>
                         </Typography>
                       </Box>
                     </Box>
                 <Box 
-                  sx={{
+                  sx={{paddingLeft:12,
                     width:{xs:'100%',md:'30%'},
                     display:{md:'inherit',xs:'none'}
                   }}>
