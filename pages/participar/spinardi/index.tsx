@@ -106,7 +106,7 @@ const Spinardi:NextPage<Props>
           </Box>
         </Box>
       </Stack>
-      <Stack paddingBottom={5} sx={{ backgroundColor: "#00cec9" }} gap={5} >
+      <Stack paddingBottom={1} sx={{ backgroundColor: "#00cec9" }} gap={5} >
         <Box
           sx={{ display: 'flex', justifyContent: 'center' }}
           alignItems={'center'}

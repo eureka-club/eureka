@@ -10,7 +10,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
   return (
     <>
       <div>
-        <Stack gap={3} paddingTop={5} paddingBottom={1}>
+        <Stack gap={0.5} paddingTop={2} paddingBottom={1}>
           <Grid>
             <Box
               sx={{ display: 'flex', justifyContent: 'center' }}
@@ -20,12 +20,11 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
             >
               <Box id="price-info" sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                 <Typography fontSize={30} textAlign="center">
-                  <b> Tenha acesso completo ao Clube!</b>
+                  <b>Garanta sua vaga!</b>
                 </Typography>
               </Box>
             </Box>
           </Grid>
-
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '45dvw', sm: '75dvw', xs: '100dvw' } }}>
@@ -42,25 +41,33 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
                 alignItems={'center'}
                 alignContent={'center'}
               >
-                <Typography fontSize={30}>
+                <Typography fontSize={22}>
                   <b>4 X</b>
                 </Typography>
-                <Typography textAlign="center" paddingBlockEnd={0} fontSize={60} paddingLeft={1}>
+                <Typography textAlign="center" paddingBlockEnd={0} fontSize={50} paddingLeft={1}>
                   <b>49,90</b>
-                </Typography>
-                <Typography textAlign="left" fontSize={30}>
-                  <b></b>
                 </Typography>
               </Box>
             </Box>
           </Grid>
-
           <Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '60dvw', sm: '100dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2">
                 Ou R$ 199,00 à vista
                 </Typography>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid paddingY={2}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'center' }}
+              alignItems={'center'}
+              paddingRight={4}
+              paddingTop={0}
+            >
+              <Box sx={{ maxWidth: { lg: '90dvw', sm: '100dvw', xs: '100dvw' } }}>
+                <BuyButton label="Comece hoje mesmo!" cycleId={cycle?.id!} />
               </Box>
             </Box>
           </Grid>
@@ -100,20 +107,7 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
               </Box>
             </Box>
           </Grid>
-
-          <Grid>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'center' }}
-              alignItems={'center'}
-              paddingRight={4}
-              paddingTop={0}
-            >
-              <Box sx={{ maxWidth: { lg: '90dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <BuyButton label="Comece hoje mesmo!" cycleId={cycle?.id!} />
-              </Box>
-            </Box>
-          </Grid>
-          <Grid>
+          <Grid paddingTop={1}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
               <Box sx={{ maxWidth: { lg: '43dvw', sm: '43dvw', xs: '100dvw' } }}>
                 <Typography textAlign="center" variant="body2" paddingBlockEnd={1}>

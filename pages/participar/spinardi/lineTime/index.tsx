@@ -6,15 +6,11 @@ const LineTime = () => {
   return (
     <>
       <div>
-    
         <Stack
-       
-          gap={0}
           paddingTop={4}
           paddingBottom={4}
           sx={{ backgroundColor: 'white' }}
           paddingLeft={2}
-          
         >
           <Stack id="asUl" direction={{ xs: 'column' }} gap={2} alignContent={'center'} alignItems={'center'}>
             <style jsx global>
@@ -39,7 +35,6 @@ const LineTime = () => {
                 }
               `}
             </style>
-
             <Grid container spacing={5} justifyContent={'left'} alignItems={'left'}>
               <Grid item xs={12} sm={4} md={3} lg={3}>
                 <Card
@@ -154,7 +149,6 @@ const LineTime = () => {
                       // </Typography>
                     }
                   />
-
                   <Divider />
                   <CardContent>
                       <Chip label="19 de Maio - 15 de Junho" color="secondary" sx={{marginBottom:'4px'}}/>
@@ -198,7 +192,6 @@ const LineTime = () => {
                       // </Typography>
                     }
                   />
-
                   <Divider />
                   <CardContent>
                       <Chip label="16 de Junho - 13 de Julho" color="secondary" sx={{marginBottom:'4px'}} />
