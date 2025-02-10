@@ -2,10 +2,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import { OncheckoutSessionCompleted } from './OncheckoutSessionCompleted';
+import { WEBAPP_URL } from '@/src/constants';
 
 export default getApiHandler()
 .get<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
-  try {debugger;
+  try {
     const cycleTitle="Com Amor, Spinardi";
     const {identifier:e} = req.query;
     const identifier = e?.toString()||undefined;
@@ -18,7 +19,8 @@ export default getApiHandler()
     const transactions = [userT,cycleT];
     const [user,cycle]:any = await prisma.$transaction(transactions);
     await OncheckoutSessionCompleted(email,user?.name!,cycle?.id!,cycleTitle);
-    res.status(200).json({status:'ok'})
+    res.redirect(`${WEBAPP_URL}/cycle/${cycle?.id}`);
+    // res.status(200).json({status:'ok'})
     
   } catch (exc) {
     console.error(exc); // eslint-disable-line no-console
