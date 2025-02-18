@@ -54,6 +54,5 @@
   "isNotUser": "Compte non enregistré",
   "EmailRequired": "Le champ 'Adresse e-mail' est obligatoire",
   "PasswordRequired": "Le champ 'Mot de passe' est obligatoire",
-  "RegisteredUsingGoogleProvider": "Inscrit à l'aide du fournisseur Google",
-  "joinCycleLabel":"Rejoignez le cycle"
+  "RegisteredUsingGoogleProvider": "Inscrit à l'aide du fournisseur Google"
 }

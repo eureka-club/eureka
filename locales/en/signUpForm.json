@@ -53,6 +53,5 @@
   "isNotUser": "User not registered",
   "EmailRequired": "The email field is required",
   "PasswordRequired": "The password field is required",
-  "RegisteredUsingGoogleProvider": "Registered Using Google Provider",
-  "joinCycleLabel":"Join cycle"
+  "RegisteredUsingGoogleProvider": "Registered Using Google Provider"
 }
