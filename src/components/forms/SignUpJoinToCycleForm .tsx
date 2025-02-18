@@ -391,7 +391,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       <img className="eurekaLogo" src="/logo.svg" alt="Project logo" />
                       <section>
                         <div className={`text-secondary ms-3 h4 mb-0 ${styles.brand}`}>Eureka</div>
-                        <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>{t('navbar:tagline')}</p>
+                        <p className="text-secondary my-0 ms-3 font-weight-light" style={{ fontSize: '.7em' }}>{t('navbar')}</p>
                       </section>
                     </aside>
                   </a>

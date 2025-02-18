@@ -1,6 +1,7 @@
 {
   "Sign up": "Sign up",
   "Welcome": "Welcome!",
+  "navbar":"Technology + culture, for social justice",
   "welcomeText1": "Eureka is the first book-film club converted to (non-profit) social media.",
   "welcomeText2": "We have a social impact goal: activate minds to transform the world.",
   "JoinEureka": "Join Eureka",
@@ -52,5 +53,6 @@
   "isNotUser": "User not registered",
   "EmailRequired": "The email field is required",
   "PasswordRequired": "The password field is required",
-  "RegisteredUsingGoogleProvider": "Registered Using Google Provider"
+  "RegisteredUsingGoogleProvider": "Registered Using Google Provider",
+  "joinCycleLabel":"Join cycle"
 }

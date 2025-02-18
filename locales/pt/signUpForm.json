@@ -1,6 +1,7 @@
 {
   "Sign up": "Cadastro",
   "Welcome": "Te damos as boas-vindas!",
+  "navbar":"Tecnologia + cultura, pela justiça social",
   "welcomeText1": "Eureka é o primeiro clube de livros e filmes convertido em rede social (sem fins lucrativos).",
   "welcomeText2": "Nosso objetivo é de impacto social: ativar mentes para transformar o mundo.",
   "JoinEureka": "Criar conta na Eureka",
@@ -53,5 +54,6 @@
   "isNotUser": "Conta não cadastrada",
   "EmailRequired": "O campo 'e-mail' é obrigatório",
   "PasswordRequired": "O campo 'Senha' é obrigatório",
-  "RegisteredUsingGoogleProvider": "Registrado usando o provedor Google"
+  "RegisteredUsingGoogleProvider": "Registrado usando o provedor Google",
+  "joinCycleLabel":"Junte-se ao ciclo"
 }
