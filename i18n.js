@@ -8,6 +8,7 @@ module.exports = {
   defaultLocale: 'pt',
   pages: {
     // '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated','hyvortalk'],
+    
     '/': [...all,'countries','feed'],
     '/login':['signInForm'],
     '/auth/emailVerify': ['navbar','emailVerify'],
@@ -21,7 +22,7 @@ module.exports = {
     '/profile': [...header, 'profile','createWorkForm', 'countries'],
     '/manifest': [...header,'manifest'],
     '/policy': [...header,'termsAndPolicy'],
-    '/register': ['signUpForm'],
+    'rgx:^/register':[...header,'signUpForm'],
     'rgx:^/payment-options/\\[cycleId\\]':['navbar','payment-options'],
     '/back-office': [...header,'backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': [...header,'mediatheque', 'countries'],
