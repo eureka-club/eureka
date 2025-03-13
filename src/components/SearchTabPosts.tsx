@@ -8,7 +8,7 @@ import { Prisma } from '@prisma/client';
 import { PostSumary } from '../types/post';
 import usePostsSumary, { getPostsSumary } from '../usePostsSumary';
 import { useSession } from 'next-auth/react';
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 
 const take = 8;
@@ -103,7 +103,13 @@ const SearchTabCycles:FunctionComponent = () => {
   },[inView])
 
   return <>
-    <FilterEnginePosts/>
+  {
+    !isLoading&&!posts?.length
+      ? <Alert severity="warning">{t('Not Found')}</Alert>
+      : <>
+        <FilterEnginePosts/>
+      </>
+  }
     {/* {
       posts?.length==0
         ? <Alert>{t('common:ResultsNotFound')}</Alert>

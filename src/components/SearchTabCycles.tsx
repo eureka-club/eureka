@@ -7,8 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { CycleSumary } from '../types/cycle';
 import useCyclesSumary from '../useCyclesSumary';
-import { MosaicsGrid } from './MosaicsGrid';
-import { CircularProgress } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 import MosaicItem from './cycle/MosaicItem';
 import Masonry from '@mui/lab/Masonry';
 
@@ -128,7 +127,13 @@ const SearchTabCycles:FunctionComponent<Props> = () => {
   },[inView])
 
   return  <>
+  {
+    !isLoading&&!cycles?.length
+    ? <Alert severity="warning">{t('Not Found')}</Alert>
+    : <>
     <FilterEngineCycles/>
+  </>
+  }
     {/* {
       cycles?.length==0
         ? <Alert>{t('ResultsNotFound')}</Alert>

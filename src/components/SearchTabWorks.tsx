@@ -1,18 +1,13 @@
 import { useState, FunctionComponent, useEffect, useMemo } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-
-import MosaicItem from '@/components/work/MosaicItem'
-
 import useFilterEngineWorks from './useFilterEngineWorks';
 import { useInView } from 'react-intersection-observer';
 import { Prisma } from '@prisma/client';
 import { WorkSumary } from '../types/work';
 import { getWorksProps } from '../types/work';
 import useWorksSumary, { getWorksSumary } from '../useWorksSumary';
-import { Alert, Box } from '@mui/material';
-import { MosaicsGrid } from './MosaicsGrid';
-import Masonry from '@mui/lab/Masonry';
+import { Alert } from '@mui/material';
 import { WorksMosaic } from './WorksMosaic';
 
 const take = 8;
@@ -88,7 +83,6 @@ const SearchTabworks:FunctionComponent = () => {
   },[inView])
 
   return  <>
-    <FilterEngineWork/>
     {/* {
       works?.length==0
         ? <Alert>{t('ResultsNotFound')}</Alert>
@@ -114,6 +108,14 @@ const SearchTabworks:FunctionComponent = () => {
         </Box>
       )}
     </Masonry> */}
+    {
+      !isLoading&&!works?.length
+        ?       <Alert severity="warning">{t('Not Found')}</Alert>
+
+        : <>
+           <FilterEngineWork/>
+          </>
+    }
     <WorksMosaic works={works}/>
     {/* {works?.length!=total && <CircularProgress ref={ref} />} */}
     {works?.length!=total && <hr ref={ref}/>}
