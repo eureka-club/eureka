@@ -573,7 +573,7 @@ const CreateWorkForm: FunctionComponent<Props> = ({ noModal = false }) => {
                                         <FormControl size="small" fullWidth>
                                             <InputLabel id="language-label">*{t('languageFieldLabel')}</InputLabel>
                                             <Select
-                                                disabled={useApiSearch}
+                                                // disabled={useApiSearch}
                                                 value={formValues.language}
                                                 onChange={(e)=>setFormValues(res=>({...res,language:e.target.value}))}
                                                 labelId="language-label"
