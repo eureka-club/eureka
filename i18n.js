@@ -30,6 +30,7 @@ module.exports = {
     'rgx:^/cycle/\\[id\\]': [...header,'cycleDetail', 'countries','hyvortalk','createPostForm'],
     'rgx:^/work/\\[id\\]': [...header,'createWorkForm','countries','workDetail','hyvortalk','createPostForm'],
     'rgx:my-cycles': [...header],
+    'rgx:my-posts': [...header],
     // '/participar/spinardi': ['spinardi'],
   },
 };
