@@ -1,13 +1,11 @@
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent } from 'react';
-import {BsFillCircleFill} from 'react-icons/bs'
 import { getNotificationMessage } from '@/src/lib/utils';
 import { NotificationSumary } from '../../types/notification';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Stack, Typography } from '@mui/material';
 import { Circle } from '@mui/icons-material';
-import UserMosaicItem from "../user/MosaicItem";
 import UserAvatar from '../common/UserAvatar';
 
 dayjs.extend(relativeTime)
