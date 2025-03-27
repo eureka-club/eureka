@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import Container from 'react-bootstrap/Container';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import SignInForm from '../src/components/forms/SignInForm';
+import { Container } from '@mui/material';
 
 const LoginPage: NextPage = () => {
   
@@ -11,7 +11,7 @@ const LoginPage: NextPage = () => {
 
   return (
     <SimpleLayout allPageSize={true} title={t('login')} showNavBar={false} showFooter={false}>
-    <Container className='mt-5'>
+    <Container sx={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh'}}>
           <SignInForm noModal  />
      </Container>
     </SimpleLayout>
