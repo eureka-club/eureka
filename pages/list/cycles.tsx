@@ -1,10 +1,8 @@
-import { Cycle } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { useEffect } from 'react';
-//import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Table from 'react-bootstrap/Table';
