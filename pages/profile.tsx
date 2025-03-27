@@ -2,12 +2,12 @@ import { GetServerSideProps,NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import {getSession, signIn } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { useEffect } from 'react';
 import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import EditUserForm from '@/components/forms/EditUserForm';
 import { Session } from '@/src/types';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Skeleton from '@/src/components/Skeleton';
 interface Props {
   session:Session
 }
@@ -43,7 +43,8 @@ if (session)
   else
    return  (
     <SimpleLayout title={t('createCycle')}>
-        <Spinner animation="grow" variant="info" />
+      <Skeleton type='card'/>
+      <Skeleton type='list'/>
     </SimpleLayout>
   );
 };
