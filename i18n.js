@@ -8,7 +8,7 @@ module.exports = {
   defaultLocale: 'pt',
   pages: {
     // '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated','hyvortalk'],
-    
+    '*':[...header],
     '/': [...all,'countries','feed'],
     '/login':['signInForm'],
     '/auth/emailVerify': ['navbar','emailVerify'],
