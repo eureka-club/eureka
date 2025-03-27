@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from 'next';
 import Head from "next/head";
 import useTranslation from 'next-translate/useTranslation';
 import { useState /* , useEffect, ReactElement, Children */ } from 'react';
-import { Col, Row } from 'react-bootstrap';
 import { BsCircleFill } from 'react-icons/bs';
 import { RiAlertLine } from 'react-icons/ri';
 import { CgArrowLongRight } from 'react-icons/cg';
@@ -13,6 +12,7 @@ import SimpleLayout from '../src/components/layouts/SimpleLayout';
 import styles from './manifest.module.css';
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
+import { Grid } from '@mui/material';
 
 interface Props{
   session:Session
@@ -41,20 +41,20 @@ const ManifestPage: NextPage<Props> = ({session}) => {
     </Head>    
     <SimpleLayout  title={t('browserTitleWelcome')}>
         <section  className="mb-5">
-          <Row style={{ gap: "5px" }}>
-            <Col style={{ paddingTop: "40px" }}  xs={12} md={4} className="pe-0 me-0 d-flex flex-column" >
+          <Grid container style={{ gap: "5px" }}>
+            <Grid item style={{ paddingTop: "40px" }}  xs={12} md={4} className="pe-0 me-0 d-flex flex-column" >
               <h1 className="text-primary" style={{ fontSize: '2.5em' }}>
                 {t('manifestLbl')} <br />
                 Eureka <BsCircleFill style={{ fontSize: '.2em' }} />{' '}
               </h1>
               <h2 style={{fontSize:'1rem'}}><em className="d-block text-gray">{t('eurekaPrinciple')}</em></h2>
-            </Col>
-            <Col xs={12} md={8} className="ms-0 border-start border-info border-2">
+            </Grid>
+            <Grid item xs={12} md={8} className="ms-0 border-start border-info border-2 p-3">
               <p>
                 <span className="text-secondary fw-bold">{t('welcomeEureka')}</span> {t('manifestDesc')}
               </p>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </section>
         {/* <Masonry
           breakpointCols={{
@@ -65,8 +65,8 @@ const ManifestPage: NextPage<Props> = ({session}) => {
           }}
           className="d-flex mt-5"
         > */}
-        <Row>
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+        <Grid container>
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(1, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -92,9 +92,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box1Desc')}</p>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(1, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -120,9 +120,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box2Desc')}</p>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(1, 3) && (
               <section
                 style={{ height: '250px' }}
@@ -148,11 +148,11 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow1Box3Desc')}</p>
               </aside>
             )}
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
         {/* row 2     */}
-        <Row>
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+        <Grid container>
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(2, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -178,9 +178,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box1Desc')}</p>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(2, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -206,9 +206,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box2Desc')}</p>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(2, 3) && (
               <section
                 style={{ height: '250px' }}
@@ -234,11 +234,11 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow2Box3Desc')}</p>
               </aside>
             )}
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
         {/* row 3     */}
-        <Row>
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+        <Grid container>
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(3, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -264,9 +264,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box1Desc')}</p>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(3, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -292,9 +292,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box2Desc')}</p>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} lg={4} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} lg={4} className=" p-3 ms-0">
             {!isVisible(3, 3) && (
               <section
                 style={{ height: '250px' }}
@@ -320,10 +320,10 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow3Box3Desc')}</p>
               </aside>
             )}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} md={6} className=" p-3 ms-0">
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={12} md={6} className=" p-3 ms-0">
             {!isVisible(4, 1) && (
               <section
                 style={{ height: '250px' }}
@@ -356,9 +356,9 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 </ul>
               </aside>
             )}
-          </Col>
+          </Grid>
 
-          <Col xs={12} md={6} className=" p-3 ms-0">
+          <Grid item xs={12} md={6} className=" p-3 ms-0">
             {!isVisible(4, 2) && (
               <section
                 style={{ height: '250px' }}
@@ -386,8 +386,8 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 <p className="p-2 m-0 text-wrap text-start fs-6">{t('manifestRow4Box2Desc')}</p>
               </aside>
             )}
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
         {/* </Masonry> */}
 
         <br />
@@ -395,8 +395,8 @@ const ManifestPage: NextPage<Props> = ({session}) => {
         <br />
 
         <section className="mb-5">
-          <Row>
-            <Col xs={12} md={4} className="pe-2 me-0 d-flex align-items-center justify-content-center">
+          <Grid container>
+            <Grid item xs={12} md={4} className="pe-2 me-0 d-flex align-items-center justify-content-center">
               <RiAlertLine
                 className="text-yellow"
                 style={{ opacity: '.7', fontSize: '15em', margin: '-.3em -.5em 0 -.3em' }}
@@ -404,8 +404,8 @@ const ManifestPage: NextPage<Props> = ({session}) => {
               <h2 className="h1 fw-bolder text-secondary mb-5 me-4" style={{ zIndex: 9999 }}>
                 {t('enforcement')}
               </h2>
-            </Col>
-            <Col xs={12} md={8} className="ms-0 border-start border-info border-2">
+            </Grid>
+            <Grid item xs={12} md={8} className="ms-0 border-start border-info border-2 p-3">
               <h2 className="h6 fw-bolder">{t('enforcementHeadLbl')}</h2>
               <ol>
                 <li>{t('manifestEnforcement1')}</li>
@@ -420,17 +420,17 @@ const ManifestPage: NextPage<Props> = ({session}) => {
                 {t('enforcementFooterLbl')}
                 <a href="mailto:hola@eureka.club">hola@eureka.club</a>
               </p>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </section>
        <section className="mb-5">
-         <Row>
+         <Grid container>
         <span>{t('AgreeText')}
           <Link href="/policy" passHref>
               <span className={`cursor-pointer ms-1 ${styles.linkText}`}>{t('policyText')}</span>
            </Link>
         </span>
-        </Row>
+        </Grid>
        </section> 
     </SimpleLayout>
     </>
