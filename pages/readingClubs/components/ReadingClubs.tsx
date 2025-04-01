@@ -23,16 +23,22 @@ export default function ReadingClubs() {
           ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio en.webp"
           : "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio pt.webp"
 
-          const imagePath5 =
-  lang === "es"
-  ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas es.webp"
-  : lang === "en"
-    ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas en.webp"
-    : lang === "pt"
-      ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas pt.webp"
-      : lang === "fr"
-        ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas en.webp"
-        : "/img/readingClubs/5 Tecnologia Sob Lentes Feministas pt.webp"
+  const imagePath5 = `/img/readingClubs/5 Tecnologia Sob Lentes Feministas ${lang=='fr'?'en':lang}.webp`
+  // lang === "es"
+  // ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas es.webp"
+  // : lang === "en"
+  //   ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas en.webp"
+  //   : lang === "pt"
+  //     ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas pt.webp"
+  //     : lang === "fr"
+  //       ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas en.webp"
+  //       : "/img/readingClubs/5 Tecnologia Sob Lentes Feministas pt.webp"
+  
+    const imagePath5Href = lang == 'es'
+      ? '/es/cycle/25'
+      : lang == 'pt'
+        ? '/pt/cycle/26'
+        : `/${lang}/cycle/24`;
 
   return (
     <>
@@ -418,12 +424,14 @@ export default function ReadingClubs() {
                         <Stack gap={0}>
                         <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image
-                              src={imagePath5}
-                              width={1080}
-                              height={1367}
-                              style={{ cursor: 'pointer' }}
-                            />
+                            <Link href={imagePath5Href}>
+                              <Image
+                                src={imagePath5}
+                                width={1080}
+                                height={1367}
+                                style={{ cursor: 'pointer' }}
+                              />
+                            </Link>
                           </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
