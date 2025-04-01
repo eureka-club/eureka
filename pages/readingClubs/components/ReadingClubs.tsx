@@ -12,7 +12,7 @@ export default function ReadingClubs() {
 
   const { t,lang } = useTranslation('readingClubs');
 
-  const imagePath5 =
+  const imagePath4 =
   lang === "es"
     ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio es.webp"
     : lang === "en"
@@ -23,7 +23,7 @@ export default function ReadingClubs() {
           ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio en.webp"
           : "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio pt.webp"
 
-          const imagePath6 =
+          const imagePath5 =
   lang === "es"
   ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas es.webp"
   : lang === "en"
@@ -328,17 +328,17 @@ export default function ReadingClubs() {
                         <Box component={Link} href={'https://www.eureka.club/cycle/31'}>
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             <Image
-                              src={imagePath5}
+                              src={imagePath4}
                               width={1080}
                               height={1367}
                               style={{ cursor: 'pointer' }}
                             />
                           </Box>
                           </Box>
-                          <Box component={Link} href={imagePath5}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/31'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Image
-                              src={imagePath5}
+                              src={imagePath4}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
@@ -416,21 +416,27 @@ export default function ReadingClubs() {
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             <Image
-                              src={imagePath6}
+                              src={imagePath5}
                               width={1080}
                               height={1367}
                               style={{ cursor: 'pointer' }}
                             />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Image
-                              src={imagePath6}
+                              src={imagePath5}
                               width={197}
                               height={260}
-                              style={{ cursor: 'pointer' }}
+
                             />
+
+
+                          </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -553,11 +559,15 @@ export default function ReadingClubs() {
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/20'}>
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image src={`/img/readingClubs/7. Ser Agua.webp`} width={1080} height={1367} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={1080} height={1367} />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/20'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image src={`/img/readingClubs/7. Ser Agua.webp`} width={197} height={260} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={197} height={260} />
+                          </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -593,19 +603,25 @@ export default function ReadingClubs() {
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/19'}>
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             <Image
                               src={`/img/readingClubs/8.ecossensse & ecosensibility.webp`}
                               width={1080}
                               height={1367}
+                              style={{ cursor: 'pointer' }}
                             />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/19'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Image
                               src={`/img/readingClubs/8.ecossensse & ecosensibility.webp`}
                               width={197}
                               height={260}
+                              style={{ cursor: 'pointer' }}
                             />
+                            </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -670,11 +686,15 @@ export default function ReadingClubs() {
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/18'}>
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image src={`/img/readingClubs/9.tautology.webp`} width={1080} height={1367} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={1080} height={1367} />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/18'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image src={`/img/readingClubs/9.tautology.webp`} width={197} height={260} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={197} height={260} />
+                          </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -710,19 +730,26 @@ export default function ReadingClubs() {
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/16'}>
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             <Image
                               src={`/img/readingClubs/10.capitalismo de las redes.webp`}
                               width={1080}
                               height={1367}
+                              style={{ cursor: 'pointer' }}
                             />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/16'}>
+
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Image
                               src={`/img/readingClubs/10.capitalismo de las redes.webp`}
                               width={197}
                               height={260}
+                              style={{ cursor: 'pointer' }}
                             />
+                          </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -787,12 +814,18 @@ export default function ReadingClubs() {
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/15'}>
+
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image src={`/img/readingClubs/11.nuevas justicias.webp`} width={1080} height={1367} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={1080} height={1367} />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/15'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image src={`/img/readingClubs/11.nuevas justicias.webp`} width={197} height={260} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={197} height={260} />
                           </Box>
+                          </Box>
+
                           <Box>
                             <Typography textAlign="left" variant="body2">
                               {t('text58')}
@@ -827,11 +860,15 @@ export default function ReadingClubs() {
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
                         <Stack gap={0}>
+                        <Box component={Link} href={'https://www.eureka.club/cycle/13'}>
                           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image src={`/img/readingClubs/12.genero e violencia.webp`} width={1080} height={1367} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={1080} height={1367} />
                           </Box>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/13'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image src={`/img/readingClubs/12.genero e violencia.webp`} width={197} height={260} />
+                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={197} height={260} />
+                          </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
