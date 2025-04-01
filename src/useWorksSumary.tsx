@@ -10,7 +10,7 @@ export const getWorksSumary = async (
 ): Promise<{ works: WorkSumary[], fetched: number, total: number }> => {
   let query = props ? `?props=${encodeURIComponent(JSON.stringify(props))}` : ''  //lang=${lang}&
   if (lang)
-    query += `&lang=${lang}`;
+    query += `${query?'&':'?'}lang=${lang}`;
   const url = `${WEBAPP_URL}/api/work/sumary${query}`
   const res = await fetch(url);
   if (!res.ok) return { works: [], fetched: 0, total: -1 };
