@@ -89,7 +89,7 @@ export const WorkSumarySpec = {
     title:true,
     type:true,
     language:true,
-    // ToCheck:true,
+    ToCheck:true,
     author:true,
     createdAt:true,
     updatedAt:true,

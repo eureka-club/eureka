@@ -8,11 +8,12 @@ module.exports = {
   defaultLocale: 'pt',
   pages: {
     // '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated','hyvortalk'],
-
+    '*':[...header],
     '/': [...all,'countries','feed'],
     '/login':['signInForm'],
     '/auth/emailVerify': ['navbar','emailVerify'],
     '/post/create': [...header,'createPostForm','countries'],
+    'rgx:^/post/\\[id\\]/edit': [...header,'createPostForm','createWorkForm','countries'],
     '/work/create': [...header,'createWorkForm', 'countries'],
     '/cycle/create': [...header,'createCycleForm','createWorkForm', 'countries'],
     'rgx:^/cycle/\\[id\\]/edit': [...header,'createCycleForm','createWorkForm', 'countries'],

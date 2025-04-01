@@ -3,14 +3,12 @@ import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import useTranslation from 'next-translate/useTranslation';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
-import Link from 'next/link';
 
 import { getSession } from 'next-auth/react';
 import { Session } from '@/src/types';
 
 import ReadingClubs from './components/ReadingClubs';
 import { Box, Stack, Typography } from '@mui/material';
-import { color } from '@mui/system';
 interface Props {
   session: Session;
 }
@@ -28,7 +26,7 @@ const readingClubsPage: NextPage<Props> = ({}) => {
           background-color: #10b4bb;
         }
       `}</style>
-      <SimpleLayout fullWidth title={t('readingClubs')}>
+      <SimpleLayout fullWidth title={t('readingsClubsTitle')}>
         <Stack sx={{ alignItems: 'center', alignContent: 'center' }}>
           <Box>
 

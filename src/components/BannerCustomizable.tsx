@@ -77,7 +77,7 @@ const BannerCustomizable: FunctionComponent = ({
                   <img src={`${imgBaseUrl}${s.images[0].storedFile}`} style={{ width: '24rem', height: '20rem' }}/>
                 </Box>
                 <Stack flex={3} id={`outerRef-${currentIdx}`}  sx={{ height:'20rem',width:'100%',whiteSpace: 'nowrap', padding:'.5rem 1rem', overflowY:'hidden' }}>
-                  <Box id={`innerRef-${currentIdx}`} >
+                  <Box id={`innerRef-${currentIdx}`} sx={{overflowY:'auto',height:'100%'}}>
                     <Stack gap={1} sx={{padding:'2rem 2rem 0 2rem'}}>
                       <Typography color={'secondary'} variant='h2' sx={{whiteSpace:'break-spaces',fontSize:'1.8rem'}}>{s.title}</Typography>
                       <Stack gap={1} className='Zxc'>
@@ -103,7 +103,12 @@ const BannerCustomizable: FunctionComponent = ({
                   </Box>
                 </Stack>
               </Stack>
-              {
+              
+              
+            </Box>
+          ))}
+          <Box>
+          {
                 bo?.sliders.length>1 
                  ? <Box
                   sx={{
@@ -111,13 +116,10 @@ const BannerCustomizable: FunctionComponent = ({
                     padding:'1rem .5rem',
                     gap:'.25rem',
                     width:'100%',
-                    position:'absolute',
-                    bottom:'0px',
-                    left:'0px', 
-                    zIndex:999,
+                    
                     alignItems:'center',
                     justifyContent:'center',
-                    // backgroundColor:'rgba(227, 231, 239,.25)'
+                    backgroundColor:'rgba(245, 246, 248, 0.93)'
                   }}
                 >
                   {
@@ -150,9 +152,7 @@ const BannerCustomizable: FunctionComponent = ({
                 </Box>
                  : <></>
               }
-              
-            </Box>
-          ))}
+          </Box>
             </Stack>
           :<></>
       }

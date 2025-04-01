@@ -2,7 +2,6 @@ import { FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Select
 import { i18n, Locale } from 'i18n-config';
 import { ChangeEvent, useRef, useState } from 'react';
 import { Editor as EditorCmp } from '@tinymce/tinymce-react';
-//import { Button } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';

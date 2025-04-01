@@ -1,11 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
-import Footer from '@/components/layouts/Footer';
-//import Button from 'react-bootstrap/Button';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-//import { Col, Row } from 'react-bootstrap';
 import SimpleLayout from '@/src/components/layouts/SimpleLayout';
 import { useRouter } from 'next/router';
 import { Button, Grid, Stack } from '@mui/material';

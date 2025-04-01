@@ -1,21 +1,13 @@
 import { signIn } from "next-auth/react";
-// import {Form, Spinner} from 'react-bootstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { useState, FunctionComponent, MouseEvent,useRef, useEffect } from 'react';
-// import Button from 'react-bootstrap/Button';
-// import Container from 'react-bootstrap/Container';
-// import ModalBody from 'react-bootstrap/ModalBody';
-// import ModalHeader from 'react-bootstrap/ModalHeader';
-// import Row from 'react-bootstrap/Row';
+import { useState, FunctionComponent, MouseEvent,useRef } from 'react';
 import Link from 'next/link'
 import toast from 'react-hot-toast'
-import styles from './SignInForm.module.css';
 import {useRouter} from 'next/router'
 import { useModalContext } from "@/src/hooks/useModal";
-import { Button,Box, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack, TextField, Typography } from '@mui/material';
 import Image from "next/image";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { WEBAPP_URL } from "@/src/constants";
 
 interface Props {
   noModal?: boolean;

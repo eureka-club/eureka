@@ -52,7 +52,7 @@ const IndexPage: NextPage<Props> = ({session}) => {
       </SimpleLayout>
          */}
       {/*{session && session.user &&  */}
-      <SimpleLayout showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
+      <SimpleLayout  showCustomBaner={(!session) ? true : false} title={t('browserTitleWelcome')}>
          <HomeNotSession/>
       </SimpleLayout>
     </>

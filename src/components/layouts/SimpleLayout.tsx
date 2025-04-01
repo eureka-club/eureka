@@ -1,6 +1,6 @@
-import { FunctionComponent, HtmlHTMLAttributes} from 'react';
+import { FunctionComponent} from 'react';
 import withTitle from '../../HOCs/withTitle';
-import NavbarMobile from '@/components/layouts/NavbarMobile';
+// import NavbarMobile from '@/components/layouts/NavbarMobile';
 import Header from '@/components/layouts/Header';
 import Navbar from '@/src/components/layouts/Navbar/Navbar';
 import HeaderMobile from '@/components/layouts/HeaderMobile';
@@ -44,12 +44,20 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
       <Box sx={!fullWidth ? {paddingBottom:'2rem'}:{}} className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}>
         {showHeader && <>
           <div className="d-none d-lg-block"><Header show={showHeader} /></div>
-          <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>
-        </>}
-        {showCustomBaner &&<div className="d-none d-lg-block">
-          <BannerCustomizable/>
-        </div>}
-        {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
+          <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>        
+        </>}   
+        {showCustomBaner
+          ? <>
+              <Box sx={{display:{xs:'none',sm:'block'}}}> 
+                <BannerCustomizable/>
+              </Box>
+              <Box sx={{display:{xs:'block',sm:'none'}}}>
+                <BannerCustomizableMobile/>
+              </Box>
+            </>
+          : <></>
+        }
+        
         {renderBanner()}
         {
         (!showNavBar || allPageSize)

@@ -3,11 +3,10 @@ import { useEffect } from 'react';
 import { getSession,useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-// import { Session } from '../../src/types';
 import SimpleLayout from '../../src/components/layouts/SimpleLayout';
 import CreateCycleForm from '../../src/components/forms/CreateCycleForm';
-import { Spinner} from 'react-bootstrap';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
+import Skeleton from '@/src/components/Skeleton';
 
 interface Props {
   notFound?: boolean;
@@ -19,32 +18,33 @@ const CreateCyclePage: NextPage<Props> = ({notFound}) => {
   const isLoadingSession = status === "loading"
   const router = useRouter();
 
-useEffect(() => {
-            if (notFound) 
-                router.push('/');
-            
-    }, [notFound]);
+  useEffect(() => {
+    if (notFound) 
+        router.push('/');
+  }, [notFound]);
 
-if (!notFound) 
-  return  (
-    <SimpleLayout title={t('createCycle')}>
-      <ButtonsTopActions/>
-         {
-          (isLoadingSession) 
-          ? <Spinner animation="grow" variant="info" />
-          : <>
-              <CreateCycleForm/>
-            </>
-        }
-    </SimpleLayout>
-  );
+  if (!notFound) 
+    return  (
+      <SimpleLayout title={t('createCycle')}>
+        <ButtonsTopActions/>
+          {
+            (isLoadingSession) 
+            ? <>
+                <Skeleton type='card'/>
+                <Skeleton type='list'/>
+              </>
+            : <>
+                <CreateCycleForm/>
+              </>
+          }
+      </SimpleLayout>
+    );
   else
-   return  (
-    <SimpleLayout title={t('createCycle')}>
-        <Spinner animation="grow" variant="info" />
-    </SimpleLayout>
-  );
-
+    return  (
+      <SimpleLayout title={t('createCycle')}>
+          <>...</>
+      </SimpleLayout>
+    );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

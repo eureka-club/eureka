@@ -4,7 +4,6 @@ import { SessionProvider as NextAuthProvider } from 'next-auth/react';
 import { StrictMode, FunctionComponent, useState,useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-// import {SSRProvider} from 'react-bootstrap'
 import { Hydrate } from 'react-query/hydration';
 import { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
@@ -63,7 +62,6 @@ import Spinner from '@/src/components/Spinner';
 import ErrorBounddary from '@/src/ErrorBounddary';
 import { ThemeProvider } from '@mui/material';
 import Head from 'next/head';
-import { FormFloating } from 'react-bootstrap';
 import { ModalProvider } from '@/src/hooks/useModal';
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   let initialState : Iterable<readonly [Atom<unknown>, unknown]> | undefined = undefined
