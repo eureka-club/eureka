@@ -12,7 +12,7 @@ import { Box, Stack, Typography } from '@mui/material';
 interface Props {
   session: Session;
 }
-const readingClubsPage: NextPage<Props> = ({}) => {
+const ReadingClubsPage: NextPage<Props> = ({}) => {
   const { t } = useTranslation('readingClubs');
 
   return (
@@ -53,4 +53,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
 };
-export default readingClubsPage;
+export default ReadingClubsPage;

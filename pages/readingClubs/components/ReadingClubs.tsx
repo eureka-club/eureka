@@ -55,7 +55,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={5} md={5}>
+                      <Grid item xs={12} sm={5} md={5}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -115,7 +115,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -220,7 +220,7 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
 
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -257,7 +257,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -365,7 +365,7 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
 
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -402,7 +402,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -514,7 +514,7 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
 
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -551,7 +551,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -645,7 +645,7 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
 
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -678,7 +678,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -773,7 +773,7 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
 
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -806,7 +806,7 @@ export default function ReadingClubs() {
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
@@ -892,7 +892,7 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
 
-                      <Grid xs={12} sm={8} md={8}>
+                      <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
