@@ -16,7 +16,7 @@ const CreateMenu = ()=>{
 
   return <>
     {
-      session?.user 
+      session?.user
         ? <MenuList>
               <Typography variant="button">{t('create')}</Typography>
               {
@@ -42,6 +42,7 @@ const AboutMenu = ()=>{
   return  <MenuList>
         <Typography variant="button">{t('About')}</Typography>
         <MenuItem><Link href={'/manifest'}>{t('Manifest')}</Link></MenuItem>
+        <MenuItem><Link href={'/readingClubs'}>{t('ReadingClubs')}</Link></MenuItem>
         <MenuItem><Link href={'/about'}>{t('About Eureka')}</Link></MenuItem>
         <MenuItem><Link href={'/aboutUs'}>{t('About Us')}</Link></MenuItem>
         <MenuItem><Link href={'/policy'}>{t('policyText')}</Link></MenuItem>
@@ -97,7 +98,7 @@ const MediathequeMenu = ()=>{
   return <>
     {
       session?.user
-        ? 
+        ?
           <MenuList>
             <Typography variant="button">{t('My Mediatheque')}</Typography>
             <MenuItem><Link href={`/mediatheque/${getMediathequeSlug()}`}>{t('My Mediatheque')}</Link></MenuItem>
@@ -136,7 +137,7 @@ export const AppsLinks = ({}:Props) => {
   return <MenuAction key='AppssLinks' label={
       <Stack justifyContent={'center'} alignItems={'center'} >
         <Avatar
-          sx={{width:32,height:32,bgcolor:'var(--color-primary)'}} 
+          sx={{width:32,height:32,bgcolor:'var(--color-primary)'}}
         >
           <Apps/>
         </Avatar>

@@ -8,7 +8,7 @@ module.exports = {
   defaultLocale: 'pt',
   pages: {
     // '*': ['common', 'meta','stripe', 'featuredWorks', 'createWorkForm', 'createPostForm', 'navbar', 'signInForm', 'signUpForm', 'PasswordRecovery', 'singInMail', 'searchEngine', 'topics', 'notification','cycleDetail','onCommentCreated','hyvortalk'],
-    
+
     '/': [...all,'countries','feed'],
     '/login':['signInForm'],
     '/auth/emailVerify': ['navbar','emailVerify'],
@@ -32,5 +32,6 @@ module.exports = {
     'rgx:my-cycles': [...header],
     'rgx:my-posts': [...header],
     // '/participar/spinardi': ['spinardi'],
+    '/readingClubs': [...header,'readingClubs','meta'],
   },
 };

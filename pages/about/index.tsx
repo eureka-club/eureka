@@ -16,7 +16,7 @@ const AboutPage: NextPage<Props> = ({session}) => {
   <Head>
         <meta name="title" content={t('meta:aboutTitle')}></meta>
         <meta name="description" content={t('meta:aboutDescription')}></meta>
-    </Head> 
+    </Head>
     <style jsx global>{`
       body{
         background-color:white!important;
@@ -35,6 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       session,
     },
   };
-  
+
 };
 export default AboutPage;

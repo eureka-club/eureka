@@ -41,26 +41,26 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </>
         }
       </section>
-      <Box sx={!fullWidth ? {paddingBottom:'2rem'}:{}} className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}> 
+      <Box sx={!fullWidth ? {paddingBottom:'2rem'}:{}} className={(!showNavBar || allPageSize ) ? 'allPageSection': 'mainSection'}>
         {showHeader && <>
           <div className="d-none d-lg-block"><Header show={showHeader} /></div>
-          <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>        
-        </>}     
-        {showCustomBaner &&<div className="d-none d-lg-block"> 
+          <div className="d-lg-none"><HeaderMobile show={showHeader} /></div>
+        </>}
+        {showCustomBaner &&<div className="d-none d-lg-block">
           <BannerCustomizable/>
         </div>}
         {showCustomBaner &&<div className="d-block d-lg-none"> <BannerCustomizableMobile/></div>}
         {renderBanner()}
         {
-        (!showNavBar || allPageSize) 
+        (!showNavBar || allPageSize)
           ? <div className='m-0'>{children}</div>
-            : (showHeader || showCustomBaner) 
-            ? !fullWidth 
+            : (showHeader || showCustomBaner)
+            ? !fullWidth
               ? <Container className='mt-4'>{children}</Container>
               :<Box className='mt-4'>{children}</Box>
-          : !fullWidth 
-            ? <Container className='mainContainer'>{children}</Container> 
-            : <Box className='mainContainer'>{children}</Box> 
+          : !fullWidth
+            ? <Container className='mainContainer'>{children}</Container>
+            : <Box className='mainContainer'>{children}</Box>
         }
       </Box>
       <ScrollTop>
@@ -69,7 +69,7 @@ const SimpleLayout: FunctionComponent<Props> = ({ children, showHeader = false, 
         </Fab>
       </ScrollTop>
       {showFooter && (<Footer/>)}
-    </>    
+    </>
   );
 };
 
