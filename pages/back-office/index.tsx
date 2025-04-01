@@ -30,7 +30,6 @@ import {
   Form,
   Popover,
   OverlayTrigger,
-  //Table,
 
 } from 'react-bootstrap';
 import styles from './index.module.css'

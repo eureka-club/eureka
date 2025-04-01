@@ -3,7 +3,6 @@ import SimpleLayout from "@/src/components/layouts/SimpleLayout";
 import { ListGroup, Spinner } from 'react-bootstrap';
 import useNotifications from '@/src/useNotifications';
 import { useSession } from 'next-auth/react';
-// import { Session } from '@/src/types';
 import MosaicItemNotification from '@/src/components/notification/MosaicItem';
 
 const Notifications: React.FC = () =>{
