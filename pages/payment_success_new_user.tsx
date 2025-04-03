@@ -77,7 +77,7 @@ const StripePaymentSuccessPage: NextPage<Props> = ({ session }) => {
             
          
         </Box>
-        <Footer />
+        {/* <Footer /> */}
       </>
     </SimpleLayout>
   );

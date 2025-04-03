@@ -23,7 +23,10 @@ module.exports = {
     '/manifest': [...header,'manifest'],
     '/policy': [...header,'termsAndPolicy'],
     'rgx:^/register':[...header,'signUpForm'],
-    'rgx:^/payment-options/\\[cycleId\\]':['navbar','payment-options'],
+    'rgx:^/payment-options/\\[cycleId\\]':['common','navbar','payment-options'],
+    'rgx:^/payment_cancel/*':[...header,'stripe'],
+    'rgx:^/payment_success_new_user/*':[...header,'stripe'],
+    
     '/back-office': [...header,'backOffice'],
     'rgx:^/mediatheque/\\[slug\\]': [...header,'mediatheque', 'countries'],
     'rgx:^/user/\\[slug\\]/my-read-or-watched': [...header,'mediatheque','countries','countries-abbr'],
