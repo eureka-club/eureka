@@ -1,4 +1,3 @@
-'use client';
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import { Grid } from '@mui/material';
@@ -6,39 +5,17 @@ import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-
 export default function ReadingClubs() {
-
-
   const { t,lang } = useTranslation('readingClubs');
 
-  const imagePath4 =
-  lang === "es"
-    ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio es.webp"
-    : lang === "en"
-      ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio en.webp"
-      : lang === "pt"
-        ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio pt.webp"
-        : lang === "fr"
-          ? "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio en.webp"
-          : "/img/readingClubs/4 Contando Feminicídios com Catherine D'Ignazio pt.webp"
-
-  const imagePath5 = `/img/readingClubs/5 Tecnologia Sob Lentes Feministas ${lang=='fr'?'en':lang}.webp`
-  // lang === "es"
-  // ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas es.webp"
-  // : lang === "en"
-  //   ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas en.webp"
-  //   : lang === "pt"
-  //     ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas pt.webp"
-  //     : lang === "fr"
-  //       ? "/img/readingClubs/5 Tecnologia Sob Lentes Feministas en.webp"
-  //       : "/img/readingClubs/5 Tecnologia Sob Lentes Feministas pt.webp"
+  const imagePath4 = `/img/readingClubs/Contando Feminicidios com Catherine DIgnazio ${lang=='fr'?'en':lang}.webp`
+  const imagePath5 = `/img/readingClubs/Tecnologia Sob Lentes Feministas ${lang=='fr'?'en':lang}.webp`
   
-    const imagePath5Href = lang == 'es'
-      ? '/es/cycle/25'
-      : lang == 'pt'
-        ? '/pt/cycle/26'
-        : `/${lang}/cycle/24`;
+  const imagePath5Href = lang == 'es'
+    ? '/es/cycle/25'
+    : lang == 'pt'
+      ? '/pt/cycle/26'
+      : `/${lang}/cycle/24`;
 
   return (
     <>
