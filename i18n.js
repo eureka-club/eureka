@@ -17,7 +17,7 @@ module.exports = {
     '/work/create': [...header,'createWorkForm', 'countries'],
     '/cycle/create': [...header,'createCycleForm','createWorkForm', 'countries'],
     'rgx:^/cycle/\\[id\\]/edit': [...header,'createCycleForm','createWorkForm', 'countries'],
-    '/about': [...header,'about'],
+    '/about': [...header,'meta','about'],
     '/aboutUs': [...header,'aboutUs'],
     '/search': [...header,'countries'],
     '/profile': [...header, 'profile','createWorkForm', 'countries'],
@@ -36,6 +36,6 @@ module.exports = {
     'rgx:my-cycles': [...header],
     'rgx:my-posts': [...header],
     // '/participar/spinardi': ['spinardi'],
-    '/readingClubs': [...header,'readingClubs','meta'],
+    '/theClubs': [...header,'readingClubs','meta'],
   },
 };
