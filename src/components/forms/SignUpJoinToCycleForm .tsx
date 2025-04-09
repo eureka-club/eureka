@@ -32,6 +32,7 @@ import useUserSumary from '@/src/useUserSumary';
 import { CycleSumary } from '@/src/types/cycle';
 import Mosaic from '../Mosaic';
 import { validateEmail } from '@/src/lib/utils';
+import { JoinLeaveCycleBtn } from '../cycle/MosaicItem/JoinLeaveCycleBtn';
 
 interface Props {
   noModal?: boolean;
@@ -577,9 +578,10 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                 {/*CASO CUANDO HAY SESSION*/}
                 {session && <>
                   <Box >
-                    {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
-                      {t('I want to register now')}
-                    </Button>}{loading && <LinearProgress className='mb-4' />}
+                    <JoinLeaveCycleBtn sx={{width:'100%',fontSize:'1.25rem',textTransform:'none'}} cycleId={+cycleId} label={t('I want to register now')}/>
+                    {/* {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
+                    {t('I want to register now')}
+                    </Button>}{loading && <LinearProgress className='mb-4' />} */}
                   </Box>
                 </>}
                 {/*CASO CUANDO NO HAY SESSION*/}

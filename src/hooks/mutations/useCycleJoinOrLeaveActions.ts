@@ -1,7 +1,7 @@
 import {} from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
-import { CycleDetail, CycleSumary } from '@/src/types/cycle';
+import { CycleSumary } from '@/src/types/cycle';
 import { UserDetail } from '@/src/types/user';
 import useTranslation from 'next-translate/useTranslation';
 import {useNotificationContext} from '@/src/useNotificationProvider';
