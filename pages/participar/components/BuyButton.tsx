@@ -1,17 +1,15 @@
-import { Button, CircularProgress } from "@mui/material";
-import useTranslation from "next-translate/useTranslation";
+import { Button, ButtonProps, CircularProgress } from "@mui/material";
 import React, { FC, useState } from "react";
 import {Stack} from '@mui/material'
-import { useModalContext } from "@/src/hooks/useModal";
 import { useRouter } from "next/router";
-interface Props {
+interface Props extends ButtonProps {
     label:string|React.ReactNode;
     cycleId:number;
 }   
-const BuyButton:FC<Props> = ({label,cycleId}) => { 
+const BuyButton:FC<Props> = ({label,cycleId,...others}) => { 
   const router=useRouter();
   const[isLoading,setIsLoading] = useState(false);
-      
+
   const onClickHandle = async (e:any) => {
     setIsLoading(true);
     e.preventDefault();
@@ -27,14 +25,10 @@ const BuyButton:FC<Props> = ({label,cycleId}) => {
         justifyContent={'center'}
         justifyItems={'center'}>
     <Button
-          variant="outlined"
-          color="primary"
-          size="large"
-          style={{color:'black',borderColor:'black',backgroundColor:'#8DFAF3',display:'block',width:'250px'}}
-          type="submit"
+          
           onClick={onClickHandle}
           disabled={isLoading}
-
+          {...others}  
       >
       {label} <CircularProgress size={'2rem'} color="inherit" style={{display: isLoading ? 'block' : 'none'}}/>
       </Button>

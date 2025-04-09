@@ -2,7 +2,6 @@ import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { FunctionComponent, useState, MouseEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { useMutation } from 'react-query';
 import { Form } from 'react-bootstrap';
@@ -11,13 +10,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import styles from './SignUpJoinToCycleForm.module.css';
-import MosaicItem from '@/src/components/cycle/MosaicItem';
 import { CycleContext } from '@/src/useCycleContext';
 import useCycle from '@/src/useCycleDetail';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, Button, Typography, Card, CardMedia, Container, Grid, Stack } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
 import { Session } from '@/src/types';
@@ -30,9 +28,18 @@ import { CycleWork } from '@/src/types/cycleWork';
 
 import useUserSumary from '@/src/useUserSumary';
 import { CycleSumary } from '@/src/types/cycle';
-import Mosaic from '../Mosaic';
 import { validateEmail } from '@/src/lib/utils';
 import { JoinLeaveCycleBtn } from '../cycle/MosaicItem/JoinLeaveCycleBtn';
+import BuySubscriptionButton from 'pages/participar/components/BuySubscriptionButton';
+import BuyButton from 'pages/participar/components/BuyButton';
+
+var utc = require("dayjs/plugin/utc");
+var timezone = require("dayjs/plugin/timezone"); // dependent on utc plugin
+import isBetween from 'dayjs/plugin/isBetween' // ES 2015
+
+dayjs.extend(isBetween);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
   noModal?: boolean;
@@ -105,6 +112,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
 
   const { data: cycle, isLoading: isLoadingCycle } = useCycle(+cycleId, { enabled: !!cycleId })
   const { data: { price, currency } = { currency: '', price: -1 } } = useCyclePrice(cycle as unknown as CycleSumary);
+  const img = `${process.env.NEXT_PUBLIC_AZURE_CDN_ENDPOINT}/${process.env.NEXT_PUBLIC_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}/${cycle?.localImages[0].storedFile}`; 
 
   const works = cycle?.cycleWorksDates?.length
     ? cycle?.cycleWorksDates
@@ -381,11 +389,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
   if (cycle)
     return (
       <>
-        <Box >
-          <Row className="d-flex justify-content-between">
-            <Col className='col-12'>
-              <Row className='p-4'>
-                <Link href="/" replace >
+        <Box>
+          <Box sx={{padding:'1.5rem'}}>
+            <Link href="/" replace >
                   <a className="d-flex align-items-center">
                     <aside className="d-flex justify-content-around align-items-center">
                       {/*<Image src="/logo.svg" width={45} height={52} alt="Project logo" />*/}
@@ -396,9 +402,80 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       </section>
                     </aside>
                   </a>
-                </Link>
-              </Row>
-            </Col>
+            </Link>
+          </Box>
+          {/* <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} sx={{backgroundColor:'red'}}>
+            <Box sx={{display: { xs: 'block', sm: 'none',backgroundColor:'red' }}}>
+              <section className='mt-3'>
+                <Image src="/pelicula.webp" width={200}
+                  height={120}
+                  alt=""></Image>
+              </section>
+            </Box>
+            
+            <div className='p-3 d-flex flex-column justify-content-center align-items-center'>
+                  <Box sx={{ width: ['100%', '60%', '40%', '90%', '100%'], paddingTop: { sm: '5em' }, paddingLeft: { lg: '10em', xl: '21em' } }} >
+
+                    <section className=''>
+                      <Row className='mb-2'>
+                        <span className='text-center ' style={{ fontSize: '.8em', fontStyle: 'italic' }}>{t("OrganinedBy")}</span>
+                      </Row>
+                      <Row className='mb-2'>
+                        <UserAvatar className='d-flex justify-content-center' size={'large'} userId={cycle.creatorId} />
+                      </Row>
+                      <Row className='mb-4'>
+                        <span className='text-center ' style={{ fontSize: '1em' }}>{cycle.creator.name}</span>
+                      </Row>
+                    </section>
+                    <Row className='mb-4 d-none d-md-flex justify-content-center align-items-center' style={{ fontSize: '1.6em', fontStyle: 'italic' }}>
+                      <span className='text-center'><b>{cycle.title.toUpperCase()}</b></span>
+                    </Row>
+                    <Row className='mb-4 d-flex d-md-none justify-content-center align-items-center' style={{ fontSize: '1.2em', fontStyle: 'italic' }}>
+                      <span className='text-center'><b>{cycle.title.toUpperCase()}</b></span>
+                    </Row>
+                    <Row className='mb-4 d-none d-md-flex' style={{ fontSize: '1.4em', fontStyle: 'italic' }}>
+                      <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
+                    </Row>
+                    <Row className='mb-4 d-flex d-md-none' style={{ fontSize: '1em', fontStyle: 'italic' }}>
+                      <span className='text-center '>{dayjs(cycle?.startDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)} - {dayjs(cycle?.endDate).add(1, 'day').tz(dayjs.tz.guess()).format(DATE_FORMAT_LARGE)}</span>
+                    </Row>
+                    <Row className='mb-4 ' >
+                      <Box sx={{ padding: '1em' }}>
+                        <a href='#FormContainer'>
+                          <Button className={`mb-xl-4 btn btn-eureka  w-100`}>
+                            <Box sx={{}}>{t('WantToJoin')}</Box>
+                          </Button></a>
+                      </Box>
+                    </Row>
+                  </Box>
+            </div>
+
+            <Box sx={{ ml: { xl: '6em' } }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
+              <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
+                <Card>
+                  <CardMedia
+                    component={'img'}
+                    image={img}
+                    height={250}
+                    width={250}
+                  />
+                </Card>
+              </CycleContext.Provider>
+            </Box>
+
+            <Box className=' w-100 mt-5'
+                sx={{
+                  display: { xs: 'flex', sm: 'none' },
+                  justifyContent: { xs: 'flex-end' },
+                  //backgroundColor: { xs: '#f7f7f7' },
+                }}
+              >
+                <Image className='' src="/libro.webp" width={180} height={284} alt=""/>
+            </Box>
+
+          </Stack> */}
+          <Row className="d-flex justify-content-between">
+            
             <Col className='col-12'>
               {/* <Row className='bg-primary d-flex align-items-center' style={{ height: '.2rem', fontSize: '1.2em' }}>
               </Row> */}
@@ -413,7 +490,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   height={120}
                   alt=""></Image></section>
             </Box>
-            <Box className='d-flex flex-column flex-xl-row'
+            <Box className='d-flex flex-column flex-xl-row justify-content-center align-items-center'
               sx={{
                 backgroundImage: { sm: "url('/registro_movil_bg.webp')", lg: "url('/registro_desktop_bg.webp')" },
                 //backgroundColor: { xs:'#f7f7f7'},
@@ -473,19 +550,14 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               <Col className={`col-12 col-xl-6 my-xl-5`}>
                 <Box sx={{ ml: { xl: '6em' } }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
                   <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
-                    {/* <MosaicItem
-                      cycleId={cycle.id}
-                      showTrash
-                      detailed={false}
-                      showSaveForLater={false}
-                      showCreateEureka={false}
-                      showJoinOrLeaveButton={false}
-                      showSocialInteraction={false}
-                      className="mt-1"
-                      cacheKey={['CYCLE', `${cycle.id}`]}
-                      size={'xxl'}
-                    /> */}
-                    <MosaicItem cycleId={cycle.id} />
+                    <Card>
+                      <CardMedia
+                        component={'img'}
+                        image={img}
+                        height={250}
+                        width={250}
+                      />
+                    </Card>
                   </CycleContext.Provider>
                 </Box>
               </Col>
@@ -576,16 +648,19 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               <Box className='py-4' 
                 sx={{ width: ['90%', '60%', '40%', '30%', '25%'] }}>
                 {/*CASO CUANDO HAY SESSION*/}
-                {session && <>
-                  <Box >
-                    <JoinLeaveCycleBtn sx={{width:'100%',fontSize:'1.25rem',textTransform:'none'}} cycleId={+cycleId} label={t('I want to register now')}/>
-                    {/* {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
-                    {t('I want to register now')}
-                    </Button>}{loading && <LinearProgress className='mb-4' />} */}
-                  </Box>
-                </>}
+                {session || cycle?.access==4 
+                  ? <>
+                      <Box>
+                        <BuyButton label={t('I want to register now')} cycleId={cycle?.id} size='large' variant='contained' color='primary'/>
+                        {/* {!loading && <Button onClick={handleJoinCycleClick} className={`mb-4 btn btn-eureka  w-100`}>
+                        {t('I want to register now')}
+                        </Button>}{loading && <LinearProgress className='mb-4' />} */}
+                      </Box>
+                    </>
+                  : <></>
+                }
                 {/*CASO CUANDO NO HAY SESSION*/}
-                {!session &&
+                {!session && cycle?.access!=4 ?
                   <><button
                     type="button"
                     onClick={handleSignUpGoogle}
@@ -600,6 +675,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                   </button>
                     <p className={`my-2 ${styles.alternativeLabelSignUpJoinCycle}`}>{t('alternativeText')}</p>
                     {!haveAccount && <Form onSubmit={handleSubmitSignUp} className='mt-2'>
+                    <Button variant='contained' color='primary' onClick={handleHaveAccountLink} sx={{textTransform:'none',width:'100%'}}>
+                          <Typography variant='body1' >{`${t('HaveAccounttext')}`}</Typography>
+                      </Button>
                       <TextField id="name" className="w-100 mb-4 " label={`${t('Name')}`}
                         variant="outlined" size="small" name="name"
                         value={formValues.name!}
@@ -633,17 +711,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       >
                       </TextField>
 
-                      <Box >
-                        <p
-                          className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
-                        >
-                          {t('HaveAccounttext')}
-                          <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
-                            {t('clic')}
-                          </span>
-                          {t('joinClub')}
-                        </p>
-                      </Box>
+                      
 
                       <Box >
                         {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
@@ -669,7 +737,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                     </Form>}
 
                     {haveAccount && <Form onSubmit={handleSubmitSignIn} className='mt-2'>
-
+                    <Button variant='contained' color='primary' onClick={handleHaveAccountLink} sx={{textTransform:'none',width:'100%'}}>
+                        <Typography variant='body1' >{`${t('dontHaveAccounttext')}`}</Typography>
+                      </Button>
                       <TextField id="email" className="w-100 mb-2" label={`${t('emailFieldLabel')}`}
                         variant="outlined" size="small" name="identifier"
                         value={formValues.identifier!}
@@ -678,7 +748,7 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                       >
                       </TextField>
                       <div className='d-flex justify-content-between mb-1'><div></div>
-                        <Button onClick={handlerRecoveryLogin} variant="link" className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{ fontSize: '.8em' }}>{t('forgotPassText')}</Button>
+                        <Button onClick={handlerRecoveryLogin} className={`btn-link d-flex link align-items-end cursor-pointer text-gray`} style={{ fontSize: '.8em' }}>{t('forgotPassText')}</Button>
                       </div>
                       <TextField id="pass" className="w-100 mb-4" label={`${t('passwordFieldLabel')}`}
                         variant="outlined" size="small" name="password"
@@ -689,31 +759,19 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
                         onChange={handleChangeTextField}
                       >
                       </TextField>
+                      
 
-                      <Box >
-                        <p
-                          className={`d-flex flex-row flex-wrap align-items-center justify-content-center mb-4 ${styles.joinedTermsText}`}
-                        >
-                          {t('dontHaveAccounttext')}
-                          <span className={`d-flex cursor-pointer ms-1 me-1 ${styles.linkText}`} onClick={handleHaveAccountLink}>
-                            {t('clic')}
-                          </span>
-                          {t('joinClub')}
-                        </p>
-                      </Box>
-
-
-                      <Box >
+                      <Box>
                         {!loading && <Button type="submit" disabled={loading} className={`mb-4 btn btn-eureka  w-100`}>
                           {t('I want to register now')}
                         </Button>} {loading && <LinearProgress className='mb-4' />}
                       </Box>
 
-
-
                     </Form>}
 
-                  </>}
+                  </>
+                  : <></>
+                }
                 <Box className='mt-5 w-100'
                   sx={{
                     display: { xs: 'flex', sm: 'none' },

@@ -67,7 +67,9 @@ const InvestInYourself: FC<{ cycleId: number }> = ({ cycleId }) => {
               paddingTop={0}
             >
               <Box sx={{ maxWidth: { lg: '90dvw', sm: '100dvw', xs: '100dvw' } }}>
-                <BuyButton label="Comece hoje mesmo!" cycleId={cycle?.id!} />
+                <BuyButton label="Comece hoje mesmo!" cycleId={cycle?.id!} sx={{color:'black',borderColor:'black',backgroundColor:'#8DFAF3',display:'block',width:'250px'}} variant="outlined"
+          size="large"
+          type="submit" />
               </Box>
             </Box>
           </Grid>
