@@ -15,7 +15,7 @@ import useCycle from '@/src/useCycleDetail';
 import UserAvatar from '@/src/components/common/UserAvatar';
 import CycleDetailWorks from '@/src/components/cycle/CycleDetailWorks';
 import Footer from '@/components/layouts/Footer';
-import { TextField, Box, Button, Typography, Card, CardMedia, Container, Grid, Stack } from '@mui/material';
+import { TextField, Box, Button, Typography, Card, CardMedia, Container, Grid, Stack, Paper } from '@mui/material';
 import { DATE_FORMAT_LARGE } from '../../constants';
 import dayjs from 'dayjs';
 import { Session } from '@/src/types';
@@ -550,14 +550,9 @@ const SignUpJoinToCycleForm: FunctionComponent<Props> = ({ noModal = false, sess
               <Col className={`col-12 col-xl-6 my-xl-5`}>
                 <Box sx={{ ml: { xl: '6em' } }} className='d-flex justify-content-center justify-content-xl-start align-items-center align-items-xl-start'>
                   <CycleContext.Provider value={{ linkToCycle: false, showShare: false, cycle: cycle }}>
-                    <Card>
-                      <CardMedia
-                        component={'img'}
-                        image={img}
-                        height={250}
-                        width={250}
-                      />
-                    </Card>
+                    <Paper>
+                      <img src={img} style={{width:'350px'}}/>
+                    </Paper>
                   </CycleContext.Provider>
                 </Box>
               </Col>
