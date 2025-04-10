@@ -35,8 +35,8 @@ const ReadingClubsPage: NextPage<Props> = ({}) => {
               {t('titlePage1')}
             </Typography>
           </Box>
-          <Box sx={{ alignItems: 'center', alignContent: 'center', paddingX: '10px', paddingTop: '20px' }}>
-            <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
+          <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '20px' }}>
+            <Box sx={{ backgroundColor: 'white', borderRadius: '30px' }}>
               <ReadingClubs />
             </Box>
           </Box>

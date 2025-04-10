@@ -20,9 +20,9 @@ export default function ReadingClubs() {
   return (
     <>
       <Stack spacing={1.5} sx={{ background: '#10b4bb', alignItems: 'center', alignContent: 'center' }}>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white', borderRadius: '0' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
-            <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
+            <Box sx={{ backgroundColor: 'white' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
                 <Box
                   sx={{ display: 'flex', justifyContent: 'center' }}
@@ -55,7 +55,8 @@ export default function ReadingClubs() {
                             <Image src={`/img/readingClubs/foto inicial.webp`} width={3978} height={2652} />
                           </Box>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image src={`/img/readingClubs/foto inicial.webp`} width={337} height={260} />
+                            <img src='/img/readingClubs/foto inicial.webp'width={'100%'} />
+                            {/* <Image src={`/img/readingClubs/foto inicial.webp`} width={350} height={260} /> */}
                           </Box>
                         </Stack>
                       </Grid>
@@ -80,7 +81,7 @@ export default function ReadingClubs() {
           </Typography>
         </Box>
 
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -124,12 +125,13 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/35'}>
                             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                              <Image
+                              <img src='/img/readingClubs/1. reimaginando tecnologias.webp' width={'100%'}/>
+                              {/* <Image
                                 src={`/img/readingClubs/1. reimaginando tecnologias.webp`}
                                 width={197}
                                 height={260}
                                 style={{ cursor: 'pointer' }}
-                              />
+                              /> */}
                             </Box>
                           </Box>
                           <Box>
@@ -153,7 +155,7 @@ export default function ReadingClubs() {
           </Box>
         </Grid>
 
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -179,12 +181,13 @@ export default function ReadingClubs() {
                             </Box>
                             <Box component={Link} href={'https://www.eureka.club/cycle/34'}>
                             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                              <Image
+                              {/* <Image
                                 src={`/img/readingClubs/2. em busca de direitos humanos na era da IA.webp`}
                                 width={197}
                                 height={260}
                                 style={{ cursor: 'pointer' }}
-                              />
+                              /> */}
+                              <img src='/img/readingClubs/2. em busca de direitos humanos na era da IA.webp' width={'100%'}/>
                             </Box>
                           </Box>
                           <Box>
@@ -222,7 +225,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -266,12 +269,13 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/28'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image
+                            <img src='/img/readingClubs/3. clube politico do juliano medeiros.webp' width={'100%'}/>
+                            {/* <Image
                               src={`/img/readingClubs/3. clube politico do juliano medeiros.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
-                            />
+                            /> */}
                           </Box>
                           </Box>
                           <Box>
@@ -294,7 +298,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -320,12 +324,13 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/31'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image
+                            {/* <Image
                               src={imagePath4}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
-                            />
+                            /> */}
+                            <img src={imagePath4} width={'100%'}/>
                           </Box>
                           </Box>
                           <Box>
@@ -367,7 +372,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -413,13 +418,13 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image
+                            {/* <Image
                               src={imagePath5}
                               width={197}
                               height={260}
 
-                            />
-
+                            /> */}
+                            <img src={imagePath5} width={'100%'}/>
 
                           </Box>
                           </Box>
@@ -443,7 +448,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -469,12 +474,13 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/21'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image
+                            {/* <Image
                               src={`/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
-                            />
+                            /> */}
+                            <img src='/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp' width={'100%'}/>
                           </Box>
                           </Box>
                           <Box>
@@ -516,7 +522,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -551,7 +557,8 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/20'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={197} height={260} />
+                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={197} height={260} /> */}
+                            <img src='/img/readingClubs/7. Ser Agua.webp' width={'100%'}/>
                           </Box>
                           </Box>
                           <Box>
@@ -574,7 +581,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -600,12 +607,13 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/19'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image
+                            {/* <Image
                               src={`/img/readingClubs/8.ecossensse & ecosensibility.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
-                            />
+                            /> */}
+                            <img src='/img/readingClubs/8.ecossensse & ecosensibility.webp' width={'100%'}/>
                             </Box>
                           </Box>
                           <Box>
@@ -643,7 +651,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -678,7 +686,8 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/18'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={197} height={260} />
+                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={197} height={260} /> */}
+                            <img src='/img/readingClubs/9.tautology.webp' width={'100%'}/>  
                           </Box>
                           </Box>
                           <Box>
@@ -701,7 +710,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -728,12 +737,13 @@ export default function ReadingClubs() {
                           <Box component={Link} href={'https://www.eureka.club/cycle/16'}>
 
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image
+                            {/* <Image
                               src={`/img/readingClubs/10.capitalismo de las redes.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
-                            />
+                            /> */}
+                            <img src='/img/readingClubs/10.capitalismo de las redes.webp' width={'100%'}/>
                           </Box>
                           </Box>
                           <Box>
@@ -771,7 +781,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -807,7 +817,8 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/15'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={197} height={260} />
+                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={197} height={260} /> */}
+                            <img src='/img/readingClubs/11.nuevas justicias.webp' width={'100%'}/>
                           </Box>
                           </Box>
 
@@ -831,7 +842,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white', borderRadius: '10px' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -852,7 +863,8 @@ export default function ReadingClubs() {
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/13'}>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={197} height={260} />
+                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={197} height={260} /> */}
+                            <img src='/img/readingClubs/12.genero e violencia.webp' width={'100%'}/>
                           </Box>
                           </Box>
                           <Box>
