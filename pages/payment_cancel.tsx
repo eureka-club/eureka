@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { Button, Grid, Stack } from '@mui/material';
 
 const StripePaymentCancelPage: NextPage = () => {
-  const { t } = useTranslation('stripe');
+  const { t, lang } = useTranslation('stripe');
   const router = useRouter();
 
   return (
@@ -55,7 +55,7 @@ const StripePaymentCancelPage: NextPage = () => {
                     </h1>
                   </Grid>
                   <Grid container justifyContent="center" alignItems="center" alignContent={'center'}>
-                    <Button variant="contained" size="large" onClick={() => router.push('/')} sx={{textTransform: 'none'}}>
+                    <Button variant="contained" size="large" onClick={() => router.push(`/register/${router?.query?.cycleId}`)} sx={{textTransform: 'none'}}>
                       <b>{t('VisitEureka')}</b>
                     </Button>
                   </Grid>
