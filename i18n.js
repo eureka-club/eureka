@@ -36,6 +36,6 @@ module.exports = {
     'rgx:my-cycles': [...header],
     'rgx:my-posts': [...header],
     // '/participar/spinardi': ['spinardi'],
-    '/theClubs': [...header,'readingClubs','meta'],
+    '/BookMovieClubs': [...header,'readingClubs','meta'],
   },
 };

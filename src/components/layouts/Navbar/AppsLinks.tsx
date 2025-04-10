@@ -42,7 +42,7 @@ const AboutMenu = ()=>{
   return  <MenuList>
         <Typography variant="button">{t('About')}</Typography>
         <MenuItem><Link href={'/manifest'}>{t('Manifest')}</Link></MenuItem>
-        <MenuItem><Link href={'/readingClubs'}>{t('ReadingClubs')}</Link></MenuItem>
+        <MenuItem><Link href={'/BookMovieClubs'}>{t('ReadingClubs')}</Link></MenuItem>
         <MenuItem><Link href={'/about'}>{t('About Eureka')}</Link></MenuItem>
         <MenuItem><Link href={'/aboutUs'}>{t('About Us')}</Link></MenuItem>
         <MenuItem><Link href={'/policy'}>{t('policyText')}</Link></MenuItem>
