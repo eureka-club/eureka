@@ -10,7 +10,7 @@ import getApiHandler from '@/src/lib/getApiHandler';
 import {prisma} from '@/src/lib/prisma';
 import {storeDeleteFile, storeUploadPhoto} from '@/src/facades/fileUpload'
 import { UserDetail } from '@/src/types/user';
-import { Notification } from '@prisma/client';
+import { Notification, User } from '@prisma/client';
 const bcrypt = require('bcryptjs');
 
 
@@ -156,5 +156,137 @@ export default getApiHandler()
       res.status(500).json({ error: 'server error' });
     } finally {
       //prisma.$disconnect();
+    }
+  })
+  .delete<NextApiRequest, NextApiResponse>(async (req, res): Promise<void> => {
+    try {
+      const { id:id_ } = req.query;debugger;
+      const id = parseInt(id_ as string, 10)
+      const session = await getSession({ req });
+      if (session == null || !session.user.roles.includes('admin')) {
+        return res.status(200).json({ error:'Unauthorized' });
+      }
+      const user = await prisma.user.findFirst({
+        select:{
+          id:true,
+          cycles:{select:{id:true,guidelines:{select:{id:true}}}},
+          accounts:{select:{id:true}},
+          posts:{select:{id:true}},
+          notify:{select:{id:true}},
+          notifications:{select:{userId:true,notificationId:true}},
+          actions:{select:{id:true}},
+          following:{select:{id:true}},
+          followedBy:{select:{id:true}},
+        },
+        where: {
+          id,
+        },
+      });
+      debugger;
+      if(!user){
+        return res.status(200).json({ error:'User not found' });
+      }
+      if(user?.cycles?.length){
+        await prisma.guideline.deleteMany({
+          where:{
+            id: { in: user.cycles.map((i)=>i.guidelines.map((j)=>j.id)).flat() }
+          }
+        });
+        await prisma.cycle.deleteMany({
+          where:{
+            id: {
+              in: user.cycles.map((i)=>i.id)
+            }
+          }
+        });
+      }
+      if(user?.accounts?.length){
+        await prisma.account.deleteMany({
+          where:{
+            id: {
+              in: user.accounts.map((i)=>i.id)
+            }
+          }
+        });
+      }
+      if(user?.posts?.length){
+        await prisma.post.deleteMany({
+          where:{
+            id: {
+              in: user.posts.map((i)=>i.id)
+            }
+          }
+        });
+      }
+      if(user?.notify?.length){
+        await prisma.notification.deleteMany({
+          where:{
+            id: {
+              in: user.notify.map((i)=>i.id)
+            }
+          }
+        });
+      }
+      if(user?.actions?.length){
+        await prisma.action.deleteMany({
+          where:{
+            id: {
+              in: user.actions.map((i)=>i.id)
+            }
+          }
+        });
+      }
+      if(user?.notifications?.length){
+        await prisma.notification.deleteMany({
+          where:{
+            toUsers: {
+              some:{
+                userId: {
+                  in: user.notifications.map((i)=>i.userId)
+                }
+              }
+            }
+          }
+        });
+      }
+      if(user?.following?.length){
+        const promises:Promise<User>[]=[];
+        user.following.forEach(f=>{
+          promises.push(
+            prisma.user.update({
+              where:{id:f.id},
+              data:{
+                followedBy:{disconnect:{id:user.id}}
+              }
+            })
+          );
+        });
+        await Promise.all(promises);
+      }
+      if(user?.followedBy?.length){
+        const promises:Promise<User>[]=[];
+        user.followedBy.forEach(f=>{
+          promises.push(
+            prisma.user.update({
+              where:{id:user.id},
+              data:{
+                followedBy:{disconnect:{id:f.id}}
+              }
+            })
+          );
+        });
+        await Promise.all(promises);
+      }
+      const userDeleted = await prisma.user.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      res.status(200).json({ user:userDeleted });
+    }
+    catch (exc) {
+      console.error(exc); // eslint-disable-line no-console
+      res.status(200).json({ error: 'server error' });
     }
   });

@@ -9,6 +9,7 @@ export const UserSumarySpec = {
     tags:true,
     photos:true,
     email:true,
+    roles:true,
   }
 } 
 
