@@ -17,6 +17,7 @@ import usePostDetail, { getPostDetail } from '@/src/usePostDetail';
 import { Button } from '@mui/material';
 import { ButtonsTopActions } from '@/src/components/ButtonsTopActions';
 import Skeleton from '@/src/components/Skeleton';
+import { redirect } from 'next/dist/server/api-utils';
 interface Props {
   session:Session;
   postId:number;
@@ -144,6 +145,14 @@ export const getServerSideProps:GetServerSideProps = async (ctx) => {
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
 
  let post = await getPostDetail(postId,session?.user.id!);
+ debugger;
+ if(!post?.id)
+  return {
+    redirect: {
+      destination: `http://localhost:3000/cycle/29`,
+      permanent: true,
+    },
+  }
  let cycle = await getCycleDetail(cycleId);
  let metaTags = {id:post?.id, cycleId:cycle?.id, title:post?.title,cycleTitle:cycle?.title,creator:post?.creator?.name, storedFile: post?.localImages[0].storedFile}
 

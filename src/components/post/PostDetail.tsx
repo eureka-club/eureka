@@ -57,7 +57,8 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
     // , { enabled: !!session?.user.id }
   );
 
-  const currentUserIsParticipant = (user && user.cycles.findIndex((c) => c.id == +router.query.id!) >=0) || cycle?.creator.id == user?.id;
+  const currentUserIsParticipant = (user && [...user.cycles,...user.joinedCycles].findIndex((c) => c.id == +router.query.id!) >=0) || cycle?.creator.id == user?.id;
+  
   const isPublicPost = cycle?.access == 1;
 
   // if(status=='unauthenticated')
@@ -74,8 +75,9 @@ const PostDetail: FunctionComponent<Props> = ({ postId, work, cacheKey, showSave
 
   if (!post && !isLoadingPost) return <Alert color="warning">Not found</Alert>;
 
-  if (cycle && !isPublicPost && !isLoadingUser && !currentUserIsParticipant)
+  if (cycle && !isPublicPost && !isLoadingUser && !currentUserIsParticipant){
     return <Alert color="warning">Unauthorized</Alert>;
+  }
 
   if (isLoadingPost || isLoadingUser || isLoadingCycle) return <Spinner />;
 

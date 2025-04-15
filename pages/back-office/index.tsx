@@ -831,6 +831,7 @@ const BackOffice: NextPage<Props> = ({ notFound, session }) => {
                         <TableCell align="right"> <LocalImageComponent
                           alt="work cover"
                           height={80}
+                          width={80}
                           filePath={work.localImages[0].storedFile}
                           style={{ marginRight: '1rem' }}
                         /></TableCell>
