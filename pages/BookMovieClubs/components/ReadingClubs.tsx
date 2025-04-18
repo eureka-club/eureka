@@ -1,26 +1,25 @@
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import { Grid } from '@mui/material';
+import { borderRadius } from '@mui/system';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ReadingClubs() {
-  const { t,lang } = useTranslation('readingClubs');
+  const { t, lang } = useTranslation('readingClubs');
 
-  const imagePath4 = `/img/readingClubs/Contando Feminicidios com Catherine DIgnazio ${lang=='fr'?'en':lang}.webp`
-  const imagePath5 = `/img/readingClubs/Tecnologia Sob Lentes Feministas ${lang=='fr'?'en':lang}.webp`
-  
-  const imagePath5Href = lang == 'es'
-    ? '/es/cycle/25'
-    : lang == 'pt'
-      ? '/pt/cycle/26'
-      : `/${lang}/cycle/24`;
+  const imagePath4 = `/img/readingClubs/Contando Feminicidios com Catherine DIgnazio ${
+    lang == 'fr' ? 'en' : lang
+  }.webp`;
+  const imagePath5 = `/img/readingClubs/Tecnologia Sob Lentes Feministas ${lang == 'fr' ? 'en' : lang}.webp`;
+
+  const imagePath5Href = lang == 'es' ? '/es/cycle/25' : lang == 'pt' ? '/pt/cycle/26' : `/${lang}/cycle/24`;
 
   return (
     <>
       <Stack spacing={1.5} sx={{ background: '#10b4bb', alignItems: 'center', alignContent: 'center' }}>
-        <Grid item sx={{ background: 'white', borderRadius: '0' }}>
+        <Grid item sx={{ background: 'white'}}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -31,31 +30,97 @@ export default function ReadingClubs() {
                   paddingRight={1}
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                    <Grid container gap={2} sx={{ justifyContent: 'center' }}>
-                      <Grid item xs={12} sm={5} md={5}>
-                        <Stack gap={2}>
-                          <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
-                            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                    <Grid container gap={0} sx={{ justifyContent: 'center' }}>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Stack  gap={0}>
+                          <Box sx={{ display: 'flex', justifyContent: 'center' }} alignItems={'center'}>
+                            <Box paddingX={2} sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+                              <Typography
+                                textAlign="left"
+                                paddingBlockEnd={1}
+                                paddingX={1}
+                                paddingTop={6}
+                                paddingLeft={10}
+                                fontSize={16}
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                              >
                                 {t('text1')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                paddingBlockEnd={1}
+                                paddingX={1}
+                                paddingLeft={10}
+                                fontSize={16}
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                              >
                                 {t('text2')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                paddingX={1}
+                                paddingLeft={10}
+                                fontSize={16}
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                              >
                                 {t('text3')}
                               </Typography>
+
+                              <Typography
+                                textAlign="left"
+                                paddingBlockEnd={1}
+                                paddingX={2}
+                                paddingTop={6}
+
+                                fontSize={16}
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                              >
+                                {t('text1')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                paddingBlockEnd={1}
+                                paddingX={2}
+
+                                fontSize={16}
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                              >
+                                {t('text2')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                paddingX={2}
+
+                                fontSize={16}
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                              >
+                                {t('text3')}
+                              </Typography>
+
+
+
                             </Box>
                           </Box>
                         </Stack>
                       </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Stack gap={0}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image src={`/img/readingClubs/foto inicial.webp`} width={3978} height={2652} />
+                      <Grid item xs={12} sm={5} md={5} gap={0}>
+                        <Stack paddingX={1} paddingRight={1}>
+                          <Box paddingY={5} sx={{ display: { xs: 'none', sm: 'block' }, borderRadius: 5 }}>
+                            <Image
+                              style={{ borderRadius: '8px' }}
+                              src={`/img/readingClubs/foto inicial.webp`}
+                              width={570}
+                              height={380}
+                            />
                           </Box>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <img src='/img/readingClubs/foto inicial.webp'width={'100%'} />
+                            <img
+                              style={{ borderRadius: '8px' }}
+                              src="/img/readingClubs/foto inicial.webp"
+                              width={'100%'}
+                            />
                             {/* <Image src={`/img/readingClubs/foto inicial.webp`} width={350} height={260} /> */}
                           </Box>
                         </Stack>
@@ -69,7 +134,7 @@ export default function ReadingClubs() {
         </Grid>
         <Box sx={{ display: 'flex', alignItems: 'center', alignContent: 'center', justifyContent: 'center' }}>
           {' '}
-          <Typography variant="h6" color={'whitesmoke'} padding={'30px'}>
+          <Typography fontSize={16} color={'whitesmoke'} padding={'30px'}>
             {t('text4')}
             <Link href={'http://bit.ly/eureka-form'}>
               <a className="text-white text-decoration-underline me-xl-1 mb-1 mb-xl-none">bit.ly/eureka-form</a>
@@ -92,19 +157,53 @@ export default function ReadingClubs() {
                   paddingRight={1}
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                    <Grid container gap={2} sx={{ justifyContent: 'center' }}>
+                    <Grid container gap={0} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={7}
+                                paddingLeft={10}
+                                paddingTop={6}
+                              >
                                 <span
                                   dangerouslySetInnerHTML={{
                                     __html: `<span style="color: blue;">${t('text6')}</span>`,
                                   }}
                                 />
                               </Typography>
-                              <Typography paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={0}
+                                paddingLeft={10}
+                                fontSize={16}
+                              >
+                                {t('text7')}
+                              </Typography>
+
+                              <Typography
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: `<span style="color: blue;">${t('text6')}</span>`,
+                                  }}
+                                />
+                              </Typography>
+                              <Typography
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={0}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text7')}
                               </Typography>
                             </Box>
@@ -112,20 +211,24 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
+                        <Stack gap={0} paddingTop={4} paddingX={4}>
                           <Box component={Link} href={'https://www.eureka.club/cycle/35'}>
                             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                               <Image
                                 src={`/img/readingClubs/1. reimaginando tecnologias.webp`}
-                                width={1080}
-                                height={1367}
-                                style={{ cursor: 'pointer' }}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
                               />
                             </Box>
                           </Box>
-                          <Box component={Link} href={'https://www.eureka.club/cycle/35'}>
+                          <Box paddingX={4} component={Link} href={'https://www.eureka.club/cycle/35'}>
                             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                              <img src='/img/readingClubs/1. reimaginando tecnologias.webp' width={'100%'}/>
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/1. reimaginando tecnologias.webp"
+                                width={'100%'}
+                              />
                               {/* <Image
                                 src={`/img/readingClubs/1. reimaginando tecnologias.webp`}
                                 width={197}
@@ -155,7 +258,7 @@ export default function ReadingClubs() {
           </Box>
         </Grid>
 
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -166,31 +269,43 @@ export default function ReadingClubs() {
                   paddingRight={1}
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                    <Grid container gap={2} sx={{ justifyContent: 'center' }}>
+                    <Grid container gap={0} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/34'}>
-                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Stack gap={0} paddingTop={4} paddingLeft={4}>
+                          <Box paddingX={4} component={Link} href={'https://www.eureka.club/cycle/34'}>
+                            <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
                               <Image
                                 src={`/img/readingClubs/2. em busca de direitos humanos na era da IA.webp`}
-                                width={1080}
-                                height={1367}
-                                style={{ cursor: 'pointer' }}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
                               />
                             </Box>
-                            </Box>
-                            <Box component={Link} href={'https://www.eureka.club/cycle/34'}>
-                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                          </Box>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/34'}>
+                            <Box paddingRight={4} sx={{ display: { xs: 'block', sm: 'none' } }}>
                               {/* <Image
                                 src={`/img/readingClubs/2. em busca de direitos humanos na era da IA.webp`}
                                 width={197}
                                 height={260}
                                 style={{ cursor: 'pointer' }}
                               /> */}
-                              <img src='/img/readingClubs/2. em busca de direitos humanos na era da IA.webp' width={'100%'}/>
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/2. em busca de direitos humanos na era da IA.webp"
+                                width={'100%'}
+                              />
                             </Box>
                           </Box>
-                          <Box>
+                          <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text13')}
+                            </Typography>
+                            <Typography variant="body2">{t('text14')}</Typography>
+                            <Typography variant="body2">{t('text15')}</Typography>
+                          </Box>
+
+                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Typography textAlign="left" variant="body2">
                               {t('text13')}
                             </Typography>
@@ -201,17 +316,55 @@ export default function ReadingClubs() {
                       </Grid>
 
                       <Grid item xs={12} sm={8} md={8}>
-                        <Stack gap={2}>
+                        <Stack gap={0}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={6}
+                              >
                                 <span
                                   dangerouslySetInnerHTML={{
                                     __html: `<span style="color: blue;">${t('text11')}</span>`,
                                   }}
                                 />
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                fontSize={16}
+                              >
+                                {t('text12')}
+                              </Typography>
+
+                              <Typography
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingRight={10}
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: `<span style="color: blue;">${t('text11')}</span>`,
+                                  }}
+                                />
+                              </Typography>
+                              <Typography
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                paddingRight={10}
+                                fontSize={16}
+                              >
                                 {t('text12')}
                               </Typography>
                             </Box>
@@ -225,7 +378,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -241,14 +394,54 @@ export default function ReadingClubs() {
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
-                              <span
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={7}
+                                paddingLeft={10}
+                                paddingTop={6}
+                              >
+                                <span
                                   dangerouslySetInnerHTML={{
                                     __html: `<span style="color: blue;">${t('text16')}</span>`,
                                   }}
                                 />
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={0}
+                                paddingLeft={10}
+                                fontSize={16}
+                              >
+                                {t('text17')}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: `<span style="color: blue;">${t('text16')}</span>`,
+                                  }}
+                                />
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={0}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text17')}
                               </Typography>
                             </Box>
@@ -256,27 +449,31 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/28'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image
-                              src={`/img/readingClubs/3. clube politico do juliano medeiros.webp`}
-                              width={1080}
-                              height={1367}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </Box>
+                        <Stack gap={0} paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/28'}>
+                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/3. clube politico do juliano medeiros.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/28'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <img src='/img/readingClubs/3. clube politico do juliano medeiros.webp' width={'100%'}/>
-                            {/* <Image
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/3. clube politico do juliano medeiros.webp"
+                                width={'100%'}
+                              />
+                              {/* <Image
                               src={`/img/readingClubs/3. clube politico do juliano medeiros.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
                             /> */}
-                          </Box>
+                            </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -309,31 +506,43 @@ export default function ReadingClubs() {
                   paddingRight={1}
                 >
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                    <Grid container gap={2} sx={{ justifyContent: 'center' }}>
+                    <Grid container sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/31'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image
-                              src={imagePath4}
-                              width={1080}
-                              height={1367}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </Box>
+                        <Stack gap={0} paddingTop={4} paddingLeft={4}>
+                          <Box paddingX={4} component={Link} href={'https://www.eureka.club/cycle/31'}>
+                            <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={imagePath4}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/31'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image
+                            <Box paddingRight={4} sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image
                               src={imagePath4}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
                             /> */}
-                            <img src={imagePath4} width={'100%'}/>
+                              <img style={{ borderRadius: '8px' }} src={imagePath4} width={'100%'} />
+                            </Box>
                           </Box>
+                          <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text23')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text24')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text25')}
+                            </Typography>
                           </Box>
-                          <Box>
+
+                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Typography textAlign="left" variant="body2">
                               {t('text23')}
                             </Typography>
@@ -348,17 +557,54 @@ export default function ReadingClubs() {
                       </Grid>
 
                       <Grid item xs={12} sm={8} md={8}>
-                        <Stack gap={2}>
+                        <Stack gap={0}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
-                              <span
+                              <Typography
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={6}
+                              >
+                                <span
                                   dangerouslySetInnerHTML={{
                                     __html: `<span >${t('text21')}</span>`,
                                   }}
                                 />
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                fontSize={16}
+                              >
+                                {t('text22')}
+                              </Typography>
+                              <Typography
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingRight={10}
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: `<span >${t('text21')}</span>`,
+                                  }}
+                                />
+                              </Typography>
+                              <Typography
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                textAlign="left"
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                paddingRight={10}
+                                fontSize={16}
+                              >
                                 {t('text22')}
                               </Typography>
                             </Box>
@@ -372,7 +618,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -388,14 +634,51 @@ export default function ReadingClubs() {
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
-                              <span
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={7}
+                                paddingLeft={10}
+                                paddingTop={6}
+                              >
+                                <span
                                   dangerouslySetInnerHTML={{
                                     __html: `<span >${t('text26')}</span>`,
                                   }}
                                 />
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={0}
+                                paddingLeft={10}
+                                fontSize={16}
+                              >
+                                {t('text27')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: `<span >${t('text26')}</span>`,
+                                  }}
+                                />
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={0}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text27')}
                               </Typography>
                             </Box>
@@ -403,32 +686,43 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Link href={imagePath5Href}>
-                              <Image
-                                src={imagePath5}
-                                width={1080}
-                                height={1367}
-                                style={{ cursor: 'pointer' }}
-                              />
-                            </Link>
+                        <Stack paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/26'}>
+                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Link href={imagePath5Href}>
+                                <Image
+                                  src={imagePath5}
+                                  width={280}
+                                  height={350}
+                                  style={{ cursor: 'pointer', borderRadius: '8px' }}
+                                />
+                              </Link>
+                            </Box>
                           </Box>
-                          </Box>
-                          <Box component={Link} href={'https://www.eureka.club/cycle/26'}  >
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image
+                          <Box component={Link} href={'https://www.eureka.club/cycle/26'}>
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image
                               src={imagePath5}
                               width={197}
                               height={260}
 
                             /> */}
-                            <img src={imagePath5} width={'100%'}/>
+                              <img style={{ borderRadius: '8px' }} src={imagePath5} width={'100%'} />
+                            </Box>
+                          </Box>
+                          <Box  sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text28')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text29')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text30')}
+                            </Typography>
+                          </Box>
 
-                          </Box>
-                          </Box>
-                          <Box>
+                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Typography textAlign="left" variant="body2">
                               {t('text28')}
                             </Typography>
@@ -448,7 +742,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -461,29 +755,44 @@ export default function ReadingClubs() {
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/21'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image
-                              src={`/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp`}
-                              width={1080}
-                              height={1367}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </Box>
+                        <Stack paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/21'}>
+                            <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/21'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image
                               src={`/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
                             /> */}
-                            <img src='/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp' width={'100%'}/>
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/6. perspectivas feministas en moderacion de contenidos.webp"
+                                width={'100%'}
+                              />
+                            </Box>
                           </Box>
+                          <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text33')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text34')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text35')}
+                            </Typography>
                           </Box>
-                          <Box>
+                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Typography textAlign="left" variant="body2">
                               {t('text33')}
                             </Typography>
@@ -498,17 +807,55 @@ export default function ReadingClubs() {
                       </Grid>
 
                       <Grid item xs={12} sm={8} md={8}>
-                        <Stack gap={2}>
-                          <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
+                        <Stack>
+                          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
-                              <span
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={6}
+                              >
+                                <span
                                   dangerouslySetInnerHTML={{
                                     __html: `<span >${t('text31')}</span>`,
                                   }}
                                 />
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                fontSize={16}
+                              >
+                                {t('text32')}
+                              </Typography>
+
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingRight={10}
+                              >
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: `<span >${t('text31')}</span>`,
+                                  }}
+                                />
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                paddingRight={10}
+                                fontSize={16}
+                              >
                                 {t('text32')}
                               </Typography>
                             </Box>
@@ -522,7 +869,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -538,10 +885,44 @@ export default function ReadingClubs() {
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={7}
+                                paddingLeft={10}
+                                paddingTop={6}
+                              >
                                 {t('text36')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={0}
+                                paddingLeft={10}
+                                fontSize={16}
+                              >
+                                {t('text37')}
+                              </Typography>
+
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                {t('text36')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={0}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text37')}
                               </Typography>
                             </Box>
@@ -549,17 +930,26 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/20'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={1080} height={1367} />
-                          </Box>
+                        <Stack paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/20'}>
+                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/7. Ser Agua.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/20'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={197} height={260} /> */}
-                            <img src='/img/readingClubs/7. Ser Agua.webp' width={'100%'}/>
-                          </Box>
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/7. Ser Agua.webp`} width={197} height={260} /> */}
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/7. Ser Agua.webp"
+                                width={'100%'}
+                              />
+                            </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -581,7 +971,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -594,29 +984,44 @@ export default function ReadingClubs() {
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/19'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image
-                              src={`/img/readingClubs/8.ecossensse & ecosensibility.webp`}
-                              width={1080}
-                              height={1367}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </Box>
+                        <Stack paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/19'}>
+                            <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/8.ecossensse & ecosensibility.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/19'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image
                               src={`/img/readingClubs/8.ecossensse & ecosensibility.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
                             /> */}
-                            <img src='/img/readingClubs/8.ecossensse & ecosensibility.webp' width={'100%'}/>
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/8.ecossensse & ecosensibility.webp"
+                                width={'100%'}
+                              />
                             </Box>
                           </Box>
-                          <Box>
+                          <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text43')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text44')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text45')}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Typography textAlign="left" variant="body2">
                               {t('text43')}
                             </Typography>
@@ -631,13 +1036,46 @@ export default function ReadingClubs() {
                       </Grid>
 
                       <Grid item xs={12} sm={8} md={8}>
-                        <Stack gap={2}>
-                          <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
+                        <Stack>
+                          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={6}
+                              >
                                 {t('text41')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                fontSize={16}
+                              >
+                                {t('text42')}
+                              </Typography>
+
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                {t('text41')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text42')}
                               </Typography>
                             </Box>
@@ -667,10 +1105,43 @@ export default function ReadingClubs() {
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={7}
+                                paddingLeft={10}
+                                paddingTop={6}
+                              >
                                 {t('text46')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={0}
+                                paddingLeft={10}
+                                fontSize={16}
+                              >
+                                {t('text47')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                {t('text46')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={0}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text47')}
                               </Typography>
                             </Box>
@@ -678,17 +1149,26 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/18'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={1080} height={1367} />
-                          </Box>
+                        <Stack paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/18'}>
+                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/9.tautology.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/18'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={197} height={260} /> */}
-                            <img src='/img/readingClubs/9.tautology.webp' width={'100%'}/>  
-                          </Box>
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/9.tautology.webp`} width={197} height={260} /> */}
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/9.tautology.webp"
+                                width={'100%'}
+                              />
+                            </Box>
                           </Box>
                           <Box>
                             <Typography textAlign="left" variant="body2">
@@ -710,7 +1190,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -723,30 +1203,44 @@ export default function ReadingClubs() {
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/16'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image
-                              src={`/img/readingClubs/10.capitalismo de las redes.webp`}
-                              width={1080}
-                              height={1367}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </Box>
+                        <Stack paddingTop={4} paddingLeft={4}>
+                          <Box paddingX={4} component={Link} href={'https://www.eureka.club/cycle/16'}>
+                            <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/10.capitalismo de las redes.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/16'}>
-
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image
+                            <Box paddingRight={4} sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image
                               src={`/img/readingClubs/10.capitalismo de las redes.webp`}
                               width={197}
                               height={260}
                               style={{ cursor: 'pointer' }}
                             /> */}
-                            <img src='/img/readingClubs/10.capitalismo de las redes.webp' width={'100%'}/>
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/10.capitalismo de las redes.webp"
+                                width={'100%'}
+                              />
+                            </Box>
                           </Box>
+                          <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text53')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text54')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text55')}
+                            </Typography>
                           </Box>
-                          <Box>
+                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <Typography textAlign="left" variant="body2">
                               {t('text53')}
                             </Typography>
@@ -761,13 +1255,46 @@ export default function ReadingClubs() {
                       </Grid>
 
                       <Grid item xs={12} sm={8} md={8}>
-                        <Stack gap={2}>
-                          <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
+                        <Stack gap={0}>
+                          <Box sx={{ display: 'flex', justifyContent: 'left' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={6}
+                              >
                                 {t('text51')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                fontSize={16}
+                              >
+                                {t('text52')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingRight={10}
+                              >
+                                {t('text51')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                paddingX={3}
+                                paddingRight={10}
+                                fontSize={16}
+                              >
                                 {t('text52')}
                               </Typography>
                             </Box>
@@ -781,7 +1308,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -795,12 +1322,45 @@ export default function ReadingClubs() {
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={8} md={8}>
                         <Stack gap={2}>
-                          <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
+                          <Box sx={{ display: 'flex', justifyContent: 'left'}} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={7}
+                                paddingLeft={10}
+                                paddingTop={6}
+                              >
                                 {t('text56')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                paddingBlockEnd={0}
+                                paddingLeft={10}
+                                fontSize={16}
+                              >
+                                {t('text57')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={2}
+                                fontSize={30}
+                                paddingX={3}
+                                paddingTop={0}
+                              >
+                                {t('text56')}
+                              </Typography>
+                              <Typography
+                                textAlign="left"
+                                sx={{ display: { xs: 'block', sm: 'none' } }}
+                                paddingBlockEnd={0}
+                                paddingX={3}
+                                fontSize={16}
+                              >
                                 {t('text57')}
                               </Typography>
                             </Box>
@@ -808,18 +1368,26 @@ export default function ReadingClubs() {
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/15'}>
-
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={1080} height={1367} />
-                          </Box>
+                        <Stack paddingTop={4} paddingX={4}>
+                          <Box component={Link} href={'https://www.eureka.club/cycle/15'}>
+                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/11.nuevas justicias.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/15'}>
-                          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={197} height={260} /> */}
-                            <img src='/img/readingClubs/11.nuevas justicias.webp' width={'100%'}/>
-                          </Box>
+                            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/11.nuevas justicias.webp`} width={197} height={260} /> */}
+                              <img
+                                style={{ borderRadius: '8px' }}
+                                src="/img/readingClubs/11.nuevas justicias.webp"
+                                width={'100%'}
+                              />
+                            </Box>
                           </Box>
 
                           <Box>
@@ -842,7 +1410,7 @@ export default function ReadingClubs() {
             </Box>
           </Box>
         </Grid>
-        <Grid item sx={{ background: 'white'}}>
+        <Grid item sx={{ background: 'white' }}>
           <Box sx={{ alignItems: 'center', alignContent: 'center', paddingTop: '10px' }}>
             <Box sx={{ backgroundColor: 'white', width: '99.99%', borderRadius: '30px' }}>
               <Stack gap={2} paddingTop={1} paddingBottom={1}>
@@ -855,19 +1423,35 @@ export default function ReadingClubs() {
                   <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
                     <Grid container gap={2} sx={{ justifyContent: 'center' }}>
                       <Grid item xs={12} sm={3} md={3}>
-                        <Stack gap={0}>
-                        <Box component={Link} href={'https://www.eureka.club/cycle/13'}>
-                          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={1080} height={1367} />
-                          </Box>
+                        <Stack paddingTop={4} paddingLeft={4} >
+                          <Box paddingX={4} component={Link} href={'https://www.eureka.club/cycle/13'}>
+                            <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                              <Image
+                                src={`/img/readingClubs/12.genero e violencia.webp`}
+                                width={280}
+                                height={350}
+                                style={{ cursor: 'pointer', borderRadius: '8px' }}
+                              />
+                            </Box>
                           </Box>
                           <Box component={Link} href={'https://www.eureka.club/cycle/13'}>
+                            <Box paddingRight={4} sx={{ display: { xs: 'block', sm: 'none' } }}>
+                              {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={197} height={260} /> */}
+                              <img style={{ borderRadius:'8px' }} src="/img/readingClubs/12.genero e violencia.webp" width={'100%'} />
+                            </Box>
+                          </Box>
+                          <Box paddingLeft={6} sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography textAlign="left" variant="body2">
+                              {t('text63')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text64')}
+                            </Typography>
+                            <Typography variant="body2" paddingInlineEnd={'85px'}>
+                              {t('text65')}
+                            </Typography>
+                          </Box>
                           <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            {/* <Image  style={{ cursor: 'pointer' }} src={`/img/readingClubs/12.genero e violencia.webp`} width={197} height={260} /> */}
-                            <img src='/img/readingClubs/12.genero e violencia.webp' width={'100%'}/>
-                          </Box>
-                          </Box>
-                          <Box>
                             <Typography textAlign="left" variant="body2">
                               {t('text63')}
                             </Typography>
@@ -885,10 +1469,16 @@ export default function ReadingClubs() {
                         <Stack gap={2}>
                           <Box sx={{ display: 'flex', justifyContent: 'left', paddingTop: '20px' }} alignItems={'left'}>
                             <Box sx={{ maxWidth: { lg: '100dvw', sm: '100dvw', xs: '100dvw' } }}>
-                              <Typography textAlign="left" paddingBlockEnd={2} fontSize={30}>
+                              <Typography sx={{ display: { xs: 'none', sm: 'block' } }} textAlign="left" paddingBlockEnd={2} fontSize={30} paddingX={3} paddingTop={6}>
                                 {t('text61')}
                               </Typography>
-                              <Typography textAlign="left" paddingBlockEnd={2} variant="h6">
+                              <Typography sx={{ display: { xs: 'none', sm: 'block' } }} textAlign="left" paddingBlockEnd={2} paddingX={3} fontSize={16}>
+                                {t('text62')}
+                              </Typography>
+                              <Typography sx={{ display: { xs: 'block', sm: 'none' } }} textAlign="left" paddingBlockEnd={2} fontSize={30} paddingX={3} paddingRight={10}>
+                                {t('text61')}
+                              </Typography>
+                              <Typography sx={{ display: { xs: 'block', sm: 'none' } }} textAlign="left" paddingBlockEnd={2} paddingX={3} paddingRight={10} fontSize={16}>
                                 {t('text62')}
                               </Typography>
                             </Box>
@@ -905,6 +1495,4 @@ export default function ReadingClubs() {
       </Stack>
     </>
   );
-};
-
-
+}

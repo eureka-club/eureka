@@ -28,7 +28,7 @@ const ReadingClubsPage: NextPage<Props> = ({}) => {
       `}</style>
       <SimpleLayout fullWidth title={t('readingsClubsTitle')}>
         <Stack sx={{ alignItems: 'center', alignContent: 'center' }}>
-          <Box>
+          <Box paddingX={5}>
 
             <Typography sx={{ padding: '30px', fontSize: 36, maxWidth: { lg: '80dvw', sm: '80dvw', xs: '100dvw' } }}>
               <b>{t('titlePage')}</b>
