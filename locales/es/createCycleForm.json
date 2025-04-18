@@ -52,5 +52,7 @@
   "invalidInput": "Entrada inválida",
   "cycleStartAndEndRequired": "Se requieren fechas de inicio y fin del Club",
   "Date Range Error": "Error en el rango de fecha",
-  "cycleGuidelineInfo": "Consideramos que las reglas deben ser contextuales. Los Clubs temáticos son diversos: en términos de tema, contexto y comunidad. Para garantizar que las reglas sean relevantes y culturalmente sensibles, cada Club tiene la capacidad de definir sus propias pautas, incluido lo que significa 'espacio seguro' y lo que se clasifica como contenido nocivo. Por supuesto, estos deben estar generalmente alineados con nuestro Manifiesto."
+  "cycleGuidelineInfo": "Consideramos que las reglas deben ser contextuales. Los Clubs temáticos son diversos: en términos de tema, contexto y comunidad. Para garantizar que las reglas sean relevantes y culturalmente sensibles, cada Club tiene la capacidad de definir sus propias pautas, incluido lo que significa 'espacio seguro' y lo que se clasifica como contenido nocivo. Por supuesto, estos deben estar generalmente alineados con nuestro Manifiesto.",
+  "incorrectWorkDiscussionPeriod":"Fechas de discusión de Obra incorrecto"
+
 }

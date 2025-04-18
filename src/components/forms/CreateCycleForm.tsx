@@ -30,6 +30,7 @@ import styles from './CreateCycleForm.module.css';
 import TagsInput from './controls/TagsInput';
 import useTopics from '../../useTopics';
 import { isWeakMap } from 'util/types';
+import toast from 'react-hot-toast';
 
 interface Props {
   className?: string;
@@ -431,7 +432,10 @@ const CreateCycleForm: FunctionComponent<Props> = ({ className }) => {
         worksDisscussionsDates.current!.scrollIntoView();
       }
     });
-    if (hasInvalidDates) return;
+    if (hasInvalidDates) {
+      toast.error(t('incorrectWorkDiscussionPeriod'))
+      return
+    };
 
     await execCreateCycle(payload);
   };
