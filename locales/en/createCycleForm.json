@@ -52,5 +52,6 @@
   "invalidInput": "Invalid input",
   "cycleStartAndEndRequired": "Club Start and End Dates are required",
   "Date Range Error": "Date range error",
-  "cycleGuidelineInfo":"We consider that rules should be contextual. Thematic clubs are diverse: in terms of topic, context and community. To ensure that rules are relevant and culturally sensitive, each club has the ability to define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content. Of course, these must be generally aligned with our Manifesto."
+  "cycleGuidelineInfo":"We consider that rules should be contextual. Thematic clubs are diverse: in terms of topic, context and community. To ensure that rules are relevant and culturally sensitive, each club has the ability to define its own guidelines, including what it means by ‘safe space’ and what classifies as harmful content. Of course, these must be generally aligned with our Manifesto.",
+  "incorrectWorkDiscussionPeriod":"Incorrect Work's discussion dates"
 }
